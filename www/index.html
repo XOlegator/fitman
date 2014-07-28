@@ -1,50 +1,536 @@
 <!DOCTYPE html>
-<!--
-    Copyright (c) 2012-2014 Adobe Systems Incorporated. All rights reserved.
-
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <link rel="stylesheet" href="assets/components/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="assets/components/bootstrap/dist/css/bootstrap-theme.min.css" />
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Personal trainer</title>
+    <!-- Path to Framework7 Library CSS-->
+    <link rel="stylesheet" href="css/framework7.min.css">
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="css/my-app.css">
+  </head>
+  <body>
+    <!-- Status bar overlay for fullscreen mode-->
+    <div class="statusbar-overlay"></div>
+    <!-- Panels overlay-->
+    <div class="panel-overlay"></div>
+    <!-- Left panel with reveal effect-->
+    <div class="panel panel-left panel-reveal">
+      <div class="content-block">
+        <p>Left panel content goes here</p>
+      </div>
+    </div>
+    <!-- Right panel with cover effect-->
+    <div class="panel panel-right panel-cover">
+      <div class="content-block">
+        <p>Right panel content goes here</p>
+      </div>
+    </div>
+    <!-- Views-->
+    <div class="views tabs toolbar-through">
+      <!-- Your main view, should have "view-main" class-->
+      <!--<div class="view view-main">-->
+        <!-- Top Navbar-->
+        <!--<div class="navbar">-->
+          <!--<div class="navbar-inner">-->
+            <div class="navbar tabbar tabbar-labels grad-menu">
+              <div class="toolbar-inner">
+                <a href="#view-1" class="tab-link active">
+                  <i class="icon tabbar-icon-1 active"></i>
+                  <span class="tabbar-label">Help</span>
+                </a>
+                <a href="#view-2" class="tab-link">
+                  <i class="icon tabbar-icon-2"></i>
+                  <span class="tabbar-label">Settings</span>
+                </a>
+                <a href="#view-3" class="tab-link">
+                  <i class="icon tabbar-icon-3"><span class="badge badge-red">4</span></i>
+                  <span class="tabbar-label">Customers</span>
+                </a>
+                <a href="#view-4" class="tab-link">
+                  <i class="icon tabbar-icon-4"></i>
+                  <span class="tabbar-label">www</span>
+                </a>
+              </div>
             </div>
+            <!-- We have home navbar without left link-->
+            <!--<div class="center sliding">Awesome App</div>-->
+            <!--<div class="right">-->
+              <!-- Right link contains only icon - additional "icon-only" class--><a href="#" class="link icon-only open-panel"><i class="icon icon-bars-blue"></i></a>
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+        <div data-page="index-1" id="view-1" class="navbar-through toolbar-through view view-main tab active">
+ 
+          <div class="pages">
+           
+            <div data-page="index-1" class="page">
+             
+              <div class="page-content grad-body">
+                <div class="content-block-title">Personal trainer</div>
+                <div class="content-block">
+                  <p>Пользовательское соглашение</p>
+                  <p>Данное приложение предназначено для профессиональных тренеров. Они должны иметь соответствующую подготовку, опыт работы в качества персонального тренера, сертификаты, подтверждающие право на работу по данной специальности. Они принимают на себя всю ответственность за причинённый ущерб, который они могут нанести клиенту в течение тренировочного процесса.</p>
+                  <p>Упражнения, которые изначально в нём имеются, присутствуют в качества примера и тренер может их удалить и создать свой перечень упражнений, сгруппировав их по своему усмотрению. 
+                  <p>Данное приложение позволяет систематизировать и контролировать тренировочный процесс, рационально использовать упражнения, следить за динамикой тренировок и  визуально, в виде графиков, видеть результаты своей работы с данным клиентом.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-        <script src="assets/components/jquery/jquery.min.js"></script>
-        <script src="assets/components/bootstrap/dist/js/bootstrap.min.js"></script>
-    </body>
+        <div data-page="index-2" id="view-2" class="navbar-through toolbar-through view tab">
+          <div class="pages">
+            <div data-page="index-2" class="page">
+              <div class="page-content grad-body">
+                <div class="content-block-title"></div>
+                <div class="list-block">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title label">Units</div>
+                          <div class="item-input">
+                            <select>
+                              <option>Imperial</option>
+                              <option>Metric</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title label">Language</div>
+                          <div class="item-input">
+                            <select>
+                              <option>English</option>
+                              <option>Russian</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title label">Exercises</div>
+                          <div class="item-input">
+                            <a href="#view-5" class="button button-round tab-link">Change</a>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <!-- Text inputs -->
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title label">Customers</div>
+                          <div class="item-input">
+                            <a href="#view-13" class="tab-link button button-round">Remove</a>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-page="index-3" id="view-3" class="navbar-through toolbar-through view tab">
+          <div class="pages">
+            <div data-page="index-3" class="page">
+              <div class="page-content grad-body">
+                <div class="content-block-title">
+                  <a href="#" class="back tab-link btn-left-top">Cancel</a>
+                  <a href="#view-10" class="tab-link btn-right-top">Add</a>
+                </div>
+                <!-- Search bar -->
+                <form data-search-list=".list-block-search" data-search-in=".item-title" class="searchbar">
+                  <div class="searchbar-input">
+                    <input type="search" placeholder="Search"><a href="#" class="searchbar-clear"></a>
+                  </div><a href="#" class="searchbar-cancel">Cancel</a>
+                </form>
+               
+                <!-- Search bar overlay -->
+                <div class="searchbar-overlay"></div>
+               
+                <div class="page-content">
+                  <!-- This block will be displayed if nothing found -->
+                  <div class="content-block searchbar-not-found">
+                    <div class="content-block-inner">Nothing found</div>
+                  </div>
+               
+                  <!-- This block will be displayed if anything found, and this list block is used a searbar target -->
+                  <div class="list-block list-block-search searchbar-found">
+                    <ul>
+                      <li class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title">Acura </div>
+                        </div>
+                      </li>
+                      <li class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title">Audi</div>
+                        </div>
+                      </li>
+                      ...
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-page="index-4" id="view-4" class="navbar-through toolbar-through view tab">
+          <div class="pages">
+            <div data-page="index-4" class="page">
+              <div class="page-content grad-body">
+                <div class="content-block-title"></div>
+                <div class="content-block">
+                  <p>Регистрация позволит Вам участвовать в улучшении программы, предлагать другим пользователям свои упражнения, загружать себе в программу упражнения других пользователей и обмениваться на форуме своим видением тренировочного процесса с помощью этой программы.</p>
+                  <a href="#" class="button button-round">Зарегистрироваться</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-page="index-5" id="view-5" class="navbar-through toolbar-through view tab">
+          <div class="pages">
+            <div data-page="index-5" class="page">
+              <div class="page-content grad-body">
+                <div class="content-block-title">
+                  <a href="#view-2" class="tab-link btn-left-top">Cancel</a>
+                  <a href="#" class="tab-link btn-right-top">Add</a>
+                </div>
+                <div class="content-block">
+                  <div class="list-block">
+                    <ul>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-media">
+                              <a href="#view-7" class="tab-link"><i class="icon icon-form-settings"></i></a>
+                            </div>
+                            <div class="item-input">
+                              <input type="text" placeholder="Exercise" value="Exercise 1 (Упражнения на натягивание)">
+                            </div>
+                            <div class="item-input hidden" id="ex-compl-1">
+                              <a href="#" class="button button-round">Delete</a>
+                            </div>
+                            <div class="item-media">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="ex-compl-1" class="btn-delete-toggle">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-page="index-7" id="view-7" class="navbar-through toolbar-through view tab">
+          <div class="pages">
+            <div data-page="index-7" class="page">
+              <div class="page-content grad-body">
+                <div class="content-block-title">
+                  <a href="#view-5" class="tab-link btn-left-top">Cancel</a>
+                  <a href="#" class="tab-link btn-right-top">Add</a>
+                </div>
+                <div class="content-block">
+                  <div class="list-block">
+                    <ul>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-input">
+                              <input type="text" placeholder="Exercise" value="Bicep curl DW">
+                            </div>
+                            <div class="item-input">
+                              <a href="#view-8" class="tab-link button button-round">Properties</a>
+                            </div>
+                            <div class="item-input hidden" id="ex1">
+                              <a href="#" class="button button-round">Delete</a>
+                            </div>
+                            <div class="item-media">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="ex1" class="btn-delete-toggle">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-page="index-8" id="view-8" class="navbar-through toolbar-through view view-main tab active">
+ 
+          <div class="pages">
+           
+            <div data-page="index-8" class="page">
+             
+              <div class="page-content grad-body">
+                <div class="content-block-title">
+                  <a href="#view-7" class="tab-link btn-left-top">Cancel</a>
+                  <a href="#" class="tab-link btn-right-top">Save</a>
+                </div>
+                <div class="content-block-title">Bicep curl DW</div>
+                <div class="content-block">
+                  <div class="row">
+                      <!-- Each "cell" has col-[widht in percents] class -->
+                      <div class="col-50">
+                        <div class="list-block">
+                          <ul>
+                            <!-- Single chekbox item -->
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <!-- Checked by default -->
+                                <input type="checkbox" name="my-checkbox" value="Repeats" checked="checked">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Repeats</div>
+                                </div>
+                              </label>
+                            </li>
+                            <!-- Another chekbox item -->
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="my-checkbox" value="Подходы">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Подходы</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="my-checkbox" value="Weight">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Weight</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="my-checkbox" value="Time">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Time</div>
+                                </div>
+                              </label>
+                            </li>
+                          </ul>
+                        </div>                    
+                      </div>
+                      <div class="col-50">
+                        <div class="list-block">
+                          <ul>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="my-checkbox" value="Distance">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Distance</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="my-checkbox" value="Speed">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Speed</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="my-checkbox" value="Slope">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Slope</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="my-checkbox" value="Load">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Load</div>
+                                </div>
+                              </label>
+                            </li>
+                          </ul>
+                        </div>                      
+                      </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-page="index-10" id="view-10" class="navbar-through toolbar-through view tab">
+          <div class="pages">
+            <div data-page="index-10" class="page">
+              <div class="page-content grad-body">
+                <div class="content-block-title">
+                  <a href="#view-3" class="tab-link btn-left-top">Cancel</a>
+                  <a href="#" class="tab-link btn-right-top">Save</a>
+                </div>
+                <div class="content-block">
+                  <div class="list-block">
+                    <ul>
+                      <!-- Date -->
+                      <li>
+                        <div class="item-content">
+                          <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                          <div class="item-inner">
+                            <div class="item-input">
+                              <input type="date" placeholder="The date of the start of classes" value="2014-07-28">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <!-- Text inputs -->
+                      <li>
+                        <div class="item-content">
+                          <div class="item-media"><i class="icon icon-form-name"></i></div>
+                          <div class="item-inner">
+                            <div class="item-input">
+                              <input type="text" placeholder="Name">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <!-- Buttons -->
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-input">
+                              <a href="#" class="tab-link button button-round">Photo</a>
+                            </div>
+                            <div class="item-input">
+                              <a href="#" class="tab-link button button-round">Comments</a>
+                            </div>
+                            <div class="item-input">
+                              <a href="#" class="tab-link button button-round">Workout of the day</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-page="index-13" id="view-13" class="navbar-through toolbar-through view tab">
+          <div class="pages">
+            <div data-page="index-13" class="page">
+              <div class="page-content grad-body">
+                <div class="content-block-title">
+                  <a href="#view-2" class="back tab-link btn-left-top">Cancel</a>
+                  <a href="#" class="confirm-ok-cancel btn-right-top">Delete</a>
+                </div>
+                <div class="list-block">
+                  <ul>
+                    <!-- Single chekbox item -->
+                    <li>
+                      <label class="label-checkbox item-content">
+                        <div class="item-inner">
+                          <div class="item-title">Customers 1</div>
+                        </div>
+                        <input type="checkbox" name="my-checkbox" value="Customers 1">
+                        <div class="item-media">
+                          <i class="icon icon-form-checkbox"></i>
+                        </div>
+                      </label>
+                    </li>
+                    <li>
+                      <label class="label-checkbox item-content">
+                        <div class="item-inner">
+                          <div class="item-title">Customers 2</div>
+                        </div>
+                        <input type="checkbox" name="my-checkbox" value="Customers 2">
+                        <div class="item-media">
+                          <i class="icon icon-form-checkbox"></i>
+                        </div>
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
+        <!--<div class="pages navbar-through toolbar-through">-->
+          <!-- Page, data-page contains page name-->
+          <!--<div data-page="index" class="page">-->
+            <!-- Scrollable page content-->
+            <!--<div class="page-content">
+              <div class="content-block-title">Personal trainer</div>
+              <div class="content-block">
+                <div class="content-block-inner">
+                  <p>Пользовательское соглашение</p>
+                  <p>Данное приложение предназначено для профессиональных тренеров. Они должны иметь соответствующую подготовку, опыт работы в качества персонального тренера, сертификаты, подтверждающие право на работу по данной специальности. Они принимают на себя всю ответственность за причинённый ущерб, который они могут нанести клиенту в течение тренировочного процесса.</p>
+                  <p>Упражнения, которые изначально в нём имеются, присутствуют в качества примера и тренер может их удалить и создать свой перечень упражнений, сгруппировав их по своему усмотрению. 
+                  <p>Данное приложение позволяет систематизировать и контролировать тренировочный процесс, рационально использовать упражнения, следить за динамикой тренировок и  визуально, в виде графиков, видеть результаты своей работы с данным клиентом.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>-->
+    
+        <!-- Bottom Toolbar-->
+        <div class="toolbar">
+          <!--<div class="toolbar-inner"><a href="#" class="link">Link 1</a><a href="#" class="link">Link 2</a></div>-->
+          <p>here is the place to advertise</p>
+        </div>
+      <!--</div>-->
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <!-- Path to Framework7 Library JS-->
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <!-- Path to your app js-->
+    <script type="text/javascript" src="js/my-app.js"></script>
+
+  </body>
 </html>
