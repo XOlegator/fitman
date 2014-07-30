@@ -1,0 +1,71 @@
+{"exerciseType":[
+  {
+    "id": 0,
+    "name": "Exercise 1 (Упражнения на натягивание)",
+    "exercises": [
+      {
+        "name": "WG pull down"
+      },
+      {
+        "name": "NG pull down"
+      },
+      {
+        "name": "Chin up"
+      },
+      {
+        "name": "Eccentric chin up"
+      },
+      {
+        "name": "Seated row M"
+      },
+      {
+        "name": "Seated row cable"
+      },
+      {
+        "name": "Bicep curl Bar"
+      },
+      {
+        "name": "Bicep curl DB"
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Exercise 2 (Упражнения на выжимание)",
+    "exercises": [
+      {
+        "name": "Push Up"
+      },
+      {
+        "name": "Push Up knee"
+      },
+      {
+        "name": "Eccentric Push Up"
+      },
+      {
+        "name": "Dips M"
+      },
+      {
+        "name": "Dips"
+      },
+      {
+        "name": "Tricep M"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Exercise 3 (Упражнения со штангой)",
+    "exercises": [
+      {
+        "name": "OH sh press M"
+      },
+      {
+        "name": "OH sh press Bar"
+      },
+      {
+        "name": "OH drive press Bar"
+      }
+    ]
+  }
+]}
