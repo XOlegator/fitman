@@ -15,7 +15,7 @@
         }
     </script>
     <script src="js/db.js"></script>
-    <script src="js/modernizr.custom.js"></script>
+    <!--<script src="js/modernizr.custom.js"></script>-->
     <!-- Path to Framework7 Library CSS-->
     <link rel="stylesheet" href="css/framework7.min.css">
     <!-- Path to your custom app styles-->
@@ -506,10 +506,10 @@
               <div class="page-content grad-body">
                 <div class="content-block-title">
                   <a href="#view-2" class="back tab-link btn-left-top">Cancel</a>
-                  <a href="#" class="confirm-ok-cancel btn-right-top">Delete</a>
+                  <a href="#" class="confirm-delete-customers btn-right-top">Delete</a>
                 </div>
                 <div class="list-block">
-                  <ul>
+                  <ul id="forDeleteCustomers">
                     <!--
                     <li>
                       <label class="label-checkbox item-content">
@@ -567,8 +567,8 @@
     </div>
     <!--<script type="text/javascript" src="cordova.js"></script>-->
     <!-- Path to Framework7 Library JS-->
-    <!--<script type="text/javascript" src="js/framework7.min.js"></script>-->
-    <!--<script src="assets/components/jquery/dist/jquery.min.js"></script>-->
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <script src="assets/components/jquery/dist/jquery.min.js"></script>
     <!--<script type="text/javascript" src="js/IndexedDBShim.min.js"></script>-->
     <!--<script type="text/javascript" src="js/db.js"></script>-->
     <!-- Path to your app js-->
@@ -578,9 +578,9 @@
         function printResult(){
           write("Executed : ", arguments);
         }
-    </script>
-    <script type="text/javascript" src="js/my-app.js"></script>-->
-    <script type="text/javascript">
+    </script>-->
+    <script type="text/javascript" src="js/my-app.js"></script>
+    <!--<script type="text/javascript">
       Modernizr.load([
         {
           load: 'js/framework7.min.js'
@@ -592,6 +592,6 @@
           load: 'js/my-app.js'
         }
       ]);
-    </script>
+    </script>-->
   </body>
 </html>

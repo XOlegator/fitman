@@ -62,7 +62,7 @@ myApp.onPageInit('index-3', function (page) {
     server = s;
     server.customers.query('name')
     .all()
-    .keys()
+    //.keys()
     .execute()
     .done(function(results) {
       updateListCustomers(results);
@@ -119,24 +119,24 @@ myApp.onPageInit('index-5', function (page) {
     server = s;
     server.exerciseType.query('name')
     .all()
-    .keys()
+    //.keys()
     .execute()
     .done(function(results) {
       updateListExerciseType(results);
+      // Управляем видимостью кнопок Delete в настройках упражнений
+      $$('.btn-delete-toggle').on('change', function() {
+      	var collapse_content_selector = '#' + $$(this).attr('name');
+      	$$(collapse_content_selector).toggleClass('hidden');
+      });
     });
   });
   
 });
 
-
 myApp.init();
-// Управляем видимостью кнопок Delete в настройках упражнений
-$$('.btn-delete-toggle').on('change', function(e) {
-	var collapse_content_selector = '#' + $$(this).attr('name');
-	$$(collapse_content_selector).toggleClass('hidden');
-});
+
 // Модальное окно для подтверждения удаления клиентов
-$$('.confirm-ok-cancel').on('click', function () {
+$$('.confirm-delete-customers').on('click', function () {
     myApp.confirm('Are you sure?', 
       function () {
         myApp.alert('You clicked Ok button');
@@ -162,8 +162,6 @@ $$('.confirm-fill-demo').on('click', function () {
             // Добавляем группы упражнений
             server.exerciseType.add(data.exerciseType[j]);
             for (var i in data.exerciseType[j].exercises) {
-              //console.log('Add exercise');
-              //console.log('exerciseType = ' + JSON.stringify(data.exerciseType[j].exercises[i]));
               // Формируем базу упражнений по типам (типы заносим в отдельную таблицу)
               server.exercise.add({'name': data.exerciseType[j].exercises[i].name, 'type': j});
             }
@@ -193,8 +191,6 @@ $$('.confirm-fill-demo').on('click', function () {
               updateListCustomers(results);
             });
         });
-        //console.log('All data was add');
-        //console.log('Reload is done');
         myApp.alert('Enjoy your new demo data');
       },
       function () {
@@ -294,14 +290,44 @@ $$('.confirm-create-db').on('click', function () {
 */
 function updateListCustomers(customers) {
   var listCustomers = '';
+  var listCustomersForDelete = '';
   customers.forEach(function (value) {
+    // Список пользователей
     listCustomers += '<li class="item-content">';
     listCustomers += '  <div class="item-inner">';
     listCustomers += '    <div class="item-title">' + value.name + '</div>';
     listCustomers += '  </div>';
     listCustomers += '</li>';
+    // Список пользователей для удаления
+    /*
+    <li>
+      <label class="label-checkbox item-content">
+        <div class="item-inner">
+          <div class="item-title">Customers 1</div>
+        </div>
+        <input type="checkbox" name="my-checkbox" value="Customers 1">
+        <div class="item-media">
+          <i class="icon icon-form-checkbox"></i>
+        </div>
+      </label>
+    </li>
+    */
+    listCustomersForDelete += '<li>';
+    listCustomersForDelete += '  <div class="item-inner">';
+    listCustomersForDelete += '    <div class="item-title">' + value.name + '</div>';
+    listCustomersForDelete += '    <div class="item-media">';
+    listCustomersForDelete += '      <label class="label-checkbox item-content">';
+    listCustomersForDelete += '        <input type="checkbox" name="' + value.name + '" value="' + value.name + '">';
+    listCustomersForDelete += '        <div class="item-media">';
+    listCustomersForDelete += '          <i class="icon icon-form-checkbox"></i>';
+    listCustomersForDelete += '        </div>';
+    listCustomersForDelete += '      </label>';
+    listCustomersForDelete += '    </div>';
+    listCustomersForDelete += '  </div>';
+    listCustomersForDelete += '</li>';
   });
   document.getElementById("ulListCustomers").innerHTML = listCustomers;
+  document.getElementById("forDeleteCustomers").innerHTML = listCustomersForDelete;
 }
 /*
 В функцию передаётся массив объектов exerciseType
@@ -317,7 +343,7 @@ function updateListExerciseType(exerciseType) {
     listExerciseType += '      </div>';
     listExerciseType += '      <div class="item-input">';
     listExerciseType += '        <input type="text" placeholder="Exercise" value="' + value.name + '">';
-    listExerciseType += '      </div';
+    listExerciseType += '      </div>';
     listExerciseType += '      <div class="item-input hidden" id="ex-compl-' + value.id + '">';
     listExerciseType += '        <a href="#" class="button button-round">Delete</a>';
     listExerciseType += '      </div>';
@@ -330,10 +356,8 @@ function updateListExerciseType(exerciseType) {
     listExerciseType += '        </label>';
     listExerciseType += '      </div>';
     listExerciseType += '    </div>';
-    listExerciseType += '    </div>';
+    listExerciseType += '  </div>';
     listExerciseType += '</li>';
-    //console.log('value = ' + value);
-    //console.log('key = ' + key);
   });
   document.getElementById("ulListExerciseType").innerHTML = listExerciseType;
 }
