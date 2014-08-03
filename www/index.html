@@ -6,6 +6,16 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>Personal trainer</title>
+    <script src="js/IndexedDBShim.min.js"></script>
+    <script type="text/javascript">
+        var server;
+        window.shimIndexedDB && window.shimIndexedDB.__useShim();
+        function printResult(){
+         write("Executed : ", arguments);
+        }
+    </script>
+    <script src="js/db.js"></script>
+    <script src="js/modernizr.custom.js"></script>
     <!-- Path to Framework7 Library CSS-->
     <link rel="stylesheet" href="css/framework7.min.css">
     <!-- Path to your custom app styles-->
@@ -123,13 +133,42 @@
                         </div>
                       </div>
                     </li>
-                    <!-- Text inputs -->
                     <li>
                       <div class="item-content">
                         <div class="item-inner">
                           <div class="item-title label">Customers</div>
                           <div class="item-input">
                             <a href="#view-13" class="tab-link button button-round">Remove</a>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title label">Fill demo data</div>
+                          <div class="item-input">
+                            <a href="#" class="button button-round confirm-fill-demo">Fill demo</a>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title label">Clean database</div>
+                          <div class="item-input">
+                            <a href="#" class="button button-round confirm-clean-db">Drop all</a>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title label">Create database</div>
+                          <div class="item-input">
+                            <a href="#" class="button button-round confirm-create-db">Create DB</a>
                           </div>
                         </div>
                       </div>
@@ -167,7 +206,7 @@
                   <!-- This block will be displayed if anything found, and this list block is used a searbar target -->
                   <div class="list-block list-block-search searchbar-found">
                     <ul id="ulListCustomers">
-                      <li class="item-content">
+                      <!--<li class="item-content">
                         <div class="item-inner">
                           <div class="item-title">Acura </div>
                         </div>
@@ -177,7 +216,7 @@
                           <div class="item-title">Audi</div>
                         </div>
                       </li>
-                      ...
+                      ...-->
                     </ul>
                   </div>
                 </div>
@@ -208,15 +247,15 @@
                 </div>
                 <div class="content-block">
                   <div class="list-block">
-                    <ul>
-                      <li>
+                    <ul id="ulListExerciseType">
+                      <!--<li>
                         <div class="item-content">
                           <div class="item-inner">
                             <div class="item-media">
                               <a href="#view-7" class="tab-link"><i class="icon icon-form-settings"></i></a>
                             </div>
                             <div class="item-input">
-                              <input type="text" placeholder="Exercise" value="Exercise 1 (Упражнения на натягивание)">
+                              <input type="text" placeholder="Exercise" value="Exercise 1 (демо группа упражнений)">
                             </div>
                             <div class="item-input hidden" id="ex-compl-1">
                               <a href="#" class="button button-round">Delete</a>
@@ -231,7 +270,7 @@
                             </div>
                           </div>
                         </div>
-                      </li>
+                      </li>-->
                     </ul>
                   </div>
                 </div>
@@ -471,7 +510,7 @@
                 </div>
                 <div class="list-block">
                   <ul>
-                    <!-- Single chekbox item -->
+                    <!--
                     <li>
                       <label class="label-checkbox item-content">
                         <div class="item-inner">
@@ -493,7 +532,7 @@
                           <i class="icon icon-form-checkbox"></i>
                         </div>
                       </label>
-                    </li>
+                    </li>-->
                   </ul>
                 </div>
               </div>
@@ -526,21 +565,33 @@
         </div>
       <!--</div>-->
     </div>
-    <script type="text/javascript" src="cordova.js"></script>
+    <!--<script type="text/javascript" src="cordova.js"></script>-->
     <!-- Path to Framework7 Library JS-->
-    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <!--<script type="text/javascript" src="js/framework7.min.js"></script>-->
     <!--<script src="assets/components/jquery/dist/jquery.min.js"></script>-->
+    <!--<script type="text/javascript" src="js/IndexedDBShim.min.js"></script>-->
+    <!--<script type="text/javascript" src="js/db.js"></script>-->
     <!-- Path to your app js-->
-    <script type="text/javascript" src="js/IndexedDBShim.min.js"></script>
-    <script type="text/javascript" src="js/db.js"></script>
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
         var server;
         window.shimIndexedDB && window.shimIndexedDB.__useShim();
         function printResult(){
-         write("Executed : ", arguments);
+          write("Executed : ", arguments);
         }
     </script>
-    <script type="text/javascript" src="js/my-app.js"></script>
-
+    <script type="text/javascript" src="js/my-app.js"></script>-->
+    <script type="text/javascript">
+      Modernizr.load([
+        {
+          load: 'js/framework7.min.js'
+        },
+        {
+          load: 'assets/components/jquery/dist/jquery.min.js'
+        },
+        {
+          load: 'js/my-app.js'
+        }
+      ]);
+    </script>
   </body>
 </html>

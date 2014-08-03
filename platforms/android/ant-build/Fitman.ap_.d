@@ -36,6 +36,7 @@
 /home/oleg/fitman/platforms/android/assets/www/res \
 /home/oleg/fitman/platforms/android/assets/www/cordova_plugins.js \
 /home/oleg/fitman/platforms/android/assets/www/cordova.js \
+/home/oleg/fitman/platforms/android/assets/www/default \
 /home/oleg/fitman/platforms/android/assets/www/js \
 /home/oleg/fitman/platforms/android/assets/www/img \
 /home/oleg/fitman/platforms/android/assets/www/form.html \
@@ -241,8 +242,18 @@
 /home/oleg/fitman/platforms/android/assets/www/res/icon/ios/icon-57-2x.png \
 /home/oleg/fitman/platforms/android/assets/www/res/icon/ios/icon-72-2x.png \
 /home/oleg/fitman/platforms/android/assets/www/res/icon/blackberry/icon-80.png \
+/home/oleg/fitman/platforms/android/assets/www/default/exercise-type.json \
+/home/oleg/fitman/platforms/android/assets/www/default/exercises.json \
+/home/oleg/fitman/platforms/android/assets/www/default/exercise.json \
+/home/oleg/fitman/platforms/android/assets/www/default/customers.json \
+/home/oleg/fitman/platforms/android/assets/www/js/IndexedDBShim.min.js \
 /home/oleg/fitman/platforms/android/assets/www/js/framework7.min.js \
+/home/oleg/fitman/platforms/android/assets/www/js/db.js \
+/home/oleg/fitman/platforms/android/assets/www/js/dbMagia.js \
 /home/oleg/fitman/platforms/android/assets/www/js/my-app.js \
+/home/oleg/fitman/platforms/android/assets/www/js/db-init.js \
+/home/oleg/fitman/platforms/android/assets/www/js/pouchdb-2.2.3.min.js \
+/home/oleg/fitman/platforms/android/assets/www/js/modernizr.custom.js \
 /home/oleg/fitman/platforms/android/assets/www/js/framework7.js \
 /home/oleg/fitman/platforms/android/assets/www/js/index.js \
 /home/oleg/fitman/platforms/android/assets/www/img/bulb.svg \

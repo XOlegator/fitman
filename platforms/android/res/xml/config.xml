@@ -7,10 +7,10 @@
     </feature>
     <name>Fitman</name>
     <description>
-        Hello World sample application that responds to the deviceready event.
+        Personal trainer
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+    <author email="subspam@mail.ru" href="">
+        Ekhlakov Oleg
     </author>
     <preference name="permissions" value="none" />
     <preference name="phonegap-version" value="3.5.0" />
@@ -28,6 +28,8 @@
     <preference name="disable-cursor" value="false" />
     <preference name="android-minSdkVersion" value="7" />
     <preference name="android-installLocation" value="auto" />
+    <preference name="InAppBrowserStorageEnabled" value="true" />
+    <preference name="LogLevel" value="VERBOSE" />
     <gap:plugin name="org.apache.cordova.battery-status" />
     <gap:plugin name="org.apache.cordova.camera" />
     <gap:plugin name="org.apache.cordova.media-capture" />
