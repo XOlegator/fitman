@@ -139,6 +139,10 @@ myApp.init();
 $$('.confirm-delete-customers').on('click', function () {
     myApp.confirm('Are you sure?', 
       function () {
+        // Найдём все value всех отмеченных чекбоксов в ul#forDeleteCustomers. Эти значения есть id клиентов для удаления из базы
+        
+        
+         
         myApp.alert('You clicked Ok button');
       },
       function () {
@@ -317,7 +321,7 @@ function updateListCustomers(customers) {
     listCustomersForDelete += '    <div class="item-title">' + value.name + '</div>';
     listCustomersForDelete += '    <div class="item-media">';
     listCustomersForDelete += '      <label class="label-checkbox item-content">';
-    listCustomersForDelete += '        <input type="checkbox" name="' + value.name + '" value="' + value.name + '">';
+    listCustomersForDelete += '        <input type="checkbox" name="' + value.name + '" value="' + value.id + '">';
     listCustomersForDelete += '        <div class="item-media">';
     listCustomersForDelete += '          <i class="icon icon-form-checkbox"></i>';
     listCustomersForDelete += '        </div>';
