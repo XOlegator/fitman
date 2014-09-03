@@ -18,7 +18,8 @@ var view8 = myApp.addView('#view-8'); // Страница настроек уп�
 var view10 = myApp.addView('#view-10'); // Добавление клиента
 var view13 = myApp.addView('#view-13'); // Удаление клиентов из базы
 */
-
+// Удаление самой базы данных
+//indexedDB.deleteDatabase('my-app');
 myApp.onPageInit('index-3', function (page) {
   db.open({
     server: 'my-app',
@@ -250,10 +251,16 @@ $$('.confirm-fill-demo').on('click', function () {
                   // Если опция действует, то добавляем упражнение с этой опцией в базу данных
                   if(data.exerciseType[j].exercises[i].options[0][optName]) {
                     //console.log('Запись в базу строки по упражнению');
-                    //console.log('name = ' + data.exerciseType[j].exercises[i].name);
+                    //console.log('name = ' + data.exerciseType[j].exercises[i].name + '; type = ' + data.exerciseType[j].name + '; options = ' + optName);
                     //console.log('type = ' + data.exerciseType[j].name);
                     //console.log('options = ' + optName);
-                    server.exercise.add({'name': data.exerciseType[j].exercises[i].name, 'type': data.exerciseType[j].name, 'options': optName});
+                    server.exercise.add({
+                    	'name': data.exerciseType[j].exercises[i].name,
+                    	'type': data.exerciseType[j].name,
+                    	'options': optName})
+                    	.then(function(item){
+                    		console.log(JSON.stringify(item));
+                    	});
                   }
                 }
               //}
@@ -297,6 +304,7 @@ $$('.confirm-fill-demo').on('click', function () {
 $$('.confirm-clean-db').on('click', function () {
     myApp.confirm('Are you sure? It will erase all of your data!', 
       function () {
+      	
         //console.log('Start cleaning DB');
         // Удалим все таблицы
         server.remove('exerciseType');
@@ -472,7 +480,7 @@ function updateListExerciseType(exerciseType) {
 function updateListExercises(exerciseType) {
   var listExercise = '';
   // Запросом отбираем все упражнения даной группы (exerciseType)
-  server.exercise.query()
+  server.exercise.query('name')
   	.filter('type', exerciseType)
     //.all()
     .distinct()
@@ -490,7 +498,7 @@ function updateListExercises(exerciseType) {
         listExercise += '        <input type="text" placeholder="Exercise" value="' + rowExercise.name + '">';
         listExercise += '      </div>';
     	listExercise += '      <div class="item-media">';
-	    listExercise += '        <a href="#view-8" class="tab-link button button-round">Properties</a>';
+	    listExercise += '        <a href="#view-8" class="tab-link button button-round" onclick="updateViewExProp(\'' + rowExercise.name + '\')">Properties</a>';
 	    listExercise += '      </div>';
 	    listExercise += '      <div class="item-input hidden" id="ex-' + rowExercise.id + '">';
 	    listExercise += '        <a href="#" class="button button-round">Delete</a>';
@@ -513,4 +521,23 @@ function updateListExercises(exerciseType) {
     });
   
   
+}
+/*
+В функцию передаётся название выбранного упражнения
+*/
+function updateViewExProp(exercise) {
+  // Сначала снимаем все галочки параметров
+  $('div#view-8 input[name="checkbox-ex-prop"]').removeAttr('checked');
+  // Теперь ставим только те галочки, которые нужны по данным БД
+  server.exercise.query()
+  	.filter('name', exercise)
+    .execute()
+    .then(function(results) {
+      //console.log('results = ' + JSON.stringify(results));
+      results.forEach(function (rowExercise) {
+      	//console.log('rowExercise.options = ' + rowExercise.options);
+      	$('div#ex-prop').text(rowExercise.name);
+      	$('input[name="checkbox-ex-prop"][value="' + rowExercise.options + '"]').click();
+      });
+    });
 }
