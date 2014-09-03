@@ -478,6 +478,7 @@ function updateListExerciseType(exerciseType) {
 В функцию передаётся название одной выбранной группы упражнений
 */
 function updateListExercises(exerciseType) {
+  $('div#ex-of-type').text(exerciseType);
   var listExercise = '';
   // Запросом отбираем все упражнения даной группы (exerciseType)
   server.exercise.query('name')
