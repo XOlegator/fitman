@@ -30,9 +30,9 @@ myApp.onPageInit('index-3', function (page) {
           autoIncrement: true
         },
         indexes: {
-    			name: {
-    			  unique: true
-    			}
+    	  name: {
+    		unique: true
+    	  }
         }
       },
       exercise: {
@@ -41,9 +41,9 @@ myApp.onPageInit('index-3', function (page) {
           autoIncrement: true
         },
         indexes: {
-    			name: {
-    			  unique: true
-    			}
+    	  name: {
+    		unique: true
+          }
         }
       },
       customers: {
@@ -52,19 +52,19 @@ myApp.onPageInit('index-3', function (page) {
           autoIncrement: true
         },
         indexes: {
-    			name: {
-    			  unique: true
-    			}
+    	  name: {
+    		unique: true
+    	  }
         }
       }
     }
-  }).done(function(s) {
-    server = s;
+  }).then(function(serv) {
+    server = serv;
     server.customers.query('name')
     .all()
     //.keys()
     .execute()
-    .done(function(results) {
+    .then(function(results) {
       updateListCustomers(results);
     });
   });
@@ -115,13 +115,13 @@ myApp.onPageInit('index-5', function (page) {
         }
       }
     }
-  }).done(function(s) {
-    server = s;
+  }).then(function(serv) {
+    server = serv;
     server.exerciseType.query('name')
     .all()
     //.keys()
     .execute()
-    .done(function(results) {
+    .then(function(results) {
       updateListExerciseType(results);
       // Управляем видимостью кнопок Delete в настройках упражнений
       $$('.btn-delete-toggle').on('change', function() {
@@ -139,6 +139,10 @@ myApp.init();
 $$('.confirm-delete-customers').on('click', function () {
     myApp.confirm('Are you sure?', 
       function () {
+        // Найдём все value всех отмеченных чекбоксов в ul#forDeleteCustomers. Эти значения есть id клиентов для удаления из базы
+        
+        
+         
         myApp.alert('You clicked Ok button');
       },
       function () {
@@ -171,7 +175,7 @@ $$('.confirm-fill-demo').on('click', function () {
             .distinct()
             //.keys()
             .execute()
-            .done(function(results) {
+            .then(function(results) {
               //console.log('exerciseType results = ' + JSON.stringify(results));
               updateListExerciseType(results);
             });
@@ -186,7 +190,7 @@ $$('.confirm-fill-demo').on('click', function () {
             .distinct()
             //.keys()
             .execute()
-            .done(function(results) {
+            .then(function(results) {
               // Запросом получили массив объектов customers
               updateListCustomers(results);
             });
@@ -214,14 +218,14 @@ $$('.confirm-clean-db').on('click', function () {
           .keys()
           .distinct()
           .execute()
-          .done(function(results) {
+          .then(function(results) {
             updateListCustomers(results);
           });
         server.exerciseType.query('name')
           .all()
           .keys()
           .execute()
-          .done(function(results) {
+          .then(function(results) {
             updateListExerciseType(results);
           });
         myApp.alert('Database is clean');
@@ -275,7 +279,7 @@ $$('.confirm-create-db').on('click', function () {
               }
             }
           }
-        }).done(function(s) {
+        }).then(function(s) {
           server = s;
           
         });
@@ -317,7 +321,7 @@ function updateListCustomers(customers) {
     listCustomersForDelete += '    <div class="item-title">' + value.name + '</div>';
     listCustomersForDelete += '    <div class="item-media">';
     listCustomersForDelete += '      <label class="label-checkbox item-content">';
-    listCustomersForDelete += '        <input type="checkbox" name="' + value.name + '" value="' + value.name + '">';
+    listCustomersForDelete += '        <input type="checkbox" name="' + value.name + '" value="' + value.id + '">';
     listCustomersForDelete += '        <div class="item-media">';
     listCustomersForDelete += '          <i class="icon icon-form-checkbox"></i>';
     listCustomersForDelete += '        </div>';

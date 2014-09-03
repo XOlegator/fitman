@@ -4,28 +4,124 @@
     "name": "Exercise 1 (Упражнения на натягивание)",
     "exercises": [
       {
-        "name": "WG pull down"
+        "name": "WG pull down",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "NG pull down"
+        "name": "NG pull down",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Chin up"
+        "name": "Chin up",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Eccentric chin up"
+        "name": "Eccentric chin up",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Seated row M"
+        "name": "Seated row M",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Seated row cable"
+        "name": "Seated row cable",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Bicep curl Bar"
+        "name": "Bicep curl Bar",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Bicep curl DB"
+        "name": "Bicep curl DB",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       }
     ]
   },
@@ -34,22 +130,94 @@
     "name": "Exercise 2 (Упражнения на выжимание)",
     "exercises": [
       {
-        "name": "Push Up"
+        "name": "Push Up",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Push Up knee"
+        "name": "Push Up knee",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Eccentric Push Up"
+        "name": "Eccentric Push Up",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Dips M"
+        "name": "Dips M",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Dips"
+        "name": "Dips",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "Tricep M"
+        "name": "Tricep M",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       }
     ]
   },
@@ -58,13 +226,454 @@
     "name": "Exercise 3 (Упражнения со штангой)",
     "exercises": [
       {
-        "name": "OH sh press M"
+        "name": "OH sh press M",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "OH sh press Bar"
+        "name": "OH sh press Bar",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       },
       {
-        "name": "OH drive press Bar"
+        "name": "OH drive press Bar",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Exercise 4",
+    "exercises": [
+      {
+        "name": "Chest press M",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Chest press Bar",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Chest press DB",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Exercise 5",
+    "exercises": [
+      {
+        "name": "Air squat",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Lunge",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Walking lunge",
+        "options": [
+          {
+            "repeats": 0,
+            "sets": 1,
+            "weight": 0,
+            "time": 0,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Back squat",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Front squat",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "OH squat",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Leg press",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Leg ext",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Exercise 6",
+    "exercises": [
+      {
+        "name": "Squat Jamp",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Lunge Jamp",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Jamp Box",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Jamp Robe",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Exercise 7",
+    "exercises": [
+      {
+        "name": "Dead Lift",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Thruster",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Snatch",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 1,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Exercise 8",
+    "exercises": [
+      {
+        "name": "Run 1:1 min",
+        "options": [
+          {
+            "repeats": 0,
+            "sets": 1,
+            "weight": 0,
+            "time": 0,
+            "distance": 0,
+            "speed": 1,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Run incline 1:1min",
+        "options": [
+          {
+            "repeats": 0,
+            "sets": 1,
+            "weight": 0,
+            "time": 0,
+            "distance": 0,
+            "speed": 1,
+            "slope": 1,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Eliptical 1:1min",
+        "options": [
+          {
+            "repeats": 0,
+            "sets": 1,
+            "weight": 0,
+            "time": 0,
+            "distance": 0,
+            "speed": 0,
+            "slope": 1,
+            "load": 1
+          }
+        ]
+      },
+      {
+        "name": "Row M",
+        "options": [
+          {
+            "repeats": 0,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 1,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Burpee",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "KBL swing",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
+      },
+      {
+        "name": "Rope",
+        "options": [
+          {
+            "repeats": 1,
+            "sets": 1,
+            "weight": 0,
+            "time": 1,
+            "distance": 0,
+            "speed": 0,
+            "slope": 0,
+            "load": 0
+          }
+        ]
       }
     ]
   }

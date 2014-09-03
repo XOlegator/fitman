@@ -30,6 +30,69 @@ myApp.onPageInit('index-3', function (page) {
           autoIncrement: true
         },
         indexes: {
+    	  name: {
+    		unique: true
+    	  }
+        }
+      },
+      exercise: {
+        key: {
+          keyPath: 'id',
+          autoIncrement: true
+        },
+        indexes: {
+    	  name: {
+    		unique: false
+          },
+          type: {
+            unique: false
+          },
+          options: {
+            unique: false
+          }
+        }
+      },
+      customers: {
+        key: {
+          keyPath: 'id',
+          autoIncrement: true
+        },
+        indexes: {
+    	  name: {
+    		unique: true
+    	  }
+        }
+      }
+    }
+  }).then(function(serv) {
+    server = serv;
+    server.customers.query('name')
+    .all()
+    //.keys()
+    .execute()
+    .then(function(results) {
+      updateListCustomers(results);
+    });
+  });
+  // Перед инициализацией страницы со списком клиентов, нужно подготовить этот список
+  //console.log('page 3 init');
+  
+  //console.log('End of init page 3');
+});
+
+myApp.onPageInit('index-5', function (page) {
+  // Перед инициализацией страницы со списком групп упражнений, нужно подготовить этот список
+  //console.log('page 5 init');
+  db.open({
+    server: 'my-app',
+    version: 1,
+    schema: {
+      exerciseType: {
+        key: {
+          keyPath: 'id',
+          autoIncrement: true
+        },
+        indexes: {
     			name: {
     			  unique: true
     			}
@@ -41,9 +104,15 @@ myApp.onPageInit('index-3', function (page) {
           autoIncrement: true
         },
         indexes: {
-    			name: {
-    			  unique: true
-    			}
+    	  name: {
+    		unique: false
+          },
+          type: {
+            unique: false
+          },
+          options: {
+            unique: false
+          }
         }
       },
       customers: {
@@ -58,25 +127,27 @@ myApp.onPageInit('index-3', function (page) {
         }
       }
     }
-  }).done(function(s) {
-    server = s;
-    server.customers.query('name')
+  }).then(function(serv) {
+    server = serv;
+    server.exerciseType.query('name')
     .all()
     //.keys()
     .execute()
-    .done(function(results) {
-      updateListCustomers(results);
+    .then(function(results) {
+      updateListExerciseType(results);
+      // Управляем видимостью кнопок Delete в настройках упражнений
+      $$('.btn-delete-toggle').on('change', function() {
+      	var collapse_content_selector = '#' + $$(this).attr('name');
+      	$$(collapse_content_selector).toggleClass('hidden');
+      });
     });
   });
-  // Перед инициализацией страницы со списком клиентов, нужно подготовить этот список
-  //console.log('page 3 init');
   
-  //console.log('End of init page 3');
 });
 
-myApp.onPageInit('index-5', function (page) {
-  // Перед инициализацией страницы со списком групп упражнений, нужно подготовить этот список
-  //console.log('page 5 init');
+// TODO переделать с инициализации страницы на загрузку. Инициализация подразумевает один раз, а загружаться будут каждый раз разные данные!
+/*myApp.onPageInit('index-7', function (page) {
+  // Перед инициализацией страницы со списком упражнений определённой группы, нужно подготовить этот список
   db.open({
     server: 'my-app',
     version: 1,
@@ -115,14 +186,14 @@ myApp.onPageInit('index-5', function (page) {
         }
       }
     }
-  }).done(function(s) {
-    server = s;
-    server.exerciseType.query('name')
+  }).then(function(serv) {
+    server = serv;
+    server.exercise.query('name')
     .all()
     //.keys()
     .execute()
-    .done(function(results) {
-      updateListExerciseType(results);
+    .then(function(results) {
+      updateListExercise(results);
       // Управляем видимостью кнопок Delete в настройках упражнений
       $$('.btn-delete-toggle').on('change', function() {
       	var collapse_content_selector = '#' + $$(this).attr('name');
@@ -131,7 +202,7 @@ myApp.onPageInit('index-5', function (page) {
     });
   });
   
-});
+});*/
 
 myApp.init();
 
@@ -140,8 +211,6 @@ $$('.confirm-delete-customers').on('click', function () {
     myApp.confirm('Are you sure?', 
       function () {
         // Найдём все value всех отмеченных чекбоксов в ul#forDeleteCustomers. Эти значения есть id клиентов для удаления из базы
-        
-        
          
         myApp.alert('You clicked Ok button');
       },
@@ -160,22 +229,43 @@ $$('.confirm-fill-demo').on('click', function () {
         server.clear('exercise');
         server.clear('customers');
         // Заполняем таблицы данными из json файлов
+        console.log('Начинаем обрабатывать упражнения');
         $.getJSON('default/exercises.json', function(data) {
+          // Запускаем цикл по группам упражнений (exerciseType)
           for (var j in data.exerciseType) {
+            //console.log('j = ' + j);
+            console.log('data.exerciseType[j].name = ' + data.exerciseType[j].name);
             //console.log('exercise = ' + JSON.stringify(data.exerciseType[j]));
             // Добавляем группы упражнений
-            server.exerciseType.add(data.exerciseType[j]);
+            server.exerciseType.add({'name': data.exerciseType[j].name});
+            // Внутри группы упражнений проходим циклом все упражнения из этой группы
             for (var i in data.exerciseType[j].exercises) {
-              // Формируем базу упражнений по типам (типы заносим в отдельную таблицу)
-              server.exercise.add({'name': data.exerciseType[j].exercises[i].name, 'type': j});
+              // Внутри упражнения проходим циклом по всем характеристикам упражнения
+              //for (var opt in data.exerciseType[j].exercises[i].options) {
+              //  console.log('opt = ' + opt);
+                // Формируем базу упражнений по типам (типы заносим в отдельную таблицу)
+                for (var optName in data.exerciseType[j].exercises[i].options[0]) {
+                  //console.log('data.exerciseType[j].exercises[i].options[0][optName] = ' + JSON.stringify(data.exerciseType[j].exercises[i].options[0][optName]));
+                  //console.log('optName = ' + optName);
+                  // Если опция действует, то добавляем упражнение с этой опцией в базу данных
+                  if(data.exerciseType[j].exercises[i].options[0][optName]) {
+                    //console.log('Запись в базу строки по упражнению');
+                    //console.log('name = ' + data.exerciseType[j].exercises[i].name);
+                    //console.log('type = ' + data.exerciseType[j].name);
+                    //console.log('options = ' + optName);
+                    server.exercise.add({'name': data.exerciseType[j].exercises[i].name, 'type': data.exerciseType[j].name, 'options': optName});
+                  }
+                }
+              //}
             }
           }
+          // Обновляем список групп упражнений на соответсвующей странице
           server.exerciseType.query('name')
             .all()
             .distinct()
             //.keys()
             .execute()
-            .done(function(results) {
+            .then(function(results) {
               //console.log('exerciseType results = ' + JSON.stringify(results));
               updateListExerciseType(results);
             });
@@ -190,7 +280,7 @@ $$('.confirm-fill-demo').on('click', function () {
             .distinct()
             //.keys()
             .execute()
-            .done(function(results) {
+            .then(function(results) {
               // Запросом получили массив объектов customers
               updateListCustomers(results);
             });
@@ -208,24 +298,28 @@ $$('.confirm-clean-db').on('click', function () {
     myApp.confirm('Are you sure? It will erase all of your data!', 
       function () {
         //console.log('Start cleaning DB');
+        // Удалим все таблицы
+        server.remove('exerciseType');
+        server.remove('exercise');
+        server.remove('customers');
         // Очистим всё
-        server.clear('exerciseType');
-        server.clear('exercise');
-        server.clear('customers');
+        //server.clear('exerciseType');
+        //server.clear('exercise');
+        //server.clear('customers');
         //console.log('Reload pages data');
         server.customers.query('name')
           .all()
           .keys()
           .distinct()
           .execute()
-          .done(function(results) {
+          .then(function(results) {
             updateListCustomers(results);
           });
         server.exerciseType.query('name')
           .all()
           .keys()
           .execute()
-          .done(function(results) {
+          .then(function(results) {
             updateListExerciseType(results);
           });
         myApp.alert('Database is clean');
@@ -262,9 +356,15 @@ $$('.confirm-create-db').on('click', function () {
                 autoIncrement: true
               },
               indexes: {
-           name: {
-           unique: true
-           }
+		    	  name: {
+		    		unique: false
+		          },
+		          type: {
+		            unique: false
+		          },
+		          options: {
+		            unique: false
+		          }
               }
             },
             customers: {
@@ -279,8 +379,8 @@ $$('.confirm-create-db').on('click', function () {
               }
             }
           }
-        }).done(function(s) {
-          server = s;
+        }).then(function(serv) {
+          server = serv;
           
         });
       },
@@ -343,7 +443,7 @@ function updateListExerciseType(exerciseType) {
     listExerciseType += '  <div class="item-content">';
     listExerciseType += '    <div class="item-inner">';
     listExerciseType += '      <div class="item-media">';
-    listExerciseType += '        <a href="#view-7" class="tab-link"><i class="icon icon-form-settings"></i></a>';
+    listExerciseType += '        <a href="#view-7" class="tab-link" onclick="updateListExercises(\'' + value.name + '\')"><i class="icon icon-form-settings"></i></a>';
     listExerciseType += '      </div>';
     listExerciseType += '      <div class="item-input">';
     listExerciseType += '        <input type="text" placeholder="Exercise" value="' + value.name + '">';
@@ -364,4 +464,53 @@ function updateListExerciseType(exerciseType) {
     listExerciseType += '</li>';
   });
   document.getElementById("ulListExerciseType").innerHTML = listExerciseType;
+}
+
+/*
+В функцию передаётся название одной выбранной группы упражнений
+*/
+function updateListExercises(exerciseType) {
+  var listExercise = '';
+  // Запросом отбираем все упражнения даной группы (exerciseType)
+  server.exercise.query()
+  	.filter('type', exerciseType)
+    //.all()
+    .distinct()
+    //.keys()
+    .execute()
+    .then(function(results) {
+      console.log('results = ' + JSON.stringify(results));
+      //for (var rowExercise in results) {
+      results.forEach(function (rowExercise) {
+      	console.log('rowExercise.name = ' + rowExercise.name);
+      	listExercise += '<li>';
+        listExercise += '  <div class="item-content">';
+        listExercise += '    <div class="item-inner">';
+        listExercise += '      <div class="item-input">';
+        listExercise += '        <input type="text" placeholder="Exercise" value="' + rowExercise.name + '">';
+        listExercise += '      </div>';
+    	listExercise += '      <div class="item-media">';
+	    listExercise += '        <a href="#view-8" class="tab-link button button-round">Properties</a>';
+	    listExercise += '      </div>';
+	    listExercise += '      <div class="item-input hidden" id="ex-' + rowExercise.id + '">';
+	    listExercise += '        <a href="#" class="button button-round">Delete</a>';
+	    listExercise += '      </div>';
+	    listExercise += '      <div class="item-media">';
+	    listExercise += '        <label class="label-checkbox item-content">';
+	    listExercise += '          <input type="checkbox" name="ex-' + rowExercise.id + '" class="btn-delete-toggle">';
+	    listExercise += '          <div class="item-media">';
+	    listExercise += '            <i class="icon icon-form-checkbox"></i>';
+	    listExercise += '          </div>';
+	    listExercise += '        </label>';
+	    listExercise += '      </div>';
+	    listExercise += '    </div>';
+	    listExercise += '  </div>';
+	    listExercise += '</li>';
+      });
+      document.getElementById("ulListExercises").innerHTML = listExercise;
+      //console.log('exerciseType results = ' + JSON.stringify(results));
+      //updateListExerciseType(results);
+    });
+  
+  
 }

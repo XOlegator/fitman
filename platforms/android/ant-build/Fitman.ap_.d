@@ -253,7 +253,9 @@
 /home/oleg/fitman/platforms/android/assets/www/js/my-app.js \
 /home/oleg/fitman/platforms/android/assets/www/js/db-init.js \
 /home/oleg/fitman/platforms/android/assets/www/js/pouchdb-2.2.3.min.js \
+/home/oleg/fitman/platforms/android/assets/www/js/IndexedDBShim.min.map \
 /home/oleg/fitman/platforms/android/assets/www/js/modernizr.custom.js \
+/home/oleg/fitman/platforms/android/assets/www/js/IndexedDBShim.js \
 /home/oleg/fitman/platforms/android/assets/www/js/framework7.js \
 /home/oleg/fitman/platforms/android/assets/www/js/index.js \
 /home/oleg/fitman/platforms/android/assets/www/img/bulb.svg \
@@ -278,7 +280,9 @@
 /home/oleg/fitman/platforms/android/assets/www/img/i-form-email.png \
 /home/oleg/fitman/platforms/android/assets/www/img/i-form-checkbox-white.png \
 /home/oleg/fitman/platforms/android/assets/www/img/i-form-checkbox-black.png \
+/home/oleg/fitman/platforms/android/assets/www/css/framework7.themes.min.css \
 /home/oleg/fitman/platforms/android/assets/www/css/my-app.css \
+/home/oleg/fitman/platforms/android/assets/www/css/framework7.themes.css \
 /home/oleg/fitman/platforms/android/assets/www/css/index.css \
 /home/oleg/fitman/platforms/android/assets/www/css/framework7.min.css \
 /home/oleg/fitman/platforms/android/assets/www/css/framework7.css \
