@@ -18,8 +18,7 @@ var view8 = myApp.addView('#view-8'); // Страница настроек уп�
 var view10 = myApp.addView('#view-10'); // Добавление клиента
 var view13 = myApp.addView('#view-13'); // Удаление клиентов из базы
 */
-// Удаление самой базы данных
-//indexedDB.deleteDatabase('my-app');
+
 myApp.onPageInit('index-3', function (page) {
   db.open({
     server: 'my-app',
@@ -137,10 +136,10 @@ myApp.onPageInit('index-5', function (page) {
     .then(function(results) {
       updateListExerciseType(results);
       // Управляем видимостью кнопок Delete в настройках упражнений
-      $$('.btn-delete-toggle').on('change', function() {
+      /*$$('.btn-delete-toggle').on('change', function() {
       	var collapse_content_selector = '#' + $$(this).attr('name');
       	$$(collapse_content_selector).toggleClass('hidden');
-      });
+      });*/
     });
   });
   
@@ -397,6 +396,18 @@ $$('.confirm-create-db').on('click', function () {
       }
     );
 });
+// Модальное окно для создания базы данных
+$$('.confirm-remove-db').on('click', function () {
+	myApp.confirm('Are you sure?', 
+      function () {
+		// Удаление самой базы данных
+		indexedDB.deleteDatabase('my-app');
+		document.getElementById("ulListCustomers").innerHTML = '';
+  		document.getElementById("forDeleteCustomers").innerHTML = '';
+  		document.getElementById("ulListExerciseType").innerHTML = '';
+	  }
+	);
+});
 /*
 В функцию передаётся массив объектов customers
 */
@@ -457,7 +468,7 @@ function updateListExerciseType(exerciseType) {
     listExerciseType += '        <input type="text" placeholder="Exercise" value="' + value.name + '">';
     listExerciseType += '      </div>';
     listExerciseType += '      <div class="item-input hidden" id="ex-compl-' + value.id + '">';
-    listExerciseType += '        <a href="#" class="button button-round">Delete</a>';
+    listExerciseType += '        <a href="" class="button button-round" onclick="deleteExType(\'' + value.name + '\', \'' + value.id + '\')" id="aDeleteExType">Delete</a>';
     listExerciseType += '      </div>';
     listExerciseType += '      <div class="item-media">';
     listExerciseType += '        <label class="label-checkbox item-content">';
@@ -557,3 +568,58 @@ function addExType() {
     });
     $$('a[href="#view-5"]').click();
 }
+/*
+В функцию передаётся название одной выбранной группы упражнений
+*/
+/*$$('#aDeleteExType').on('click', function () {
+    myApp.addNotification({
+        title: 'Delete',
+        message: 'This item can not be delete while there are exercises in it.'
+    });
+});*/
+function deleteExType(exerciseType, idExType) {
+	// Сначала проверим, есть ли поданной группе упражнений упражнения в базе
+	server.exercise.query('name')
+  	.filter('type', exerciseType)
+    //.all()
+    .distinct()
+    //.keys()
+    .execute()
+    .then(function(res){
+    	if(res.length) {
+    		// В базе есть упражнения из этой группы. Удалять нельзя
+    		myApp.addNotification({
+		        title: 'Delete',
+		        message: 'This item can not be delete while there are exercises in it.'
+		    });
+    	} else {
+    		// В базе нет упражнений из этой группы, поэтому смело удаляем эту группу упражнений
+    		server.remove('exerciseType', parseInt(idExType)).then(function(res1) {
+    			server.exerciseType.query('name')
+				    .all()
+				    .distinct()
+				    //.keys()
+				    .execute()
+				    .then(function(results) {
+				      //console.log('exerciseType results = ' + JSON.stringify(results));
+				      updateListExerciseType(results);
+				    });
+				    // Управляем видимостью кнопок Delete в настройках упражнений
+				    //$$('body').off('change', '.btn-delete-toggle');
+			      /*$$('.btn-delete-toggle').on('change', function() {
+			      	var collapse_content_selector = '#' + $$(this).attr('name');
+			      	$$(collapse_content_selector).toggleClass('hidden');
+			      });*/
+	    		/*myApp.addNotification({
+			        title: 'Delete is done',
+			        message: 'This item was deleted.'
+			    });*/
+    		});
+    	}
+    });
+}
+// Управляем видимостью кнопок Delete в настройках упражнений
+$(document).on('change', '.btn-delete-toggle', function() {
+  var collapse_content_selector = '#' + $$(this).attr('name');
+  $$(collapse_content_selector).toggleClass('hidden');
+});

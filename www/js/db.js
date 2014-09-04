@@ -166,7 +166,7 @@
                 throw 'Database has been closed';
             }
             var transaction = db.transaction( table , transactionModes.readwrite ),
-                store = transaction.objectStore( table );
+                 store = transaction.objectStore( table );
             
             return new Promise(function(resolve, reject){
               var req = store.delete( key );
