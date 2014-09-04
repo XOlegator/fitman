@@ -538,7 +538,22 @@ function updateViewExProp(exercise) {
       results.forEach(function (rowExercise) {
       	//console.log('rowExercise.options = ' + rowExercise.options);
       	$('div#ex-prop').text(rowExercise.name);
-      	$('input[name="checkbox-ex-prop"][value="' + rowExercise.options + '"]').click();
+      	$$('input[name="checkbox-ex-prop"][value="' + rowExercise.options + '"]').click();
       });
     });
+}
+function addExType() {
+	var newExType = $('input#inputNewExType').val();
+	server.exerciseType.add({'name': newExType});
+	// Обновляем список групп упражнений на соответсвующей странице
+  server.exerciseType.query('name')
+    .all()
+    .distinct()
+    //.keys()
+    .execute()
+    .then(function(results) {
+      //console.log('exerciseType results = ' + JSON.stringify(results));
+      updateListExerciseType(results);
+    });
+    $$('a[href="#view-5"]').click();
 }
