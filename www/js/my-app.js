@@ -406,7 +406,7 @@ function updateListExerciseType(exerciseType) {
     listExerciseType += '        <input type="text" placeholder="Exercise" value="' + value.name + '">';
     listExerciseType += '      </div>';
     listExerciseType += '      <div class="item-input hidden" id="ex-compl-' + value.id + '">';
-    listExerciseType += '        <a href="" class="button button-round" onclick="deleteExType(\'' + value.name + '\', \'' + value.id + '\')" id="aDeleteExType">Delete</a>';
+    listExerciseType += '        <a href="" class="button button-round" onclick="deleteExType(\'' + value.name + '\', \'' + value.id + '\')">Delete</a>';
     listExerciseType += '      </div>';
     listExerciseType += '      <div class="item-media">';
     listExerciseType += '        <label class="label-checkbox item-content">';
@@ -438,10 +438,10 @@ function updateListExercises(exerciseType) {
     //.keys()
     .execute()
     .then(function(results) {
-      console.log('results = ' + JSON.stringify(results));
+      //console.log('results = ' + JSON.stringify(results));
       //for (var rowExercise in results) {
       results.forEach(function (rowExercise) {
-      	console.log('rowExercise.name = ' + rowExercise.name);
+      	//console.log('rowExercise.name = ' + rowExercise.name);
       	listExercise += '<li>';
         listExercise += '  <div class="item-content">';
         listExercise += '    <div class="item-inner">';
@@ -452,7 +452,7 @@ function updateListExercises(exerciseType) {
 	    listExercise += '        <a href="#view-8" class="tab-link button button-round" onclick="updateViewExProp(\'' + rowExercise.name + '\')">Properties</a>';
 	    listExercise += '      </div>';
 	    listExercise += '      <div class="item-input hidden" id="ex-' + rowExercise.id + '">';
-	    listExercise += '        <a href="#" class="button button-round">Delete</a>';
+	    listExercise += '        <a href="" class="button button-round" onclick="deleteExercise(\'' + rowExercise.name + '\')">Delete</a>';
 	    listExercise += '      </div>';
 	    listExercise += '      <div class="item-media">';
 	    listExercise += '        <label class="label-checkbox item-content">';
@@ -488,6 +488,42 @@ function addExercise() {
     updateListExercises(typeExercise);
     $$('a[href="#view-7"]').click();
   }
+}
+/*
+Функция удаления упражнения. В функцию передаётся название упражнения
+*/
+function deleteExercise(exercise) {
+	// Сначала проверим, есть ли по данному упражнению записи в базе
+	/*server.exercise.query('name')
+  	.filter('type', exerciseType)
+    .distinct()
+    .execute()
+    .then(function(res){
+    	if(res.length) {
+    		// В базе есть записи с этим упражнением. Удалять нельзя
+    		myApp.addNotification({
+		        title: 'Delete',
+		        message: 'This item can not be delete while there are exercises in it.'
+		    });
+    	} else {*/
+    		// В базе нет записей по этому упражнению, поэтому смело удаляем его
+    		// Сначала найдём все id записей по этому упражнению из таблицы exercise
+    		//console.log('exercise для удаления: ' + exercise);
+    		server.exercise.query()
+		  	.filter('name', exercise)
+		    .execute()
+		    .then(function(results) {
+		      //console.log('results = ' + JSON.stringify(results));
+		      results.forEach(function (rowExercise) {
+		      	server.remove('exercise', parseInt(rowExercise.id));
+		      	//console.log('Удалили запись с id ' + rowExercise.id);
+		      });
+		      var typeExercise = $('div#view-7a div.ex-of-type').text();
+		      updateListExercises(typeExercise);
+		    });
+    		
+    	//}
+    //});
 }
 /*
 Функция обновления списка опций конкретного упражнения. В функцию передаётся название выбранного упражнения
