@@ -8,8 +8,7 @@ var myApp = new Framework7({
 // Export selectors engine
 var $$ = Framework7.$;
 //indexedDB.deleteDatabase('my-app');
-//var RSVP = require('rsvp');
-//var Promise = require('es6-promise').Promise;
+
 /*
 var view1 = myApp.addView('#view-1'); // Заглавная страница
 var view2 = myApp.addView('#view-2'); // Настройки
@@ -138,74 +137,10 @@ myApp.onPageInit('index-5', function (page) {
     .execute()
     .then(function(results) {
       updateListExerciseType(results);
-      // Управляем видимостью кнопок Delete в настройках упражнений
-      /*$$('.btn-delete-toggle').on('change', function() {
-      	var collapse_content_selector = '#' + $$(this).attr('name');
-      	$$(collapse_content_selector).toggleClass('hidden');
-      });*/
     });
   });
   
 });
-
-// TODO переделать с инициализации страницы на загрузку. Инициализация подразумевает один раз, а загружаться будут каждый раз разные данные!
-/*myApp.onPageInit('index-7', function (page) {
-  // Перед инициализацией страницы со списком упражнений определённой группы, нужно подготовить этот список
-  db.open({
-    server: 'my-app',
-    version: 1,
-    schema: {
-      exerciseType: {
-        key: {
-          keyPath: 'id',
-          autoIncrement: true
-        },
-        indexes: {
-    			name: {
-    			  unique: true
-    			}
-        }
-      },
-      exercise: {
-        key: {
-          keyPath: 'id',
-          autoIncrement: true
-        },
-        indexes: {
-    			name: {
-    			  unique: true
-    			}
-        }
-      },
-      customers: {
-        key: {
-          keyPath: 'id',
-          autoIncrement: true
-        },
-        indexes: {
-    			name: {
-    			  unique: true
-    			}
-        }
-      }
-    }
-  }).then(function(serv) {
-    server = serv;
-    server.exercise.query('name')
-    .all()
-    //.keys()
-    .execute()
-    .then(function(results) {
-      updateListExercise(results);
-      // Управляем видимостью кнопок Delete в настройках упражнений
-      $$('.btn-delete-toggle').on('change', function() {
-      	var collapse_content_selector = '#' + $$(this).attr('name');
-      	$$(collapse_content_selector).toggleClass('hidden');
-      });
-    });
-  });
-  
-});*/
 
 myApp.init();
 
@@ -412,7 +347,7 @@ $$('.confirm-remove-db').on('click', function () {
 	);
 });
 /*
-В функцию передаётся массив объектов customers
+Функция построения списка клиентов. В функцию передаётся массив объектов customers
 */
 function updateListCustomers(customers) {
   var listCustomers = '';
@@ -456,7 +391,7 @@ function updateListCustomers(customers) {
   document.getElementById("forDeleteCustomers").innerHTML = listCustomersForDelete;
 }
 /*
-В функцию передаётся массив объектов exerciseType
+Функция построения списка групп упражнений. В функцию передаётся массив объектов exerciseType
 */
 function updateListExerciseType(exerciseType) {
   var listExerciseType = '';
@@ -489,10 +424,11 @@ function updateListExerciseType(exerciseType) {
 }
 
 /*
+Функция построения списка упражнений определённой группы.
 В функцию передаётся название одной выбранной группы упражнений
 */
 function updateListExercises(exerciseType) {
-  $('div#ex-of-type').text(exerciseType);
+  $('div.ex-of-type').text(exerciseType);
   var listExercise = '';
   // Запросом отбираем все упражнения даной группы (exerciseType)
   server.exercise.query('name')
@@ -534,11 +470,27 @@ function updateListExercises(exerciseType) {
       //console.log('exerciseType results = ' + JSON.stringify(results));
       //updateListExerciseType(results);
     });
-  
-  
 }
 /*
-В функцию передаётся название выбранного упражнения
+Функция добавления упражнения и его характеристик. Вызывается из страницы #view-7a
+*/
+function addExercise() {
+  var newExercise = $('input#inputNewExercise').val();
+  var typeExercise = $('div#view-7a div.ex-of-type').text();
+  if(newExercise != '') {
+    // Повторяем запись в базу по каждому отмеченному свойству упражнения
+    $('input[name="checkbox-new-ex-prop"]:checked').each(function(){
+      //console.log('Мы в цикле по действующим параметрам упражнения!');
+      //console.log('name = ' + newExercise + '; type = ' + typeExercise + '; options = ' + this.value);
+	  server.exercise.add({'name': newExercise, 'type': typeExercise, 'options': this.value});
+    });
+    // Обновляем список упражнений на соответсвующей странице
+    updateListExercises(typeExercise);
+    $$('a[href="#view-7"]').click();
+  }
+}
+/*
+Функция обновления списка опций конкретного упражнения. В функцию передаётся название выбранного упражнения
 */
 function updateViewExProp(exercise) {
   // Сначала снимаем все галочки параметров
@@ -556,6 +508,9 @@ function updateViewExProp(exercise) {
       });
     });
 }
+/*
+Функция добавления названия группы упражнений
+*/
 function addExType() {
 	var newExType = $('input#inputNewExType').val();
 	server.exerciseType.add({'name': newExType});
@@ -572,14 +527,8 @@ function addExType() {
     $$('a[href="#view-5"]').click();
 }
 /*
-В функцию передаётся название одной выбранной группы упражнений
+Функция удаления названия группы упражнений. В функцию передаётся название одной выбранной группы упражнений
 */
-/*$$('#aDeleteExType').on('click', function () {
-    myApp.addNotification({
-        title: 'Delete',
-        message: 'This item can not be delete while there are exercises in it.'
-    });
-});*/
 function deleteExType(exerciseType, idExType) {
 	// Сначала проверим, есть ли поданной группе упражнений упражнения в базе
 	server.exercise.query('name')

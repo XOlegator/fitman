@@ -290,7 +290,7 @@
             </div>
           </div>
         </div>
-        <!-- Страница добавления упражнения -->
+        <!-- Страница добавления названия группы упражнений -->
         <div data-page="index-5a" id="view-5a" class="navbar-through toolbar-through view tab">
           <div class="pages">
             <div data-page="index-5a" class="page">
@@ -318,9 +318,9 @@
               <div class="page-content grad-body">
                 <div class="content-block-title">
                   <a href="#view-5" class="tab-link btn-left-top">Cancel</a>
-                  <a href="#" class="tab-link btn-right-top">Add</a>
+                  <a href="#view-7a" class="tab-link btn-right-top">Add</a>
                 </div>
-                <div class="content-block-title" id="ex-of-type"></div>
+                <div class="content-block-title ex-of-type"></div>
                 <div class="content-block">
                   <div class="list-block">
                     <ul id="ulListExercises">
@@ -348,6 +348,135 @@
                         </div>
                       </li>-->
                     </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Страница добавления упражнения -->
+        <div data-page="index-7a" id="view-7a" class="navbar-through toolbar-through view tab">
+          <div class="pages">
+            <div data-page="index-7" class="page">
+              <div class="page-content grad-body">
+                <div class="content-block-title">
+                  <a href="#view-7" class="tab-link btn-left-top">Cancel</a>
+                  <a href="" class="tab-link btn-right-top" onclick="addExercise()">Save</a>
+                </div>
+                <div class="content-block-title ex-of-type"></div>
+                <div class="content-block">
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-input">
+                        <input type="text" placeholder="Exercise" value="" id="inputNewExercise">
+                      </div>
+                    </div>
+                  </div>
+                <div class="row">
+                  <!-- Each "cell" has col-[widht in percents] class -->
+                  <div class="col-50">
+                    <div class="list-block">
+                      <ul>
+                        <!-- Single chekbox item -->
+                          <li>
+                            <label class="label-checkbox item-content">
+                              <!-- Checked by default -->
+                              <input type="checkbox" name="checkbox-new-ex-prop" value="repeats">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Repeats</div>
+                                </div>
+                              </label>
+                            </li>
+                            <!-- Another chekbox item -->
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="checkbox-new-ex-prop" value="sets">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Sets</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="checkbox-new-ex-prop" value="weight">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Weight</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="checkbox-new-ex-prop" value="time">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Time</div>
+                                </div>
+                              </label>
+                            </li>
+                          </ul>
+                        </div>                    
+                      </div>
+                      <div class="col-50">
+                        <div class="list-block">
+                          <ul>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="checkbox-new-ex-prop" value="distance">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Distance</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="checkbox-new-ex-prop" value="speed">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Speed</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="checkbox-new-ex-prop" value="slope">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Slope</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li>
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="checkbox-new-ex-prop" value="load">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title">Load</div>
+                                </div>
+                              </label>
+                            </li>
+                          </ul>
+                        </div>                      
+                      </div>
                   </div>
                 </div>
               </div>
