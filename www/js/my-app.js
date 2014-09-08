@@ -7,6 +7,9 @@ var myApp = new Framework7({
 
 // Export selectors engine
 var $$ = Framework7.$;
+//indexedDB.deleteDatabase('my-app');
+//var RSVP = require('rsvp');
+//var Promise = require('es6-promise').Promise;
 /*
 var view1 = myApp.addView('#view-1'); // Заглавная страница
 var view2 = myApp.addView('#view-2'); // Настройки
@@ -396,7 +399,7 @@ $$('.confirm-create-db').on('click', function () {
       }
     );
 });
-// Модальное окно для создания базы данных
+// Модальное окно для удаления базы данных
 $$('.confirm-remove-db').on('click', function () {
 	myApp.confirm('Are you sure?', 
       function () {

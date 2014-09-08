@@ -7,7 +7,7 @@
             readonly: 'readonly',
             readwrite: 'readwrite'
         };
-        
+  
     var hasOwn = Object.prototype.hasOwnProperty;
 
     if ( !indexedDB ) {
