@@ -4,7 +4,13 @@ var myApp = new Framework7({
   modalTitle: 'Personal trainer',
   init: false
 });
-
+// Функция для приведения дат в нужный вид
+Date.prototype.toDateInputValue = (function() {
+  var local = new Date(this);
+  local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+  return local.toJSON().slice(0,10);
+});
+  
 // Export selectors engine
 var $$ = Framework7.$;
 //indexedDB.deleteDatabase('my-app');
@@ -62,6 +68,12 @@ myApp.onPageInit('index-3', function (page) {
         indexes: {
     	  name: {
     		unique: true
+    	  },    	  
+    	  photo: {
+    		unique: false
+    	  },    	  
+    	  comments: {
+    		unique: false
     	  }
         }
       }
@@ -125,7 +137,13 @@ myApp.onPageInit('index-5', function (page) {
         indexes: {
     			name: {
     			  unique: true
-    			}
+    			},    	  
+    	  photo: {
+    		unique: false
+    	  },    	  
+    	  comments: {
+    		unique: false
+    	  }
         }
       }
     }
@@ -141,7 +159,11 @@ myApp.onPageInit('index-5', function (page) {
   });
   
 });
-
+// Инициализация страницы добавления клиента
+myApp.onPageInit('index-10', function (page) {
+  // Устанавливаем дату начала занятий на текущую дату
+  $('#inputDateStartClasses').val(new Date().toDateInputValue());
+});
 myApp.init();
 
 // Модальное окно для подтверждения удаления клиентов
@@ -277,62 +299,62 @@ $$('.confirm-clean-db').on('click', function () {
 
 // Модальное окно для создания базы данных
 $$('.confirm-create-db').on('click', function () {
-    myApp.confirm('Are you sure?', 
-      function () {
-        var server;
-        db.open({
-          server: 'my-app',
-          version: 1,
-          schema: {
-            exerciseType: {
-              key: {
-                keyPath: 'id',
-                autoIncrement: true
-              },
-              indexes: {
-           name: {
-           unique: true
-           }
-              }
-            },
-            exercise: {
-              key: {
-                keyPath: 'id',
-                autoIncrement: true
-              },
-              indexes: {
-		    	  name: {
-		    		unique: false
-		          },
-		          type: {
-		            unique: false
-		          },
-		          options: {
-		            unique: false
-		          }
-              }
-            },
-            customers: {
-              key: {
-                keyPath: 'id',
-                autoIncrement: true
-              },
-              indexes: {
-           name: {
-           unique: true
-           }
-              }
+  myApp.confirm('Are you sure?', function () {
+    var server;
+    db.open({
+      server: 'my-app',
+      version: 1,
+      schema: {
+        exerciseType: {
+          key: {
+            keyPath: 'id',
+            autoIncrement: true
+          },
+          indexes: {
+            name: {
+              unique: true
             }
           }
-        }).then(function(serv) {
-          server = serv;
-          
-        });
-      },
-      function () {
-        // Действие отменено
+        },
+        exercise: {
+          key: {
+            keyPath: 'id',
+            autoIncrement: true
+          },
+          indexes: {
+		    name: {
+		      unique: false
+		    },
+		    type: {
+		      unique: false
+		    },
+		    options: {
+		      unique: false
+		    }
+          }
+        },
+        customers: {
+          key: {
+            keyPath: 'id',
+            autoIncrement: true
+          },
+          indexes: {
+            name: {
+              unique: true
+            },    	  
+    	    photo: {
+    		  unique: false
+    	    },    	  
+    	    comments: {
+    		  unique: false
+    	    }
+          }
+        }
       }
-    );
+    }).then(function(serv) {
+      server = serv;
+    });
+  });
 });
 // Модальное окно для удаления базы данных
 $$('.confirm-remove-db').on('click', function () {
@@ -389,6 +411,64 @@ function updateListCustomers(customers) {
   });
   document.getElementById("ulListCustomers").innerHTML = listCustomers;
   document.getElementById("forDeleteCustomers").innerHTML = listCustomersForDelete;
+}
+/*
+Функция добавления клиента. Вызывается из страницы #view-10 по кнопке Save
+*/
+function addCustomer() {
+  var newCustomer = $('input#inputNewCustomer').val();
+  var dateStartClasses = $('input#inputDateStartClasses').val();
+  var timeVal = new Date().toISOString();//.substring(0, 10);
+  var photo = 'somepic' + timeVal + '.jpg';
+  var newCustomerComments = $('textarea#newCustomerComments').val();
+  //console.log('Добавляем клиента ' + newCustomer + ' фотография ' + photo + ' комментарий: ' + newCustomerComments);
+  if(newCustomer != '') {
+  	//console.log('Добавляем клиента ' + newCustomer + ' фотография ' + photo + ' комментарий: ' + newCustomerComments);
+    server.customers.add({'name': newCustomer, 'photo': photo, 'comments': newCustomerComments});
+    // Обновляем список клиентов на соответсвующей странице
+    server.customers.query('name')
+      .all()            
+      .distinct()
+      .execute()
+      .then(function(results) {
+      	myApp.addNotification({
+          title: 'Add new Customer',
+          message: 'Data was saved'
+        });
+        // Запросом получили массив объектов customers
+        updateListCustomers(results);
+      });
+    //$$('a[href="#view-3"]').click();
+  }
+}
+/*
+Функция удаления клиентов из БД. Вызывается из страницы #view-13 по кнопке Delete
+*/
+function removeCustomer() {
+  /*var newCustomer = $('input#inputNewCustomer').val();
+  var dateStartClasses = $('input#inputDateStartClasses').val();
+  var timeVal = new Date().toISOString();//.substring(0, 10);
+  var photo = 'somepic' + timeVal + '.jpg';
+  var newCustomerComments = $('textarea#newCustomerComments').val();
+  //console.log('Добавляем клиента ' + newCustomer + ' фотография ' + photo + ' комментарий: ' + newCustomerComments);
+  if(newCustomer != '') {
+  	//console.log('Добавляем клиента ' + newCustomer + ' фотография ' + photo + ' комментарий: ' + newCustomerComments);
+    server.customers.add({'name': newCustomer, 'photo': photo, 'comments': newCustomerComments});
+    // Обновляем список клиентов на соответсвующей странице
+    server.customers.query('name')
+      .all()            
+      .distinct()
+      .execute()
+      .then(function(results) {
+      	myApp.addNotification({
+          title: 'Add new Customer',
+          message: 'Data was saved'
+        });
+        // Запросом получили массив объектов customers
+        updateListCustomers(results);
+      });
+    //$$('a[href="#view-3"]').click();
+  }*/
 }
 /*
 Функция построения списка групп упражнений. В функцию передаётся массив объектов exerciseType
