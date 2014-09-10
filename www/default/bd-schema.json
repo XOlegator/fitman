@@ -1,0 +1,51 @@
+{
+    "server": "my-app",
+    "version": 1,
+    "schema": {
+        "exerciseType": {
+            "key": {
+                "keyPath": "id",
+                "autoIncrement": true
+            },
+            "indexes": {
+                "name": {
+                    "unique": true
+                }
+            }
+        },
+        "exercise": {
+            "key": {
+                "keyPath": "id",
+                "autoIncrement": true
+            },
+            "indexes": {
+                "name": {
+                    "unique": false
+                },
+                "type": {
+                    "unique": false
+                },
+                "options": {
+                    "unique": false
+                }
+            }
+        },
+        "customers": {
+            "key": {
+                "keyPath": "id",
+                "autoIncrement": true
+            },
+            "indexes": {
+                "name": {
+                    "unique": true
+                },
+                "photo": {
+                    "unique": false
+                },
+                "comments": {
+                    "unique": false
+                }
+            }
+        }
+    }
+}

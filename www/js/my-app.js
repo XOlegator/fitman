@@ -4,13 +4,14 @@ var myApp = new Framework7({
   modalTitle: 'Personal trainer',
   init: false
 });
+
 // Функция для приведения дат в нужный вид
 Date.prototype.toDateInputValue = (function() {
   var local = new Date(this);
   local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
   return local.toJSON().slice(0,10);
 });
-  
+var server;
 // Export selectors engine
 var $$ = Framework7.$;
 //indexedDB.deleteDatabase('my-app');
@@ -26,223 +27,115 @@ var view8 = myApp.addView('#view-8'); // Страница настроек уп�
 var view10 = myApp.addView('#view-10'); // Добавление клиента
 var view13 = myApp.addView('#view-13'); // Удаление клиентов из базы
 */
-
-myApp.onPageInit('index-3', function (page) {
-  db.open({
-    server: 'my-app',
-    version: 1,
-    schema: {
-      exerciseType: {
-        key: {
-          keyPath: 'id',
-          autoIncrement: true
-        },
-        indexes: {
-    	  name: {
-    		unique: true
-    	  }
-        }
-      },
-      exercise: {
-        key: {
-          keyPath: 'id',
-          autoIncrement: true
-        },
-        indexes: {
-    	  name: {
-    		unique: false
-          },
-          type: {
-            unique: false
-          },
-          options: {
-            unique: false
-          }
-        }
-      },
-      customers: {
-        key: {
-          keyPath: 'id',
-          autoIncrement: true
-        },
-        indexes: {
-    	  name: {
-    		unique: true
-    	  },    	  
-    	  photo: {
-    		unique: false
-    	  },    	  
-    	  comments: {
-    		unique: false
-    	  }
-        }
-      }
-    }
-  }).then(function(serv) {
+var bdSchema = '';
+$.getJSON('default/bd-schema.json', function(data){
+  //console.log('Вот что прочли из файла  схемы БД' + data);
+  //bdSchema = JSON.stringify(data, "", 2);
+  //console.log('1 bdSchema = ' + bdSchema);
+  db.open(data).then(function(serv) {
+  	console.log('Получили схему БД, открыли базу');
     server = serv;
-    server.customers.query('name')
-    .all()
-    //.keys()
-    .execute()
-    .then(function(results) {
-      updateListCustomers(results);
+    console.log('Инициализируем страницу index-3');
+    myApp.onPageInit('index-3', function (page) {
+      // Перед инициализацией страницы со списком клиентов, нужно подготовить этот список
+      server.customers.query('name')
+        .all()
+        .execute()
+        .then(function(results) {
+          console.log('Формируем список клиентов');
+          updateListCustomers(results);
+        });
     });
-  });
-  // Перед инициализацией страницы со списком клиентов, нужно подготовить этот список
-  //console.log('page 3 init');
-  
-  //console.log('End of init page 3');
+    console.log('Инициализируем страницу index-5');
+    myApp.onPageInit('index-5', function (page) {
+      // Перед инициализацией страницы со списком групп упражнений, нужно подготовить этот список
+      server.exerciseType.query('name')
+        .all()
+        .execute()
+        .then(function(results) {
+          console.log('Формируем список групп упражнений');
+          updateListExerciseType(results);
+        });
+      });
+    });
 });
 
-myApp.onPageInit('index-5', function (page) {
-  // Перед инициализацией страницы со списком групп упражнений, нужно подготовить этот список
-  //console.log('page 5 init');
-  db.open({
-    server: 'my-app',
-    version: 1,
-    schema: {
-      exerciseType: {
-        key: {
-          keyPath: 'id',
-          autoIncrement: true
-        },
-        indexes: {
-    			name: {
-    			  unique: true
-    			}
-        }
-      },
-      exercise: {
-        key: {
-          keyPath: 'id',
-          autoIncrement: true
-        },
-        indexes: {
-    	  name: {
-    		unique: false
-          },
-          type: {
-            unique: false
-          },
-          options: {
-            unique: false
-          }
-        }
-      },
-      customers: {
-        key: {
-          keyPath: 'id',
-          autoIncrement: true
-        },
-        indexes: {
-    			name: {
-    			  unique: true
-    			},    	  
-    	  photo: {
-    		unique: false
-    	  },    	  
-    	  comments: {
-    		unique: false
-    	  }
-        }
-      }
-    }
-  }).then(function(serv) {
-    server = serv;
-    server.exerciseType.query('name')
-    .all()
-    //.keys()
-    .execute()
-    .then(function(results) {
-      updateListExerciseType(results);
-    });
-  });
-  
-});
 // Инициализация страницы добавления клиента
 myApp.onPageInit('index-10', function (page) {
   // Устанавливаем дату начала занятий на текущую дату
   $('#inputDateStartClasses').val(new Date().toDateInputValue());
 });
+
 myApp.init();
 
 // Модальное окно для подтверждения загрузки демо-данных
 $$('.confirm-fill-demo').on('click', function () {
-    myApp.confirm('Are you sure? It will erase all of your data!', 
-      function () {
-        // Очистим всё
-        server.clear('exerciseType');
-        server.clear('exercise');
-        server.clear('customers');
-        // Заполняем таблицы данными из json файлов
-        console.log('Начинаем обрабатывать упражнения');
-        $.getJSON('default/exercises.json', function(data) {
-          // Запускаем цикл по группам упражнений (exerciseType)
-          for (var j in data.exerciseType) {
-            //console.log('j = ' + j);
-            console.log('data.exerciseType[j].name = ' + data.exerciseType[j].name);
-            //console.log('exercise = ' + JSON.stringify(data.exerciseType[j]));
-            // Добавляем группы упражнений
-            server.exerciseType.add({'name': data.exerciseType[j].name});
-            // Внутри группы упражнений проходим циклом все упражнения из этой группы
-            for (var i in data.exerciseType[j].exercises) {
-              // Внутри упражнения проходим циклом по всем характеристикам упражнения
-              //for (var opt in data.exerciseType[j].exercises[i].options) {
-              //  console.log('opt = ' + opt);
-                // Формируем базу упражнений по типам (типы заносим в отдельную таблицу)
-                for (var optName in data.exerciseType[j].exercises[i].options[0]) {
-                  //console.log('data.exerciseType[j].exercises[i].options[0][optName] = ' + JSON.stringify(data.exerciseType[j].exercises[i].options[0][optName]));
-                  //console.log('optName = ' + optName);
-                  // Если опция действует, то добавляем упражнение с этой опцией в базу данных
-                  if(data.exerciseType[j].exercises[i].options[0][optName]) {
-                    //console.log('Запись в базу строки по упражнению');
-                    //console.log('name = ' + data.exerciseType[j].exercises[i].name + '; type = ' + data.exerciseType[j].name + '; options = ' + optName);
-                    //console.log('type = ' + data.exerciseType[j].name);
-                    //console.log('options = ' + optName);
-                    server.exercise.add({
-                    	'name': data.exerciseType[j].exercises[i].name,
-                    	'type': data.exerciseType[j].name,
-                    	'options': optName})
-                    	.then(function(item){
-                    		console.log(JSON.stringify(item));
-                    	});
-                  }
-                }
-              //}
+  myApp.confirm('Are you sure? It will erase all of your data!', function () {
+    // Очистим всё
+    console.log(JSON.stringify(server));
+    server.clear('exerciseType');
+    server.clear('exercise');
+    server.clear('customers');
+    // Заполняем таблицы данными из json файлов
+    console.log('Начинаем обрабатывать упражнения');
+    $.getJSON('default/exercises.json', function(data) {
+      // Запускаем цикл по группам упражнений (exerciseType)
+      for (var j in data.exerciseType) {
+        console.log('j = ' + j);
+        console.log('data.exerciseType[j].name = ' + data.exerciseType[j].name);
+        console.log('exercise = ' + JSON.stringify(data.exerciseType[j]));
+        // Добавляем группы упражнений
+        server.exerciseType.add({'name': data.exerciseType[j].name});
+        // Внутри группы упражнений проходим циклом все упражнения из этой группы
+        for (var i in data.exerciseType[j].exercises) {
+          // Внутри упражнения проходим циклом по всем характеристикам упражнения
+          // Формируем базу упражнений по типам (типы заносим в отдельную таблицу)
+          for (var optName in data.exerciseType[j].exercises[i].options[0]) {
+            //console.log('data.exerciseType[j].exercises[i].options[0][optName] = ' + JSON.stringify(data.exerciseType[j].exercises[i].options[0][optName]));
+            //console.log('optName = ' + optName);
+            // Если опция действует, то добавляем упражнение с этой опцией в базу данных
+            if(data.exerciseType[j].exercises[i].options[0][optName]) {
+              //console.log('Запись в базу строки по упражнению');
+              //console.log('name = ' + data.exerciseType[j].exercises[i].name + '; type = ' + data.exerciseType[j].name + '; options = ' + optName);
+              //console.log('type = ' + data.exerciseType[j].name);
+              //console.log('options = ' + optName);
+              server.exercise.add({
+                'name': data.exerciseType[j].exercises[i].name,
+                'type': data.exerciseType[j].name,
+                'options': optName
+              }).then(function(item){
+                console.log(JSON.stringify(item));
+              });
             }
           }
-          // Обновляем список групп упражнений на соответсвующей странице
-          server.exerciseType.query('name')
-            .all()
-            .distinct()
-            //.keys()
-            .execute()
-            .then(function(results) {
-              //console.log('exerciseType results = ' + JSON.stringify(results));
-              updateListExerciseType(results);
-            });
-        });
-        $.getJSON('default/customers.json', function(data) {
-          for (var i in data.customers) {
-            // Добавляем клиентов в базу
-            server.customers.add(data.customers[i]);
-          }
-          server.customers.query('name')
-            .all()            
-            .distinct()
-            //.keys()
-            .execute()
-            .then(function(results) {
-              // Запросом получили массив объектов customers
-              updateListCustomers(results);
-            });
-        });
-        myApp.alert('Enjoy your new demo data');
-      },
-      function () {
-        // Действие отменено
+        }
       }
-    );
+      // Обновляем список групп упражнений на соответсвующей странице
+      server.exerciseType.query('name')
+        .all()
+        .distinct()
+        .execute()
+        .then(function(results) {
+          //console.log('exerciseType results = ' + JSON.stringify(results));
+          updateListExerciseType(results);
+        });
+      });
+      $.getJSON('default/customers.json', function(data) {
+        for (var i in data.customers) {
+          // Добавляем клиентов в базу
+          server.customers.add(data.customers[i]);
+        }
+        server.customers.query('name')
+          .all()            
+          .distinct()
+          .execute()
+          .then(function(results) {
+            // Запросом получили массив объектов customers
+            updateListCustomers(results);
+          });
+      });
+      myApp.alert('Enjoy your new demo data');
+  });
 });
 
 // Модальное окно для подтверждения очистки базы данных
@@ -287,7 +180,9 @@ $$('.confirm-clean-db').on('click', function () {
 $$('.confirm-create-db').on('click', function () {
   myApp.confirm('Are you sure?', function () {
     var server;
-    db.open({
+    db.open(
+    	bdSchema
+    	/*{
       server: 'my-app',
       version: 1,
       schema: {
@@ -337,7 +232,7 @@ $$('.confirm-create-db').on('click', function () {
           }
         }
       }
-    }).then(function(serv) {
+    }*/).then(function(serv) {
       server = serv;
     });
   });
