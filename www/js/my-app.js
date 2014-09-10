@@ -11,7 +11,7 @@ Date.prototype.toDateInputValue = (function() {
   local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
   return local.toJSON().slice(0,10);
 });
-var server;
+//var server;
 // Export selectors engine
 var $$ = Framework7.$;
 //indexedDB.deleteDatabase('my-app');
@@ -29,9 +29,7 @@ var view13 = myApp.addView('#view-13'); // Удаление клиентов и�
 */
 var bdSchema = '';
 $.getJSON('default/bd-schema.json', function(data){
-  //console.log('Вот что прочли из файла  схемы БД' + data);
-  //bdSchema = JSON.stringify(data, "", 2);
-  //console.log('1 bdSchema = ' + bdSchema);
+  bdSchema = data;
   db.open(data).then(function(serv) {
   	console.log('Получили схему БД, открыли базу');
     server = serv;
@@ -43,6 +41,7 @@ $.getJSON('default/bd-schema.json', function(data){
         .execute()
         .then(function(results) {
           console.log('Формируем список клиентов');
+          //console.log('Список клиентов: ' + JSON.stringify(results));
           updateListCustomers(results);
         });
     });
@@ -54,19 +53,18 @@ $.getJSON('default/bd-schema.json', function(data){
         .execute()
         .then(function(results) {
           console.log('Формируем список групп упражнений');
+          //console.log('Список групп упражнений: ' + JSON.stringify(results));
           updateListExerciseType(results);
         });
       });
+    // Инициализация страницы добавления клиента
+    myApp.onPageInit('index-10', function (page) {
+      // Устанавливаем дату начала занятий на текущую дату
+      $('#inputDateStartClasses').val(new Date().toDateInputValue());
     });
+    myApp.init();
+  });
 });
-
-// Инициализация страницы добавления клиента
-myApp.onPageInit('index-10', function (page) {
-  // Устанавливаем дату начала занятий на текущую дату
-  $('#inputDateStartClasses').val(new Date().toDateInputValue());
-});
-
-myApp.init();
 
 // Модальное окно для подтверждения загрузки демо-данных
 $$('.confirm-fill-demo').on('click', function () {
@@ -81,9 +79,9 @@ $$('.confirm-fill-demo').on('click', function () {
     $.getJSON('default/exercises.json', function(data) {
       // Запускаем цикл по группам упражнений (exerciseType)
       for (var j in data.exerciseType) {
-        console.log('j = ' + j);
-        console.log('data.exerciseType[j].name = ' + data.exerciseType[j].name);
-        console.log('exercise = ' + JSON.stringify(data.exerciseType[j]));
+        //console.log('j = ' + j);
+        //console.log('data.exerciseType[j].name = ' + data.exerciseType[j].name);
+        //console.log('exercise = ' + JSON.stringify(data.exerciseType[j]));
         // Добавляем группы упражнений
         server.exerciseType.add({'name': data.exerciseType[j].name});
         // Внутри группы упражнений проходим циклом все упражнения из этой группы
@@ -179,60 +177,7 @@ $$('.confirm-clean-db').on('click', function () {
 // Модальное окно для создания базы данных
 $$('.confirm-create-db').on('click', function () {
   myApp.confirm('Are you sure?', function () {
-    var server;
-    db.open(
-    	bdSchema
-    	/*{
-      server: 'my-app',
-      version: 1,
-      schema: {
-        exerciseType: {
-          key: {
-            keyPath: 'id',
-            autoIncrement: true
-          },
-          indexes: {
-            name: {
-              unique: true
-            }
-          }
-        },
-        exercise: {
-          key: {
-            keyPath: 'id',
-            autoIncrement: true
-          },
-          indexes: {
-		    name: {
-		      unique: false
-		    },
-		    type: {
-		      unique: false
-		    },
-		    options: {
-		      unique: false
-		    }
-          }
-        },
-        customers: {
-          key: {
-            keyPath: 'id',
-            autoIncrement: true
-          },
-          indexes: {
-            name: {
-              unique: true
-            },    	  
-    	    photo: {
-    		  unique: false
-    	    },    	  
-    	    comments: {
-    		  unique: false
-    	    }
-          }
-        }
-      }
-    }*/).then(function(serv) {
+    db.open(bdSchema).then(function(serv) {
       server = serv;
     });
   });
@@ -259,26 +204,17 @@ function updateListCustomers(customers) {
     // Список пользователей
     listCustomers += '<li class="item-content">';
     listCustomers += '  <div class="item-inner">';
-    listCustomers += '    <div class="item-title">' + value.name + '</div>';
+    listCustomers += '    <div class="item-title">';
+    listCustomers += '      <a href="#view-10" class="tab-link btn-right-top" onclick="fillCustomerData(\'' + value.name + '\')">' + value.name + '</a>';
+    listCustomers += '    </div>';
     listCustomers += '  </div>';
     listCustomers += '</li>';
     // Список пользователей для удаления
-    /*
-    <li>
-      <label class="label-checkbox item-content">
-        <div class="item-inner">
-          <div class="item-title">Customers 1</div>
-        </div>
-        <input type="checkbox" name="my-checkbox" value="Customers 1">
-        <div class="item-media">
-          <i class="icon icon-form-checkbox"></i>
-        </div>
-      </label>
-    </li>
-    */
     listCustomersForDelete += '<li>';
     listCustomersForDelete += '  <div class="item-inner">';
-    listCustomersForDelete += '    <div class="item-title">' + value.name + '</div>';
+    listCustomersForDelete += '    <div class="item-title">';
+    listCustomersForDelete += '      <a href="#view-10" class="tab-link btn-right-top" onclick="fillCustomerData(\'' + value.name + '\')">' + value.name + '</a>';
+    listCustomersForDelete += '    </div>';
     listCustomersForDelete += '    <div class="item-media">';
     listCustomersForDelete += '      <label class="label-checkbox item-content">';
     listCustomersForDelete += '        <input type="checkbox" name="inputCustomerForDelete" value="' + value.id + '">';
@@ -385,6 +321,18 @@ function removeCustomers() {
       });
     //$$('a[href="#view-3"]').click();
   }*/
+}
+/*
+Функция заполнения данными страницы клиента. Вызывается из списка клиентов при выборе клиента
+*/
+function fillCustomerData(customerName) {
+  server.customers.query()
+  	.filter('name', customerName)
+    .execute()
+    .then(function(results) {
+      $('input#inputNewCustomer').val(results[0].name);
+      $('textarea#newCustomerComments').val(results[0].comments);
+    });
 }
 /*
 Функция построения списка групп упражнений. В функцию передаётся массив объектов exerciseType
@@ -525,18 +473,49 @@ function deleteExercise(exercise) {
 Функция обновления списка опций конкретного упражнения. В функцию передаётся название выбранного упражнения
 */
 function updateViewExProp(exercise) {
+  console.log('Формируем список характеристик данного упражнения');
   // Сначала снимаем все галочки параметров
   $('div#view-8 input[name="checkbox-ex-prop"]').removeAttr('checked');
+  $('div#ex-prop').text(exercise); // Обновим на странице название текущего упражнения
   // Теперь ставим только те галочки, которые нужны по данным БД
   server.exercise.query()
   	.filter('name', exercise)
     .execute()
     .then(function(results) {
-      //console.log('results = ' + JSON.stringify(results));
+      console.log('Список характеристик: ' + JSON.stringify(results));
       results.forEach(function (rowExercise) {
-      	//console.log('rowExercise.options = ' + rowExercise.options);
-      	$('div#ex-prop').text(rowExercise.name);
+      	console.log('rowExercise.options = ' + rowExercise.options);
       	$$('input[name="checkbox-ex-prop"][value="' + rowExercise.options + '"]').click();
+      });
+    });
+}
+/*
+Функция обновления действующих параметров выбранного упражнения. Вызывается со страницы view-8 по кнопке Save 
+*/
+function updateExerciseProperties() {
+  // Определяем редактируемое упражнение
+  var exerciseName = $('div#ex-prop').text();
+  var exerciseType;
+  console.log('Идёт обновление параметров упражнения ' + exerciseName);
+  // Сначала отберём все записи по данному упражнению из базы...
+  server.exercise.query()
+  	.filter('name', exerciseName)
+    .execute()
+    .then(function(results) {
+      // Запомним название группы упражнений
+      exerciseType = results[0].type;
+      console.log('results[0].type = ' + results[0].type);
+      // ... и удалим их
+      console.log('Список характеристик: ' + JSON.stringify(results));
+      results.forEach(function (rowExercise) {
+      	console.log('rowExercise.id = ' + rowExercise.id);
+      	server.remove('exercise', parseInt(rowExercise.id));
+      });
+      // После того, как удалил старые записи, внесём в базу новые записи
+      $('input[name="checkbox-ex-prop"]:checked').each(function(){
+        console.log('Мы в цикле по новым действующим параметрам упражнения!');
+        console.log('name = ' + exerciseName + '; type = ' + exerciseType + '; options = ' + this.value);
+	    server.exercise.add({'name': exerciseName, 'type': exerciseType, 'options': this.value});
       });
     });
 }
