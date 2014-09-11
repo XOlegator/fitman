@@ -586,3 +586,14 @@ $(document).on('change', '.btn-delete-toggle', function() {
   var collapse_content_selector = '#' + $$(this).attr('name');
   $$(collapse_content_selector).toggleClass('hidden');
 });
+/*
+Функция обновления данных на странице формирования комплекса упражнений клиента.
+Вызывается со страницы #view-10 по кнопке "Workout of the day"
+*/
+function upgradeViewWorkout() {
+  var customerName = $('input#inputNewCustomer').val();
+  $('span#spanCustName').html(customerName);
+  var today = new Date().toDateInputValue();
+  $('span#spanDateEx').html(today);
+  console.log('Клиент ' + customerName + ', дата ' + today);
+}

@@ -673,7 +673,7 @@
                               <div class="hidden"></div>
                             </div>
                             <div class="item-input">
-                              <a href="#" class="tab-link button button-round">Workout of the day</a>
+                              <a href="#view-15" class="tab-link button button-round" onclick="upgradeViewWorkout()">Workout of the day</a>
                               <div class="hidden"></div>
                             </div>
                           </div>
@@ -721,6 +721,59 @@
                       </label>
                     </li>-->
                   </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Страница для формирования занятий по клиенту -->
+        <div data-page="index-15" id="view-15" class="navbar-through toolbar-through view tab">
+          <div class="pages">
+            <div data-page="index-15" class="page">
+              <div class="page-content grad-body">
+                <div class="content-block-title">
+                  <div class="row">
+                    <div class="col-30"><span id="spanCustName"></span></div>
+                    <div class="col-40"><center><strong>Workout of the day</strong></center></div>
+                    <div class="col-30"><span id="spanDateEx"></span></div>
+                  </div>
+                </div>
+                <div class="content-block">
+                  <div class="row">
+                    <div class="col-25">
+                      <center><a href="#view-10" class="back tab-link">Cancel</a></center>
+                    </div>
+                    <div class="col-25">
+                      <center><a href="#tab1" class="tab-link">Calendar</a></center>
+                    </div>
+                    <div class="col-25">
+                      <center><a href="#tab2" class="tab-link">Schedule</a></center>
+                    </div>
+                    <div class="col-25">
+                      <center><a href="#tab3" class="tab-link">Change</a></center>
+                    </div>
+                  </div>
+                </div>
+                <!-- Tabs, tabs wrapper -->
+                <div class="tabs">
+                  <!-- Tab 1, active by default -->
+                  <div id="tab1" class="tab">
+                    <div class="content-block">
+                      <p>This is tab 1 content</p>
+                    </div>
+                  </div>
+                  <!-- Tab 2 -->
+                  <div id="tab2" class="tab">
+                    <div class="content-block">
+                      <p>This is tab 2 content</p>
+                    </div>
+                  </div>
+                  <!-- Tab 3 -->
+                  <div id="tab3" class="tab">
+                    <div class="content-block">
+                      <p>This is tab 3 content</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
