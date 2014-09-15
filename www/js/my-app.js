@@ -614,6 +614,12 @@ function upgradeViewWorkout() {
 Вызывается со страницы #view-15 по кнопке "Change"
 */
 function makeSetExCustomer() {
+  // Кнопку Change надо заменить на Save
+  $('a[href="#tab3"]').replaceWith('<a href="#tab3" class="tab-link" onclick="saveSetExCustomer()">Save</a>');
+  // Кнопку Cancel надо заменить на Clear all
+  $('a#aCancelSetEx').replaceWith('<a href="" class="tab-link" onclick="makeSetExCustomer()">Clear all</a>');
+  // Очистим список готового набора
+  $('ul#ulListSelectedExercises').empty();
   // Формируем список групп упражнений
   server.exerciseType.query('name')
     .all()
@@ -727,6 +733,14 @@ $(document).on('opened', '.swipeout-selected', function (e) {
     .execute()
     .then(function(result) {
       console.log('Нашли тип этого упражнения: ' + result[0].type);
+      // TODO Тут вставляем запись в конец списка, хотя правильнее было бы в нужном порядке (сортировка по алфавиту)
       $('ul#ulListAllExWithTypes li[data-item="' + result[0].type + '"]').append(listExercises);
     });
-});   
+});  
+/*
+Функция сохранения набора упражнений клиента.
+Вызывается со страницы #view-15 #tab3 по кнопке "Save"
+*/
+function saveSetExCustomer() {
+  console.log('Сохраняем набор');
+} 
