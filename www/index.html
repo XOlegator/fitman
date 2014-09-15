@@ -22,6 +22,9 @@
     <link rel="stylesheet" href="css/framework7.min.css">
     <!-- Path to your custom app styles-->
     <link rel="stylesheet" href="css/my-app.css">
+    <link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.min.css">
+    <link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.theme.min.css">
   </head>
   <body>
     <!-- Status bar overlay for fullscreen mode-->
@@ -750,16 +753,35 @@
                       <center><a href="#tab2" class="tab-link">Schedule</a></center>
                     </div>
                     <div class="col-25">
-                      <center><a href="#tab3" class="tab-link">Change</a></center>
+                      <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a></center>
                     </div>
                   </div>
                 </div>
                 <!-- Tabs, tabs wrapper -->
                 <div class="tabs">
-                  <!-- Tab 1, active by default -->
+                  <!-- Tab 1, Календарь -->
                   <div id="tab1" class="tab">
                     <div class="content-block">
-                      <p>This is tab 1 content</p>
+                      <div class="row">
+                      	<div class="col-50">
+                          <div class="list-block">
+                            <ul id="ulListPastExercises">
+                              <li>
+                                <div class="item-content">
+                                  <div class="item-inner">
+                                    <div class="item-input">
+                                      <input type="text" placeholder="Exercise" value="Bicep curl DW">
+                                    </div>
+                                  </div>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      	<div class="col-50">
+                          <div id="calendar"></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <!-- Tab 2 -->
@@ -768,10 +790,53 @@
                       <p>This is tab 2 content</p>
                     </div>
                   </div>
-                  <!-- Tab 3 -->
+                  <!-- Tab 3 Создание нового набора упражнений -->
                   <div id="tab3" class="tab">
                     <div class="content-block">
-                      <p>This is tab 3 content</p>
+                      <div class="row">
+                      	<div class="col-50">
+                          <div class="list-block">
+                          	<!-- Сформированный набор упражнений -->
+                            <ul id="ulListSelectedExercises">
+                              <!--<li class="swipeout">
+                                <div class="swipeout-content item-content">
+                                  <div class="item-media"><i class="icon icon-f7"></i></div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Item title</div>
+                                    <div class="item-after">Label</div>
+                                  </div>
+                                </div>
+                                <div class="swipeout-actions">
+                                  <div class="swipeout-actions-inner">
+                                    <a href="" class="action1">Deleted</a>
+                                  </div>
+                                </div>
+                              </li>-->
+                            </ul>
+                          </div>
+                        </div>
+                      	<div class="col-50">
+                          <div class="list-block">
+                          	<!-- Упражнения из базы данных -->
+                            <ul id="ulListAllExWithTypes">
+                              <!--<li class="swipeout">
+                                <div class="swipeout-content item-content">
+                                  <div class="item-media"><i class="icon icon-f7"></i></div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Item title</div>
+                                    <div class="item-after">Label</div>
+                                  </div>
+                                </div>
+                                <div class="swipeout-actions">
+                                  <div class="swipeout-actions-inner">
+                                    <a href="" class="action1">Added</a>
+                                  </div>
+                                </div>
+                              </li>-->
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -820,6 +885,7 @@
         }
     </script>-->
     <script type="text/javascript" src="js/my-app.js"></script>
+    <script type="text/javascript" src="assets/components/jquery-ui-1.11.1.custom/jquery-ui.min.js"></script>
     <!--<script type="text/javascript">
       Modernizr.load([
         {

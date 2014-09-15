@@ -209,6 +209,14 @@ function updateListCustomers(customers) {
     listCustomers += '    </div>';
     listCustomers += '  </div>';
     listCustomers += '</li>';
+    /*// Этот вариант более красивый, но почему-то не происходит переход по ссылке
+    listCustomers += '<li>';
+    listCustomers += '  <a href="#view-10" class="item-link item-content" onclick="fillCustomerData(\'' + value.name + '\')">';
+    listCustomers += '    <div class="item-inner">';
+    listCustomers += '      <div class="item-title">' + value.name + '</div>';
+    listCustomers += '    </div>';
+    listCustomers += '  </a>';
+    listCustomers += '</li>';*/
     // Список пользователей для удаления
     listCustomersForDelete += '<li>';
     listCustomersForDelete += '  <div class="item-inner">';
@@ -326,6 +334,7 @@ function removeCustomers() {
 Функция заполнения данными страницы клиента. Вызывается из списка клиентов при выборе клиента
 */
 function fillCustomerData(customerName) {
+  console.log('Заполняем данные по клиенту ' + customerName);
   server.customers.query()
   	.filter('name', customerName)
     .execute()
@@ -333,6 +342,7 @@ function fillCustomerData(customerName) {
       $('input#inputNewCustomer').val(results[0].name);
       $('textarea#newCustomerComments').val(results[0].comments);
     });
+    //document.location.href = '#view-10';
 }
 /*
 Функция построения списка групп упражнений. В функцию передаётся массив объектов exerciseType
@@ -596,4 +606,127 @@ function upgradeViewWorkout() {
   var today = new Date().toDateInputValue();
   $('span#spanDateEx').html(today);
   console.log('Клиент ' + customerName + ', дата ' + today);
+  // Формируем календарь занятий данного клиента
+  $( "#calendar" ).datepicker({ autoSize: true });
 }
+/*
+Функция обновления данных на странице формирования набора упражнений клиента.
+Вызывается со страницы #view-15 по кнопке "Change"
+*/
+function makeSetExCustomer() {
+  // Формируем список групп упражнений
+  server.exerciseType.query('name')
+    .all()
+    .execute()
+    .then(function(results) {
+       console.log('Формируем список групп упражнений');
+       //console.log('Список групп упражнений: ' + JSON.stringify(results));
+       // Терепь найдём все упражнения из данной группы.
+       // Упражнения без сортировки (библиотека db.js не поддерживает сортировку) - добавим её,
+       // но сначала сформируем массив для сотрировки
+       var arrExTypes = [];
+       results.forEach(function (rowExerciseType, indexType) {
+       	 console.log('indexType: ' + indexType);
+       	 arrExTypes[indexType] = rowExerciseType.name;
+       	 console.log('arrExTypes[indexType] = ' + rowExerciseType.name);
+       });
+       arrExTypes.sort(); // Теперь имеем отсортированный по названиям список групп упражнений
+       var arrEx = [];
+       console.log('arrExTypes = ' + arrExTypes);
+       // Пройдём циклом по всем названиям групп упражнений
+       arrExTypes.forEach(function(exTypeName) {
+       	 // Добавляем на страницу наименования групп упранений
+         $('ul#ulListAllExWithTypes').append('<li class="item-divider" data-item="' + exTypeName + '">' + exTypeName + '</li>');
+         // Формируем список упражнений из данной группы
+         server.exercise.query('name')
+  	       .filter('type', exTypeName)
+           .distinct()
+           .execute()
+           .then(function(res2) {
+             res2.forEach(function (rowExercise, indexEx) {
+               arrEx[indexEx] = rowExercise.name;
+               console.log('arrEx[indexEx]: ' + rowExercise.name);
+             });
+             arrEx.sort(); // Теперь упражнения отсортированы по названиям
+             console.log('Упорядоченный список упражнений: ' + arrEx);
+             arrEx.forEach(function(exercice, index) {
+           	   var listExercises = '';
+               listExercises += '<li class="swipeout swipeout-all">';
+               listExercises += '  <div class="swipeout-content item-content">';
+               //listExercises += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
+               listExercises += '    <div class="item-inner">';
+               listExercises += '      <div class="item-title">' + exercice + '</div>';
+               //listExercises += '        <div class="item-after">Label</div>';
+               listExercises += '      </div>';
+               listExercises += '    </div>';
+               listExercises += '    <div class="swipeout-actions">';
+               listExercises += '    <div class="swipeout-actions-inner">';
+               listExercises += '      <a href="" class="action1">Added</a>';
+               listExercises += '    </div>';
+               listExercises += '  </div>';
+               listExercises += '</li>';
+               // Элемент сформирован, надо вставлять на место
+               $('ul#ulListAllExWithTypes li[data-item="' + exTypeName + '"]').append(listExercises);
+             });
+             arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
+           });
+       });
+  });
+}
+// Обработаем свайпы на упражнениях. Нужно такое упражнение убрать из списка справа и добавить в список слева
+$(document).on('opened', '.swipeout-all', function (e) {
+  //console.log('Item opened on: ' + e.detail.progress + '%');
+  console.log('Item opened');
+  myApp.swipeoutDelete(this);
+  //console.log(this);
+  console.log($(this).find('div.item-title').text());
+  var exercise = $(this).find('div.item-title').text();
+  var listEx = '';
+  listEx += '<li class="swipeout swipeout-selected">';
+  listEx += '  <div class="swipeout-content item-content">';
+  //listEx += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
+  listEx += '    <div class="item-inner">';
+  listEx += '      <div class="item-title">' + exercise + '</div>';
+  //listEx += '      <div class="item-after">Label</div>';
+  listEx += '    </div>';
+  listEx += '  </div>';
+  listEx += '  <div class="swipeout-actions">';
+  listEx += '    <div class="swipeout-actions-inner">';
+  listEx += '      <a href="" class="action1">Deleted</a>';
+  listEx += '    </div>';
+  listEx += '  </div>';
+  listEx += '</li>';
+  $('ul#ulListSelectedExercises').append(listEx);
+});
+// Обработаем свайпы на упражнениях, которые уже успели отобрать. Нужно такое упражнение убрать из списка слева и добавить в список справа
+$(document).on('opened', '.swipeout-selected', function (e) {
+  myApp.swipeoutDelete(this);
+  //console.log(this);
+  console.log($(this).find('div.item-title').text());
+  var exercise = $(this).find('div.item-title').text();
+  var listExercises = '';
+  listExercises += '<li class="swipeout swipeout-all">';
+  listExercises += '  <div class="swipeout-content item-content">';
+  //listExercises += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
+  listExercises += '    <div class="item-inner">';
+  listExercises += '      <div class="item-title">' + exercise + '</div>';
+  //listExercises += '        <div class="item-after">Label</div>';
+  listExercises += '      </div>';
+  listExercises += '    </div>';
+  listExercises += '    <div class="swipeout-actions">';
+  listExercises += '    <div class="swipeout-actions-inner">';
+  listExercises += '      <a href="" class="action1">Added</a>';
+  listExercises += '    </div>';
+  listExercises += '  </div>';
+  listExercises += '</li>';
+  // Элемент сформирован, надо вставлять на место
+  // Но сначала найти нужную группу упражнений
+  server.exercise.query('name')
+  	.filter('name', exercise)
+    .distinct()
+    .execute()
+    .then(function(result) {
+      console.log('Нашли тип этого упражнения: ' + result[0].type);
+      $('ul#ulListAllExWithTypes li[data-item="' + result[0].type + '"]').append(listExercises);
+    });
+});   

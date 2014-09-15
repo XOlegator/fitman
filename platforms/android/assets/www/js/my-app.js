@@ -11,7 +11,7 @@ Date.prototype.toDateInputValue = (function() {
   local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
   return local.toJSON().slice(0,10);
 });
-var server;
+//var server;
 // Export selectors engine
 var $$ = Framework7.$;
 //indexedDB.deleteDatabase('my-app');
@@ -29,9 +29,7 @@ var view13 = myApp.addView('#view-13'); // Удаление клиентов и�
 */
 var bdSchema = '';
 $.getJSON('default/bd-schema.json', function(data){
-  //console.log('Вот что прочли из файла  схемы БД' + data);
-  //bdSchema = JSON.stringify(data, "", 2);
-  //console.log('1 bdSchema = ' + bdSchema);
+  bdSchema = data;
   db.open(data).then(function(serv) {
   	console.log('Получили схему БД, открыли базу');
     server = serv;
@@ -43,6 +41,7 @@ $.getJSON('default/bd-schema.json', function(data){
         .execute()
         .then(function(results) {
           console.log('Формируем список клиентов');
+          //console.log('Список клиентов: ' + JSON.stringify(results));
           updateListCustomers(results);
         });
     });
@@ -54,19 +53,18 @@ $.getJSON('default/bd-schema.json', function(data){
         .execute()
         .then(function(results) {
           console.log('Формируем список групп упражнений');
+          //console.log('Список групп упражнений: ' + JSON.stringify(results));
           updateListExerciseType(results);
         });
       });
+    // Инициализация страницы добавления клиента
+    myApp.onPageInit('index-10', function (page) {
+      // Устанавливаем дату начала занятий на текущую дату
+      $('#inputDateStartClasses').val(new Date().toDateInputValue());
     });
+    myApp.init();
+  });
 });
-
-// Инициализация страницы добавления клиента
-myApp.onPageInit('index-10', function (page) {
-  // Устанавливаем дату начала занятий на текущую дату
-  $('#inputDateStartClasses').val(new Date().toDateInputValue());
-});
-
-myApp.init();
 
 // Модальное окно для подтверждения загрузки демо-данных
 $$('.confirm-fill-demo').on('click', function () {
@@ -81,9 +79,9 @@ $$('.confirm-fill-demo').on('click', function () {
     $.getJSON('default/exercises.json', function(data) {
       // Запускаем цикл по группам упражнений (exerciseType)
       for (var j in data.exerciseType) {
-        console.log('j = ' + j);
-        console.log('data.exerciseType[j].name = ' + data.exerciseType[j].name);
-        console.log('exercise = ' + JSON.stringify(data.exerciseType[j]));
+        //console.log('j = ' + j);
+        //console.log('data.exerciseType[j].name = ' + data.exerciseType[j].name);
+        //console.log('exercise = ' + JSON.stringify(data.exerciseType[j]));
         // Добавляем группы упражнений
         server.exerciseType.add({'name': data.exerciseType[j].name});
         // Внутри группы упражнений проходим циклом все упражнения из этой группы
@@ -179,60 +177,7 @@ $$('.confirm-clean-db').on('click', function () {
 // Модальное окно для создания базы данных
 $$('.confirm-create-db').on('click', function () {
   myApp.confirm('Are you sure?', function () {
-    var server;
-    db.open(
-    	bdSchema
-    	/*{
-      server: 'my-app',
-      version: 1,
-      schema: {
-        exerciseType: {
-          key: {
-            keyPath: 'id',
-            autoIncrement: true
-          },
-          indexes: {
-            name: {
-              unique: true
-            }
-          }
-        },
-        exercise: {
-          key: {
-            keyPath: 'id',
-            autoIncrement: true
-          },
-          indexes: {
-		    name: {
-		      unique: false
-		    },
-		    type: {
-		      unique: false
-		    },
-		    options: {
-		      unique: false
-		    }
-          }
-        },
-        customers: {
-          key: {
-            keyPath: 'id',
-            autoIncrement: true
-          },
-          indexes: {
-            name: {
-              unique: true
-            },    	  
-    	    photo: {
-    		  unique: false
-    	    },    	  
-    	    comments: {
-    		  unique: false
-    	    }
-          }
-        }
-      }
-    }*/).then(function(serv) {
+    db.open(bdSchema).then(function(serv) {
       server = serv;
     });
   });
@@ -259,26 +204,25 @@ function updateListCustomers(customers) {
     // Список пользователей
     listCustomers += '<li class="item-content">';
     listCustomers += '  <div class="item-inner">';
-    listCustomers += '    <div class="item-title">' + value.name + '</div>';
+    listCustomers += '    <div class="item-title">';
+    listCustomers += '      <a href="#view-10" class="tab-link btn-right-top" onclick="fillCustomerData(\'' + value.name + '\')">' + value.name + '</a>';
+    listCustomers += '    </div>';
     listCustomers += '  </div>';
     listCustomers += '</li>';
+    /*// Этот вариант более красивый, но почему-то не происходит переход по ссылке
+    listCustomers += '<li>';
+    listCustomers += '  <a href="#view-10" class="item-link item-content" onclick="fillCustomerData(\'' + value.name + '\')">';
+    listCustomers += '    <div class="item-inner">';
+    listCustomers += '      <div class="item-title">' + value.name + '</div>';
+    listCustomers += '    </div>';
+    listCustomers += '  </a>';
+    listCustomers += '</li>';*/
     // Список пользователей для удаления
-    /*
-    <li>
-      <label class="label-checkbox item-content">
-        <div class="item-inner">
-          <div class="item-title">Customers 1</div>
-        </div>
-        <input type="checkbox" name="my-checkbox" value="Customers 1">
-        <div class="item-media">
-          <i class="icon icon-form-checkbox"></i>
-        </div>
-      </label>
-    </li>
-    */
     listCustomersForDelete += '<li>';
     listCustomersForDelete += '  <div class="item-inner">';
-    listCustomersForDelete += '    <div class="item-title">' + value.name + '</div>';
+    listCustomersForDelete += '    <div class="item-title">';
+    listCustomersForDelete += '      <a href="#view-10" class="tab-link btn-right-top" onclick="fillCustomerData(\'' + value.name + '\')">' + value.name + '</a>';
+    listCustomersForDelete += '    </div>';
     listCustomersForDelete += '    <div class="item-media">';
     listCustomersForDelete += '      <label class="label-checkbox item-content">';
     listCustomersForDelete += '        <input type="checkbox" name="inputCustomerForDelete" value="' + value.id + '">';
@@ -385,6 +329,20 @@ function removeCustomers() {
       });
     //$$('a[href="#view-3"]').click();
   }*/
+}
+/*
+Функция заполнения данными страницы клиента. Вызывается из списка клиентов при выборе клиента
+*/
+function fillCustomerData(customerName) {
+  console.log('Заполняем данные по клиенту ' + customerName);
+  server.customers.query()
+  	.filter('name', customerName)
+    .execute()
+    .then(function(results) {
+      $('input#inputNewCustomer').val(results[0].name);
+      $('textarea#newCustomerComments').val(results[0].comments);
+    });
+    //document.location.href = '#view-10';
 }
 /*
 Функция построения списка групп упражнений. В функцию передаётся массив объектов exerciseType
@@ -525,18 +483,49 @@ function deleteExercise(exercise) {
 Функция обновления списка опций конкретного упражнения. В функцию передаётся название выбранного упражнения
 */
 function updateViewExProp(exercise) {
+  console.log('Формируем список характеристик данного упражнения');
   // Сначала снимаем все галочки параметров
   $('div#view-8 input[name="checkbox-ex-prop"]').removeAttr('checked');
+  $('div#ex-prop').text(exercise); // Обновим на странице название текущего упражнения
   // Теперь ставим только те галочки, которые нужны по данным БД
   server.exercise.query()
   	.filter('name', exercise)
     .execute()
     .then(function(results) {
-      //console.log('results = ' + JSON.stringify(results));
+      console.log('Список характеристик: ' + JSON.stringify(results));
       results.forEach(function (rowExercise) {
-      	//console.log('rowExercise.options = ' + rowExercise.options);
-      	$('div#ex-prop').text(rowExercise.name);
+      	console.log('rowExercise.options = ' + rowExercise.options);
       	$$('input[name="checkbox-ex-prop"][value="' + rowExercise.options + '"]').click();
+      });
+    });
+}
+/*
+Функция обновления действующих параметров выбранного упражнения. Вызывается со страницы view-8 по кнопке Save 
+*/
+function updateExerciseProperties() {
+  // Определяем редактируемое упражнение
+  var exerciseName = $('div#ex-prop').text();
+  var exerciseType;
+  console.log('Идёт обновление параметров упражнения ' + exerciseName);
+  // Сначала отберём все записи по данному упражнению из базы...
+  server.exercise.query()
+  	.filter('name', exerciseName)
+    .execute()
+    .then(function(results) {
+      // Запомним название группы упражнений
+      exerciseType = results[0].type;
+      console.log('results[0].type = ' + results[0].type);
+      // ... и удалим их
+      console.log('Список характеристик: ' + JSON.stringify(results));
+      results.forEach(function (rowExercise) {
+      	console.log('rowExercise.id = ' + rowExercise.id);
+      	server.remove('exercise', parseInt(rowExercise.id));
+      });
+      // После того, как удалил старые записи, внесём в базу новые записи
+      $('input[name="checkbox-ex-prop"]:checked').each(function(){
+        console.log('Мы в цикле по новым действующим параметрам упражнения!');
+        console.log('name = ' + exerciseName + '; type = ' + exerciseType + '; options = ' + this.value);
+	    server.exercise.add({'name': exerciseName, 'type': exerciseType, 'options': this.value});
       });
     });
 }
@@ -607,3 +596,137 @@ $(document).on('change', '.btn-delete-toggle', function() {
   var collapse_content_selector = '#' + $$(this).attr('name');
   $$(collapse_content_selector).toggleClass('hidden');
 });
+/*
+Функция обновления данных на странице формирования комплекса упражнений клиента.
+Вызывается со страницы #view-10 по кнопке "Workout of the day"
+*/
+function upgradeViewWorkout() {
+  var customerName = $('input#inputNewCustomer').val();
+  $('span#spanCustName').html(customerName);
+  var today = new Date().toDateInputValue();
+  $('span#spanDateEx').html(today);
+  console.log('Клиент ' + customerName + ', дата ' + today);
+  // Формируем календарь занятий данного клиента
+  $( "#calendar" ).datepicker({ autoSize: true });
+}
+/*
+Функция обновления данных на странице формирования набора упражнений клиента.
+Вызывается со страницы #view-15 по кнопке "Change"
+*/
+function makeSetExCustomer() {
+  // Формируем список групп упражнений
+  server.exerciseType.query('name')
+    .all()
+    .execute()
+    .then(function(results) {
+       console.log('Формируем список групп упражнений');
+       //console.log('Список групп упражнений: ' + JSON.stringify(results));
+       // Терепь найдём все упражнения из данной группы.
+       // Упражнения без сортировки (библиотека db.js не поддерживает сортировку) - добавим её,
+       // но сначала сформируем массив для сотрировки
+       var arrExTypes = [];
+       results.forEach(function (rowExerciseType, indexType) {
+       	 console.log('indexType: ' + indexType);
+       	 arrExTypes[indexType] = rowExerciseType.name;
+       	 console.log('arrExTypes[indexType] = ' + rowExerciseType.name);
+       });
+       arrExTypes.sort(); // Теперь имеем отсортированный по названиям список групп упражнений
+       var arrEx = [];
+       console.log('arrExTypes = ' + arrExTypes);
+       // Пройдём циклом по всем названиям групп упражнений
+       arrExTypes.forEach(function(exTypeName) {
+       	 // Добавляем на страницу наименования групп упранений
+         $('ul#ulListAllExWithTypes').append('<li class="item-divider" data-item="' + exTypeName + '">' + exTypeName + '</li>');
+         // Формируем список упражнений из данной группы
+         server.exercise.query('name')
+  	       .filter('type', exTypeName)
+           .distinct()
+           .execute()
+           .then(function(res2) {
+             res2.forEach(function (rowExercise, indexEx) {
+               arrEx[indexEx] = rowExercise.name;
+               console.log('arrEx[indexEx]: ' + rowExercise.name);
+             });
+             arrEx.sort(); // Теперь упражнения отсортированы по названиям
+             console.log('Упорядоченный список упражнений: ' + arrEx);
+             arrEx.forEach(function(exercice, index) {
+           	   var listExercises = '';
+               listExercises += '<li class="swipeout swipeout-all">';
+               listExercises += '  <div class="swipeout-content item-content">';
+               //listExercises += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
+               listExercises += '    <div class="item-inner">';
+               listExercises += '      <div class="item-title">' + exercice + '</div>';
+               //listExercises += '        <div class="item-after">Label</div>';
+               listExercises += '      </div>';
+               listExercises += '    </div>';
+               listExercises += '    <div class="swipeout-actions">';
+               listExercises += '    <div class="swipeout-actions-inner">';
+               listExercises += '      <a href="" class="action1">Added</a>';
+               listExercises += '    </div>';
+               listExercises += '  </div>';
+               listExercises += '</li>';
+               // Элемент сформирован, надо вставлять на место
+               $('ul#ulListAllExWithTypes li[data-item="' + exTypeName + '"]').append(listExercises);
+             });
+             arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
+           });
+       });
+  });
+}
+// Обработаем свайпы на упражнениях. Нужно такое упражнение убрать из списка справа и добавить в список слева
+$(document).on('opened', '.swipeout-all', function (e) {
+  //console.log('Item opened on: ' + e.detail.progress + '%');
+  console.log('Item opened');
+  myApp.swipeoutDelete(this);
+  //console.log(this);
+  console.log($(this).find('div.item-title').text());
+  var exercise = $(this).find('div.item-title').text();
+  var listEx = '';
+  listEx += '<li class="swipeout swipeout-selected">';
+  listEx += '  <div class="swipeout-content item-content">';
+  //listEx += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
+  listEx += '    <div class="item-inner">';
+  listEx += '      <div class="item-title">' + exercise + '</div>';
+  //listEx += '      <div class="item-after">Label</div>';
+  listEx += '    </div>';
+  listEx += '  </div>';
+  listEx += '  <div class="swipeout-actions">';
+  listEx += '    <div class="swipeout-actions-inner">';
+  listEx += '      <a href="" class="action1">Deleted</a>';
+  listEx += '    </div>';
+  listEx += '  </div>';
+  listEx += '</li>';
+  $('ul#ulListSelectedExercises').append(listEx);
+});
+// Обработаем свайпы на упражнениях, которые уже успели отобрать. Нужно такое упражнение убрать из списка слева и добавить в список справа
+$(document).on('opened', '.swipeout-selected', function (e) {
+  myApp.swipeoutDelete(this);
+  //console.log(this);
+  console.log($(this).find('div.item-title').text());
+  var exercise = $(this).find('div.item-title').text();
+  var listExercises = '';
+  listExercises += '<li class="swipeout swipeout-all">';
+  listExercises += '  <div class="swipeout-content item-content">';
+  //listExercises += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
+  listExercises += '    <div class="item-inner">';
+  listExercises += '      <div class="item-title">' + exercise + '</div>';
+  //listExercises += '        <div class="item-after">Label</div>';
+  listExercises += '      </div>';
+  listExercises += '    </div>';
+  listExercises += '    <div class="swipeout-actions">';
+  listExercises += '    <div class="swipeout-actions-inner">';
+  listExercises += '      <a href="" class="action1">Added</a>';
+  listExercises += '    </div>';
+  listExercises += '  </div>';
+  listExercises += '</li>';
+  // Элемент сформирован, надо вставлять на место
+  // Но сначала найти нужную группу упражнений
+  server.exercise.query('name')
+  	.filter('name', exercise)
+    .distinct()
+    .execute()
+    .then(function(result) {
+      console.log('Нашли тип этого упражнения: ' + result[0].type);
+      $('ul#ulListAllExWithTypes li[data-item="' + result[0].type + '"]').append(listExercises);
+    });
+});   
