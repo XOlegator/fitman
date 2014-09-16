@@ -341,7 +341,7 @@ function removeCustomers() {
   }*/
 }
 /*
-Функция заполнения данными страницы клиента. Вызывается из списка клиентов при выборе клиента
+Функция заполнения данными страницы клиента (#index-3). Вызывается из списка клиентов при выборе клиента
 */
 function fillCustomerData(customerName) {
   console.log('Заполняем данные по клиенту ' + customerName);
@@ -625,9 +625,9 @@ function upgradeViewWorkout() {
 */
 function makeSetExCustomer() {
   // Кнопку Change надо заменить на Save
-  $('a[href="#tab3"]').replaceWith('<a href="#tab3" class="tab-link" onclick="saveSetExCustomer()">Save</a>');
+  $('a[href="#tab3"]').replaceWith('<a href="#tab0" class="tab-link" onclick="saveSetExCustomer()">Save</a>');
   // Кнопку Cancel надо заменить на Clear all
-  $('a#aCancelSetEx').replaceWith('<a href="" class="tab-link" onclick="makeSetExCustomer()">Clear all</a>');
+  $('a#aCancelSetEx').replaceWith('<a href="" class="tab-link" onclick="makeSetExCustomer()" id="aClearAll">Clear all</a>');
   // Очистим список готового набора
   $('ul#ulListSelectedExercises').empty();
   // Формируем список групп упражнений
@@ -710,7 +710,7 @@ $(document).on('opened', '.swipeout-all', function (e) {
   listEx += '  <div class="swipeout-content item-content">';
   //listEx += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
   listEx += '    <div class="item-inner">';
-  listEx += '      <div class="item-title">' + exercise + '</div>';
+  listEx += '      <div class="item-title set-of-exercises">' + exercise + '</div>';
   //listEx += '      <div class="item-after">Label</div>';
   listEx += '    </div>';
   listEx += '  </div>';
@@ -761,4 +761,31 @@ $(document).on('opened', '.swipeout-selected', function (e) {
 */
 function saveSetExCustomer() {
   console.log('Сохраняем набор');
+  var setExercises = [];
+  var temp ='';
+  var listCustomers = '';
+  $('div.set-of-exercises').each(function(index, item){
+  	temp = item.innerHTML;
+  	// На всякий случай поставим заглушку от инъекций
+  	setExercises[index] = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
+  	
+  	var customerName = $('span#spanCustName').text();
+    var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
+    console.log('setExercises[index] = ' + item.innerHTML + '; customerName = ' + customerName + '; dateEx = ' + dateEx);
+  	server.workout.add({'customer': customerName, 'date': dateEx, 'exercise': setExercises[index]});
+  	
+  	listCustomers += '<li class="item-content">';
+    listCustomers += '  <div class="item-inner">';
+    listCustomers += '    <div class="item-title">';
+    listCustomers += '      <a href="" class="" onclick="">' + setExercises[index] + '</a>';
+    listCustomers += '    </div>';
+    listCustomers += '  </div>';
+    listCustomers += '</li>';
+  });
+  // После того, как в цикле сформировали список упражнений, покажем его на странице
+  $('ul#ulListCurrentExercises').html(listCustomers);
+  // Кнопку Save надо заменить на Change
+  $('a[href="#tab0"]').replaceWith('<a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a>');
+  // Кнопку Clear all надо заменить на Cancel 
+  $('a#aClearAll').replaceWith('<a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a>');
 } 
