@@ -744,7 +744,7 @@
                 <div class="content-block">
                   <div class="row">
                     <div class="col-25">
-                      <center><a href="#view-10" class="back tab-link">Cancel</a></center>
+                      <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a></center>
                     </div>
                     <div class="col-25">
                       <center><a href="#tab1" class="tab-link">Calendar</a></center>
@@ -759,6 +759,31 @@
                 </div>
                 <!-- Tabs, tabs wrapper -->
                 <div class="tabs">
+                  <!-- Tab 0, Текущий набор упражнений клиента -->
+                  <div id="tab0" class="tab">
+                    <div class="content-block">
+                      <div class="row">
+                      	<div class="col-50">
+                          <div class="list-block">
+                            <ul id="ulListCurrentExercises">
+                              <!--<li>
+                                <div class="item-content">
+                                  <div class="item-inner">
+                                    <div class="item-input">
+                                      <input type="text" placeholder="Exercise" value="Bicep curl DW">
+                                    </div>
+                                  </div>
+                                </div>
+                              </li>-->
+                            </ul>
+                          </div>
+                        </div>
+                      	<div class="col-50">
+                          <div id="calendar"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <!-- Tab 1, Календарь -->
                   <div id="tab1" class="tab">
                     <div class="content-block">

@@ -11,7 +11,17 @@ Date.prototype.toDateInputValue = (function() {
   local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
   return local.toJSON().slice(0,10);
 });
-//var server;
+/*
+document.addEventListener( 'touchstart', function(e){ onStart(e); }, false );
+    function onStart ( touchEvent ) {
+      if( navigator.userAgent.match(/Android/i) ) {
+        touchEvent.preventDefault();
+      }
+    }
+    */
+document.ontouchmove = function(event) {
+    event.preventDefault();
+};
 // Export selectors engine
 var $$ = Framework7.$;
 //indexedDB.deleteDatabase('my-app');
@@ -643,6 +653,7 @@ function makeSetExCustomer() {
        arrExTypes.forEach(function(exTypeName) {
        	 // Добавляем на страницу наименования групп упранений
          $('ul#ulListAllExWithTypes').append('<li class="item-divider" data-item="' + exTypeName + '">' + exTypeName + '</li>');
+         var testExercise = [];
          // Формируем список упражнений из данной группы
          server.exercise.query('name')
   	       .filter('type', exTypeName)
@@ -655,24 +666,31 @@ function makeSetExCustomer() {
              });
              arrEx.sort(); // Теперь упражнения отсортированы по названиям
              console.log('Упорядоченный список упражнений: ' + arrEx);
-             arrEx.forEach(function(exercice, index) {
-           	   var listExercises = '';
-               listExercises += '<li class="swipeout swipeout-all">';
-               listExercises += '  <div class="swipeout-content item-content">';
-               //listExercises += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
-               listExercises += '    <div class="item-inner">';
-               listExercises += '      <div class="item-title">' + exercice + '</div>';
-               //listExercises += '        <div class="item-after">Label</div>';
-               listExercises += '      </div>';
-               listExercises += '    </div>';
-               listExercises += '    <div class="swipeout-actions">';
-               listExercises += '    <div class="swipeout-actions-inner">';
-               listExercises += '      <a href="" class="action1">Added</a>';
-               listExercises += '    </div>';
-               listExercises += '  </div>';
-               listExercises += '</li>';
-               // Элемент сформирован, надо вставлять на место
-               $('ul#ulListAllExWithTypes li[data-item="' + exTypeName + '"]').append(listExercises);
+             arrEx.forEach(function(exercise, index) {
+               testExercise[index] = exercise;
+               console.log('testExercise[index] = ' + testExercise[index]);
+               console.log('testExercise[index - 1] = ' + testExercise[index - 1]);
+               if((index == 0) || (testExercise[index] != testExercise[index - 1])) {
+                 // В браузере и эмуляторе Android отрабатывает по-разному
+                 // В эмуляторе проявляются лишние строки. Видимо, distinct не отрабатывает и выводятся записи упражнений по каждой опции
+           	     var listExercises = '';
+                 listExercises += '<li class="swipeout swipeout-all">';
+                 listExercises += '  <div class="swipeout-content item-content">';
+                 //listExercises += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
+                 listExercises += '    <div class="item-inner">';
+                 listExercises += '      <div class="item-title">' + exercise + '</div>';
+                 //listExercises += '        <div class="item-after">Label</div>';
+                 listExercises += '      </div>';
+                 listExercises += '    </div>';
+                 listExercises += '    <div class="swipeout-actions">';
+                 listExercises += '    <div class="swipeout-actions-inner">';
+                 listExercises += '      <a href="" class="action1">Added</a>';
+                 listExercises += '    </div>';
+                 listExercises += '  </div>';
+                 listExercises += '</li>';
+                 // Элемент сформирован, надо вставлять на место
+                 $('ul#ulListAllExWithTypes li[data-item="' + exTypeName + '"]').append(listExercises);
+               }
              });
              arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
            });
