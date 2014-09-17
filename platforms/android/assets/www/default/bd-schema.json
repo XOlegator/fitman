@@ -46,6 +46,23 @@
                     "unique": false
                 }
             }
+        },
+        "workout": {
+            "key": {
+                "keyPath": "id",
+                "autoIncrement": true
+            },
+            "indexes": {
+                "customer": {
+                    "unique": false
+                },
+                "date": {
+                    "unique": false
+                },
+                "exercise": {
+                    "unique": false
+                }
+            }
         }
     }
 }

@@ -18,10 +18,10 @@ document.addEventListener( 'touchstart', function(e){ onStart(e); }, false );
         touchEvent.preventDefault();
       }
     }
-    */
+    
 document.ontouchmove = function(event) {
     event.preventDefault();
-};
+};*/
 // Export selectors engine
 var $$ = Framework7.$;
 //indexedDB.deleteDatabase('my-app');
@@ -212,21 +212,13 @@ function updateListCustomers(customers) {
   var listCustomersForDelete = '';
   customers.forEach(function (value) {
     // Список пользователей
-    listCustomers += '<li class="item-content">';
-    listCustomers += '  <div class="item-inner">';
-    listCustomers += '    <div class="item-title">';
-    listCustomers += '      <a href="#view-10" class="tab-link btn-right-top" onclick="fillCustomerData(\'' + value.name + '\')">' + value.name + '</a>';
-    listCustomers += '    </div>';
-    listCustomers += '  </div>';
-    listCustomers += '</li>';
-    /*// Этот вариант более красивый, но почему-то не происходит переход по ссылке
     listCustomers += '<li>';
-    listCustomers += '  <a href="#view-10" class="item-link item-content" onclick="fillCustomerData(\'' + value.name + '\')">';
+    listCustomers += '  <a href="#view-10" class="tab-link item-link item-content" onclick="fillCustomerData(\'' + value.name + '\')">';
     listCustomers += '    <div class="item-inner">';
     listCustomers += '      <div class="item-title">' + value.name + '</div>';
     listCustomers += '    </div>';
     listCustomers += '  </a>';
-    listCustomers += '</li>';*/
+    listCustomers += '</li>';
     // Список пользователей для удаления
     listCustomersForDelete += '<li>';
     listCustomersForDelete += '  <div class="item-inner">';
@@ -341,7 +333,7 @@ function removeCustomers() {
   }*/
 }
 /*
-Функция заполнения данными страницы клиента. Вызывается из списка клиентов при выборе клиента
+Функция заполнения данными страницы клиента (#index-3). Вызывается из списка клиентов при выборе клиента
 */
 function fillCustomerData(customerName) {
   console.log('Заполняем данные по клиенту ' + customerName);
@@ -625,9 +617,9 @@ function upgradeViewWorkout() {
 */
 function makeSetExCustomer() {
   // Кнопку Change надо заменить на Save
-  $('a[href="#tab3"]').replaceWith('<a href="#tab3" class="tab-link" onclick="saveSetExCustomer()">Save</a>');
+  $('a[href="#tab3"]').replaceWith('<a href="#tab0" class="tab-link" onclick="saveSetExCustomer()">Save</a>');
   // Кнопку Cancel надо заменить на Clear all
-  $('a#aCancelSetEx').replaceWith('<a href="" class="tab-link" onclick="makeSetExCustomer()">Clear all</a>');
+  $('a#aCancelSetEx').replaceWith('<a href="" class="tab-link" onclick="makeSetExCustomer()" id="aClearAll">Clear all</a>');
   // Очистим список готового набора
   $('ul#ulListSelectedExercises').empty();
   // Формируем список групп упражнений
@@ -676,20 +668,18 @@ function makeSetExCustomer() {
            	     var listExercises = '';
                  listExercises += '<li class="swipeout swipeout-all">';
                  listExercises += '  <div class="swipeout-content item-content">';
-                 //listExercises += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
                  listExercises += '    <div class="item-inner">';
                  listExercises += '      <div class="item-title">' + exercise + '</div>';
-                 //listExercises += '        <div class="item-after">Label</div>';
                  listExercises += '      </div>';
                  listExercises += '    </div>';
-                 listExercises += '    <div class="swipeout-actions">';
-                 listExercises += '    <div class="swipeout-actions-inner">';
-                 listExercises += '      <a href="" class="action1">Added</a>';
-                 listExercises += '    </div>';
+                 listExercises += '  </div>';
+                 listExercises += '  <div class="swipeout-actions-right">'; // Действие появится справа
+                 //listExercises += '    <div class="swipeout-actions-inner">';
+                 listExercises += '    <a href="#" class="action1">Added</a>';
                  listExercises += '  </div>';
                  listExercises += '</li>';
                  // Элемент сформирован, надо вставлять на место
-                 $('ul#ulListAllExWithTypes li[data-item="' + exTypeName + '"]').append(listExercises);
+                 $('ul#ulListAllExWithTypes li[data-item="' + exTypeName + '"]').after(listExercises);
                }
              });
              arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
@@ -708,16 +698,14 @@ $(document).on('opened', '.swipeout-all', function (e) {
   var listEx = '';
   listEx += '<li class="swipeout swipeout-selected">';
   listEx += '  <div class="swipeout-content item-content">';
-  //listEx += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
   listEx += '    <div class="item-inner">';
-  listEx += '      <div class="item-title">' + exercise + '</div>';
-  //listEx += '      <div class="item-after">Label</div>';
+  listEx += '      <div class="item-title set-of-exercises">' + exercise + '</div>';
   listEx += '    </div>';
   listEx += '  </div>';
-  listEx += '  <div class="swipeout-actions">';
-  listEx += '    <div class="swipeout-actions-inner">';
-  listEx += '      <a href="" class="action1">Deleted</a>';
-  listEx += '    </div>';
+  listEx += '  <div class="swipeout-actions-left">';
+  //listEx += '    <div class="swipeout-actions-inner">';
+  listEx += '    <a href="#" class="action1">Deleted</a>';
+  //listEx += '    </div>';
   listEx += '  </div>';
   listEx += '</li>';
   $('ul#ulListSelectedExercises').append(listEx);
@@ -731,15 +719,13 @@ $(document).on('opened', '.swipeout-selected', function (e) {
   var listExercises = '';
   listExercises += '<li class="swipeout swipeout-all">';
   listExercises += '  <div class="swipeout-content item-content">';
-  //listExercises += '    <div class="item-media"><i class="icon icon-f7"></i></div>';
   listExercises += '    <div class="item-inner">';
   listExercises += '      <div class="item-title">' + exercise + '</div>';
-  //listExercises += '        <div class="item-after">Label</div>';
   listExercises += '      </div>';
   listExercises += '    </div>';
-  listExercises += '    <div class="swipeout-actions">';
-  listExercises += '    <div class="swipeout-actions-inner">';
-  listExercises += '      <a href="" class="action1">Added</a>';
+  listExercises += '    <div class="swipeout-actions-right">';
+  //listExercises += '      <div class="swipeout-actions-inner">';
+  listExercises += '      <a href="#" class="action1">Added</a>';
   listExercises += '    </div>';
   listExercises += '  </div>';
   listExercises += '</li>';
@@ -752,7 +738,7 @@ $(document).on('opened', '.swipeout-selected', function (e) {
     .then(function(result) {
       console.log('Нашли тип этого упражнения: ' + result[0].type);
       // TODO Тут вставляем запись в конец списка, хотя правильнее было бы в нужном порядке (сортировка по алфавиту)
-      $('ul#ulListAllExWithTypes li[data-item="' + result[0].type + '"]').append(listExercises);
+      $('ul#ulListAllExWithTypes li[data-item="' + result[0].type + '"]').after(listExercises);
     });
 });  
 /*
@@ -761,4 +747,39 @@ $(document).on('opened', '.swipeout-selected', function (e) {
 */
 function saveSetExCustomer() {
   console.log('Сохраняем набор');
-} 
+  var setExercises;
+  var temp = '';
+  var listExCust = '';
+  $('div.set-of-exercises').each(function(index, item){
+  	temp = item.innerHTML;
+  	// На всякий случай поставим заглушку от инъекций
+  	setExercises = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
+  	
+  	var customerName = $('span#spanCustName').text();
+    var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
+    console.log('setExercises[index] = ' + item.innerHTML + '; customerName = ' + customerName + '; dateEx = ' + dateEx);
+  	server.workout.add({'customer': customerName, 'date': dateEx, 'exercise': setExercises});
+    listExCust += '<li>';
+    listExCust += '  <a href="#view-24" class="tab-link item-link item-content" onclick="makeViewExWork(\'' + setExercises + '\')">';
+    listExCust += '    <div class="item-inner">';
+    listExCust += '      <span>' + setExercises + '</span>';
+    listExCust += '    </div>';
+    listExCust += '  </a>';
+    listExCust += '</li>';
+  });
+  // После того, как в цикле сформировали список упражнений, покажем его на странице
+  document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
+  //$('ul#ulListCurrentExercises').html(listExCust);
+  // Кнопку Save надо заменить на Change
+  $('a[href="#tab0"]').replaceWith('<a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a>');
+  // Кнопку Clear all надо заменить на Cancel 
+  $('a#aClearAll').replaceWith('<a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a>');
+}
+/*
+Функция подготовки отображения страницы работы с упражнением клиента.
+Вызывается со страницы #view-15 #tab0 по нажатию на какое-то упражнение (оно передаётся в параметре)
+*/
+function makeViewExWork(exercise) {
+  console.log('Подготавливаем к работе страницу с упражнением ' + exercise);
+  document.getElementById("spanExWork").innerHTML = exercise;
+}
