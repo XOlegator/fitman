@@ -761,11 +761,8 @@
                 <div class="tabs">
                   <!-- Tab 0, Текущий набор упражнений клиента -->
                   <div id="tab0" class="tab">
-                    <div class="content-block">
-                      <div class="list-block">
-                        <ul id="ulListCurrentExercises">
-                        </ul>
-                      </div>
+                    <div class="list-block">
+                      <ul id="ulListCurrentExercises"></ul>
                     </div>
                   </div>
                   <!-- Tab 1, Календарь -->
@@ -801,7 +798,7 @@
                   </div>
                   <!-- Tab 3 Создание нового набора упражнений -->
                   <div id="tab3" class="tab">
-                    <div class="content-block">
+                    <!--<div class="content-block">-->
                       <div class="row">
                       	<div class="col-50">
                           <div class="list-block">
@@ -846,8 +843,31 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    <!--</div>-->
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Страница работы с выбранным упражнением -->
+        <div data-page="index-24" id="view-24" class="navbar-through toolbar-through view tab">
+          <div class="pages">
+            <div data-page="index-24" class="page">
+              <div class="page-content grad-body">
+                <div class="content-block-title">
+                  <div class="row my-row">
+                    <div class="col-30"><span id="spanCustName"></span></div>
+                    <div class="col-40"><center><strong>Workout of the day</strong></center></div>
+                    <div class="col-30"><span id="spanDateEx"></span></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-30"><a href="" class="tab-link btn-left-top">Cancel</a><!-- На view-5 tab0 --></div>
+                    <div class="col-40"><center><strong><span id="spanExWork"></span></strong></center></div>
+                    <div class="col-30"><a href="" class="tab-link btn-right-top" onclick="saveExerciseWork()">Save</a></div>
+                  </div>
+                </div>
+                <div class="content-block">
                 </div>
               </div>
             </div>

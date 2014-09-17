@@ -62,3 +62,7 @@ i.tabbar-icon-4 {
 div.page-content>div.my-toolbar-inner {
   height: 20px;
 }
+
+.my-row {
+  margin-bottom: 15px;
+}  
