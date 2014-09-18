@@ -782,4 +782,80 @@ function saveSetExCustomer() {
 function makeViewExWork(exercise) {
   console.log('Подготавливаем к работе страницу с упражнением ' + exercise);
   document.getElementById("spanExWork").innerHTML = exercise;
+  // Формируем к показу характеристики выбранного упражнения
+  var propEx = '';
+  var exerciseName = $('span#spanExWork').text();
+  console.log('Идёт построение параметров упражнения ' + exerciseName);
+  // Сначала отберём все записи по данному упражнению из базы...
+  server.exercise.query()
+  	.filter('name', exerciseName)
+    .execute()
+    .then(function(results) {
+      console.log('Список характеристик: ' + JSON.stringify(results));
+      results.forEach(function (rowExercise) {
+      	console.log('rowExercise.options = ' + rowExercise.options);
+      	// Параметр "Подходы" нужно оформить в виде выпадающего списка
+      	if (rowExercise.options == 'sets') {
+      	  propEx += '<li>';
+      	  propEx += '  <div class="item-content">';
+      	  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
+      	  propEx += '    <div class="item-inner">';
+      	  propEx += '      <div class="item-title label">' + rowExercise.options + '</div>';
+      	  propEx += '      <div class="item-input">';
+      	  propEx += '        <select>';
+      	  for (i=1; i<11; i++) {
+            propEx += '          <option>' + i + '</option>';
+          }
+          propEx += '        </select>';
+      	  propEx += '      </div>';
+      	  propEx += '    </div>';
+      	  propEx += '  </div>';
+      	  propEx += '</li>';
+      	}
+      	// Параметр "Время" нужно оформить в виде двух окон ввода для минут и секунд 
+      	else if (rowExercise.options == 'time') {
+      	  propEx += '<li>';
+      	  propEx += '  <div class="item-content">';
+      	  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
+      	  propEx += '    <div class="item-inner">';
+      	  propEx += '      <div class="item-title label">' + rowExercise.options + '</div>';
+      	  propEx += '      <div class="item-input">';
+      	  propEx += '        <div class="row">';
+      	  propEx += '          <div class="col-50"><input type="number" min="0" placeholder="Minutes"></div>';
+      	  propEx += '          <div class="col-50"><input type="number" min="0" placeholder="Seconds"></div>';
+      	  propEx += '        </div>';
+      	  propEx += '      </div>';
+      	  propEx += '    </div>';
+      	  propEx += '  </div>';
+      	  propEx += '</li>';
+      	}
+      	else {
+      	  propEx += '<li>';
+      	  propEx += '  <div class="item-content">';
+      	  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
+      	  propEx += '    <div class="item-inner">';
+      	  propEx += '      <div class="item-title label">' + rowExercise.options + '</div>';
+      	  propEx += '      <div class="item-input">';
+      	  propEx += '        <input type="number" min="0" placeholder="Value of ' + rowExercise.options + '">';
+      	  propEx += '      </div>';
+      	  propEx += '    </div>';
+      	  propEx += '  </div>';
+      	  propEx += '</li>';
+      	}
+      });
+      document.getElementById("ulListCurrentWorkEx").innerHTML = propEx;
+    });
+  /*
+  <li>
+      <div class="item-content">
+        <div class="item-media"><i class="icon icon-form-name"></i></div>
+        <div class="item-inner">
+          <div class="item-title label">Name</div>
+          <div class="item-input">
+            <input type="text" placeholder="Your name">
+          </div>
+        </div>
+      </div>
+    </li> 
+  */
 }
