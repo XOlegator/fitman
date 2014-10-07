@@ -65,4 +65,7 @@ div.page-content>div.my-toolbar-inner {
 
 .my-row {
   margin-bottom: 15px;
-}  
+}
+.calendar_actdate a {
+  font-weight: bold !important;
+}

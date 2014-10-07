@@ -613,7 +613,7 @@ function upgradeViewWorkout() {
   $('span#spanDateEx').html(today);
   console.log('Клиент ' + customerName + ', дата ' + today);
   // Формируем календарь занятий данного клиента
-  $("#calendar").datepicker({ autoSize: true });
+  //$("#calendar").datepicker({ autoSize: true });
   // Сформируем список упражнений, если он уже был сформирован на сегодня ранее
   server.workout.query('customer')
   	.filter('date', today)
@@ -977,7 +977,27 @@ function saveExerciseWork() {
   	}
   });
 }
+// Приводим даты в "русский вид" ("15.04.2013"))
+function makeCalDate(date)
+{
+    var d = date.getDate().toString();
+    var m = 1 + date.getMonth();
+    var y = date.getFullYear().toString();
+    if(d.length < 2)
+    {
+        d = "0" + d;    
+    }
+    m = m.toString();
+    if(m.length < 2)
+    {
+        m = "0" + m;    
+    }
 
+    //var Date2 = d +"."+ m +"."+ y;
+    var Date2 = y +"-"+ m +"-"+ d;
+                        
+    return Date2;                        
+}
 /*
 Функция подготовки отображения календаря клиента.
 Вызывается со страницы #view-15 #tab1 (при клике на вкладку календаря)
@@ -1001,11 +1021,53 @@ function makeCalendExCustomer() {
   console.log("Начинаем подгружать календарь");
   // Получим из базы данные, когда были занятия у данного клиента
   var customerName = $('span#spanCustName').attr('data-item');
-  server.workExercise.query('date')
+  server.workout.query()
   	.filter('customer', customerName)
     .execute()
     .then(function(result) {
       console.log('Нашли данные по занятиям: ' + JSON.stringify(result));
+      var datesWork = [];
+      var dateWork = '';
+      var i = 0;
+      result.forEach(function (item, index) {
+        // Сформируем массив дат, когда были занятия
+        dateWork = item.date;
+        if (index == 0) {
+          datesWork[0] = dateWork;
+          console.log('Новая дата: ' + dateWork);
+          i = 1;
+        } else { // Обрабатываем уже не первую запись
+          // Если дата из новой записи ещё не встречалась, то запишем её в наш массив дат
+          if(!(in_array(dateWork, datesWork))) {
+            i = i + 1;
+            datesWork[i] = dateWork;
+            console.log('Новая дата: ' + dateWork);
+          }
+        }
+      });
+      // Вышли из цикла после обработки всех строк
+      //console.log('Цикл закончился, форматируем даты');
+      $("#calendar").datepicker({  
+        beforeShowDay: function(date) {
+          //console.log('Мы в обработке даты');
+          //console.log('makeCalDate(date) = ' + makeCalDate(date));
+          if(in_array(makeCalDate(date), datesWork)) {
+            //console.log('Прошли проверку даты');
+            return[true, "calendar_actdate"];
+          } else {
+            //console.log('не Прошли проверку даты');
+            return[true, ""];                                
+          }
+        },
+        onSelect: function(dateText, inst) {
+          console.log('Нажали на дату dateText ' + dateText);
+                 // Если есть событие, то открываем окно
+                /*if(in_array(datesWork, dateText))
+                {
+                    $( "#calendar_dialog" ).dialog( "open" );
+                }*/
+        }
+      });
     });
 }
 /*
