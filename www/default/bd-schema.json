@@ -64,6 +64,23 @@
                 }
             }
         },
+        "schedule": {
+            "key": {
+                "keyPath": "id",
+                "autoIncrement": true
+            },
+            "indexes": {
+                "customer": {
+                    "unique": false
+                },
+                "day": {
+                    "unique": false
+                },
+                "exercise": {
+                    "unique": false
+                }
+            }
+        },
         "workExercise": {
             "key": {
                 "keyPath": "id",

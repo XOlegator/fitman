@@ -679,6 +679,7 @@ function makeSetExCustomer() {
     listEx += '</li>';
   });
   $('ul#ulListSelectedExercises').append(listEx);
+  $('#ulListAllExWithTypes').empty();
   // Формируем полный список групп упражнений (тот, что справа)
   server.exerciseType.query('name')
     .all()
@@ -1113,7 +1114,7 @@ function makeCalendExCustomer() {
             var workExercises = arrWorkEx[dateText].split('@#');
             var listExCust = '';
             workExercises.forEach(function(exercise, indexEx) {
-            	console.log('exercise = ' + exercise);
+              //console.log('exercise = ' + exercise);
               listExCust += '<li>';
               listExCust += '  <div class="item-link item-content">';
               listExCust += '    <div class="item-inner">';
@@ -1122,14 +1123,9 @@ function makeCalendExCustomer() {
               listExCust += '  </div>';
               listExCust += '</li>';
             });
+            // Надо слева показать список упражнений выделенного дня 
             document.getElementById("ulListPastExercises").innerHTML = listExCust;
           }
-          // Надо слева показать список упражнений выделенного дня 
-          
-                 // Если есть событие, то открываем окно
-                /*if(in_array(datesWork, dateText)) {
-                    $( "#calendar_dialog" ).dialog( "open" );
-                }*/
         }
       });
     });
@@ -1142,7 +1138,7 @@ function makeScheduleExCustomer() {
   // Сформируем доступные кнопки для вкладки Календарь
   var menuWorkout = '';
   menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a>';
+  menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">Cancel</a>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
@@ -1151,9 +1147,76 @@ function makeScheduleExCustomer() {
   menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a></center>';
+  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="makeScheduleCustomer()">Save</a></center>';
   menuWorkout += '</div>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
+  // Найдём сформированный на сегодня набор упражнений, чтобы тут же его показать
+  var customerName = $('span#spanCustName').attr('data-item');
+  var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
+  server.workout.query()
+  	.filter('date', dateEx)
+    .execute()
+    .then(function(result) {
+      //console.log('Нашли данные по занятиям на текущий день: ' + JSON.stringify(result));
+      var listExCust = '';
+      result.forEach(function (item, index) {
+        // Найдём заняти только нужного клиента и сформируем из них спискок
+        if (item.customer == customerName) {
+          listExCust += '<li>';
+          listExCust += '  <div class="item-link item-content">';
+          listExCust += '    <div class="item-inner">';
+          listExCust += '      <span>' + item.exercise + '</span>';
+          listExCust += '    </div>';
+          listExCust += '  </div>';
+          listExCust += '</li>';
+        }
+      }); // Конец цикла по упражнениям текущей даты
+      // Надо слева показать список упражнений выделенного дня 
+      document.getElementById("ulListScheduleEx").innerHTML = listExCust;
+    }); // Конец обработки запроса
+}
+/*
+Функция сохранения расписания по сформированному набору упражнений клиента.
+Вызывается со страницы #view-15 #tab2 (при Save в Schedule)
+*/
+function makeScheduleCustomer() {
+  console.log('Сохраняем расписание');
+  var customerName = $('span#spanCustName').attr('data-item');
+  var day;
+  // Сформируем текущий рабочий список дней (всё, что отметили галочками)
+  var tempDays = $('input:checkbox[name=day-checkbox]:checked').map(function(index, element) {
+    return $(element).attr("value");
+  });
+  var arrNewDays = tempDays.get();
+  //console.log('arrNewDays[1] = ' + arrNewDays[1]);
+  // Найдём в базе все записи по расписаниям занятий на данного клиента
+  server.schedule.query()
+  	.filter('customer', customerName)
+    .execute()
+    .then(function(results) {
+      // Удалим всё, что уже ранее было сохранено в качестве расписания клиента по выбранным сейчас дням
+      // Остальные дни не трогаем. Таким образом можно сформировать разные групы упражнений для разных дней.
+      results.forEach(function (rowSchedule) {
+      	if(in_array(rowSchedule.day, arrNewDays)) {
+      	  server.remove('schedule', parseInt(rowSchedule.id));
+      	}
+      });
+    });
+  // После того, как удалили старые записи, внесём в базу новые записи
+  // Для этого в цикле по дням (из сформированного ранее массива) занесём все упражнения
+  arrNewDays.forEach(function(element, indexDay) {
+    $('#ulListScheduleEx span').each(function(index, item) {
+      temp = item.innerHTML;
+      // На всякий случай поставим заглушку от инъекций
+  	  scheduleExercise = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
+  	  server.schedule.add({
+  	    'customer': customerName,
+  	    'day': arrNewDays[indexDay],
+  	    'exercise': scheduleExercise
+  	  });
+  	  console.log('Были добавлены такие данные: customer = ' + customerName + '; day = ' + arrNewDays[indexDay] + '; exercise = ' + scheduleExercise);
+    });
+  });
 }
 /*
 Функция отображения сформированного набора упражнений клиента на сегодня.
@@ -1176,3 +1239,25 @@ function viewExSetCustomer() {
   menuWorkout += '</div>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
 }
+// Функция выполняется когда изменяется значение какого-либо флага дня из расписания (на странице #view-15 #tab2 - Schedule)
+$('#ulListDays li').click(function() {
+  console.log('$(this).find("input").val() = ' + $(this).find('input').val());
+  var checkBox = $(this).find('input').val();
+  var isChecked = $('#ulListDays input[value="' + checkBox + '"]').is(':checked'); // Проверяем, установлен ли флаг
+  if (isChecked) {
+    if(checkBox == 'today') {
+      // Установлен флаг "только на сегодня", значит, надо снять отметки со всех остальных флагов
+      $('li[data-item="everyday"] input').removeAttr('checked');
+      $('li[data-item="week"] input').removeAttr('checked');
+    } else if (checkBox == 'everyday') {
+      // Установлен флаг "ежедневно", значит, надо снять отметки со всех остальных флагов
+      $('li[data-item="today"] input').removeAttr('checked');
+      $('li[data-item="week"] input').removeAttr('checked');
+    } else {
+  	  // Установлен флаг на каком-то дне недели, значит, надо снять отметки с флагов "только на сегодня" и "ежедневно"
+      $('li[data-item="today"] input').removeAttr('checked');
+      $('li[data-item="every"] input').removeAttr('checked');
+    }
+  }
+});
+
