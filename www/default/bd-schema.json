@@ -88,19 +88,22 @@
             },
             "indexes": {
                 "customer": {
-                    "unique": false
+                  "unique": false
                 },
                 "date": {
-                    "unique": false
+                  "unique": false
                 },
                 "exercise": {
-                    "unique": false
+                  "unique": false
                 },
                 "option": {
-                    "unique": false
+                  "unique": false
                 },
                 "value": {
-                    "unique": false
+                  "unique": false
+                },
+                "set": {
+                  "unique": false
                 }
             }
         }

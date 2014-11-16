@@ -1010,43 +1010,140 @@ function saveExerciseWork() {
   var customerName = $('span#spanCustName').attr('data-item');
   var exercise = $('span#spanExWork').text();
   var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
-  // Считываем все значения
-  $('#ulListCurrentWorkEx input').each(function(index, item) {
-  	console.log('item.value ' + item.value + 'item.attributes[data-item].value ' + item.attributes['data-item'].value);
-  	var option = item.attributes['data-item'].value;
-  	var time = 0; // Время будем записывать в секундах
-  	if(option) {
-  	  // Значение параметра заполнено
-  	  if(option == 'time-minutes') {
-  	  	// Запоминаем минуты, переведённые в секунды
-  	  	time = time + parseInt(item.value) * 60; 
-  	  }
-  	  else if(option == 'time-seconds') {
-  	  	// Запоминем секунды
-  	  	time = time + parseInt(item.value);
-  	  } else {
-  	  	// Любой параметр, кроме времени
-  	    server.workExercise.add({
-  	  	  'customer': customerName,
-  	  	  'date': dateEx,
-  	  	  'exercise': exercise,
-  	  	  'option': option,
-  	  	  'value': item.value
-  	    });
-  	  }
-  	} else {
-  	  // Значение параметра не заполнено
-  	}
-  	// Отдельно записываем в базу время, т.к. сразу нельзя было (происходило сложение минут и секунд)
-  	if(time) {
-  	  server.workExercise.add({
-  	  	'customer': customerName,
-  	  	'date': dateEx,
-  	  	'exercise': exercise,
-  	  	'option': 'time',
-  	  	'value': time
-  	  });
-  	}
+  var workSet = $('select[data-item="sets"]').val(); // Узнаём номер подхода
+  console.log('workSet = ' + workSet); 
+  // Перед тем, как записать в базу данных, нужно проверить нет ли уже там записи о текущем аналитическом разрезе
+  // Для этого отберём из базы все записи по выполнению упражнений на сегодня
+  server.workExercise.query()
+  	.filter('date', dateEx)
+    .execute()
+    .then(function(result) {
+      // Среди сегодняшних записей найдём записи на текущего клиента и текущего упражнения, а также на данный подход
+      var flagAdd = [];
+      result.forEach(function (itemWorkEx, indexWorkEx) {
+        if((itemWorkEx.customer == customerName) && (itemWorkEx.exercise == exercise) && (itemWorkEx.set == workSet)) {
+      	  // Текущая проверяемая запись из базы данных совпала с текущим клиентом, текущим упражнением и текущим подходом
+          // Если текущий аналитический разрез присутствует в базе, предложим пользователю три варианта:
+          // 1. Перезаписать данные
+          // 2. Добавить к записанному
+          // 3. Отменить запись
+          myApp.modal({
+            title:  'Current set already exist in DB',
+            text: 'What do you wond to do with current values ',
+            buttons: [{
+              text: 'Rewrite',
+              onClick: function() {
+              	// Выбрали вариант перезаписи. Значит найдём все записи по данному подходу данного клиента по данному упражнению и удалим
+                flagAdd[indexWorkEx] = 1;
+                // Сначала удаляем уже имеющуюся запись
+                //server.remove('workExercise', parseInt(itemWorkEx.id));
+                //break;
+              }
+            },
+            {
+              text: 'Add',
+              onClick: function() {
+              	// Выбрали вариант перезаписи. Значит найдём все записи по данному подходу данного клиента по данному упражнению и прибавим текущие значения
+                flagAdd[indexWorkEx] = 2;
+                // Чтобы прибавить к уже имеющимся значениям, считаем их из базы данных
+                  
+                // Считываем все значения
+                $('#ulListCurrentWorkEx input').each(function(index, item) {
+  	              console.log('item.value ' + item.value + 'item.attributes[data-item].value ' + item.attributes['data-item'].value);
+  	              var option = item.attributes['data-item'].value;
+  	              var time = 0; // Время будем записывать в секундах
+  	              if(option) {
+  	                // Значение параметра заполнено
+  	                if(option == 'time-minutes') {
+  	  	              // Запоминаем минуты, переведённые в секунды
+  	  	              time = time + parseInt(item.value) * 60; 
+  	                }
+  	                else if(option == 'time-seconds') {
+  	  	              // Запоминем секунды
+  	  	              time = time + parseInt(item.value);
+  	                } else {
+  	  	              // Любой параметр, кроме времени
+  	                  server.workExercise.add({
+  	  	                'customer': customerName,
+  	  	                'date': dateEx,
+  	  	                'exercise': exercise,
+  	  	                'option': option,
+  	  	                'value': item.value
+  	                  });
+  	                }
+  	              } else {
+  	                // Значение параметра не заполнено
+  	              }
+  	              // Отдельно записываем в базу время, т.к. сразу нельзя было (происходило сложение минут и секунд)
+  	              if(time) {
+  	                server.workExercise.add({
+  	  	              'customer': customerName,
+  	  	              'date': dateEx,
+  	  	              'exercise': exercise,
+  	  	              'option': 'time',
+  	  	              'value': time
+  	                });
+  	              }
+                }); // Конец цикла записи
+                //break;
+              }
+            },
+            {
+              text: 'Cancel',
+              bold: true,
+              onClick: function() {
+                flagAdd[indexWorkEx] = 0;
+                //break;
+              }
+            }]
+          }); // Конец обработки модального окна
+        } else { // Конец проверки наличия аналитического разреза
+          // Если текущего аналитического разреза не нашлось.
+          flagAdd[indexWorkEx] = 1;
+        }
+      }); // Конец цикла по записям текущего дня
+      if(!flagAdd.length || (flagAdd.length && (in_array(1, flagAdd)))) {
+      	// Было модальное окно и было указано, что надо перезаписать текущими значениями то, что уже записано в базу данных
+      	// Или если ни разу в цикле не нашлась запись из базы данных
+      	// Считываем все значения
+        $('#ulListCurrentWorkEx input').each(function(index, item) {
+  	      console.log('item.value ' + item.value + 'item.attributes[data-item].value ' + item.attributes['data-item'].value);
+  	      var option = item.attributes['data-item'].value;
+  	      var time = 0; // Время будем записывать в секундах
+  	      if(option) {
+  	        // Значение параметра заполнено
+  	        if(option == 'time-minutes') {
+  	  	      // Запоминаем минуты, переведённые в секунды
+  	  	      time = time + parseInt(item.value) * 60; 
+  	        }
+  	        else if(option == 'time-seconds') {
+  	  	      // Запоминем секунды
+  	  	      time = time + parseInt(item.value);
+  	        } else {
+  	  	      // Любой параметр, кроме времени
+  	          server.workExercise.add({
+  	  	        'customer': customerName,
+  	  	        'date': dateEx,
+  	  	        'exercise': exercise,
+  	  	        'option': option,
+  	  	        'value': item.value
+  	          });
+  	        }
+  	      } else {
+  	        // Значение параметра не заполнено
+  	      }
+  	      // Отдельно записываем в базу время, т.к. сразу нельзя было (происходило сложение минут и секунд)
+  	      if(time) {
+  	        server.workExercise.add({
+  	  	      'customer': customerName,
+  	  	      'date': dateEx,
+  	  	      'exercise': exercise,
+  	  	      'option': 'time',
+  	  	      'value': time
+  	        });
+  	      }
+        }); // Конец цикла записи
+      } // Конец обработки необходимости записи в БД
   });
 }
 // Приводим даты в "русский вид" ("15.04.2013"))
@@ -1295,7 +1392,9 @@ function viewExSetCustomer() {
   menuWorkout += '</div>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
 }
-// Функция выполняется когда изменяется значение какого-либо флага дня из расписания (на странице #view-15 #tab2 - Schedule)
+/* Функция выполняется когда изменяется значение какого-либо флага дня из расписания (на странице #view-15 #tab2 - Schedule)
+ Управляет автоматическим переключением флагов согласно логике.
+*/
 $('#ulListDays li').click(function() {
   console.log('$(this).find("input").val() = ' + $(this).find('input').val());
   var checkBox = $(this).find('input').val();
