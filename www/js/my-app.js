@@ -940,6 +940,22 @@ function makeViewExWork(exercise) {
   document.getElementById("spanExWork").innerHTML = exercise;
   // Формируем к показу характеристики выбранного упражнения
   var propEx = '';
+  // Параметр "Подходы" нужно оформить в виде выпадающего списка. Сразу добавим его.
+  propEx += '<li>';
+  propEx += '  <div class="item-content">';
+  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
+  propEx += '    <div class="item-inner">';
+  propEx += '      <div class="item-title label">sets</div>';
+  propEx += '      <div class="item-input">';
+  propEx += '        <select data-item="sets">';
+  for (i=1; i<11; i++) {
+    propEx += '          <option>' + i + '</option>';
+  }
+  propEx += '        </select>';
+  propEx += '      </div>';
+  propEx += '    </div>';
+  propEx += '  </div>';
+  propEx += '</li>';
   var exerciseName = $('span#spanExWork').text();
   console.log('Идёт построение параметров упражнения ' + exerciseName);
   // Сначала отберём все записи по данному упражнению из базы...
@@ -950,26 +966,8 @@ function makeViewExWork(exercise) {
       console.log('Список характеристик: ' + JSON.stringify(results));
       results.forEach(function (rowExercise) {
       	console.log('rowExercise.options = ' + rowExercise.options);
-      	// Параметр "Подходы" нужно оформить в виде выпадающего списка
-      	if (rowExercise.options == 'sets') {
-      	  propEx += '<li>';
-      	  propEx += '  <div class="item-content">';
-      	  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
-      	  propEx += '    <div class="item-inner">';
-      	  propEx += '      <div class="item-title label">' + rowExercise.options + '</div>';
-      	  propEx += '      <div class="item-input">';
-      	  propEx += '        <select data-item="' + rowExercise.options + '">';
-      	  for (i=1; i<11; i++) {
-            propEx += '          <option>' + i + '</option>';
-          }
-          propEx += '        </select>';
-      	  propEx += '      </div>';
-      	  propEx += '    </div>';
-      	  propEx += '  </div>';
-      	  propEx += '</li>';
-      	}
       	// Параметр "Время" нужно оформить в виде двух окон ввода для минут и секунд 
-      	else if (rowExercise.options == 'time') {
+      	if (rowExercise.options == 'time') {
       	  propEx += '<li>';
       	  propEx += '  <div class="item-content">';
       	  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
@@ -1012,16 +1010,17 @@ function saveExerciseWork() {
   var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
   var workSet = $('select[data-item="sets"]').val(); // Узнаём номер подхода
   console.log('workSet = ' + workSet); 
-  // Перед тем, как записать в базу данных, нужно проверить нет ли уже там записи о текущем аналитическом разрезе
-  // Для этого отберём из базы все записи по выполнению упражнений на сегодня
+  // Перед тем, как записать что-либо в базу данных, нужно проверить нет ли уже там записи о текущем аналитическом разрезе
+  // Для этого отберём из базы все записи по выполнению упражнений на текущий день
   server.workExercise.query()
   	.filter('date', dateEx)
     .execute()
     .then(function(result) {
-      // Среди сегодняшних записей найдём записи на текущего клиента и текущего упражнения, а также на данный подход
+      // Среди сегодняшних записей найдём записи на текущего клиента и текущее упражнения, а также на данный подход
       var flagAdd = [];
+      var findNext = 1;
       result.forEach(function (itemWorkEx, indexWorkEx) {
-        if((itemWorkEx.customer == customerName) && (itemWorkEx.exercise == exercise) && (itemWorkEx.set == workSet)) {
+        if((itemWorkEx.customer == customerName) && (itemWorkEx.exercise == exercise) && (itemWorkEx.set == workSet) && findNext) {
       	  // Текущая проверяемая запись из базы данных совпала с текущим клиентом, текущим упражнением и текущим подходом
           // Если текущий аналитический разрез присутствует в базе, предложим пользователю три варианта:
           // 1. Перезаписать данные
@@ -1034,59 +1033,67 @@ function saveExerciseWork() {
               text: 'Rewrite',
               onClick: function() {
               	// Выбрали вариант перезаписи. Значит найдём все записи по данному подходу данного клиента по данному упражнению и удалим
-                flagAdd[indexWorkEx] = 1;
                 // Сначала удаляем уже имеющуюся запись
-                //server.remove('workExercise', parseInt(itemWorkEx.id));
-                //break;
-              }
+                // Чтобы удалить уже имеющиеся значения, считаем их из базы данных. 
+                // В этом поможет отдельная функция, которая по Клиенту, Дате, Упражнению, Подходу вернёт массив вида
+                // array['option': 'value']. Например, ['repeats': '2', 'weight': '45', 'time': '120']
+                var arrayOldVal = [];
+                arrayOldVal = getValByAnalit(customerName, dateEx, exercise, workSet);
+                for(option in arrayOldVal) { // Проходим циклом по всем параметрам упражнения из БД
+                  // Найдём текущий параметр в нашей форме
+                  if(option == 'time') {
+                	newValOpt = (parseInt($('#ulListCurrentWorkEx input[data-item = "time-minutes"]').value) * 60) + parseInt($('#ulListCurrentWorkEx input[data-item = "time-seconds"]').value);
+                  } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
+                	// Сразу же записываем в базу сумму по каждому параметру
+				    // The value is obj[key]
+				    var newValOpt = parseInt($('#ulListCurrentWorkEx input[data-item = "' + option + '"]').value);
+				  }
+				  // Все новые значения рассичтали, значит пора старое удалять из базы данных
+				  server.remove('workExercise', getIdWorkExerciseByAnalit(customerName, dateEx, exercise, workSet, option)).then(function(res){
+	                server.workExercise.add({
+  	  	              'customer': customerName,
+  	  	              'date': dateEx,
+  	  	              'exercise': exercise,
+  	  	              'option': option,
+  	  	              'value': newValOpt,
+  	  	        	  'set': workSet
+  	                });
+	              });
+	            }               
+              } // Конец функции перезаписи значений БД
             },
             {
               text: 'Add',
               onClick: function() {
-              	// Выбрали вариант перезаписи. Значит найдём все записи по данному подходу данного клиента по данному упражнению и прибавим текущие значения
-                flagAdd[indexWorkEx] = 2;
-                // Чтобы прибавить к уже имеющимся значениям, считаем их из базы данных
-                  
-                // Считываем все значения
-                $('#ulListCurrentWorkEx input').each(function(index, item) {
-  	              console.log('item.value ' + item.value + 'item.attributes[data-item].value ' + item.attributes['data-item'].value);
-  	              var option = item.attributes['data-item'].value;
-  	              var time = 0; // Время будем записывать в секундах
-  	              if(option) {
-  	                // Значение параметра заполнено
-  	                if(option == 'time-minutes') {
-  	  	              // Запоминаем минуты, переведённые в секунды
-  	  	              time = time + parseInt(item.value) * 60; 
-  	                }
-  	                else if(option == 'time-seconds') {
-  	  	              // Запоминем секунды
-  	  	              time = time + parseInt(item.value);
-  	                } else {
-  	  	              // Любой параметр, кроме времени
-  	                  server.workExercise.add({
-  	  	                'customer': customerName,
-  	  	                'date': dateEx,
-  	  	                'exercise': exercise,
-  	  	                'option': option,
-  	  	                'value': item.value
-  	                  });
-  	                }
-  	              } else {
-  	                // Значение параметра не заполнено
-  	              }
-  	              // Отдельно записываем в базу время, т.к. сразу нельзя было (происходило сложение минут и секунд)
-  	              if(time) {
-  	                server.workExercise.add({
+              	// Выбрали вариант добавления текущих показателей к тем, что уже есть в базе по данному разрезу.
+              	// Значит найдём все записи по данному подходу данного клиента по данному упражнению и прибавим текущие значения
+                // Чтобы прибавить к уже имеющимся значениям, считаем их из базы данных. 
+                // В этом поможет отдельная функция, которая по Клиенту, Дате, Упражнению, Подходу вернёт массив вида
+                // array['option': 'value']. Например, ['repeats': '2', 'weight': '45', 'time': '120']
+                var arrayOldVal = [];
+                arrayOldVal = getValByAnalit(customerName, dateEx, exercise, workSet);
+                for(option in arrayOldVal) { // Проходим циклом по всем параметрам упражнения из БД
+                  // Найдём текущий параметр в нашей форме
+                  if(option == 'time') {
+                	newValOpt = getValOptionByAnalit(customerName, dateEx, exercise, workSet, 'time') + (parseInt($('#ulListCurrentWorkEx input[data-item = "time-minutes"]').value) * 60) + parseInt($('#ulListCurrentWorkEx input[data-item = "time-seconds"]').value);
+                  } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
+                	// Сразу же записываем в базу сумму по каждому параметру
+				    // The value is obj[key]
+				    var newValOpt = getValOptionByAnalit(customerName, dateEx, exercise, workSet, option) + parseInt($('#ulListCurrentWorkEx input[data-item = "' + option + '"]').value);
+				  }
+				  // Все новые значения рассичтали, значит пора старое удалять из базы данных
+				  server.remove('workExercise', getIdWorkExerciseByAnalit(customerName, dateEx, exercise, workSet, option)).then(function(res){
+	                server.workExercise.add({
   	  	              'customer': customerName,
   	  	              'date': dateEx,
   	  	              'exercise': exercise,
-  	  	              'option': 'time',
-  	  	              'value': time
+  	  	              'option': option,
+  	  	              'value': newValOpt,
+  	  	        	  'set': workSet
   	                });
-  	              }
-                }); // Конец цикла записи
-                //break;
-              }
+	              });
+				}
+              } // Конец функции добавления значений к сохранённым в БД
             },
             {
               text: 'Cancel',
@@ -1094,23 +1101,25 @@ function saveExerciseWork() {
               onClick: function() {
                 flagAdd[indexWorkEx] = 0;
                 //break;
-              }
+              } // Конец функции отмены сохранения
             }]
           }); // Конец обработки модального окна
+          findNext = 0; // Дальше искать в записях БД не нужно; выходим из if
         } else { // Конец проверки наличия аналитического разреза
-          // Если текущего аналитического разреза не нашлось.
+          // Если текущего аналитического разреза не нашлось, делаем поднятие флага, что нужно добавить запись в БД.
           flagAdd[indexWorkEx] = 1;
         }
       }); // Конец цикла по записям текущего дня
+      // Если прошличь по всем записям в БД и не нашли совпадений, то надо просто добавить текущие значения в БД
       if(!flagAdd.length || (flagAdd.length && (in_array(1, flagAdd)))) {
       	// Было модальное окно и было указано, что надо перезаписать текущими значениями то, что уже записано в базу данных
-      	// Или если ни разу в цикле не нашлась запись из базы данных
+      	// Или если ни разу в цикле не нашлась запись из базы данных. Т.е. надо добавить запись в БД
       	// Считываем все значения
         $('#ulListCurrentWorkEx input').each(function(index, item) {
   	      console.log('item.value ' + item.value + 'item.attributes[data-item].value ' + item.attributes['data-item'].value);
   	      var option = item.attributes['data-item'].value;
   	      var time = 0; // Время будем записывать в секундах
-  	      if(option) {
+  	      if(option && option != 'sets') { // Если есть какие-нибудь опции и это не Sets
   	        // Значение параметра заполнено
   	        if(option == 'time-minutes') {
   	  	      // Запоминаем минуты, переведённые в секунды
@@ -1126,7 +1135,8 @@ function saveExerciseWork() {
   	  	        'date': dateEx,
   	  	        'exercise': exercise,
   	  	        'option': option,
-  	  	        'value': item.value
+  	  	        'value': item.value,
+  	  	        'set': workSet
   	          });
   	        }
   	      } else {
@@ -1139,7 +1149,8 @@ function saveExerciseWork() {
   	  	      'date': dateEx,
   	  	      'exercise': exercise,
   	  	      'option': 'time',
-  	  	      'value': time
+  	  	      'value': time,
+  	  	      'set': workSet
   	        });
   	      }
         }); // Конец цикла записи
@@ -1416,3 +1427,62 @@ $('#ulListDays li').click(function() {
   }
 });
 
+/*
+Функция возвращает массив данных из БД вида Параметр:Значение по переданным Клиенту, Дате, Упражнению и Подходу
+*/
+function getValByAnalit(customerName, dateEx, exercise, workSet) {
+  var arrVal = [];
+  // Для этого отберём из базы все записи по выполнению упражнений на текущий день
+  server.workExercise.query()
+  	.filter('date', dateEx)
+    .execute()
+    .then(function(result) {
+      result.forEach(function (item, index) {
+      	if((item.custome == customerName) && (item.exercise == exercise) && (item.set == workSet)) {
+      	  // Мы нашли данные по аналитическому разрезу!
+      	  arrVal[item.option] = item.value;
+      	}
+      });
+    });
+  return arrVal;
+}
+
+/*
+Функция возвращает числовое значение параметра из БД по переданным Клиенту, Дате, Упражнению, Подходу и Параметру
+*/
+function getValOptionByAnalit(customerName, dateEx, exercise, workSet, option) {
+  var valOpt = 0;
+  // Для этого отберём из базы все записи по выполнению упражнений на текущий день
+  server.workExercise.query()
+  	.filter('date', dateEx)
+    .execute()
+    .then(function(result) {
+      result.forEach(function (item, index) {
+      	if((item.custome == customerName) && (item.exercise == exercise) && (item.set == workSet) && (item.option == option)) {
+      	  // Мы нашли данные по аналитическому разрезу!
+      	  valOpt = parseInt(item.value);
+      	}
+      });
+    });
+  return valOpt;
+}
+
+/*
+Функция возвращает числовое значение id из таблицы workExercise БД по переданным Клиенту, Дате, Упражнению, Подходу и Параметру
+*/
+function getIdWorkExerciseByAnalit(customerName, dateEx, exercise, workSet, option) {
+  var valId = 0;
+  // Для этого отберём из базы все записи по выполнению упражнений на текущий день
+  server.workExercise.query()
+  	.filter('date', dateEx)
+    .execute()
+    .then(function(result) {
+      result.forEach(function (item, index) {
+      	if((item.custome == customerName) && (item.exercise == exercise) && (item.set == workSet) && (item.option == option)) {
+      	  // Мы нашли данные по аналитическому разрезу!
+      	  valId = parseInt(item.id);
+      	}
+      });
+    });
+  return valId;
+}
