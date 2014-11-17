@@ -37,6 +37,7 @@ var view8 = myApp.addView('#view-8'); // Страница настроек уп�
 var view10 = myApp.addView('#view-10'); // Добавление клиента
 var view13 = myApp.addView('#view-13'); // Удаление клиентов из базы
 */
+
 var bdSchema = '';
 $.getJSON('default/bd-schema.json', function(data){
   bdSchema = data;
@@ -1485,4 +1486,43 @@ function getIdWorkExerciseByAnalit(customerName, dateEx, exercise, workSet, opti
       });
     });
   return valId;
+}
+
+/*
+Функция генерирует данные для страницы статистики по выбранному упражнению, клиенту и дате
+*/
+function generateStatistics() {
+  // 5 Slides Per View, 5px Between
+  var mySlider3 = myApp.slider('.slider-stat', {
+    pagination:'.slider-stat .slider-pagination',
+    spaceBetween: 5,
+    slidesPerView: 5
+  });
+  var customerName = $('span#spanCustName').attr('data-item');
+  var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
+  var exercise = $('span#spanExWork').text();
+  // Найдём все характеристики упражнения и сформируем из них заголовки строк статистики
+  // Первым параметром всегда идёт Подход
+  var statName = '';
+  statName += '<span class="statistics-name">sets</span><br>';
+  server.exercise.query()
+  	.filter('name', exercise)
+    .execute()
+    .then(function(results) {
+      results.forEach(function (rowExercise) {
+      	statName += '<span class="statistics-name">' + rowExercise.options + '</span><br>';
+      });
+      document.getElementById("divStatName").innerHTML = statName;
+    });
+  /*server.workExercise.query()
+  	.filter('date', dateEx)
+    .execute()
+    .then(function(result) {
+      result.forEach(function (item, index) {
+      	if((item.custome == customerName) && (item.exercise == exercise) && (item.set == workSet) && (item.option == option)) {
+      	  // Мы нашли данные по аналитическому разрезу!
+      	  valId = parseInt(item.id);
+      	}
+      });
+    });*/
 }

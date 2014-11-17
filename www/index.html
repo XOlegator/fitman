@@ -988,7 +988,7 @@
                       <center><a href="#workTab2" class="tab-link" id="aWorkGraph">Graph</a></center>
                     </div>
                     <div class="col-33">
-                      <center><a href="#workTab3" class="tab-link" id="aWorkStatistics">Statistics</a></center>
+                      <center><a href="#workTab3" class="tab-link" id="aWorkStatistics" onclick="generateStatistics()">Statistics</a></center>
                     </div>
                   </div>
                 </div>
@@ -1006,7 +1006,28 @@
                   </div>
                   <!-- workTab3, Статистика по данному упражнению -->
                   <div id="workTab3" class="tab">
-                    
+                    <!--<div class="content-block-title">3 Slides Per View, 10px Between</div>-->
+                    <div class="row">
+                      <div class="col-20 stat-name" id="divStatName">
+                      	<!--<span class="statistics-name">Sets</span><br>
+                      	<span class="statistics-name">Repeats</span><br>
+                      	<span class="statistics-name">weight</span><br>
+                      	<span class="statistics-name">time</span>-->
+                      </div>
+                      <div class="col-80">
+				        <div class="slider-container slider-stat">
+				          <div class="slider-pagination"></div>
+				          <div class="slider-wrapper">
+				            <div class="slider-slide"><span>1</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				            <div class="slider-slide"><span>2</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				            <div class="slider-slide"><span>3</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				            <div class="slider-slide"><span>4</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				            <div class="slider-slide"><span>5</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				            <div class="slider-slide"><span>6</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				          </div>
+				        </div>
+				      </div>
+				    </div>
                   </div>
                 </div><!-- End of Tabs, tabs wrapper -->
               </div>

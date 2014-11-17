@@ -69,3 +69,17 @@ div.page-content>div.my-toolbar-inner {
 .calendar_actdate a {
   font-weight: bold !important;
 }
+.slider-slide {
+  background: #fff;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+}
+.slider-slide span {
+  text-align:center;
+  display:block;
+  margin: 15px;
+}
+.statistics-name {
+  margin: 15px;
+  display: block;
+}
