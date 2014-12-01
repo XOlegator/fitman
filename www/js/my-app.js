@@ -102,7 +102,50 @@ $.getJSON('default/bd-schema.json', function(data){
     myApp.init();
   });
 });
-
+// Функция изменения системы единиц измерения в настройках
+$('#selectUnits').on('change', function() {
+	console.log('Зашли в изменение настроек единиц измерения');
+  // Сначала найдём то, что уже есть в базе
+  server.settings.query()
+    .all()
+    .execute()
+    .then(function(results) {
+      var setLang = results[0].language;
+      var setUnits = $("#selectUnits :selected").html();
+      // Т.к. запись с настройками может быть только одна, то смело удаляем найденную запись
+      server.remove('settings', parseInt(results[0].id)).then(function(res1) {
+      	// Старую запись с настройками удалил, добавляем новую
+	    	server.settings.add({
+	        'units': setUnits, // Ставим новое значение
+	        'language': setLang // Оставляем то, что было ранее
+	      }).then(function(item) {
+	        console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
+	      });
+	    });
+    });
+});
+// Функция изменения языка приложения в настройках
+$('#selectLang').on('change', function() {
+	console.log('Зашли в изменение настроек языка');
+  // Сначала найдём то, что уже есть в базе
+  server.settings.query()
+    .all()
+    .execute()
+    .then(function(results) {
+      var setLang = $("#selectLang :selected").html();
+      var setUnits = results[0].units;
+      // Т.к. запись с настройками может быть только одна, то смело удаляем найденную запись
+      server.remove('settings', parseInt(results[0].id)).then(function(res1) {
+      	// Старую запись с настройками удалил, добавляем новую
+	    	server.settings.add({
+	        'units': setUnits, // Оставляем то, что было ранее
+	        'language': setLang // Ставим новое значение
+	      }).then(function(item) {
+	        console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
+	      });
+	    });
+    });
+});
 // Модальное окно для подтверждения загрузки демо-данных
 $$('.confirm-fill-demo').on('click', function () {
   myApp.confirm('Are you sure? It will erase all of your data!', function () {
