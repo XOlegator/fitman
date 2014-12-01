@@ -63,6 +63,46 @@
                     "unique": false
                 }
             }
+        },
+        "schedule": {
+            "key": {
+                "keyPath": "id",
+                "autoIncrement": true
+            },
+            "indexes": {
+                "customer": {
+                    "unique": false
+                },
+                "day": {
+                    "unique": false
+                },
+                "exercise": {
+                    "unique": false
+                }
+            }
+        },
+        "workExercise": {
+            "key": {
+                "keyPath": "id",
+                "autoIncrement": true
+            },
+            "indexes": {
+                "customer": {
+                    "unique": false
+                },
+                "date": {
+                    "unique": false
+                },
+                "exercise": {
+                    "unique": false
+                },
+                "option": {
+                    "unique": false
+                },
+                "value": {
+                    "unique": false
+                }
+            }
         }
     }
 }

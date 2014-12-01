@@ -729,28 +729,28 @@
             </div>
           </div>
         </div>
-        <!-- Страница для формирования занятий по клиенту -->
+        <!-- Страница для комплектования списка занятий по клиенту -->
         <div data-page="index-15" id="view-15" class="navbar-through toolbar-through view tab">
           <div class="pages">
             <div data-page="index-15" class="page">
               <div class="page-content grad-body">
                 <div class="content-block-title">
                   <div class="row">
-                    <div class="col-30"><span id="spanCustName"></span></div>
+                    <div class="col-30"><span id="spanCustName" data-item=""></span></div>
                     <div class="col-40"><center><strong>Workout of the day</strong></center></div>
                     <div class="col-30"><span id="spanDateEx"></span></div>
                   </div>
                 </div>
                 <div class="content-block">
-                  <div class="row">
+                  <div class="row" id="divMenuWorkout">
                     <div class="col-25">
                       <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a></center>
                     </div>
                     <div class="col-25">
-                      <center><a href="#tab1" class="tab-link">Calendar</a></center>
+                      <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>
                     </div>
                     <div class="col-25">
-                      <center><a href="#tab2" class="tab-link">Schedule</a></center>
+                      <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>
                     </div>
                     <div class="col-25">
                       <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a></center>
@@ -769,10 +769,10 @@
                   <div id="tab1" class="tab">
                     <div class="content-block">
                       <div class="row">
-                      	<div class="col-50">
+                      	<div class="col-60">
                           <div class="list-block">
                             <ul id="ulListPastExercises">
-                              <li>
+                              <!--<li>
                                 <div class="item-content">
                                   <div class="item-inner">
                                     <div class="item-input">
@@ -780,11 +780,11 @@
                                     </div>
                                   </div>
                                 </div>
-                              </li>
+                              </li>-->
                             </ul>
                           </div>
                         </div>
-                      	<div class="col-50">
+                      	<div class="col-40">
                           <div id="calendar"></div>
                         </div>
                       </div>
@@ -792,9 +792,121 @@
                   </div>
                   <!-- Tab 2 -->
                   <div id="tab2" class="tab">
-                    <div class="content-block">
-                      <p>This is tab 2 content</p>
-                    </div>
+                    <div class="row">
+                      	<div class="col-50">
+                          <div class="list-block">
+                          	<!-- Сформированный набор упражнений -->
+                            <ul id="ulListScheduleEx">
+                            </ul>
+                          </div>
+                        </div>
+                      	<div class="col-50">
+                          <div class="list-block">
+                          	<!-- Упражнения из базы данных -->
+                            <ul id="ulListDays">
+                              <li data-item="today">
+                                <label class="label-checkbox item-content">
+                                  <input type="checkbox" name="day-checkbox" value="today">
+                                  <div class="item-media">
+                                    <i class="icon icon-form-checkbox"></i>
+                                  </div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Only today</div>
+                                  </div>
+                                </label>
+                              </li>
+                              <li data-item="everyday">
+                                <label class="label-checkbox item-content">
+                                  <input type="checkbox" name="day-checkbox" value="everyday">
+                                  <div class="item-media">
+                                    <i class="icon icon-form-checkbox"></i>
+                                  </div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Everyday</div>
+                                  </div>
+                                </label>
+                              </li>
+                              <li data-item="week">
+                                <label class="label-checkbox item-content">
+                                  <input type="checkbox" name="day-checkbox" value="sunday">
+                                  <div class="item-media">
+                                    <i class="icon icon-form-checkbox"></i>
+                                  </div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Sunday</div>
+                                  </div>
+                                </label>
+                              </li>
+                              <li data-item="week">
+                                <label class="label-checkbox item-content">
+                                  <input type="checkbox" name="day-checkbox" value="monday">
+                                  <div class="item-media">
+                                    <i class="icon icon-form-checkbox"></i>
+                                  </div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Monday</div>
+                                  </div>
+                                </label>
+                              </li>
+                              <li data-item="week">
+                                <label class="label-checkbox item-content">
+                                  <input type="checkbox" name="day-checkbox" value="tuesday">
+                                  <div class="item-media">
+                                    <i class="icon icon-form-checkbox"></i>
+                                  </div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Tuesday</div>
+                                  </div>
+                                </label>
+                              </li>
+                              <li data-item="week">
+                                <label class="label-checkbox item-content">
+                                  <input type="checkbox" name="day-checkbox" value="wednesday">
+                                  <div class="item-media">
+                                    <i class="icon icon-form-checkbox"></i>
+                                  </div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Wednesday</div>
+                                  </div>
+                                </label>
+                              </li>
+                              <li data-item="week">
+                                <label class="label-checkbox item-content">
+                                  <input type="checkbox" name="day-checkbox" value="thursday">
+                                  <div class="item-media">
+                                    <i class="icon icon-form-checkbox"></i>
+                                  </div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Thursday</div>
+                                  </div>
+                                </label>
+                              </li>
+                              <li data-item="week">
+                                <label class="label-checkbox item-content">
+                                  <input type="checkbox" name="day-checkbox" value="friday">
+                                  <div class="item-media">
+                                    <i class="icon icon-form-checkbox"></i>
+                                  </div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Friday</div>
+                                  </div>
+                                </label>
+                              </li>
+                              <li data-item="week">
+                                <label class="label-checkbox item-content">
+                                  <input type="checkbox" name="day-checkbox" value="saturday">
+                                  <div class="item-media">
+                                    <i class="icon icon-form-checkbox"></i>
+                                  </div>
+                                  <div class="item-inner">
+                                    <div class="item-title">Saturday</div>
+                                  </div>
+                                </label>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
                   </div>
                   <!-- Tab 3 Создание нового набора упражнений -->
                   <div id="tab3" class="tab">
@@ -857,18 +969,46 @@
               <div class="page-content grad-body">
                 <div class="content-block-title">
                   <div class="row my-row">
-                    <div class="col-30"><span id="spanCustName"></span></div>
+                    <div class="col-30"><span id="spanWorkCustName"></span></div>
                     <div class="col-40"><center><strong>Workout of the day</strong></center></div>
-                    <div class="col-30"><span id="spanDateEx"></span></div>
+                    <div class="col-30"><span id="spanWorkDateEx"></span></div>
                   </div>
                   <div class="row">
-                    <div class="col-30"><a href="" class="tab-link btn-left-top">Cancel</a><!-- На view-5 tab0 --></div>
+                    <div class="col-30"><a href="#view-15" class="tab-link btn-left-top">Cancel</a><!-- На view-15 tab0 --></div>
                     <div class="col-40"><center><strong><span id="spanExWork"></span></strong></center></div>
                     <div class="col-30"><a href="" class="tab-link btn-right-top" onclick="saveExerciseWork()">Save</a></div>
                   </div>
                 </div>
                 <div class="content-block">
+                  <div class="row">
+                    <div class="col-33">
+                      <center><a href="#workTab1" class="tab-link active" id="aWorkNote">Note</a></center>
+                    </div>
+                    <div class="col-33">
+                      <center><a href="#workTab2" class="tab-link" id="aWorkGraph">Graph</a></center>
+                    </div>
+                    <div class="col-33">
+                      <center><a href="#workTab3" class="tab-link" id="aWorkStatistics">Statistics</a></center>
+                    </div>
+                  </div>
                 </div>
+                <!-- Tabs, tabs wrapper -->
+                <div class="tabs">
+                  <!-- workTab1, Работа с текущим упражнением клиента -->
+                  <div id="workTab1" class="tab active">
+                    <div class="list-block">
+                      <ul id="ulListCurrentWorkEx"></ul>
+                    </div>
+                  </div>
+                  <!-- workTab2, Графики по данному упражнению -->
+                  <div id="workTab2" class="tab">
+                    
+                  </div>
+                  <!-- workTab3, Статистика по данному упражнению -->
+                  <div id="workTab3" class="tab">
+                    
+                  </div>
+                </div><!-- End of Tabs, tabs wrapper -->
               </div>
             </div>
           </div>

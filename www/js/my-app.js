@@ -122,7 +122,7 @@ $$('.confirm-fill-demo').on('click', function () {
           }
         }
       }
-      // Обновляем список групп упражнений на соответсвующей странице
+      // Обновляем список групп упражнений на соответствующей странице
       server.exerciseType.query('name')
         .all()
         .distinct()
@@ -299,7 +299,7 @@ function removeCustomers() {
             });
           });
       });
-      // После всех удалений, обновим списки клиентов на соответсвующих страницах
+      // После всех удалений, обновим списки клиентов на соответствующих страницах
       server.customers.query('name')
 		.all()
 		.distinct()
@@ -323,7 +323,7 @@ function removeCustomers() {
   if(newCustomer != '') {
   	//console.log('Добавляем клиента ' + newCustomer + ' фотография ' + photo + ' комментарий: ' + newCustomerComments);
     server.customers.add({'name': newCustomer, 'photo': photo, 'comments': newCustomerComments});
-    // Обновляем список клиентов на соответсвующей странице
+    // Обновляем список клиентов на соответствующей странице
     server.customers.query('name')
       .all()            
       .distinct()
@@ -393,7 +393,7 @@ function updateListExerciseType(exerciseType) {
 function updateListExercises(exerciseType) {
   $('div.ex-of-type').text(exerciseType);
   var listExercise = '';
-  // Запросом отбираем все упражнения даной группы (exerciseType)
+  // Запросом отбираем все упражнения данной группы (exerciseType)
   server.exercise.query('name')
   	.filter('type', exerciseType)
     //.all()
@@ -447,7 +447,7 @@ function addExercise() {
       //console.log('name = ' + newExercise + '; type = ' + typeExercise + '; options = ' + this.value);
 	  server.exercise.add({'name': newExercise, 'type': typeExercise, 'options': this.value});
     });
-    // Обновляем список упражнений на соответсвующей странице
+    // Обновляем список упражнений на соответствующей странице
     updateListExercises(typeExercise);
     $$('a[href="#view-7"]').click();
   }
@@ -544,7 +544,7 @@ function updateExerciseProperties() {
 function addExType() {
 	var newExType = $('input#inputNewExType').val();
 	server.exerciseType.add({'name': newExType});
-	// Обновляем список групп упражнений на соответсвующей странице
+	// Обновляем список групп упражнений на соответствующей странице
   server.exerciseType.query('name')
     .all()
     .distinct()
@@ -745,7 +745,7 @@ function makeSetExCustomer() {
        //console.log('Список групп упражнений: ' + JSON.stringify(results));
        // Терепь найдём все упражнения из данной группы.
        // Упражнения без сортировки (библиотека db.js не поддерживает сортировку) - добавим её,
-       // но сначала сформируем массив для сотрировки
+       // но сначала сформируем массив для сортировки
        var arrExTypes = [];
        results.forEach(function (rowExerciseType, indexType) {
        	 //console.log('indexType: ' + indexType);
@@ -757,7 +757,7 @@ function makeSetExCustomer() {
        //console.log('arrExTypes = ' + arrExTypes);
        // Пройдём циклом по всем названиям групп упражнений
        arrExTypes.forEach(function(exTypeName) {
-       	 // Добавляем на страницу наименования групп упранений
+       	 // Добавляем на страницу наименования групп упражнений
          $('ul#ulListAllExWithTypes').append('<li class="item-divider" data-item="' + exTypeName + '">' + exTypeName + '</li>');
          var testExercise = [];
          // Формируем список упражнений из данной группы
@@ -1085,7 +1085,7 @@ function saveExerciseWork() {
 								      // The value is obj[key]
 								      var newValOpt = getValOptionByAnalit(customerName, dateEx, exercise, workSet, option) + parseInt($('#ulListCurrentWorkEx input[data-item = "' + option + '"]').value);
 								    }
-								    // Все новые значения рассичтали, значит пора старое удалять из базы данных
+								    // Все новые значения рассчитали, значит пора старое удалять из базы данных
 								    server.remove('workExercise', getIdWorkExerciseByAnalit(customerName, dateEx, exercise, workSet, option)).then(function(res){
 	                  	server.workExercise.add({
   	  	                'customer': customerName,
@@ -1402,7 +1402,7 @@ function makeScheduleCustomer() {
     .execute()
     .then(function(results) {
       // Удалим всё, что уже ранее было сохранено в качестве расписания клиента по выбранным сейчас дням
-      // Остальные дни не трогаем. Таким образом можно сформировать разные групы упражнений для разных дней.
+      // Остальные дни не трогаем. Таким образом можно сформировать разные группы упражнений для разных дней.
       results.forEach(function (rowSchedule) {
       	if(in_array(rowSchedule.day, arrNewDays)) {
       	  server.remove('schedule', parseInt(rowSchedule.id));
@@ -1607,28 +1607,100 @@ $('#aWorkStatistics').on('click', function() {
 $('#aWorkGraph').on('click', function() {
 	// Надо скрыть кнопку Save
 	$('#linkSaveWorkEx').hide();
-	var data = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  series: [
-    [5, 4, 3, 7, 5, 10, 3, 4, 8, 10, 6, 8],
-    [3, 2, 9, 5, 4, 6, 4, 6, 7, 8, 7, 4]
-  ]
-};
-
-var options = {
-  seriesBarDistance: 10
-};
-
-var responsiveOptions = [
-  ['screen and (max-width: 640px)', {
-    seriesBarDistance: 5,
-    axisX: {
-      labelInterpolationFnc: function (value) {
-        return value[0];
-      }
-    }
-  }]
-];
-
-new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+	// Получим все параметры данного упражнения
+	var exercise = $('span#spanExWork').text();
+	var customerName = $('span#spanCustName').attr('data-item');
+	var arrOptEx = []; // Список всех параметров данного упражнения
+	var i = 0; // Счётчик количества данных (фактически это количество подходов)
+	server.exercise.query()
+  	.filter('name', exercise)
+    .execute()
+    .then(function(results) {
+      results.forEach(function (rowExercise, index) {
+    		arrOptEx[index] = rowExercise.options;
+      });
+      // Определим количество характеристик
+      var countOptions = arrOptEx.length;
+      console.log('Количество всех собранных из БД характеристик: ' + countOptions);
+      //console.log('Список всех собранных из БД характеристик: ' + JSON.stringify(arrOptEx));
+      // Теперь надо сформировать данные для графика. Ищем в базе всё по данному упражнению и клиенту
+      server.workExercise.query()
+  	    .filter('customer', customerName)
+        .execute()
+        .then(function(result) {
+      		var analitCount = 0;
+					var arrSetEx = [];
+					var arrDateEx = [];
+					var arrRepeats = [];
+					var arrWeight = [];
+					var arrTime = [];
+					var arrDistance = [];
+					var arrSpeed = [];
+					var arrSlope = [];
+					var arrLoad = [];
+          result.forEach(function (item) {
+            if(item.exercise == exercise) { // Нас интересует только определённое упражнение
+            	// Добрались до данных, теперь их надо собрать в массивы
+            	if (i == 0) {
+            		arrDateEx[analitCount] = item.date;
+            		arrSetEx[analitCount] = item.set;
+            	}	else { 
+            		if (item.option == 'repeats') {
+	            		arrRepeats[analitCount] = item.value;
+	            	} else if (item.option == 'weight') {
+	            		arrWeight[analitCount] = item.value;
+	            	} else if (item.option == 'time') {
+	            		arrTime[analitCount] = item.value;
+	            	} else if (item.option == 'distance') {
+	            		arrDistance[analitCount] = item.value;
+	            	} else if (item.option == 'speed') {
+	            		arrSpeed[analitCount] = item.value;
+	            	} else if (item.option == 'slope') {
+	            		arrSlope[analitCount] = item.value;
+	            	} else if (item.option == 'load') {
+	            		arrLoad[analitCount] = item.value;
+	            	}
+            	}
+            	i++; // Счётчик по параметрам одного аналитического разреза
+            	if(i == countOptions) {
+            		i = 0; // Начало нового аналитического разреза
+	            	analitCount++;
+            	}
+            	console.log('Номер характеристики в текущей итерации: ' + i);
+            }
+          });
+          // Данные собрали в массив. Теперь готовим к показу график по данным
+          var test = [1, 2, 3];
+					var data = {
+					  //labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+					  labels: arrDateEx,
+					  series: [
+					    arrRepeats,
+					    arrWeight,
+					    arrTime,
+					    arrDistance,
+					    arrSpeed,
+					    arrSlope,
+					    arrLoad
+					  ]
+					};
+					
+					var options = {
+					  seriesBarDistance: 10
+					};
+					
+					var responsiveOptions = [
+					  ['screen and (max-width: 640px)', {
+					    seriesBarDistance: 5,
+					    axisX: {
+					      labelInterpolationFnc: function (value) {
+					        return value[0];
+					      }
+					    }
+					  }]
+					];
+					
+					new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+        });
+    });  
 });
