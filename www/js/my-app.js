@@ -44,6 +44,31 @@ $.getJSON('default/bd-schema.json', function(data){
   db.open(data).then(function(serv) {
   	console.log('Получили схему БД, открыли базу');
     server = serv;
+    console.log('Инициализируем страницу index-2');
+    myApp.onPageInit('index-2', function (page) {
+      // Перед инициализацией страницы с настройками, нужно получить некоторые настройки из БД
+      server.settings.query()
+        .all()
+        .execute()
+        .then(function(results) {
+          console.log('Получили список настроек');
+          if(results.length) {
+          	$("#selectUnits :contains('" + results.units + "')").attr("selected", "selected");
+          	$("#selectLang :contains('" + results.language + "')").attr("selected", "selected");
+          } else {
+          	// Настроек в базе никаких не было (значит в первый раз открыли программу). Допишем их туда.
+          	// По-умолчанию язык будет - English, система единиц измерения - Metric
+          	server.settings.add({
+              'units': 'Metric',
+              'language': 'English'
+            }).then(function(item){
+              console.log('Записали настройки по-умолчанию в базу: ' + JSON.stringify(item));
+          	  $("#selectUnits :contains('Metric')").attr("selected", "selected");
+          	  $("#selectLang :contains('English')").attr("selected", "selected");
+            });
+          }
+        });
+    });
     console.log('Инициализируем страницу index-3');
     myApp.onPageInit('index-3', function (page) {
       // Перед инициализацией страницы со списком клиентов, нужно подготовить этот список
@@ -54,6 +79,7 @@ $.getJSON('default/bd-schema.json', function(data){
           console.log('Формируем список клиентов');
           //console.log('Список клиентов: ' + JSON.stringify(results));
           updateListCustomers(results);
+          document.getElementById("badgeCountCustomers").innerHTML = results.length;
         });
     });
     console.log('Инициализируем страницу index-5');
@@ -157,9 +183,9 @@ $$('.confirm-clean-db').on('click', function () {
       	
         //console.log('Start cleaning DB');
         // Удалим все таблицы
-        server.clear('workExercise');
-        server.clear('schedule');
-        server.clear('workout');
+        server.remove('workExercise');
+        server.remove('schedule');
+        server.remove('workout');
         server.remove('exerciseType');
         server.remove('exercise');
         server.remove('customers');
@@ -201,15 +227,13 @@ $$('.confirm-create-db').on('click', function () {
 });
 // Модальное окно для удаления базы данных
 $$('.confirm-remove-db').on('click', function () {
-	myApp.confirm('Are you sure?', 
-      function () {
+	myApp.confirm('Are you sure?', function () {
 		// Удаление самой базы данных
 		indexedDB.deleteDatabase('my-app');
 		document.getElementById("ulListCustomers").innerHTML = '';
-  		document.getElementById("forDeleteCustomers").innerHTML = '';
-  		document.getElementById("ulListExerciseType").innerHTML = '';
-	  }
-	);
+		document.getElementById("forDeleteCustomers").innerHTML = '';
+		document.getElementById("ulListExerciseType").innerHTML = '';
+	});
 });
 /*
 Функция построения списка клиентов. В функцию передаётся массив объектов customers

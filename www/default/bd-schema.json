@@ -1,111 +1,125 @@
 {
-    "server": "my-app",
-    "version": 1,
-    "schema": {
-        "exerciseType": {
-            "key": {
-                "keyPath": "id",
-                "autoIncrement": true
-            },
-            "indexes": {
-                "name": {
-                    "unique": true
-                }
-            }
-        },
-        "exercise": {
-            "key": {
-                "keyPath": "id",
-                "autoIncrement": true
-            },
-            "indexes": {
-                "name": {
-                    "unique": false
-                },
-                "type": {
-                    "unique": false
-                },
-                "options": {
-                    "unique": false
-                }
-            }
-        },
-        "customers": {
-            "key": {
-                "keyPath": "id",
-                "autoIncrement": true
-            },
-            "indexes": {
-                "name": {
-                    "unique": true
-                },
-                "photo": {
-                    "unique": false
-                },
-                "comments": {
-                    "unique": false
-                }
-            }
-        },
-        "workout": {
-            "key": {
-                "keyPath": "id",
-                "autoIncrement": true
-            },
-            "indexes": {
-                "customer": {
-                    "unique": false
-                },
-                "date": {
-                    "unique": false
-                },
-                "exercise": {
-                    "unique": false
-                }
-            }
-        },
-        "schedule": {
-            "key": {
-                "keyPath": "id",
-                "autoIncrement": true
-            },
-            "indexes": {
-                "customer": {
-                    "unique": false
-                },
-                "day": {
-                    "unique": false
-                },
-                "exercise": {
-                    "unique": false
-                }
-            }
-        },
-        "workExercise": {
-            "key": {
-                "keyPath": "id",
-                "autoIncrement": true
-            },
-            "indexes": {
-                "customer": {
-                  "unique": false
-                },
-                "date": {
-                  "unique": false
-                },
-                "exercise": {
-                  "unique": false
-                },
-                "option": {
-                  "unique": false
-                },
-                "value": {
-                  "unique": false
-                },
-                "set": {
-                  "unique": false
-                }
-            }
-        }
-    }
+	"server": "my-app",
+	"version": 1,
+	"schema": {
+		"settings": {
+			"key": {
+				"keyPath": "id",
+				"autoIncrement": true
+			},
+			"indexes": {
+				"units": {
+					"unique": true
+				},
+				"language": {
+					"unique": true
+				}
+			}
+		},
+		"exerciseType": {
+			"key": {
+				"keyPath": "id",
+				"autoIncrement": true
+			},
+			"indexes": {
+				"name": {
+					"unique": true
+				}
+			}
+		},
+		"exercise": {
+			"key": {
+				"keyPath": "id",
+				"autoIncrement": true
+			},
+			"indexes": {
+				"name": {
+					"unique": false
+				},
+				"type": {
+					"unique": false
+				},
+				"options": {
+					"unique": false
+				}
+			}
+		},
+		"customers": {
+			"key": {
+				"keyPath": "id",
+				"autoIncrement": true
+			},
+			"indexes": {
+				"name": {
+					"unique": true
+				},
+				"photo": {
+					"unique": false
+				},
+				"comments": {
+					"unique": false
+				}
+			}
+		},
+		"workout": {
+			"key": {
+				"keyPath": "id",
+				"autoIncrement": true
+			},
+			"indexes": {
+				"customer": {
+					"unique": false
+				},
+				"date": {
+					"unique": false
+				},
+				"exercise": {
+					"unique": false
+				}
+			}
+		},
+		"schedule": {
+			"key": {
+				"keyPath": "id",
+				"autoIncrement": true
+			},
+			"indexes": {
+				"customer": {
+					"unique": false
+				},
+				"day": {
+					"unique": false
+				},
+				"exercise": {
+					"unique": false
+				}
+			}
+		},
+		"workExercise": {
+			"key": {
+				"keyPath": "id",
+				"autoIncrement": true
+			},
+			"indexes": {
+				"customer": {
+					"unique": false
+				},
+				"date": {
+					"unique": false
+				},
+				"exercise": {
+					"unique": false
+				},
+				"option": {
+					"unique": false
+				},
+				"value": {
+					"unique": false
+				},
+				"set": {
+					"unique": false
+				}
+			}
+		}
+	}
 }

@@ -17,6 +17,7 @@
     <!--<script src="js/rsvp.js"></script>-->
     <script src="js/promise-1.0.0.min.js"></script>
     <script src="js/db.js"></script>
+    <script src="assets/components/chartist/libdist/chartist.min.js"></script>
     <!--<script src="js/modernizr.custom.js"></script>-->
     <!-- Path to Framework7 Library CSS-->
     <link rel="stylesheet" href="css/framework7.min.css">
@@ -25,6 +26,7 @@
     <link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.min.css">
     <link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.structure.min.css">
     <link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="assets/components/chartist/libdist/chartist.min.css">
   </head>
   <body>
     <!-- Status bar overlay for fullscreen mode-->
@@ -61,7 +63,7 @@
                   <span class="tabbar-label">Settings</span>
                 </a>
                 <a href="#view-3" class="tab-link">
-                  <i class="icon tabbar-icon-3"><span class="badge badge-red">4</span></i>
+                  <i class="icon tabbar-icon-3"><span class="badge badge-red" id="badgeCountCustomers"></span></i>
                   <span class="tabbar-label">Customers</span>
                 </a>
                 <a href="#view-4" class="tab-link">
@@ -107,7 +109,7 @@
                         <div class="item-inner">
                           <div class="item-title label">Units</div>
                           <div class="item-input">
-                            <select>
+                            <select id="selectUnits">
                               <option>Imperial</option>
                               <option>Metric</option>
                             </select>
@@ -120,7 +122,7 @@
                         <div class="item-inner">
                           <div class="item-title label">Language</div>
                           <div class="item-input">
-                            <select>
+                            <select id="selectLang">
                               <option>English</option>
                               <option>Russian</option>
                             </select>
@@ -409,7 +411,7 @@
                           </label>
                         </li>
                         <!-- Another chekbox item -->
-                        <li>
+                        <!--<li>
                           <label class="label-checkbox item-content">
                             <input type="checkbox" name="checkbox-new-ex-prop" value="sets">
                             <div class="item-media">
@@ -419,7 +421,7 @@
                               <div class="item-title">Sets</div>
                             </div>
                           </label>
-                        </li>
+                        </li>-->
                         <li>
                           <label class="label-checkbox item-content">
                             <input type="checkbox" name="checkbox-new-ex-prop" value="weight">
@@ -442,12 +444,6 @@
                             </div>
                           </label>
                         </li>
-                      </ul>
-                    </div>                    
-                  </div>
-                  <div class="col-50">
-                    <div class="list-block">
-                      <ul>
                         <li>
                           <label class="label-checkbox item-content">
                             <input type="checkbox" name="checkbox-new-ex-prop" value="distance">
@@ -459,6 +455,12 @@
                             </div>
                           </label>
                         </li>
+                      </ul>
+                    </div>                    
+                  </div>
+                  <div class="col-50">
+                    <div class="list-block">
+                      <ul>
                         <li>
                           <label class="label-checkbox item-content">
                             <input type="checkbox" name="checkbox-new-ex-prop" value="speed">
@@ -530,7 +532,7 @@
                               </label>
                             </li>
                             <!-- Another chekbox item -->
-                            <li>
+                            <!--<li>
                               <label class="label-checkbox item-content">
                                 <input type="checkbox" name="checkbox-ex-prop" value="sets">
                                 <div class="item-media">
@@ -540,7 +542,7 @@
                                   <div class="item-title">Sets</div>
                                 </div>
                               </label>
-                            </li>
+                            </li>-->
                             <li>
                               <label class="label-checkbox item-content">
                                 <input type="checkbox" name="checkbox-ex-prop" value="weight">
@@ -563,12 +565,6 @@
                                 </div>
                               </label>
                             </li>
-                          </ul>
-                        </div>                    
-                      </div>
-                      <div class="col-50">
-                        <div class="list-block">
-                          <ul>
                             <li>
                               <label class="label-checkbox item-content">
                                 <input type="checkbox" name="checkbox-ex-prop" value="distance">
@@ -580,6 +576,12 @@
                                 </div>
                               </label>
                             </li>
+                          </ul>
+                        </div>                    
+                      </div>
+                      <div class="col-50">
+                        <div class="list-block">
+                          <ul>
                             <li>
                               <label class="label-checkbox item-content">
                                 <input type="checkbox" name="checkbox-ex-prop" value="speed">
@@ -976,7 +978,7 @@
                   <div class="row">
                     <div class="col-30"><a href="#view-15" class="tab-link btn-left-top">Cancel</a><!-- На view-15 tab0 --></div>
                     <div class="col-40"><center><strong><span id="spanExWork"></span></strong></center></div>
-                    <div class="col-30"><a href="" class="tab-link btn-right-top" onclick="saveExerciseWork()">Save</a></div>
+                    <div class="col-30"><a href="" class="tab-link btn-right-top" onclick="saveExerciseWork()" id="linkSaveWorkEx">Save</a></div>
                   </div>
                 </div>
                 <div class="content-block">
@@ -988,7 +990,7 @@
                       <center><a href="#workTab2" class="tab-link" id="aWorkGraph">Graph</a></center>
                     </div>
                     <div class="col-33">
-                      <center><a href="#workTab3" class="tab-link" id="aWorkStatistics">Statistics</a></center>
+                      <center><a href="#workTab3" class="tab-link" id="aWorkStatistics" onclick="generateStatistics()">Statistics</a></center>
                     </div>
                   </div>
                 </div>
@@ -1002,11 +1004,32 @@
                   </div>
                   <!-- workTab2, Графики по данному упражнению -->
                   <div id="workTab2" class="tab">
-                    
+                    <div class="ct-chart ct-perfect-fourth"></div>
                   </div>
                   <!-- workTab3, Статистика по данному упражнению -->
                   <div id="workTab3" class="tab">
-                    
+                    <!--<div class="content-block-title">3 Slides Per View, 10px Between</div>-->
+                    <div class="row">
+                      <div class="col-20 stat-name" id="divStatName">
+                      	<!--<span class="statistics-name">Sets</span><br>
+                      	<span class="statistics-name">Repeats</span><br>
+                      	<span class="statistics-name">weight</span><br>
+                      	<span class="statistics-name">time</span>-->
+                      </div>
+                      <div class="col-80">
+				        <div class="slider-container slider-stat">
+				          <div class="slider-pagination"></div>
+				          <div class="slider-wrapper" id="divStatistics">
+				            <!--<div class="slider-slide"><span>1</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				            <div class="slider-slide"><span>2</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				            <div class="slider-slide"><span>3</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				            <div class="slider-slide"><span>4</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				            <div class="slider-slide"><span>5</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+				            <div class="slider-slide"><span>6</span><br><span>1</span><br><span>1</span><br><span>1</span></div>-->
+				          </div>
+				        </div>
+				      </div>
+				    </div>
                   </div>
                 </div><!-- End of Tabs, tabs wrapper -->
               </div>

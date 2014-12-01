@@ -8,7 +8,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -23,7 +22,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -38,7 +36,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -53,7 +50,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -68,7 +64,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -83,7 +78,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -98,7 +92,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -113,7 +106,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -134,7 +126,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -149,7 +140,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -164,7 +154,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -179,7 +168,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -194,7 +182,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -209,7 +196,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -230,7 +216,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -245,7 +230,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -260,7 +244,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -281,7 +264,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -296,7 +278,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -311,7 +292,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -332,7 +312,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -347,7 +326,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -362,7 +340,6 @@
         "options": [
           {
             "repeats": 0,
-            "sets": 1,
             "weight": 0,
             "time": 0,
             "distance": 0,
@@ -377,7 +354,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -392,7 +368,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -407,7 +382,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -422,7 +396,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -437,7 +410,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -458,7 +430,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -473,7 +444,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -488,7 +458,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -503,7 +472,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -524,7 +492,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -539,7 +506,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -554,7 +520,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 1,
             "time": 1,
             "distance": 0,
@@ -575,7 +540,6 @@
         "options": [
           {
             "repeats": 0,
-            "sets": 1,
             "weight": 0,
             "time": 0,
             "distance": 0,
@@ -590,7 +554,6 @@
         "options": [
           {
             "repeats": 0,
-            "sets": 1,
             "weight": 0,
             "time": 0,
             "distance": 0,
@@ -605,7 +568,6 @@
         "options": [
           {
             "repeats": 0,
-            "sets": 1,
             "weight": 0,
             "time": 0,
             "distance": 0,
@@ -620,7 +582,6 @@
         "options": [
           {
             "repeats": 0,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 1,
@@ -635,7 +596,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -650,7 +610,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
@@ -665,7 +624,6 @@
         "options": [
           {
             "repeats": 1,
-            "sets": 1,
             "weight": 0,
             "time": 1,
             "distance": 0,
