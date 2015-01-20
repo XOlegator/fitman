@@ -79,7 +79,6 @@ $.getJSON('default/bd-schema.json', function(data){
           console.log('Формируем список клиентов');
           //console.log('Список клиентов: ' + JSON.stringify(results));
           updateListCustomers(results);
-          document.getElementById("badgeCountCustomers").innerHTML = results.length;
         });
     });
     console.log('Инициализируем страницу index-5');
@@ -312,6 +311,7 @@ function updateListCustomers(customers) {
   });
   document.getElementById("ulListCustomers").innerHTML = listCustomers;
   document.getElementById("forDeleteCustomers").innerHTML = listCustomersForDelete;
+  document.getElementById("badgeCountCustomers").innerHTML = customers.length;
 }
 /*
 Функция добавления клиента. Вызывается из страницы #view-10 по кнопке Save
@@ -348,38 +348,38 @@ function addCustomer() {
 function removeCustomers() {
   // Модальное окно для подтверждения удаления клиентов
   //$$('.confirm-delete-customers').on('click', function () {
-    myApp.confirm('Are you sure?', function () {
-      // Найдём все value всех отмеченных чекбоксов в ul#forDeleteCustomers. Эти значения есть id клиентов для удаления из базы
-      // Начинаем цикл по всем отмеченным для удаления клиентам
-      $('input[name="inputCustomerForDelete"]:checked').each(function() {
-        console.log('Проверяем пользователя с id = ' + this.value);
-  	    server.customers.query('name')
-  	      .filter('id', parseInt(this.value))
-          .execute()
-          .then(function(results) {
-            // Проверяем, можно ли удалять этого клиента из базы
-            // TODO Если по клиенту есть записи в истории занятий, то спрашиваем, точно ли всё по нему удалить
-            console.log(JSON.stringify(results));
-            server.remove('customers', parseInt(results[0].id)).then(function(res3){
-              console.log('Удалили пользователя с id = ' + results[0].id);
-              console.log(JSON.stringify(res3));
-            });
+  myApp.confirm('Are you sure?', function () {
+    // Найдём все value всех отмеченных чекбоксов в ul#forDeleteCustomers. Эти значения есть id клиентов для удаления из базы
+    // Начинаем цикл по всем отмеченным для удаления клиентам
+    $('input[name="inputCustomerForDelete"]:checked').each(function() {
+      console.log('Проверяем пользователя с id = ' + this.value);
+	    server.customers.query('name')
+	      .filter('id', parseInt(this.value))
+        .execute()
+        .then(function(results) {
+          // Проверяем, можно ли удалять этого клиента из базы
+          // TODO Если по клиенту есть записи в истории занятий, то спрашиваем, точно ли всё по нему удалить
+          console.log('Нашли удаляемого клиента в базе: ' + JSON.stringify(results));
+          server.remove('customers', parseInt(results[0].id)).then(function(res3){
+            console.log('Удалили пользователя с id = ' + results[0].id);
+            console.log(JSON.stringify(res3));
+            // После всех удалений, обновим списки клиентов на соответствующих страницах
+            server.customers.query('name')
+          		.all()
+          		.distinct()
+          		.execute()
+          		.then(function(res2) {
+          		  console.log('Клиенты после удаления res2 = ' + JSON.stringify(res2));
+          		  updateListCustomers(res2);
+      	      });
           });
-      });
-      // После всех удалений, обновим списки клиентов на соответствующих страницах
-      server.customers.query('name')
-		.all()
-		.distinct()
-		.execute()
-		.then(function(res2) {
-		  console.log('Клиенты после удаления res2 = ' + JSON.stringify(res2));
-		  updateListCustomers(res2);
-	    });
-      },
-      function () {
-        myApp.alert('You clicked Cancel button');
-      }
-    );
+        });
+    });
+    },
+    function () {
+      myApp.alert('You clicked Cancel button');
+    }
+  );
   //});
   /*var newCustomer = $('input#inputNewCustomer').val();
   var dateStartClasses = $('input#inputDateStartClasses').val();
@@ -677,7 +677,7 @@ $(document).on('change', '.btn-delete-toggle', function() {
 Вызывается со страницы #view-10 (страница обзора выбранного клиента) по кнопке "Workout of the day"
 По-умолчанию тут должен сформироваться комплекс упражнений на сегодня, если он уже был ранее сформирован сегодня,
 либо если сегодня тот день недели, на который есть расписание
-(в случае когда есть и то, и то, -приоритет за сформированным сегодня комплексом). 
+(в случае когда есть и то, и то, - приоритет за сформированным сегодня комплексом). 
 */
 function upgradeViewWorkout() {
   var customerName = $('input#inputNewCustomer').val();
