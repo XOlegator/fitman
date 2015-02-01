@@ -204,7 +204,7 @@
               <div class="page-content grad-body">
                 <div class="content-block-title">
                   <!--<a href="#" class="back tab-link btn-left-top">Cancel</a>-->
-                  <a href="#view-10" class="tab-link btn-right-top">Add</a>
+                  <a href="#view-10" class="tab-link btn-right-top" onclick="emptyDataCustomer()">Add</a>
                 </div>
                 <!-- Search bar -->
                 <form data-search-list=".list-block-search" data-search-in=".item-title" class="searchbar">
@@ -633,7 +633,8 @@
               <div class="page-content grad-body">
                 <div class="content-block-title">
                   <a href="#view-3" class="tab-link btn-left-top">Cancel</a>
-                  <a href="" class="tab-link btn-right-top" onclick="addCustomer()">Save</a>
+                  <a href="" class="tab-link btn-right-top" id="linkAddCustomer" onclick="addCustomer()">Save</a>
+                  <a href="" class="tab-link btn-right-top hidden" id="linkEditCustomer" onclick="editCustomer()">Save</a>
                 </div>
                 <div class="content-block">
                   <div class="list-block">
@@ -655,7 +656,7 @@
                           <div class="item-media"><i class="icon icon-form-name"></i></div>
                           <div class="item-inner">
                             <div class="item-input">
-                              <input type="text" placeholder="Name" id="inputNewCustomer" data-item="">
+                              <input type="text" placeholder="Name" id="inputNewCustomer" data-item="" oninput="showEditLinkCustomer()">
                             </div>
                           </div>
                         </div>
@@ -665,7 +666,7 @@
                           <div class="item-media"><i class="icon icon-form-comment"></i></div>
                           <div class="item-inner">
                             <div class="item-input">
-                              <textarea placeholder="Comments" id="newCustomerComments"></textarea>
+                              <textarea placeholder="Comments" id="newCustomerComments" oninput="showEditLinkCustomer()"></textarea>
                             </div>
                           </div>
                         </div>
