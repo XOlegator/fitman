@@ -908,6 +908,7 @@ $(document).on('change', '.btn-delete-toggle', function() {
 (в случае когда есть и то, и то, - приоритет за сформированным сегодня комплексом). 
 */
 function upgradeViewWorkout() {
+  var isWorkout = 0; // Установим флаг наличия расписания на сегодня
   var customerName = $('input#inputNewCustomer').val();
   var customerId = $$('#inputNewCustomer').attr('data-item');
   $('span#spanCustName').html(customerName).attr('data-item', customerId);
@@ -940,8 +941,12 @@ function upgradeViewWorkout() {
               listExCust += '</li>';
               // После того, как в цикле сформировали список упражнений не текущий день недели, покажем его на странице
               console.log('Сейчас будем выводить подготовленный список упражнений');
+              if(!$('#noWorkout').hasClass('hidden')) {
+                $('#noWorkout').addClass('hidden');    
+              }
               document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
             });
+            isWorkout = 1;
       	  }
         });
       } else { // Сегодня комплекс занятий не формировался
@@ -979,6 +984,7 @@ function upgradeViewWorkout() {
               }
               console.log('Сегодня: ' + nameToday);
               // Теперь пройдёмся по всем дням недели и проверим, нет ли там текущего
+              // А если на текущий день недели ничего не запланировано, то покажем текст-заглушку. Для это используем флаг isWorkout
               resSchedule.forEach(function(item) {
       	        if((item.day == nameToday) || (item.day == 'everyday')) {
       	          server.exercise.get(item.exercise).then(function (rowExercise) {
@@ -992,12 +998,21 @@ function upgradeViewWorkout() {
                     listExCust += '</li>';
                     // После того, как в цикле сформировали список упражнений не текущий день недели, покажем его на странице
                     console.log('Сейчас будем выводить подготовленный список упражнений');
+                    if(!$('#noWorkout').hasClass('hidden')) {
+                      $('#noWorkout').addClass('hidden');    
+                    }
                     document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
                   });
+                  isWorkout = 1;
       	        }
               });
            } // Конец проверки на наличие расписания по дням недели на данного клиента
       	  });
+      }
+      if (!isWorkout) { // Если упражнений на сегодня нет
+        if($('#noWorkout').hasClass('hidden')) {
+          $('#noWorkout').removeClass('hidden');    
+        }
       }
     });
   // По-умолчанию первым делом показываем вкладку с уже сформированным списком упражнений на сегодня
