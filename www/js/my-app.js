@@ -1067,82 +1067,74 @@ function makeSetExCustomer() {
     .all()
     .execute()
     .then(function(results) {
-       //console.log('Формируем список групп упражнений');
-       //console.log('Список групп упражнений: ' + JSON.stringify(results));
-       // Терепь найдём все упражнения из данной группы.
+       console.log('Формируем список групп упражнений');
+       console.log('Список групп упражнений: ' + JSON.stringify(results));
        // Упражнения без сортировки (библиотека db.js не поддерживает сортировку) - добавим её,
        // но сначала сформируем массив для сортировки по наименованию
        var arrExTypes = [];
        results.forEach(function (rowExerciseType, indexType) {
        	 //console.log('indexType: ' + indexType);
-       	 arrExTypes[indexType] = rowExerciseType.name;
+       	 arrExTypes[indexType] = rowExerciseType.name + '@#' + rowExerciseType.id;
        	 //console.log('arrExTypes[indexType] = ' + rowExerciseType.name);
        });
        arrExTypes.sort(); // Теперь имеем отсортированный по названиям список групп упражнений
        var arrEx = [];
        //console.log('arrExTypes = ' + arrExTypes);
-       // Пройдём циклом по всем названиям групп упражнений
-       arrExTypes.forEach(function(exTypeName) {
-         // Нужно получить код группы упражнений по её названию
-         server.exerciseType.query()
-           .filter('name', exTypeName)
+       // Пройдём циклом по всем названиям групп упражнений, которые уже упорядочены по наименованию
+       arrExTypes.forEach(function(exTypeNameId) {
+         var arrTempNameId = exTypeNameId.split('@#');
+         var exTypeId = arrTempNameId[1]; // Получили код группы упражнений
+         var exTypeName = arrTempNameId[0]; // Получили наименование текущей группы упражнений
+         console.log('Текущая группа упражнений: ' + exTypeName + ' с id = ' + exTypeId);
+         // Добавляем на страницу наименования групп упражнений
+         $('ul#ulListAllExWithTypes').append('<li class="item-divider" data-item="' + exTypeId + '">' + exTypeName + '</li>');
+         var testExercise = [];
+         // Формируем список упражнений из данной группы
+         server.exercise.query('name')
+  	       .filter('type', parseInt(exTypeId))
+           .distinct()
            .execute()
-           .then(function (resExType) {
-             var exTypeId = resExType[0].id;
-             console.log('Определили id очередной группы упражнений. id = ' + JSON.stringify(exTypeId));
-             // Добавляем на страницу наименования групп упражнений
-             $('ul#ulListAllExWithTypes').append('<li class="item-divider" data-item="' + exTypeId + '">' + exTypeName + '</li>');
-             var testExercise = [];
-             // Формируем список упражнений из данной группы
-             server.exercise.query('name')
-      	       .filter('type', parseInt(exTypeId))
-               .distinct()
-               .execute()
-               .then(function(res2) {
-                 res2.forEach(function (rowExercise, indexEx) {
-                   arrEx[indexEx] = rowExercise.name; // Создаём массив наименований упражнений для того, чтобы отсортировать
-                   //console.log('arrEx[indexEx]: ' + rowExercise.name);
-                 });
-                 arrEx.sort(); // Теперь упражнения отсортированы по названиям
-                 //console.log('Упорядоченный список упражнений: ' + arrEx);
-                 // По отсортированному массиву названий упражнений пройдём циклом
-                 arrEx.forEach(function(exerciseName, index) {
-                   testExercise[index] = exerciseName;
-                   //console.log('testExercise[index] = ' + testExercise[index]);
-                   //console.log('testExercise[index - 1] = ' + testExercise[index - 1]);
-                   if((index == 0) || (testExercise[index] != testExercise[index - 1])) {
-                   	 // Если упражнение было уже отобрано ранее, то его не надо включать в полный список справа 
-                   	 //console.log('Вот наш список исключений: ' + excludeEx[0] + '; ' + excludeEx[1]);
-                   	 if(!(in_array(exerciseName, excludeEx))) {
-                   	   //console.log('Проверили, что этого упражнения нет в списке исключений: ' + exercise);
-                   	   // Получим id текущего упражнения по его названию
-                   	   server.exercise.query()
-                   	     .filter('name', exerciseName)
-                   	     .execute()
-                   	     .then(function (exercises) {
-                   	       // В браузере и эмуляторе Android отрабатывает по-разному
-                           // В эмуляторе проявляются лишние строки. Видимо, distinct не отрабатывает и выводятся записи упражнений по каждой опции
-                   	       var listExercises = '';
-                           listExercises += '<li class="swipeout swipeout-all">';
-                           listExercises += '  <div class="swipeout-content item-content">';
-                           listExercises += '    <div class="item-inner">';
-                           listExercises += '      <div class="item-title" data-item="' + exercises[0].id + '">' + exerciseName + '</div>';
-                           listExercises += '      </div>';
-                           listExercises += '    </div>';
-                           listExercises += '  </div>';
-                           listExercises += '  <div class="swipeout-actions-right">'; // Действие появится справа
-                           //listExercises += '    <div class="swipeout-actions-inner">';
-                           listExercises += '    <a href="#" class="action1">Added</a>';
-                           listExercises += '  </div>';
-                           listExercises += '</li>';
-                           // Элемент сформирован, надо вставлять на место
-                           $('ul#ulListAllExWithTypes li[data-item="' + exTypeId + '"]').after(listExercises);
-                   	     });
-                     }
-                   }
-                 });
-                 arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
-               });
+           .then(function(res2) {
+             res2.forEach(function (rowExercise, indexEx) {
+               arrEx[indexEx] = rowExercise.name + '@#' + rowExercise.id; // Создаём массив наименований упражнений для того, чтобы отсортировать
+               //console.log('arrEx[indexEx]: ' + rowExercise.name);
+             });
+             arrEx.sort(function (a, b) {
+               return b - a;             
+             }); // Теперь упражнения отсортированы по названиям в порядке убывания
+             //console.log('Упорядоченный список упражнений: ' + arrEx);
+             // По отсортированному массиву названий упражнений пройдём циклом
+             arrEx.forEach(function(exerciseNameId, index) {
+               var arrTempExNameId = exerciseNameId.split('@#');
+               var exerciseId = arrTempExNameId[1]; // Получили id текущего упражнения
+               var exerciseName = arrTempExNameId[0]; // Получили наименование текущего упражнения
+               testExercise[index] = exerciseName;
+               //console.log('testExercise[index] = ' + testExercise[index]);
+               //console.log('testExercise[index - 1] = ' + testExercise[index - 1]);
+               if((index == 0) || (testExercise[index] != testExercise[index - 1])) {
+               	 // Если упражнение было уже отобрано ранее, то его не надо включать в полный список справа 
+               	 //console.log('Вот наш список исключений: ' + excludeEx[0] + '; ' + excludeEx[1]);
+               	 if(!(in_array(exerciseName, excludeEx))) {
+               	   //console.log('Проверили, что этого упражнения нет в списке исключений: ' + exercise);
+               	   var listExercises = '';
+                   listExercises += '<li class="swipeout swipeout-all">';
+                   listExercises += '  <div class="swipeout-content item-content">';
+                   listExercises += '    <div class="item-inner">';
+                   listExercises += '      <div class="item-title" data-item="' + exerciseId + '">' + exerciseName + '</div>';
+                   listExercises += '      </div>';
+                   listExercises += '    </div>';
+                   listExercises += '  </div>';
+                   listExercises += '  <div class="swipeout-actions-right">'; // Действие появится справа
+                   //listExercises += '    <div class="swipeout-actions-inner">';
+                   listExercises += '    <a href="#" class="action1">Added</a>';
+                   listExercises += '  </div>';
+                   listExercises += '</li>';
+                   // Элемент сформирован, надо вставлять на место
+                   $('ul#ulListAllExWithTypes li[data-item="' + exTypeId + '"]').after(listExercises);
+                 }
+               }
+             });
+             arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
            });
        });
   });
@@ -1460,10 +1452,6 @@ function saveExerciseWork() {
                 onClick: function() {
               	  // Выбрали вариант добавления текущих показателей к тем, что уже есть в базе по данному разрезу.
               	  // Значит найдём все записи по данному подходу данного клиента по данному упражнению и прибавим текущие значения
-                  // Чтобы прибавить к уже имеющимся значениям, считаем их из базы данных. 
-                  // В этом поможет отдельная функция, которая по Клиенту, Дате, Упражнению, Подходу вернёт массив вида
-                  // array['option': 'value']. Например, ['repeats': '2', 'weight': '45', 'time': '120']
-                  //var arrayOldVal = [];
                   server.workExercise.query()
                   	.filter('date', dateEx)
                     .execute()
@@ -1514,8 +1502,6 @@ function saveExerciseWork() {
                 text: 'Cancel',
                 bold: true,
                 onClick: function() {
-                  //flagAdd[indexWorkEx] = 0;
-                  //break;
                 } // Конец функции отмены сохранения
               }]
             }); // Конец обработки модального окна
@@ -1934,69 +1920,6 @@ $('#ulListDays li').click(function() {
     }
   }
 });
-
-/*
-Функция возвращает массив данных из БД вида Параметр:Значение по переданным Клиенту, Дате, Упражнению и Подходу
-*/
-/*function getValByAnalit(customerId, dateEx, exerciseId, workSet) {
-  var arrVal = [];
-  // Для этого отберём из базы все записи по выполнению упражнений на текущий день
-  console.log('Проверим полученные в функции параметры. customerId = ' + customerId + '; dateEx = ' + dateEx + '; exerciseId = ' + exerciseId + '; workSet = ' + workSet);
-  server.workExercise.query()
-  	.filter('date', dateEx)
-    .execute()
-    .then(function(result) {
-      result.forEach(function (item, index) {
-      	if((item.customer == customerId) && (item.exercise == exerciseId) && (item.set == workSet)) {
-      	  // Мы нашли данные по аналитическому разрезу!
-      	  console.log('В базе нашлось: item.option = ' + item.option + '; item.value = ' + item.value);
-      	  arrVal[item.option] = item.value;
-      	}
-      });
-    });
-  return arrVal;
-}*/
-
-/*
-Функция возвращает числовое значение параметра из БД по переданным Клиенту, Дате, Упражнению, Подходу и Параметру
-*/
-/*function getValOptionByAnalit(customerId, dateEx, exerciseId, workSet, option) {
-  var valOpt = 0;
-  // Для этого отберём из базы все записи по выполнению упражнений на текущий день
-  server.workExercise.query()
-  	.filter('date', dateEx)
-    .execute()
-    .then(function(result) {
-      result.forEach(function (item, index) {
-      	if((item.customer == customerId) && (item.exercise == exerciseId) && (item.set == workSet) && (item.option == option)) {
-      	  // Мы нашли данные по аналитическому разрезу!
-      	  valOpt = parseInt(item.value);
-      	}
-      });
-    });
-  return valOpt;
-}*/
-
-/*
-Функция возвращает числовое значение id из таблицы workExercise БД по переданным Клиенту, Дате, Упражнению, Подходу и Параметру
-*/
-/*function getIdWorkExerciseByAnalit(customerId, dateEx, exerciseId, workSet, option) {
-  var valId = 0;
-  // Для этого отберём из базы все записи по выполнению упражнений на текущий день
-  server.workExercise.query()
-  	.filter('date', dateEx)
-    .execute()
-    .then(function(result) {
-      result.forEach(function (item, index) {
-      	if((item.customer == customerId) && (item.exercise == exerciseId) && (item.set == workSet) && (item.option == option)) {
-      	  // Мы нашли данные по аналитическому разрезу!
-      	  valId = parseInt(item.id);
-      	}
-      });
-    });
-  return valId;
-}*/
-
 /*
 Функция генерирует данные для страницы статистики по выбранному упражнению, клиенту и дате
 */
