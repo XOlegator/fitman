@@ -147,7 +147,7 @@ $('#selectLang').on('change', function() {
 $$('.confirm-fill-demo').on('click', function () {
   myApp.confirm('Are you sure? It will erase all of your data!', function () {
     // Очистим всё
-    console.log(JSON.stringify(server));
+    //console.log(JSON.stringify(server));
     server.clear('workExercise');
     server.clear('schedule');
     server.clear('workout');
@@ -156,47 +156,62 @@ $$('.confirm-fill-demo').on('click', function () {
     server.clear('exerciseType');
     server.clear('customers');
     // Заполняем таблицы данными из json файлов
-    console.log('Начинаем обрабатывать упражнения');
+    //console.log('Начинаем обрабатывать упражнения');
+    var dataExercisesJSON = '';
     $.getJSON('default/exercises.json', function(data) {
+      dataExercisesJSON = data;
       // Запускаем цикл по группам упражнений (exerciseType)
       for (var j in data.exerciseType) {
         //console.log('j = ' + j);
         //console.log('data.exerciseType[j].name = ' + data.exerciseType[j].name);
         //console.log('exercise = ' + JSON.stringify(data.exerciseType[j]));
+        var newExTypeName = data.exerciseType[j].name;
+        var newExTypeId = data.exerciseType[j].id;
+        //console.log('newExTypeId = ' + newExTypeId + '; newExTypeName = ' + newExTypeName);
         // Добавляем группы упражнений
         server.exerciseType.add({
-          'id': data.exerciseType[j].id,
-          'name': data.exerciseType[j].name
+          'id': newExTypeId,
+          'name': newExTypeName
         }).then(function(exType) {
           //console.log('Добавили в БД новую группу упражнений: ' + JSON.stringify(exType));
-          var exerciseTypeId = exType[0].id;
-          console.log('Начинаем обработку группы упражнений с id = ' + exerciseTypeId);
+          //var exerciseTypeId = exType[0].id;
+          //console.log('Начинаем обработку группы упражнений с id = ' + exerciseTypeId);
           // Внутри группы упражнений проходим циклом все упражнения из этой группы
-          //var arrExercises = data.exerciseType[j].exercises; // Занесём все упражнения (как объекты) данной группы в отдельный массив
-          var arrExercises = data.exerciseType[exerciseTypeId].exercises; // Занесём все упражнения (как объекты) данной группы в отдельный массив
           //console.log('arrExercises = ' + JSON.stringify(arrExercises));
-          for (var i in arrExercises) {
-            console.log('Начинаем обрабатывать следующее упражнение: arrExercises[i].name = ' + arrExercises[i].name);
+          //var arrExercises = data.exerciseType[j].exercises; // Занесём все упражнения (как объекты) данной группы в отдельный массив
+          for (var i in data.exerciseType[parseInt(exType[0].id)].exercises) {
+            //console.log('i = ' + i);
+            //console.log('Начинаем обрабатывать следующее упражнение: data.exerciseType[j].exercises[i].name = ' + data.exerciseType[j].exercises[i].name);
+            // Занесём характеристики текущего упражнения в массив
+            //var options = arrExercises[i].options[0];
+            //var options = data.exerciseType[j].exercises[i].options[0];
+            //console.log('options = ' + options);
+            var newExerciseName = data.exerciseType[parseInt(exType[0].id)].exercises[i].name;
+            var newExerciseId = parseInt(data.exerciseType[parseInt(exType[0].id)].exercises[i].id);
+            //console.log('newExerciseName = ' + newExerciseName);
             server.exercise.add({
-              'name': arrExercises[i].name,
-              'type': parseInt(exerciseTypeId)
+              'id': newExerciseId,
+              'name': newExerciseName,
+              'type': parseInt(exType[0].id)
             }).then(function(itemEx) {
-              console.log('Добавили в БД новое упражнение: ' + JSON.stringify(itemEx));
-              // Внутри упражнения проходим циклом по всем характеристикам упражнения
-              for (var optName in arrExercises[i].options[0]) {
-                //console.log('item[0].id = ' + JSON.stringify(item[0].id));
-                //console.log('Активный параметр: optName = ' + optName);
-                // Если опция действует, то добавляем связь упражнения с этой опцией в базу данных
-                if(arrExercises[i].options[0][optName]) {
-                  server.optionsExercises.add({
-                    'option': optName,
-                    'exerciseId': itemEx[0].id
-                  }).then(function(itemOpt) {
-                    console.log('Добавили в БД новую связку упражнения с активным параметром: ' + JSON.stringify(itemOpt));
-                  });
-                }
-              }
+              //console.log('Добавили в БД новое упражнение: ' + JSON.stringify(itemEx));
             });
+          }
+          // Параллельно в этом же цикле (по группам упражнений) запустим добавление в БД связок Упражнение-Параметр
+          for(var rowExercise in data.exerciseType[parseInt(exType[0].id)].exercises) {
+            //console.log('Мы в отдельном цикле. Текущий параметр rowExercise = ' + rowExercise);
+            for (var option in data.exerciseType[parseInt(exType[0].id)].exercises[rowExercise].options[0]) {
+              if(data.exerciseType[parseInt(exType[0].id)].exercises[rowExercise].options[0][option]) {
+                //console.log('Текущий действующий параметр: option = ' + option);
+                var newExerciseId = data.exerciseType[parseInt(exType[0].id)].exercises[rowExercise].id;
+                server.optionsExercises.add({
+                  'option': option,
+                  'exerciseId': newExerciseId
+                }).then(function(itemOpt) {
+                  console.log('Добавили в БД новую связку упражнения с активным параметром: ' + JSON.stringify(itemOpt));
+                });
+              }        
+            }     
           }
         });
       }
@@ -209,7 +224,8 @@ $$('.confirm-fill-demo').on('click', function () {
           //console.log('exerciseType results = ' + JSON.stringify(results));
           updateListExerciseType(results);
         });
-    });
+    });  
+    
     $.getJSON('default/customers.json', function(data) {
       for (var i in data.customers) {
         // Добавляем клиентов в базу
@@ -224,6 +240,7 @@ $$('.confirm-fill-demo').on('click', function () {
           updateListCustomers(results);
         });
     });
+    
     myApp.alert('Enjoy your new demo data');
   });
 });
@@ -908,6 +925,10 @@ $(document).on('change', '.btn-delete-toggle', function() {
 (в случае когда есть и то, и то, - приоритет за сформированным сегодня комплексом). 
 */
 function upgradeViewWorkout() {
+  // Кнопку Save надо заменить на Change
+  $('a[href="#tab0"]').replaceWith('<a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a>');
+  // Кнопку Clear all надо заменить на Cancel 
+  $('a#aClearAll').replaceWith('<a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a>');
   var isWorkout = 0; // Установим флаг наличия расписания на сегодня
   var customerName = $('input#inputNewCustomer').val();
   var customerId = parseInt($$('#inputNewCustomer').attr('data-item'));
