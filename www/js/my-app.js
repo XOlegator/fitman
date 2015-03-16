@@ -1260,7 +1260,7 @@ function saveSetExCustomer(flagFrom) {
   // Сформируем доступные кнопки для вкладки сформированного комплекса упражнений
   var menuWorkout = '';
   menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">Cancel</a>';
+  menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
@@ -1331,10 +1331,6 @@ function saveSetExCustomer(flagFrom) {
       listExCust += '  </a>';
       listExCust += '</li>';
     });
-    /*// Кнопку Save надо заменить на Change
-    $('a[href="#tab0"]').replaceWith('<a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a>');
-    // Кнопку Clear all надо заменить на Cancel
-    $('a#aClearAll').replaceWith('<a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a>');*/
   }
   if(!$('#noWorkout').hasClass('hidden')) {
     $('#noWorkout').addClass('hidden');    
@@ -1342,7 +1338,6 @@ function saveSetExCustomer(flagFrom) {
   // После того, как в цикле сформировали список упражнений, покажем его на странице
   document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
   SORTER.sort('#ulListCurrentExercises');
-  //$('ul#ulListCurrentExercises').html(listExCust);
 }
 /*
 Функция подготовки отображения страницы работы с упражнением клиента.
@@ -1737,8 +1732,7 @@ function makeCalendExCustomer() {
   menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="viewExSetCustomer()">Cancel</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  //menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
-  menuWorkout += '  <center><a href="#" class="tab-link">Calendar</a></center>';
+  menuWorkout += '  <center><a href="#tab1" class="tab-link active">Calendar</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
@@ -1874,51 +1868,6 @@ function makeCalendExCustomer() {
               }
           }
       });
-      //calendarInline = ({value: [new Date()]});
-/*
-      $("#calendar").datepicker({ 
-      	dateFormat: "yy-mm-dd", 
-        beforeShowDay: function(date) { // Функция выполняется каждый раз при построении ячейки с датой
-          console.log('Мы в обработке даты');
-          //console.log('date = ' + date);
-          var datePast = makeCalDate(date);
-          if(in_array(datePast, datesWork)) { // Ищем дату, которую выделили, среди дат на которые есть комплексы занятий 
-            //console.log('Прошли проверку даты');
-            return[true, "calendar_actdate"]; // Делаем даты с наборами занятий активными, присваиваем свой стиль
-          } else {
-            //console.log('не Прошли проверку даты');
-            return[false, ""]; // Делаем пустые даты неактивными                               
-          }
-        },
-        onSelect: function(dateText, inst) {
-          console.log('Нажали на дату dateText ' + dateText);
-          console.log('arrWorkEx[dateText] ' + arrWorkEx[dateText]);
-          if(in_array(dateText, datesWork)) {
-          	console.log('На эту дату есть комплекс упражнений!');
-          	var workExercises = [];
-            workExercises = arrWorkEx[dateText].split('@#');
-            var listExCust = '';
-            workExercises.forEach(function(exerciseId) {
-              console.log('Мы в цикле по кодам упражнений. Текущая строка: ' + exerciseId);
-              // Т.к. мы нашли id упражнения, определим его название
-              server.exercise.get(parseInt(exerciseId)).then(function (rowExercise) {
-                //console.log('exercise = ' + exercise);
-                listExCust += '<li>';
-                listExCust += '  <div class="item-link item-content">';
-                listExCust += '    <div class="item-inner">';
-                listExCust += '      <span data-item="' + rowExercise.id + '">' + rowExercise.name + '</span>';
-                listExCust += '    </div>';
-                listExCust += '  </div>';
-                listExCust += '</li>';
-                // Надо слева показать список упражнений выделенного дня
-                console.log('listExCust = ' + listExCust); 
-                document.getElementById("ulListPastExercises").innerHTML = listExCust;
-                console.log('Обновили комплекс упражнений!');
-              });
-            });
-          }
-        }
-      });*/
     });
 }
 /*
@@ -1950,8 +1899,7 @@ function makeScheduleExCustomer() {
   menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  //menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
-  menuWorkout += '  <center><a href="#" class="tab-link">Schedule</a></center>';
+  menuWorkout += '  <center><a href="#tab2" class="tab-link active">Schedule</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="makeScheduleCustomer()">Save</a></center>';
