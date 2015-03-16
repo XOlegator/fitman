@@ -1847,6 +1847,7 @@ function makeCalendExCustomer() {
                     // Надо слева показать список упражнений выделенного дня
                     console.log('listExCust = ' + listExCust);
                     document.getElementById("ulListPastExercises").innerHTML = listExCust;
+                    SORTER.sort('#ulListPastExercises');
                     console.log('Обновили комплекс упражнений!');
                   });
                 });
@@ -1900,6 +1901,21 @@ function makeCalendExCustomer() {
       });*/
     });
 }
+/*
+Функция сортировки списков <li>
+*/
+var SORTER = {};
+SORTER.sort = function(which, dir) {
+  SORTER.dir = (dir == "desc") ? -1 : 1;
+  $(which).each(function() {
+    // Find the list items and sort them
+    var sorted = $(this).find("> li").sort(function(a, b) {
+      return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? SORTER.dir : -SORTER.dir;
+    });
+    $(this).append(sorted);
+  });
+};
+
 /*
 Функция подготовки отображения расписания клиента по дням недели.
 Вызывается со страницы #view-15 #tab2 (при клике на вкладку Schedule)
