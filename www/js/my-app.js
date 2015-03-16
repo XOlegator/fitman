@@ -994,6 +994,7 @@ function upgradeViewWorkout() {
                 $('#noWorkout').addClass('hidden');    
               }
               document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
+              SORTER.sort('#ulListCurrentExercises');
             });
             isWorkout = 1;
       	  }
@@ -1256,6 +1257,22 @@ $(document).on('opened', '.swipeout-selected', function (e) {
 Вызывается со страницы #view-15 #tab3 по кнопке "Save"
 */
 function saveSetExCustomer(flagFrom) {
+  // Сформируем доступные кнопки для вкладки сформированного комплекса упражнений
+  var menuWorkout = '';
+  menuWorkout =  '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">Cancel</a>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  //menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
+  menuWorkout += '  <center><a href="#" class="tab-link">Schedule</a></center>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a></center>';
+  menuWorkout += '</div>';
+  document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   console.log('Сохраняем набор');
   var temp = '';
   var listExCust = '';
@@ -1314,17 +1331,18 @@ function saveSetExCustomer(flagFrom) {
       listExCust += '  </a>';
       listExCust += '</li>';
     });
+    /*// Кнопку Save надо заменить на Change
+    $('a[href="#tab0"]').replaceWith('<a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a>');
+    // Кнопку Clear all надо заменить на Cancel
+    $('a#aClearAll').replaceWith('<a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a>');*/
   }
   if(!$('#noWorkout').hasClass('hidden')) {
     $('#noWorkout').addClass('hidden');    
   }
   // После того, как в цикле сформировали список упражнений, покажем его на странице
   document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
+  SORTER.sort('#ulListCurrentExercises');
   //$('ul#ulListCurrentExercises').html(listExCust);
-  // Кнопку Save надо заменить на Change
-  $('a[href="#tab0"]').replaceWith('<a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a>');
-  // Кнопку Clear all надо заменить на Cancel 
-  $('a#aClearAll').replaceWith('<a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a>');
 }
 /*
 Функция подготовки отображения страницы работы с упражнением клиента.
@@ -1719,7 +1737,8 @@ function makeCalendExCustomer() {
   menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="viewExSetCustomer()">Cancel</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
+  //menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
+  menuWorkout += '  <center><a href="#" class="tab-link">Calendar</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
@@ -1783,6 +1802,7 @@ function makeCalendExCustomer() {
             listExCust += '  </div>';
             listExCust += '</li>';
             document.getElementById("ulListPastExercises").innerHTML = listExCust;
+            SORTER.sort('#ulListPastExercises');
           });
         });
       };
@@ -1921,7 +1941,7 @@ SORTER.sort = function(which, dir) {
 Вызывается со страницы #view-15 #tab2 (при клике на вкладку Schedule)
 */
 function makeScheduleExCustomer() {
-  // Сформируем доступные кнопки для вкладки Календарь
+  // Сформируем доступные кнопки для вкладки расписания по дням недели
   var menuWorkout = '';
   menuWorkout =  '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">Cancel</a>';
@@ -1930,7 +1950,8 @@ function makeScheduleExCustomer() {
   menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
+  //menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
+  menuWorkout += '  <center><a href="#" class="tab-link">Schedule</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="makeScheduleCustomer()">Save</a></center>';
@@ -1969,6 +1990,22 @@ function makeScheduleExCustomer() {
 Вызывается со страницы #view-15 #tab2 (при Save в Schedule)
 */
 function makeScheduleCustomer() {
+  // Сформируем доступные кнопки для вкладки текущего комплекса упражнений
+  var menuWorkout = '';
+  menuWorkout =  '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">Cancel</a>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  //menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
+  menuWorkout += '  <center><a href="#" class="tab-link">Schedule</a></center>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a></center>';
+  menuWorkout += '</div>';
+  document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   console.log('Сохраняем расписание');
   var customerId = parseInt($('span#spanCustName').attr('data-item'));
   var day;

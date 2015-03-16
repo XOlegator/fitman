@@ -90,3 +90,7 @@ div.page-content>div.my-toolbar-inner {
   margin: 15px;
   display: block;
 }
+
+.list-block-without-margin {
+  margin: 0;
+}
