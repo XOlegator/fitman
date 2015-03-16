@@ -41,11 +41,37 @@ var view13 = myApp.addView('#view-13'); // Удаление клиентов и�
 */
 
 var bdSchema = '';
+
+/*function getJSON(url) {
+return new Promise(function(resolve, reject){
+  var xhr = new XMLHttpRequest();
+
+  xhr.open('GET', url);
+  xhr.onreadystatechange = handler;
+  xhr.responseType = 'json';
+  xhr.setRequestHeader('Accept', 'application/json');
+  xhr.send();
+
+  function handler() {
+    if (this.readyState === this.DONE) {
+      if (this.status === 200) {
+        resolve(this.response);
+      } else {
+        reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
+      }
+    }
+  };
+});
+}*/
+
 $.getJSON('default/bd-schema.json', function(data){
+//getJSON('default/bd-schema.json').then(function(data) {
   bdSchema = data;
+  console.log("Схема БД: " + JSON.stringify(data));
   db.open(data).then(function(serv) {
   	console.log('Получили схему БД, открыли базу');
     server = serv;
+    console.log(JSON.stringify(server));
     console.log('Инициализируем страницу index-2');
     myApp.onPageInit('index-2', function (page) {
       // Перед инициализацией страницы с настройками, нужно получить некоторые настройки из БД
@@ -147,7 +173,7 @@ $('#selectLang').on('change', function() {
 $$('.confirm-fill-demo').on('click', function () {
   myApp.confirm('Are you sure? It will erase all of your data!', function () {
     // Очистим всё
-    //console.log(JSON.stringify(server));
+    console.log(JSON.stringify(server));
     server.clear('workExercise');
     server.clear('schedule');
     server.clear('workout');
@@ -156,9 +182,10 @@ $$('.confirm-fill-demo').on('click', function () {
     server.clear('exerciseType');
     server.clear('customers');
     // Заполняем таблицы данными из json файлов
-    //console.log('Начинаем обрабатывать упражнения');
+    console.log('Начинаем обрабатывать упражнения');
     var dataExercisesJSON = '';
     $.getJSON('default/exercises.json', function(data) {
+    //getJSON('default/exercises.json').then(function(data) {
       dataExercisesJSON = data;
       // Запускаем цикл по группам упражнений (exerciseType)
       for (var j in data.exerciseType) {
@@ -227,6 +254,7 @@ $$('.confirm-fill-demo').on('click', function () {
     });  
     
     $.getJSON('default/customers.json', function(data) {
+    //getJSON('default/customers.json').then(function(data) {
       for (var i in data.customers) {
         // Добавляем клиентов в базу
         server.customers.add(data.customers[i]);
@@ -1946,17 +1974,35 @@ $('#ulListDays li').click(function() {
 */
 function generateStatistics() {
 	// Надо добавить кнопку Save
-	$('#linkSaveWorkEx').show(); 
-  // 5 Slides Per View, 5px Between
-  var mySlider3 = myApp.slider('.slider-stat', {
-    pagination:'.slider-stat .slider-pagination',
-    spaceBetween: 5,
-    slidesPerView: 5
-  });
+	$('#linkSaveWorkEx').show();
   var customerId = parseInt($('span#spanCustName').attr('data-item'));
   var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
   var exerciseName = $('span#spanExWork').text();
   var exerciseId = parseInt($('#spanExWork').attr('data-item'));
+  var countBlock = 0; 
+  // 5 Slides Per View, 5px Between
+  server.optionsExercises.query()
+  	.filter('exerciseId', exerciseId)
+    .execute()
+    .then(function(results) {
+      if (results.length < 5) {
+        countBlock = results.length;
+      } else {
+        countBlock = 5;
+      }
+      var mySlider3 = myApp.swiper('.swiper-stat', {
+        //pagination: '.swiper-stat .swiper-pagination',
+        freeMode: true,
+        spaceBetween: 15,
+        slidesPerView: countBlock,
+        //slidesPerView: 'auto',
+        grabCursor: true,
+        paginationHide: false,
+        paginationClickable: true,
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev'
+      });
+    });
   console.log('Получили id текущего упражнения: ' + exerciseId);
   // Найдём все характеристики упражнения и сформируем из них заголовки строк статистики
   // Первым параметром всегда идёт Подход
@@ -1987,7 +2033,7 @@ function generateStatistics() {
           	  if(i == 0) {
           	    // Пошёл первый параметр в новом блоке
           	    console.log('Открываем новый блок');
-          	    block += '<div class="slider-slide">';
+          	    block += '<div class="swiper-slide">';
           	    // Первым параметром всегда идёт Подход
           	    block += '<span>' + item.set + '</span>';
           	  }
@@ -2003,6 +2049,7 @@ function generateStatistics() {
           });
           console.log('Выводим блок на страницу.');
           document.getElementById("divStatistics").innerHTML = block;
+          //mySlider3.updateContainerSize();
         });
     });
 }

@@ -7,16 +7,17 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>Personal trainer</title>
     <script src="js/IndexedDBShim.min.js"></script>
+    <script src="js/es6-promise-2.0.1.min.js"></script>
     <script type="text/javascript">
         var server;
         window.shimIndexedDB && window.shimIndexedDB.__useShim();
         function printResult(){
           write("Executed : ", arguments);
         }
+        if (!window.Promise) window.Promise = ES6Promise.Promise;
     </script>
     <!--<script src="js/rsvp.js"></script>-->
     <!--<script src="js/promise-1.0.0.min.js"></script>-->
-    <script src="js/es6-promise-2.0.1.min.js"></script>
     <script src="js/db.js"></script>
     <script src="assets/components/chartist/libdist/chartist.min.js"></script>
     <!--<script src="js/modernizr.custom.js"></script>-->
@@ -1021,19 +1022,23 @@
                       	<span class="statistics-name">time</span>-->
                       </div>
                       <div class="col-80">
-				        <div class="slider-container slider-stat">
-				          <div class="slider-pagination"></div>
-				          <div class="slider-wrapper" id="divStatistics">
-				            <!--<div class="slider-slide"><span>1</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-				            <div class="slider-slide"><span>2</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-				            <div class="slider-slide"><span>3</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-				            <div class="slider-slide"><span>4</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-				            <div class="slider-slide"><span>5</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-				            <div class="slider-slide"><span>6</span><br><span>1</span><br><span>1</span><br><span>1</span></div>-->
-				          </div>
-				        </div>
-				      </div>
-				    </div>
+                        <div class="slider-custom">
+          				        <div class="swiper-container swiper-stat">
+          				          <div class="swiper-pagination"></div>
+          				          <div class="swiper-wrapper" id="divStatistics">
+          				            <!--<div class="slider-slide"><span>1</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+          				            <div class="slider-slide"><span>2</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+          				            <div class="slider-slide"><span>3</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+          				            <div class="slider-slide"><span>4</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+          				            <div class="slider-slide"><span>5</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+          				            <div class="slider-slide"><span>6</span><br><span>1</span><br><span>1</span><br><span>1</span></div>-->
+          				          </div>
+          				        </div>
+                          <div class="slider-button-prev"></div>
+                          <div class="slider-button-next"></div>
+          				      </div>
+        				      </div>
+        				    </div>
                   </div>
                 </div><!-- End of Tabs, tabs wrapper -->
               </div>
