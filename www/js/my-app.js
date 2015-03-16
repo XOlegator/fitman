@@ -1742,7 +1742,7 @@ function makeCalendExCustomer() {
       var arrWorkEx = [];
       var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
       result.forEach(function (item, index) {
-        // Сформируем массив дат, когда были составлены списки упражнеий для занятия текущего клиента
+        // Сформируем массив дат, когда были составлены списки упражнений для занятия текущего клиента
         dateWork = item.date;
         if (index == 0) {
           datesWork[0] = dateWork;
@@ -1787,6 +1787,74 @@ function makeCalendExCustomer() {
         });
       };
       //console.log('Цикл закончился, форматируем даты');
+
+      var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August' , 'September' , 'October', 'November', 'December'];
+      document.getElementById("calendar-inline-container").innerHTML = '';
+      console.log(datesWork[0]);
+      var calendarInline = myApp.calendar({
+          container: '#calendar-inline-container',
+          //value: [new Date()],
+          value: datesWork,
+          weekHeader: false,
+          toolbarTemplate:
+              '<div class="toolbar calendar-custom-toolbar">' +
+                  '<div class="toolbar-inner">' +
+                      '<div class="left">' +
+                          '<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
+                      '</div>' +
+                      '<div class="center"></div>' +
+                      '<div class="right">' +
+                          '<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
+                      '</div>' +
+                  '</div>' +
+              '</div>',
+          onOpen: function (p) {
+              $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
+              $$('.calendar-custom-toolbar .left .link').on('click', function () {
+                  calendarInline.prevMonth();
+              });
+              $$('.calendar-custom-toolbar .right .link').on('click', function () {
+                  calendarInline.nextMonth();
+              });
+          },
+          onMonthYearChangeStart: function (p) {
+              $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
+          },
+          onDayClick: function (p, dayContainer, year, month, day) {
+            //console.log('Нажали на дату ' + year + '-' + (parseInt(month)+1) + '-' + day);
+            // Собираем дату в виде строки по формату ГГГГ-ММ-ДД
+            var tempDate = new Date(year, month, day);
+            var dateText = makeCalDate(tempDate);
+            //console.log('dateText = ' + dateText);
+            //console.log('datesWork[0] = ' + datesWork[0]);
+            if(in_array(dateText, datesWork)) {
+                console.log('На эту дату есть комплекс упражнений!');
+                var workExercises = [];
+                workExercises = arrWorkEx[dateText].split('@#');
+                var listExCust = '';
+                workExercises.forEach(function(exerciseId) {
+                  console.log('Мы в цикле по кодам упражнений. Текущая строка: ' + exerciseId);
+                  // Т.к. мы нашли id упражнения, определим его название
+                  server.exercise.get(parseInt(exerciseId)).then(function (rowExercise) {
+                    //console.log('exercise = ' + exercise);
+                    listExCust += '<li>';
+                    listExCust += '  <div class="item-link item-content">';
+                    listExCust += '    <div class="item-inner">';
+                    listExCust += '      <span data-item="' + rowExercise.id + '">' + rowExercise.name + '</span>';
+                    listExCust += '    </div>';
+                    listExCust += '  </div>';
+                    listExCust += '</li>';
+                    // Надо слева показать список упражнений выделенного дня
+                    console.log('listExCust = ' + listExCust);
+                    document.getElementById("ulListPastExercises").innerHTML = listExCust;
+                    console.log('Обновили комплекс упражнений!');
+                  });
+                });
+              }
+          }
+      });
+      //calendarInline = ({value: [new Date()]});
+/*
       $("#calendar").datepicker({ 
       	dateFormat: "yy-mm-dd", 
         beforeShowDay: function(date) { // Функция выполняется каждый раз при построении ячейки с датой
@@ -1829,7 +1897,7 @@ function makeCalendExCustomer() {
             });
           }
         }
-      });
+      });*/
     });
 }
 /*
