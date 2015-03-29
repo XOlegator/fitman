@@ -1457,6 +1457,7 @@ function saveExerciseWork() {
               buttons: [{
                 text: 'Rewrite',
                 onClick: function() {
+                  var flagSavedData = 0;
               	  // Выбрали вариант перезаписи.
               	  // Значит найдём все записи по данному подходу данного клиента по данному упражнению на данную дату и обновим их
                   console.log('Мы в обработчике перезаписи данных по выполнению упражнения');
@@ -1486,12 +1487,12 @@ function saveExerciseWork() {
                       	    newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
                           } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
                       	    var tempValue = $('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
-      								      if (tempValue == '') { // Если поле ввода оставили пустым
-      								        var newValOpt = 0;
-      								      } else {
-      								        var newValOpt = parseInt(tempValue);
-      								      }
-      								    }
+                            if (tempValue == '') { // Если поле ввода оставили пустым
+                              var newValOpt = 0;
+                            } else {
+                              var newValOpt = parseInt(tempValue);
+                            }
+                          }
                       	  server.workExercise.update({
                             'id': parseInt(item.id),
                             'customer': customerId,
@@ -1499,19 +1500,28 @@ function saveExerciseWork() {
       	  	                'exercise': exerciseId,
       	  	                'option': item.option,
       	  	                'value': newValOpt,
-      	  	        	    	'set': workSet                     	  
+      	  	        	    'set': workSet
                       	  }).then(function (updatedWorkEx) {
       	                    console.log('Обновили очередную строку в БД: ' + JSON.stringify(updatedWorkEx));
+      	                    flagSavedData++;
+                            if (flagSavedData == 1) {
+                              // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
+                              myApp.addNotification({
+                                title: 'Data was saved',
+                                hold: messageDelay,
+                                message: 'Data was updated'
+                              });
+                            }
       	                  });
                       	}
                       });
-                      
                     });          
                 } // Конец функции перезаписи значений БД
               },
               {
                 text: 'Add',
                 onClick: function() {
+                  var flagSavedData = 0;
               	  // Выбрали вариант добавления текущих показателей к тем, что уже есть в базе по данному разрезу.
               	  // Значит найдём все записи по данному подходу данного клиента по данному упражнению и прибавим текущие значения
                   server.workExercise.query()
@@ -1538,12 +1548,12 @@ function saveExerciseWork() {
                       	    newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
                           } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
                       	    var tempValue = $('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
-      								      if (tempValue == '') { // Если поле ввода оставили пустым
-      								        var newValOpt = 0;
-      								      } else {
-      								        var newValOpt = parseInt(tempValue);
-      								      }
-      								    }
+                            if (tempValue == '') { // Если поле ввода оставили пустым
+                              var newValOpt = 0;
+                            } else {
+                              var newValOpt = parseInt(tempValue);
+                            }
+                          }
                       	  server.workExercise.update({
                             'id': parseInt(item.id),
                             'customer': customerId,
@@ -1551,9 +1561,18 @@ function saveExerciseWork() {
       	  	                'exercise': exerciseId,
       	  	                'option': item.option,
       	  	                'value': newValOpt + item.value,
-      	  	        	    	'set': workSet                     	  
+      	  	        	    'set': workSet
                       	  }).then(function (updatedWorkEx) {
       	                    console.log('Обновили очередную строку в БД (сложили показатели): ' + JSON.stringify(updatedWorkEx));
+      	                    flagSavedData++;
+                            if (flagSavedData == 1) {
+                              // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
+                              myApp.addNotification({
+                                title: 'Data was saved',
+                                hold: messageDelay,
+                                message: 'Data was updated'
+                              });
+                            }
       	                  });
                       	}
                       });
@@ -1575,58 +1594,69 @@ function saveExerciseWork() {
         }); // Конец цикла по записям текущего дня
         // Если прошлись по всем записям в БД и не нашли совпадений, то надо просто добавить текущие значения в БД
         if(flagAdd && noDoubles) {
-        	console.log('Сегодня записи были, но по текущему подходу ничего не нашлось');
+          console.log('Сегодня записи были, но по текущему подходу ничего не нашлось');
       	  // Ни разу в цикле не нашлась запись из базы данных. Т.е. надо добавить запись в БД
       	  // Считываем все значения
       	  var option = '';
   	      var time = 0; // Время будем записывать в секундах
-	        var isTime = 0;
+	      var isTime = 0;
+	      var flagSavedData = 0; // Флаг, что данные (первоя строка) сохранены
           $('#ulListCurrentWorkEx li input').each(function(index, item) {
   	        console.log('item.value ' + item.value + 'item.attributes[data-item].value ' + item.attributes['data-item'].value);
   	        option = item.attributes['data-item'].value;
-	          // Значение параметра заполнено
-	          if(option == 'time-minutes') {
-	            isTime = 1;
-	  	        // Запоминаем минуты, переведённые в секунды
-	  	        var tempMinValue = $(this).val();
-	  	        if (tempMinValue == '') {
-	  	          var intMinValue = 0;
-	  	        } else {
-	  	          var intMinValue = parseInt(tempMinValue);
-	  	        }
-	  	        time = time + (intMinValue * 60); 
-	          }
-	          else if(option == 'time-seconds') {
-	            isTime = 1;
-	  	        // Запоминем секунды
-	  	        var tempSecValue = $(this).val();
-	  	        if (tempSecValue == '') {
-	  	          var intSecValue = 0;
-	  	        } else {
-	  	          var intSecValue = parseInt(tempSecValue);
-	  	        }
-	  	        time = time + intSecValue;
+	        // Значение параметра заполнено
+	        if(option == 'time-minutes') {
+	          isTime = 1;
+	  	      // Запоминаем минуты, переведённые в секунды
+	  	      var tempMinValue = $(this).val();
+	  	      if (tempMinValue == '') {
+	  	        var intMinValue = 0;
+	  	      } else {
+	  	        var intMinValue = parseInt(tempMinValue);
+	  	      }
+	  	      time = time + (intMinValue * 60);
+	        }
+	        else if(option == 'time-seconds') {
+	          isTime = 1;
+	  	      // Запоминем секунды
+	  	      var tempSecValue = $(this).val();
+	  	      if (tempSecValue == '') {
+	  	        var intSecValue = 0;
+	  	      } else {
+	  	        var intSecValue = parseInt(tempSecValue);
+	  	      }
+	  	      time = time + intSecValue;
+	        } else {
+	          var tempValue = $(this).val();
+	          if(tempValue == '') {
+	            var intValue = 0;
 	          } else {
-	            var tempValue = $(this).val();
-	            if(tempValue == '') {
-	              var intValue = 0;
-	            } else {
-	              var intValue = parseInt(tempValue);
-	            }
-	  	        // Любой параметр, кроме времени
-	            server.workExercise.add({
-	  	          'customer': customerId,
-	  	          'date': dateEx,
-	  	          'exercise': exerciseId,
-	  	          'option': option,
-	  	          'value': intValue,
-	  	          'set': workSet
-	            });
+	            var intValue = parseInt(tempValue);
 	          }
+	  	      // Любой параметр, кроме времени
+	          server.workExercise.add({
+	  	        'customer': customerId,
+	  	        'date': dateEx,
+	  	        'exercise': exerciseId,
+	  	        'option': option,
+	  	        'value': intValue,
+	  	        'set': workSet
+	          }).then(function (savedData) {
+	            flagSavedData++;
+	            if (flagSavedData == 1) {
+	              // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
+                  myApp.addNotification({
+                    title: 'Data was saved',
+                    hold: messageDelay,
+                    message: 'Data was added'
+                  });
+	            }
+	          });
+	        }
           }); // Конец цикла записи
 	        // Отдельно записываем в базу время, т.к. сразу нельзя было (происходило сложение минут и секунд)
 	        if(isTime) {
-	        	console.log('Добавляем время выполнения упражнения в базу. time = ' + time);
+	          console.log('Добавляем время выполнения упражнения в базу. time = ' + time);
 	          server.workExercise.add({
 	  	        'customer': customerId,
 	  	        'date': dateEx,
@@ -1634,18 +1664,29 @@ function saveExerciseWork() {
 	  	        'option': 'time',
 	  	        'value': time,
 	  	        'set': workSet
-	          });
+	          }).then(function (savedData) {
+                flagSavedData++;
+                if (flagSavedData == 1) {
+                  // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
+                  myApp.addNotification({
+                    title: 'Data was saved',
+                    hold: messageDelay,
+                    message: 'Data was added'
+                  });
+                }
+              });
 	        }
         } // Конец обработки необходимости записи в БД
-      } else { // На текущий день в базе нет никаких записей, значит сразу добавляем в базу параметры
+      } else { // На текущий день в базе нет никаких записей по выполненным упражнениям, значит сразу добавляем в базу параметры
+      	var flagSavedData = 0;
       	// Считываем все значения
       	console.log('На текущий день записей нет. Добавляем смело новые записи');
-	      var time = 0; // Время будем записывать в секундах
-	      var option = '';
-	      var isTime = 0;
-	      $('#ulListCurrentWorkEx li input').each(function(index, item) {
-	        console.log('item.value ' + item.value + '; item.attributes[data-item].value ' + item.attributes['data-item'].value);
-	        option = item.attributes['data-item'].value;
+	    var time = 0; // Время будем записывать в секундах
+	    var option = '';
+	    var isTime = 0;
+	    $('#ulListCurrentWorkEx li input').each(function(index, item) {
+	      console.log('item.value ' + item.value + '; item.attributes[data-item].value ' + item.attributes['data-item'].value);
+	      option = item.attributes['data-item'].value;
           // Значение параметра заполнено
           if(option == 'time-minutes') {
             isTime = 1; // Устанавливаем флаг, что есть параметр время
@@ -1683,12 +1724,22 @@ function saveExerciseWork() {
   	          'option': option,
   	          'value': intValue,
   	          'set': workSet
+            }).then(function (savedData) {
+              flagSavedData++;
+              if (flagSavedData == 1) {
+                // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
+                myApp.addNotification({
+                  title: 'Data was saved',
+                  hold: messageDelay,
+                  message: 'Data was added'
+                });
+              }
             });
           }
-	      }); // Конец цикла записи
+	    }); // Конец цикла записи
         // Отдельно записываем в базу время, т.к. сразу нельзя было (происходило сложение минут и секунд)
         if(isTime) {
-    			console.log('Добавляем время выполнения упражнения в базу. time = ' + time);
+    	  console.log('Добавляем время выполнения упражнения в базу. time = ' + time);
           server.workExercise.add({
   	        'customer': customerId,
   	        'date': dateEx,
@@ -1696,11 +1747,21 @@ function saveExerciseWork() {
   	        'option': 'time',
   	        'value': time,
   	        'set': workSet
+          }).then(function (savedData) {
+            flagSavedData++;
+            if (flagSavedData == 1) {
+              // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
+              myApp.addNotification({
+                title: 'Data was saved',
+                hold: messageDelay,
+                message: 'Data was added'
+              });
+            }
           });
         }
-      }
-    });
-}
+      } // Конец обработки случая, когда на сегодня нет записей о выполнении упражнений
+    }); // Конец обработки запроса на наличие записей о выполнении упражнений за сегодня
+} // Конец функции сохранения результатов выполнения упражнения
 // Приводим даты в "русский вид" ("15.04.2013"))
 function makeCalDate(date) {
     var d = date.getDate().toString();
