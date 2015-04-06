@@ -94,3 +94,6 @@ div.page-content>div.my-toolbar-inner {
 .list-block-without-margin {
   margin: 0;
 }
+.item-media-right {
+  padding-right: 15px;
+}

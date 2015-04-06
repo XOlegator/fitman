@@ -132,7 +132,7 @@ $.getJSON('default/bd-schema.json', function(data){
 });
 // Функция изменения системы единиц измерения в настройках
 $('#selectUnits').on('change', function() {
-	console.log('Зашли в изменение настроек единиц измерения');
+  console.log('Зашли в изменение настроек единиц измерения');
   // Сначала найдём то, что уже есть в базе
   server.settings.query()
     .all()
@@ -141,18 +141,18 @@ $('#selectUnits').on('change', function() {
       var setLang = results[0].language;
       var setUnits = $("#selectUnits :selected").html();
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
-	    server.settings.update({
-	      'id': parseInt(results[0].id),
+	  server.settings.update({
+	    'id': parseInt(results[0].id),
         'units': setUnits, // Ставим новое значение
         'language': setLang // Оставляем то, что было ранее
-	    }).then(function(item) {
+	  }).then(function(item) {
         console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
       });
     });
 });
 // Функция изменения языка приложения в настройках
 $('#selectLang').on('change', function() {
-	console.log('Зашли в изменение настроек языка');
+  console.log('Зашли в изменение настроек языка');
   // Сначала найдём то, что уже есть в базе
   server.settings.query()
     .all()
@@ -162,7 +162,7 @@ $('#selectLang').on('change', function() {
       var setUnits = results[0].units;
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
       server.settings.update({
-	      'id': parseInt(results[0].id),
+	    'id': parseInt(results[0].id),
         'units': setUnits, // Оставляем то, что было ранее
         'language': setLang // Ставим новое значение
       }).then(function(item) {
@@ -288,21 +288,23 @@ $$('.confirm-clean-db').on('click', function () {
         server.clear('exercise');
         server.clear('customers');
         console.log('Reload pages data');
-        server.customers.query('name')
+        /*server.customers.query('name')
           .all()
           .keys()
           .distinct()
           .execute()
           .then(function(results) {
             updateListCustomers(results);
-          });
-        server.exerciseType.query('name')
+          });*/
+        updateListCustomers('');
+        /*server.exerciseType.query('name')
           .all()
           .keys()
           .execute()
           .then(function(results) {
             updateListExerciseType(results);
-          });
+          });*/
+        updateListExerciseType('');
         myApp.alert('Database is clean');
       },
       function () {
@@ -321,13 +323,13 @@ $$('.confirm-create-db').on('click', function () {
 });
 // Модальное окно для удаления базы данных
 $$('.confirm-remove-db').on('click', function () {
-	myApp.confirm('Are you sure?', function () {
-		// Удаление самой базы данных
-		indexedDB.deleteDatabase('my-app');
-		document.getElementById("ulListCustomers").innerHTML = '';
-		document.getElementById("forDeleteCustomers").innerHTML = '';
-		document.getElementById("ulListExerciseType").innerHTML = '';
-	});
+  myApp.confirm('Are you sure?', function () {
+	// Удаление самой базы данных
+	indexedDB.deleteDatabase('my-app');
+	document.getElementById("ulListCustomers").innerHTML = '';
+	document.getElementById("forDeleteCustomers").innerHTML = '';
+	document.getElementById("ulListExerciseType").innerHTML = '';
+  });
 });
 /*
 Функция очистки данных на странице данных клиента. Вызывается со страницы index-3 (списко клиентв) по кнопке Add
@@ -361,19 +363,17 @@ function updateListCustomers(customers) {
     listCustomers += '</li>';
     // Список пользователей для удаления
     listCustomersForDelete += '<li>';
-    listCustomersForDelete += '  <div class="item-inner">';
-    listCustomersForDelete += '    <div class="item-title">';
-    listCustomersForDelete += '      <a href="#view-10" class="tab-link btn-right-top" onclick="fillCustomerData(' + value.id + ')">' + value.name + '</a>';
+    listCustomersForDelete += '  <label class="label-checkbox item-content">';
+    listCustomersForDelete += '    <div class="item-inner">';
+    listCustomersForDelete += '      <div class="item-title">';
+    listCustomersForDelete += '        <a href="#view-10" class="tab-link btn-right-top" onclick="fillCustomerData(' + value.id + ')">' + value.name + '</a>';
+    listCustomersForDelete += '      </div>';
     listCustomersForDelete += '    </div>';
-    listCustomersForDelete += '    <div class="item-media">';
-    listCustomersForDelete += '      <label class="label-checkbox item-content">';
-    listCustomersForDelete += '        <input type="checkbox" name="inputCustomerForDelete" value="' + value.id + '">';
-    listCustomersForDelete += '        <div class="item-media">';
-    listCustomersForDelete += '          <i class="icon icon-form-checkbox"></i>';
-    listCustomersForDelete += '        </div>';
-    listCustomersForDelete += '      </label>';
+    listCustomersForDelete += '    <input type="checkbox" name="inputCustomerForDelete" value="' + value.id + '">';
+    listCustomersForDelete += '    <div class="item-media item-media-right">';
+    listCustomersForDelete += '      <i class="icon icon-form-checkbox"></i>';
     listCustomersForDelete += '    </div>';
-    listCustomersForDelete += '  </div>';
+    listCustomersForDelete += '  </label>';
     listCustomersForDelete += '</li>';
   });
   document.getElementById("ulListCustomers").innerHTML = listCustomers;
@@ -419,7 +419,7 @@ function editCustomer() {
   var newCommentsCustomer = $('#newCustomerComments').val();
   console.log('Сейчас будем обновлять данные по клиенту с id = ' + customerId);
   server.customers.get(customerId).then(function (customer) {
-    if ((newNameCustomer == customer.name) && (newCommentsCustomer == customer.comments)) {
+    if ((newNameCustomer === customer.name) && (newCommentsCustomer === customer.comments)) {
       myApp.addNotification({
         title: 'Nothing to save',
         hold: messageDelay,
@@ -444,6 +444,8 @@ function editCustomer() {
 }
 /*
 Функция удаления клиентов из БД. Вызывается из страницы #view-13 по кнопке Delete
+Параметры сюда никакие не передаются, т.к. функция вызывается только из определённого места html страницы -
+параметры добываются непосредственно из страницы
 */
 function removeCustomers() {
   // Модальное окно для подтверждения удаления клиентов
@@ -453,86 +455,71 @@ function removeCustomers() {
     // Начинаем цикл по всем отмеченным для удаления клиентам
     $('input[name="inputCustomerForDelete"]:checked').each(function() {
       console.log('Проверяем пользователя с id = ' + this.value);
-	    server.customers.query('name')
-	      .filter('id', parseInt(this.value))
-        .execute()
-        .then(function(results) {
-          console.log('Нашли удаляемого клиента в базе: ' + JSON.stringify(results));
-          // Проверяем, можно ли удалять этого клиента из базы
-          // TODO Если по клиенту есть записи в истории занятий, то спрашиваем, точно ли всё по нему удалить
-          // Искать нужно в трёх таблицах сразу: workout (хотя это можно, пожалуй, пропустить), schedule и workExercise
-          server.workExercise.query()
-          	.filter('customer', results[0].name)
-            .execute()
-            .then(function(resWorkEx) {
-              if(resWorkEx.length) { // Если что-то нашлось, то спрашиваем удалять ли всё
-              
-              } else { // Ничего не нашли тут, проверяем в следующей таблице
-                server.schedule.query()
-                	.filter('customer', results[0].name)
-                  .execute()
-                  .then(function(resSchedule) {
-                    if(resSchedule.length) { // Если что-то нашлось, то спрашиваем удалять ли всё
-                    
-                    } else { // Ничего не нашли тут, проверяем в следующей таблице
-                      server.workout.query()
-                      	.filter('customer', results[0].name)
-                        .execute()
-                        .then(function(resWorkout) {
-                          if(resWorkout.length) { // Если что-то нашлось, то спрашиваем удалять ли всё
-                          
-                          } else { // Ничего не нашли тут, то искать уже нигде больше не надо, - можно смело удалять пользователя 
-                            server.remove('customers', parseInt(results[0].id)).then(function(res3){
-                              console.log('Удалили пользователя с id = ' + results[0].id);
-                              console.log(JSON.stringify(res3));
-                              // После всех удалений, обновим списки клиентов на соответствующих страницах
-                              server.customers.query('name')
-                            		.all()
-                            		.distinct()
-                            		.execute()
-                            		.then(function(res2) {
-                            		  console.log('Клиенты после удаления res2 = ' + JSON.stringify(res2));
-                            		  updateListCustomers(res2);
-                        	      });
-                            });
-                          }
-                        });
-                    }
-                  });
-              }
-            });
-        });
-    });
-    },
-    function () {
-      myApp.alert('You clicked Cancel button');
-    }
-  );
-  //});
-  /*var newCustomer = $('input#inputNewCustomer').val();
-  var dateStartClasses = $('input#inputDateStartClasses').val();
-  var timeVal = new Date().toISOString();//.substring(0, 10);
-  var photo = 'somepic' + timeVal + '.jpg';
-  var newCustomerComments = $('textarea#newCustomerComments').val();
-  //console.log('Добавляем клиента ' + newCustomer + ' фотография ' + photo + ' комментарий: ' + newCustomerComments);
-  if(newCustomer != '') {
-  	//console.log('Добавляем клиента ' + newCustomer + ' фотография ' + photo + ' комментарий: ' + newCustomerComments);
-    server.customers.add({'name': newCustomer, 'photo': photo, 'comments': newCustomerComments});
-    // Обновляем список клиентов на соответствующей странице
-    server.customers.query('name')
-      .all()            
-      .distinct()
-      .execute()
-      .then(function(results) {
-      	myApp.addNotification({
-          title: 'Add new Customer',
-          message: 'Data was saved'
-        });
-        // Запросом получили массив объектов customers
-        updateListCustomers(results);
+	  server.customers.get(parseInt(this.value)).then(function(resCustomer) {
+        console.log('Нашли удаляемого клиента в базе: ' + JSON.stringify(resCustomer));
+        // Проверяем, можно ли удалять этого клиента из базы
+        // Если по клиенту есть записи в истории занятий или расписании, то спрашиваем, точно ли всё по нему удалить
+        // Искать нужно в трёх таблицах сразу: workout (хотя это можно, пожалуй, пропустить), schedule и workExercise
+        console.log('resCustomer.id = ' + resCustomer.id);
+        server.workExercise.query()
+          .filter('customer', parseInt(resCustomer.id))
+          .execute()
+          .then(function(resWorkEx) {
+            if(resWorkEx.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
+              myApp.addNotification({
+                title: 'Customer ' + resCustomer.name + ' can not be deleted',
+                hold: messageDelay,
+                message: 'There is data in history.'
+              });
+            } else { // Ничего не нашли тут, проверяем в следующей таблице
+              server.schedule.query()
+                .filter('customer', parseInt(resCustomer.id))
+                .execute()
+                .then(function(resSchedule) {
+                  if(resSchedule.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
+                    myApp.addNotification({
+                      title: 'Customer ' + resCustomer.name + ' can not be deleted',
+                      hold: messageDelay,
+                      message: 'There is data in schedule by that customer.'
+                    });
+                  } else { // Ничего не нашли тут, проверяем в следующей таблице
+                    server.workout.query()
+                      .filter('customer', parseInt(resCustomer.id))
+                      .execute()
+                      .then(function(resWorkout) {
+                        if(resWorkout.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
+                          myApp.addNotification({
+                            title: 'Customer ' + resCustomer.name + ' can not be deleted',
+                            hold: messageDelay,
+                            message: 'There is data in workout.'
+                          });
+                        } else { // Ничего не нашли тут - искать уже нигде больше не надо, - можно смело удалять пользователя
+                          server.remove('customers', parseInt(resCustomer.id)).then(function(res3) {
+                            console.log('Удалили пользователя с id = ' + resCustomer.id);
+                            console.log(JSON.stringify(res3));
+                            // После всех удалений, обновим списки клиентов на соответствующих страницах
+                            server.customers.query('name')
+                          	  .all()
+                              .distinct()
+                              .execute()
+                              .then(function(res2) {
+                                console.log('Клиенты после удаления res2 = ' + JSON.stringify(res2));
+                                updateListCustomers(res2);
+                        	  });
+                          });
+                        }
+                      });
+                  }
+                });
+            }
+          });
       });
-    //$$('a[href="#view-3"]').click();
-  }*/
+    });
+  },
+  function () {
+    myApp.alert('You clicked Cancel button');
+  }
+  );
 }
 /*
 Функция заполнения данными страницы клиента (#index-3). В функцию передаётся id клиента. Вызывается из списка клиентов при выборе клиента
@@ -2101,7 +2088,6 @@ $('#aWorkGraph').on('click', function() {
       //console.log('Список всех собранных из БД характеристик: ' + JSON.stringify(arrOptEx));
       // Теперь надо сформировать данные для графика. Ищем в базе всё по данному упражнению и клиенту
       server.workExercise.query()
-  	    //.filter('customer', customerId)
   	    .filter(function(blockData) {return ((blockData.exercise == exerciseId) && (blockData.customer == customerId))})
         .execute()
         .then(function(result) {
