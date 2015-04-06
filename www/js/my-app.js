@@ -1990,7 +1990,6 @@ function generateStatistics() {
   $('#linkSaveWorkEx').show();
   var customerId = parseInt($('span#spanCustName').attr('data-item'));
   var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
-  //var exerciseName = $('span#spanExWork').text();
   var exerciseId = parseInt($('#spanExWork').attr('data-item'));
   var countBlock = 0; 
   // Определим, какое количество блоков информации надо выводить (количество записей по даному клиенту)
@@ -2084,12 +2083,11 @@ $('#aWorkGraph').on('click', function() {
 	// Надо скрыть кнопку Save
 	$('#linkSaveWorkEx').hide();
 	// Получим все параметры данного упражнения
-	//var exerciseName = $('span#spanExWork').text();
 	var exerciseId = parseInt($('#spanExWork').attr('data-item'));
 	var customerId = parseInt($('span#spanCustName').attr('data-item'));
 	var arrOptEx = []; // Список всех параметров данного упражнения
 	var i = 0; // Счётчик количества данных (фактически это количество подходов)
-	// Сначала определим количество активных параметров у данного упражнения
+	// Сначала определим состав и количество активных параметров у данного упражнения
 	server.optionsExercises.query()
   	.filter('exerciseId', exerciseId)
     .execute()
@@ -2103,7 +2101,8 @@ $('#aWorkGraph').on('click', function() {
       //console.log('Список всех собранных из БД характеристик: ' + JSON.stringify(arrOptEx));
       // Теперь надо сформировать данные для графика. Ищем в базе всё по данному упражнению и клиенту
       server.workExercise.query()
-  	    .filter('customer', customerId)
+  	    //.filter('customer', customerId)
+  	    .filter(function(blockData) {return ((blockData.exercise == exerciseId) && (blockData.customer == customerId))})
         .execute()
         .then(function(result) {
       	  var analitCount = 0;
@@ -2117,35 +2116,33 @@ $('#aWorkGraph').on('click', function() {
 		  var arrSlope = [];
 		  var arrLoad = [];
           result.forEach(function (item) {
-            if(item.exercise == exerciseId) { // Нас интересует только определённое упражнение
-              // Добрались до данных, теперь их надо собрать в массивы
-              if (i == 0) {
-            	arrDateEx[analitCount] = item.date;
-            	arrSetEx[analitCount] = item.set;
-              }	else {
-            	if (item.option == 'repeats') {
-	              arrRepeats[analitCount] = item.value;
-	            } else if (item.option == 'weight') {
-	              arrWeight[analitCount] = item.value;
-	            } else if (item.option == 'time') {
-	              arrTime[analitCount] = item.value;
-	            } else if (item.option == 'distance') {
-	              arrDistance[analitCount] = item.value;
-	            } else if (item.option == 'speed') {
-	              arrSpeed[analitCount] = item.value;
-	            } else if (item.option == 'slope') {
-	              arrSlope[analitCount] = item.value;
-	            } else if (item.option == 'load') {
-	              arrLoad[analitCount] = item.value;
-	            }
-              }
-              i++; // Счётчик по параметрам одного аналитического разреза
-              if(i == countOptions) {
-            	i = 0; // Начало нового аналитического разреза
-	           	analitCount++;
-              }
-              console.log('Номер характеристики в текущей итерации: ' + i);
+            // Добрались до данных, теперь их надо собрать в массивы
+            if (i === 0) {
+              arrDateEx[analitCount] = item.date;
+              arrSetEx[analitCount] = item.set;
             }
+            console.log('item.option = ' + item.option);
+            if (item.option === 'repeats') {
+	          arrRepeats[analitCount] = item.value;
+	        } else if (item.option === 'weight') {
+	          arrWeight[analitCount] = item.value;
+	        } else if (item.option === 'time') {
+	          arrTime[analitCount] = item.value / 60; // Время отобразим в минутах
+	        } else if (item.option === 'distance') {
+	          arrDistance[analitCount] = item.value;
+	        } else if (item.option === 'speed') {
+	          arrSpeed[analitCount] = item.value;
+	        } else if (item.option === 'slope') {
+	          arrSlope[analitCount] = item.value;
+	        } else if (item.option === 'load') {
+	          arrLoad[analitCount] = item.value;
+	        }
+            i++; // Счётчик по параметрам одного аналитического разреза
+            if(i === countOptions) {
+              i = 0; // Начало нового аналитического разреза
+	          analitCount++;
+            }
+            console.log('Номер характеристики в текущей итерации: ' + i);
           });
           // Данные собрали в массив. Теперь готовим к показу график по данным
           var test = [1, 2, 3];
