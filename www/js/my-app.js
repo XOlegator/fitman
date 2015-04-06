@@ -26,6 +26,7 @@ document.ontouchmove = function(event) {
 };*/
 // Export selectors engine
 var $$ = Framework7.$;
+var server;
 //indexedDB.deleteDatabase('my-app');
 
 /*
@@ -1424,7 +1425,7 @@ function makeViewExWork(exerciseId) {
 */
 function saveExerciseWork() {
   var customerId = parseInt($('span#spanCustName').attr('data-item'));
-  var exerciseName = $('span#spanExWork').text();
+  //var exerciseName = $('span#spanExWork').text();
   var exerciseId = parseInt($('#spanExWork').attr('data-item'));
   var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
   var workSet = parseInt($('select[data-item="sets"]').val()); // Узнаём номер подхода
@@ -1432,298 +1433,183 @@ function saveExerciseWork() {
   console.log('workSet = ' + workSet);
   var flagAdd = 0; // По-умолчанию запись в базу запрещена
   // Перед тем, как записать что-либо в базу данных, нужно проверить нет ли уже там записи о текущем аналитическом разрезе
-  // Для этого отберём из базы все записи по выполнению упражнений на текущий день
   server.workExercise.query()
-  	.filter('date', dateEx)
+    .filter(function(workEx) {return (workEx.date == dateEx) && (workEx.exercise == exerciseId) && (workEx.customer == customerId) && (workEx.set == workSet)})
     .execute()
     .then(function(result) {
-      if(result.length) { // Если что-то на сегодня нашлось, то делаем дальше проверки
-        // Среди сегодняшних записей найдём записи на текущего клиента и текущее упражнения, а также на данный подход
-        var findNext = 1;
-        result.forEach(function (itemWorkEx, indexWorkEx) {
-          console.log('Мы в цикле обработки новых значений. Текущая строка значений: ' + JSON.stringify(itemWorkEx));
-          if((itemWorkEx.customer == customerId) && (itemWorkEx.exercise == exerciseId) && (itemWorkEx.set == workSet) && findNext) {
-            findNext = 0; // Дальше искать в записях БД не нужно; выходим из if
-            noDoubles = 0; // Показываем, что дубли попались
-            console.log('Прошли в обработку повторяющейся записи!');
-      	    // Текущая проверяемая запись из базы данных совпала с текущим клиентом, текущим упражнением и текущим подходом
-            // Если текущий аналитический разрез присутствует в базе, предложим пользователю три варианта:
-            // 1. Перезаписать данные
-            // 2. Добавить к записанному
-            // 3. Отменить запись
-            myApp.modal({
-              title:  'Current set already exist in DB',
-              text: 'What do you want to do with current values?',
-              buttons: [{
-                text: 'Rewrite',
-                onClick: function() {
-                  var flagSavedData = 0;
-              	  // Выбрали вариант перезаписи.
-              	  // Значит найдём все записи по данному подходу данного клиента по данному упражнению на данную дату и обновим их
-                  console.log('Мы в обработчике перезаписи данных по выполнению упражнения');
-                  //var arrayOldVal = [];
-                  server.workExercise.query()
-                  	.filter('date', dateEx)
-                    .execute()
-                    .then(function(result) {
-                      result.forEach(function (item, index) {
-                      	if((item.customer == customerId) && (item.exercise == exerciseId) && (item.set == workSet)) {
-                      	  // Мы нашли данные по аналитическому разрезу!
-                      	  console.log('В базе нашлось: item.option = ' + item.option + '; item.value = ' + item.value);
-                      	  // Найдём текущий параметр в нашей форме
-                          if(item.option == 'time') {
-                            var tempMinValue = $('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
-                            if (tempMinValue == '') { // Не заполнили минуты
-                              var intMinValue = 0;
-                            } else {
-                              var intMinValue = parseInt(tempMinValue);
-                            }
-                            var tempSecValue = $('#ulListCurrentWorkEx input[data-item = "time-seconds"]').val();
-                            if (tempSecValue == '') {
-                              var intSecValue = 0;
-                            } else {
-                              var intSecValue = parseInt(tempSecValue);
-                            }
-                      	    newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
-                          } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
-                      	    var tempValue = $('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
-                            if (tempValue == '') { // Если поле ввода оставили пустым
-                              var newValOpt = 0;
-                            } else {
-                              var newValOpt = parseInt(tempValue);
-                            }
-                          }
-                      	  server.workExercise.update({
-                            'id': parseInt(item.id),
-                            'customer': customerId,
-      	  	                'date': dateEx,
-      	  	                'exercise': exerciseId,
-      	  	                'option': item.option,
-      	  	                'value': newValOpt,
-      	  	        	    'set': workSet
-                      	  }).then(function (updatedWorkEx) {
-      	                    console.log('Обновили очередную строку в БД: ' + JSON.stringify(updatedWorkEx));
-      	                    flagSavedData++;
-                            if (flagSavedData == 1) {
-                              // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
-                              myApp.addNotification({
-                                title: 'Data was saved',
-                                hold: messageDelay,
-                                message: 'Data was updated'
-                              });
-                            }
-      	                  });
-                      	}
-                      });
-                    });          
-                } // Конец функции перезаписи значений БД
-              },
-              {
-                text: 'Add',
-                onClick: function() {
-                  var flagSavedData = 0;
-              	  // Выбрали вариант добавления текущих показателей к тем, что уже есть в базе по данному разрезу.
-              	  // Значит найдём все записи по данному подходу данного клиента по данному упражнению и прибавим текущие значения
-                  server.workExercise.query()
-                  	.filter('date', dateEx)
-                    .execute()
-                    .then(function(result) {
-                      result.forEach(function (item, index) {
-                      	if((item.customer == customerId) && (item.exercise == exerciseId) && (item.set == workSet)) {
-                      	  // Мы нашли в БД данные по текущему аналитическому разрезу!
-                      	  // Найдём текущий параметр в нашей форме
-                          if(item.option == 'time') {
-                            var tempMinValue = $('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
-                            if (tempMinValue == '') { // Не заполнили минуты
-                              var intMinValue = 0;
-                            } else {
-                              var intMinValue = parseInt(tempMinValue);
-                            }
-                            var tempSecValue = $('#ulListCurrentWorkEx input[data-item = "time-seconds"]').val();
-                            if (tempSecValue == '') {
-                              var intSecValue = 0;
-                            } else {
-                              var intSecValue = parseInt(tempSecValue);
-                            }
-                      	    newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
-                          } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
-                      	    var tempValue = $('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
-                            if (tempValue == '') { // Если поле ввода оставили пустым
-                              var newValOpt = 0;
-                            } else {
-                              var newValOpt = parseInt(tempValue);
-                            }
-                          }
-                      	  server.workExercise.update({
-                            'id': parseInt(item.id),
-                            'customer': customerId,
-      	  	                'date': dateEx,
-      	  	                'exercise': exerciseId,
-      	  	                'option': item.option,
-      	  	                'value': newValOpt + item.value,
-      	  	        	    'set': workSet
-                      	  }).then(function (updatedWorkEx) {
-      	                    console.log('Обновили очередную строку в БД (сложили показатели): ' + JSON.stringify(updatedWorkEx));
-      	                    flagSavedData++;
-                            if (flagSavedData == 1) {
-                              // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
-                              myApp.addNotification({
-                                title: 'Data was saved',
-                                hold: messageDelay,
-                                message: 'Data was updated'
-                              });
-                            }
-      	                  });
-                      	}
-                      });
-                    });
-                } // Конец функции добавления значений к сохранённым в БД
-              },
-              {
-                text: 'Cancel',
-                bold: true,
-                onClick: function() {
-                } // Конец функции отмены сохранения
-              }]
-            }); // Конец обработки модального окна
-          } else { // Конец проверки наличия аналитического разреза
-            // Если текущего аналитического разреза не нашлось, делаем поднятие флага, что нужно добавить запись в БД.
-            flagAdd = 1;
-            console.log('Установили флаг, что искать дубли больше не нужно');
-          }
-        }); // Конец цикла по записям текущего дня
-        // Если прошлись по всем записям в БД и не нашли совпадений, то надо просто добавить текущие значения в БД
-        if(flagAdd && noDoubles) {
-          console.log('Сегодня записи были, но по текущему подходу ничего не нашлось');
-      	  // Ни разу в цикле не нашлась запись из базы данных. Т.е. надо добавить запись в БД
-      	  // Считываем все значения
-      	  var option = '';
-  	      var time = 0; // Время будем записывать в секундах
-	      var isTime = 0;
-	      var flagSavedData = 0; // Флаг, что данные (первоя строка) сохранены
-          $('#ulListCurrentWorkEx li input').each(function(index, item) {
-  	        console.log('item.value ' + item.value + 'item.attributes[data-item].value ' + item.attributes['data-item'].value);
-  	        option = item.attributes['data-item'].value;
-	        // Значение параметра заполнено
-	        if(option == 'time-minutes') {
-	          isTime = 1;
-	  	      // Запоминаем минуты, переведённые в секунды
-	  	      var tempMinValue = $(this).val();
-	  	      if (tempMinValue == '') {
-	  	        var intMinValue = 0;
-	  	      } else {
-	  	        var intMinValue = parseInt(tempMinValue);
-	  	      }
-	  	      time = time + (intMinValue * 60);
-	        }
-	        else if(option == 'time-seconds') {
-	          isTime = 1;
-	  	      // Запоминем секунды
-	  	      var tempSecValue = $(this).val();
-	  	      if (tempSecValue == '') {
-	  	        var intSecValue = 0;
-	  	      } else {
-	  	        var intSecValue = parseInt(tempSecValue);
-	  	      }
-	  	      time = time + intSecValue;
-	        } else {
-	          var tempValue = $(this).val();
-	          if(tempValue == '') {
-	            var intValue = 0;
-	          } else {
-	            var intValue = parseInt(tempValue);
-	          }
-	  	      // Любой параметр, кроме времени
-	          server.workExercise.add({
-	  	        'customer': customerId,
-	  	        'date': dateEx,
-	  	        'exercise': exerciseId,
-	  	        'option': option,
-	  	        'value': intValue,
-	  	        'set': workSet
-	          }).then(function (savedData) {
-	            flagSavedData++;
-	            if (flagSavedData == 1) {
-	              // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
-                  myApp.addNotification({
-                    title: 'Data was saved',
-                    hold: messageDelay,
-                    message: 'Data was added'
-                  });
-	            }
-	          });
-	        }
-          }); // Конец цикла записи
-	        // Отдельно записываем в базу время, т.к. сразу нельзя было (происходило сложение минут и секунд)
-	        if(isTime) {
-	          console.log('Добавляем время выполнения упражнения в базу. time = ' + time);
-	          server.workExercise.add({
-	  	        'customer': customerId,
-	  	        'date': dateEx,
-	  	        'exercise': exerciseId,
-	  	        'option': 'time',
-	  	        'value': time,
-	  	        'set': workSet
-	          }).then(function (savedData) {
-                flagSavedData++;
-                if (flagSavedData == 1) {
-                  // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
-                  myApp.addNotification({
-                    title: 'Data was saved',
-                    hold: messageDelay,
-                    message: 'Data was added'
-                  });
+      if(result.length) {
+        console.log('По текущему аналитическому разрезу уже есть данные');
+        // Текущая проверяемая запись из базы данных совпала с текущим клиентом, текущим упражнением и текущим подходом
+        // Если текущий аналитический разрез присутствует в базе, предложим пользователю три варианта:
+        // 1. Перезаписать данные
+        // 2. Добавить к записанному
+        // 3. Отменить запись
+        myApp.modal({
+          title: 'Current set already exist in DB',
+          text: 'What do you want to do with current values?',
+          buttons: [{
+            text: 'Rewrite',
+            onClick: function() {
+              var flagSavedData = 0;
+              // Выбрали вариант перезаписи.
+              // Значит найдём все записи по данному подходу данного клиента по данному упражнению на данную дату и обновим их
+              console.log('Мы в обработчике перезаписи данных по выполнению упражнения');
+              result.forEach(function (item, index) {
+                // Мы нашли данные по аналитическому разрезу!
+                console.log('В базе нашлось: item.option = ' + item.option + '; item.value = ' + item.value);
+                // Найдём текущий параметр в нашей форме
+                if(item.option == 'time') {
+                  var tempMinValue = $('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
+                  if (tempMinValue == '') { // Не заполнили минуты
+                    var intMinValue = 0;
+                  } else {
+                    var intMinValue = parseInt(tempMinValue);
+                  }
+                  var tempSecValue = $('#ulListCurrentWorkEx input[data-item = "time-seconds"]').val();
+                  if (tempSecValue == '') {
+                    var intSecValue = 0;
+                  } else {
+                    var intSecValue = parseInt(tempSecValue);
+                  }
+                  newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
+                } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
+                  var tempValue = $('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
+                  if (tempValue == '') { // Если поле ввода оставили пустым
+                    var newValOpt = 0;
+                  } else {
+                    var newValOpt = parseInt(tempValue);
+                  }
                 }
+                server.workExercise.update({
+                  'id': parseInt(item.id),
+                  'customer': customerId,
+                  'date': dateEx,
+                  'exercise': exerciseId,
+                  'option': item.option,
+                  'value': newValOpt,
+                  'set': workSet
+                }).then(function (updatedWorkEx) {
+                  console.log('Обновили очередную строку в БД: ' + JSON.stringify(updatedWorkEx));
+                  flagSavedData++;
+                  if (flagSavedData == 1) {
+                    // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
+                    myApp.addNotification({
+                      title: 'Data was saved',
+                      hold: messageDelay,
+                      message: 'Data was updated'
+                    });
+                  }
+                });
               });
-	        }
-        } // Конец обработки необходимости записи в БД
-      } else { // На текущий день в базе нет никаких записей по выполненным упражнениям, значит сразу добавляем в базу параметры
-      	var flagSavedData = 0;
-      	// Считываем все значения
-      	console.log('На текущий день записей нет. Добавляем смело новые записи');
-	    var time = 0; // Время будем записывать в секундах
-	    var option = '';
-	    var isTime = 0;
-	    $('#ulListCurrentWorkEx li input').each(function(index, item) {
-	      console.log('item.value ' + item.value + '; item.attributes[data-item].value ' + item.attributes['data-item'].value);
-	      option = item.attributes['data-item'].value;
+            } // Конец функции перезаписи значений БД
+          },
+          {
+            text: 'Add',
+            onClick: function() {
+              var flagSavedData = 0;
+              // Выбрали вариант добавления текущих показателей к тем, что уже есть в базе по данному разрезу.
+              // Значит найдём все записи по данному подходу данного клиента по данному упражнению и прибавим текущие значения
+              result.forEach(function (item, index) {
+                // Найдём текущий параметр в нашей форме
+                if(item.option == 'time') {
+                  var tempMinValue = $('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
+                  if (tempMinValue == '') { // Не заполнили минуты
+                    var intMinValue = 0;
+                  } else {
+                    var intMinValue = parseInt(tempMinValue);
+                  }
+                  var tempSecValue = $('#ulListCurrentWorkEx input[data-item = "time-seconds"]').val();
+                  if (tempSecValue == '') {
+                    var intSecValue = 0;
+                  } else {
+                    var intSecValue = parseInt(tempSecValue);
+                  }
+                  newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
+                } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
+                  var tempValue = $('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
+                  if (tempValue == '') { // Если поле ввода оставили пустым
+                    var newValOpt = 0;
+                  } else {
+                    var newValOpt = parseInt(tempValue);
+                  }
+                }
+                server.workExercise.update({
+                  'id': parseInt(item.id),
+                  'customer': customerId,
+                  'date': dateEx,
+                  'exercise': exerciseId,
+                  'option': item.option,
+                  'value': newValOpt + item.value,
+                  'set': workSet
+                }).then(function (updatedWorkEx) {
+                  console.log('Обновили очередную строку в БД (сложили показатели): ' + JSON.stringify(updatedWorkEx));
+                  flagSavedData++;
+                  if (flagSavedData == 1) {
+                    // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
+                    myApp.addNotification({
+                      title: 'Data was saved',
+                      hold: messageDelay,
+                      message: 'Data was updated'
+                    });
+                  }
+                });
+              });
+            } // Конец функции добавления значений к сохранённым в БД
+          },
+          {
+            text: 'Cancel',
+            bold: true,
+            onClick: function() {
+            } // Конец функции отмены сохранения
+          }]
+        }); // Конец обработки модального окна
+      } else {
+        console.log('По текущему аналитическому разрезу ничего не найдено');
+        // Считываем все значения
+        var option = '';
+        var time = 0; // Время будем записывать в секундах
+        var isTime = 0;
+        var flagSavedData = 0; // Флаг, что данные (первоя строка) сохранены
+        $('#ulListCurrentWorkEx li input').each(function(index, item) {
+          console.log('item.value ' + item.value + 'item.attributes[data-item].value ' + item.attributes['data-item'].value);
+          option = item.attributes['data-item'].value;
           // Значение параметра заполнено
           if(option == 'time-minutes') {
-            isTime = 1; // Устанавливаем флаг, что есть параметр время
-  	        // Запоминаем минуты, переведённые в секунды
-  	        var tempMinValue = $(this).val();
-  	        if (tempMinValue == '') {
-  	          var intMinValue = 0;
-  	        } else {
-  	          var intMinValue = parseInt(tempMinValue);
-  	        }
-  	        time = time + (intMinValue * 60); 
+            isTime = 1;
+            // Запоминаем минуты, переведённые в секунды
+            var tempMinValue = $(this).val();
+            if (tempMinValue == '') {
+              var intMinValue = 0;
+            } else {
+              var intMinValue = parseInt(tempMinValue);
+            }
+            time = time + (intMinValue * 60);
           }
           else if(option == 'time-seconds') {
-            isTime = 1; // Устанавливаем флаг, что есть параметр время
-  	        // Запоминем секунды
-  	        var tempSecValue = $(this).val();
-  	        if (tempSecValue == '') {
-  	          var intSecValue = 0;
-  	        } else {
-  	          var intSecValue = parseInt(tempSecValue);
-  	        }
-  	        time = time + intSecValue;
+            isTime = 1;
+            // Запоминем секунды
+            var tempSecValue = $(this).val();
+            if (tempSecValue == '') {
+              var intSecValue = 0;
+            } else {
+              var intSecValue = parseInt(tempSecValue);
+            }
+            time = time + intSecValue;
           } else {
-  	        // Любой параметр, кроме времени
-  	        var tempValue = $(this).val();
-  	        if (tempValue == '') {
-  	          var intValue = 0;
-  	        } else {
-  	          var intValue = parseInt($(this).val());
-  	        }
+            var tempValue = $(this).val();
+            if(tempValue == '') {
+              var intValue = 0;
+            } else {
+              var intValue = parseInt(tempValue);
+            }
+            // Любой параметр, кроме времени
             server.workExercise.add({
-  	          'customer': customerId,
-  	          'date': dateEx,
-  	          'exercise': exerciseId,
-  	          'option': option,
-  	          'value': intValue,
-  	          'set': workSet
+              'customer': customerId,
+              'date': dateEx,
+              'exercise': exerciseId,
+              'option': option,
+              'value': intValue,
+              'set': workSet
             }).then(function (savedData) {
               flagSavedData++;
               if (flagSavedData == 1) {
@@ -1736,32 +1622,33 @@ function saveExerciseWork() {
               }
             });
           }
-	    }); // Конец цикла записи
-        // Отдельно записываем в базу время, т.к. сразу нельзя было (происходило сложение минут и секунд)
-        if(isTime) {
-    	  console.log('Добавляем время выполнения упражнения в базу. time = ' + time);
-          server.workExercise.add({
-  	        'customer': customerId,
-  	        'date': dateEx,
-  	        'exercise': exerciseId,
-  	        'option': 'time',
-  	        'value': time,
-  	        'set': workSet
-          }).then(function (savedData) {
-            flagSavedData++;
-            if (flagSavedData == 1) {
-              // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
-              myApp.addNotification({
-                title: 'Data was saved',
-                hold: messageDelay,
-                message: 'Data was added'
-              });
-            }
-          });
-        }
-      } // Конец обработки случая, когда на сегодня нет записей о выполнении упражнений
-    }); // Конец обработки запроса на наличие записей о выполнении упражнений за сегодня
+        }); // Конец цикла записи
+          // Отдельно записываем в базу время, т.к. сразу нельзя было (происходило сложение минут и секунд)
+          if(isTime) {
+            console.log('Добавляем время выполнения упражнения в базу. time = ' + time);
+            server.workExercise.add({
+              'customer': customerId,
+              'date': dateEx,
+              'exercise': exerciseId,
+              'option': 'time',
+              'value': time,
+              'set': workSet
+            }).then(function (savedData) {
+              flagSavedData++;
+              if (flagSavedData == 1) {
+                // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
+                myApp.addNotification({
+                  title: 'Data was saved',
+                  hold: messageDelay,
+                  message: 'Data was added'
+                });
+              }
+            });
+          }
+      }
+    });
 } // Конец функции сохранения результатов выполнения упражнения
+
 // Приводим даты в "русский вид" ("15.04.2013"))
 function makeCalDate(date) {
     var d = date.getDate().toString();
@@ -1867,67 +1754,67 @@ function makeCalendExCustomer() {
       document.getElementById("calendar-inline-container").innerHTML = '';
       console.log(datesWork[0]);
       var calendarInline = myApp.calendar({
-          container: '#calendar-inline-container',
-          //value: [new Date()],
-          value: datesWork,
-          weekHeader: false,
-          toolbarTemplate:
-              '<div class="toolbar calendar-custom-toolbar">' +
-                  '<div class="toolbar-inner">' +
-                      '<div class="left">' +
-                          '<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
-                      '</div>' +
-                      '<div class="center"></div>' +
-                      '<div class="right">' +
-                          '<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
-                      '</div>' +
-                  '</div>' +
-              '</div>',
-          onOpen: function (p) {
-              $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
-              $$('.calendar-custom-toolbar .left .link').on('click', function () {
-                  calendarInline.prevMonth();
+        container: '#calendar-inline-container',
+        //value: [new Date()],
+        value: datesWork,
+        weekHeader: false,
+        toolbarTemplate:
+          '<div class="toolbar calendar-custom-toolbar">' +
+            '<div class="toolbar-inner">' +
+              '<div class="left">' +
+                '<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
+              '</div>' +
+              '<div class="center"></div>' +
+              '<div class="right">' +
+                '<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
+              '</div>' +
+            '</div>' +
+          '</div>',
+        onOpen: function (p) {
+          $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
+          $$('.calendar-custom-toolbar .left .link').on('click', function () {
+            calendarInline.prevMonth();
+          });
+          $$('.calendar-custom-toolbar .right .link').on('click', function () {
+            calendarInline.nextMonth();
+          });
+        },
+        onMonthYearChangeStart: function (p) {
+          $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
+        },
+        onDayClick: function (p, dayContainer, year, month, day) {
+          //console.log('Нажали на дату ' + year + '-' + (parseInt(month)+1) + '-' + day);
+          // Собираем дату в виде строки по формату ГГГГ-ММ-ДД
+          var tempDate = new Date(year, month, day);
+          var dateText = makeCalDate(tempDate);
+          //console.log('dateText = ' + dateText);
+          //console.log('datesWork[0] = ' + datesWork[0]);
+          if(in_array(dateText, datesWork)) {
+            console.log('На эту дату есть комплекс упражнений!');
+            var workExercises = [];
+            workExercises = arrWorkEx[dateText].split('@#');
+            var listExCust = '';
+            workExercises.forEach(function(exerciseId) {
+              console.log('Мы в цикле по кодам упражнений. Текущая строка: ' + exerciseId);
+              // Т.к. мы нашли id упражнения, определим его название
+              server.exercise.get(parseInt(exerciseId)).then(function (rowExercise) {
+                //console.log('exercise = ' + exercise);
+                listExCust += '<li>';
+                listExCust += '  <div class="item-link item-content">';
+                listExCust += '    <div class="item-inner">';
+                listExCust += '      <span data-item="' + rowExercise.id + '">' + rowExercise.name + '</span>';
+                listExCust += '    </div>';
+                listExCust += '  </div>';
+                listExCust += '</li>';
+                // Надо слева показать список упражнений выделенного дня
+                console.log('listExCust = ' + listExCust);
+                document.getElementById("ulListPastExercises").innerHTML = listExCust;
+                SORTER.sort('#ulListPastExercises');
+                console.log('Обновили комплекс упражнений!');
               });
-              $$('.calendar-custom-toolbar .right .link').on('click', function () {
-                  calendarInline.nextMonth();
-              });
-          },
-          onMonthYearChangeStart: function (p) {
-              $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
-          },
-          onDayClick: function (p, dayContainer, year, month, day) {
-            //console.log('Нажали на дату ' + year + '-' + (parseInt(month)+1) + '-' + day);
-            // Собираем дату в виде строки по формату ГГГГ-ММ-ДД
-            var tempDate = new Date(year, month, day);
-            var dateText = makeCalDate(tempDate);
-            //console.log('dateText = ' + dateText);
-            //console.log('datesWork[0] = ' + datesWork[0]);
-            if(in_array(dateText, datesWork)) {
-                console.log('На эту дату есть комплекс упражнений!');
-                var workExercises = [];
-                workExercises = arrWorkEx[dateText].split('@#');
-                var listExCust = '';
-                workExercises.forEach(function(exerciseId) {
-                  console.log('Мы в цикле по кодам упражнений. Текущая строка: ' + exerciseId);
-                  // Т.к. мы нашли id упражнения, определим его название
-                  server.exercise.get(parseInt(exerciseId)).then(function (rowExercise) {
-                    //console.log('exercise = ' + exercise);
-                    listExCust += '<li>';
-                    listExCust += '  <div class="item-link item-content">';
-                    listExCust += '    <div class="item-inner">';
-                    listExCust += '      <span data-item="' + rowExercise.id + '">' + rowExercise.name + '</span>';
-                    listExCust += '    </div>';
-                    listExCust += '  </div>';
-                    listExCust += '</li>';
-                    // Надо слева показать список упражнений выделенного дня
-                    console.log('listExCust = ' + listExCust);
-                    document.getElementById("ulListPastExercises").innerHTML = listExCust;
-                    SORTER.sort('#ulListPastExercises');
-                    console.log('Обновили комплекс упражнений!');
-                  });
-                });
-              }
+            });
           }
+        }
       });
     });
 }
@@ -1970,27 +1857,24 @@ function makeScheduleExCustomer() {
   var customerId = parseInt($('span#spanCustName').attr('data-item'));
   var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
   server.workout.query()
-  	.filter('date', dateEx)
+  	.filter(function(currentWorkout){ return ((currentWorkout.date == dateEx) && (currentWorkout.customer == customerId))})
     .execute()
     .then(function(result) {
       //console.log('Нашли данные по занятиям на текущий день: ' + JSON.stringify(result));
       var listExCust = '';
       result.forEach(function (item, index) {
-        // Найдём заняти только нужного клиента и сформируем из них спискок
-        if (item.customer == customerId) {
-          // Т.к. в базе хранятся id упражнения, то надо сначала найти их названия
-          server.exercise.get(item.exercise).then(function (rowExercise) {
-            listExCust += '<li>';
-            listExCust += '  <div class="item-link item-content">';
-            listExCust += '    <div class="item-inner">';
-            listExCust += '      <span data-item="' + rowExercise.id + '">' + rowExercise.name + '</span>';
-            listExCust += '    </div>';
-            listExCust += '  </div>';
-            listExCust += '</li>';
-            // Надо слева показать список упражнений выделенного дня 
-            document.getElementById("ulListScheduleEx").innerHTML = listExCust;
-          });
-        }
+        // Т.к. в базе хранятся id упражнения, то надо сначала найти их названия
+        server.exercise.get(item.exercise).then(function (rowExercise) {
+          listExCust += '<li>';
+          listExCust += '  <div class="item-link item-content">';
+          listExCust += '    <div class="item-inner">';
+          listExCust += '      <span data-item="' + rowExercise.id + '">' + rowExercise.name + '</span>';
+          listExCust += '    </div>';
+          listExCust += '  </div>';
+          listExCust += '</li>';
+          // Надо слева показать список упражнений выделенного дня
+          document.getElementById("ulListScheduleEx").innerHTML = listExCust;
+        });
       }); // Конец цикла по упражнениям текущей даты
     }); // Конец обработки запроса
 }
@@ -2008,7 +1892,6 @@ function makeScheduleCustomer() {
   menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  //menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
   menuWorkout += '  <center><a href="#" class="tab-link">Schedule</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
@@ -2057,7 +1940,7 @@ function makeScheduleCustomer() {
 }
 /*
 Функция отображения сформированного набора упражнений клиента на сегодня.
-Вызывается со страницы #view-15 #tab1 (при Cancel в Календаре)
+Вызывается со страницы #view-15 #tab1 (при Cancel в Календаре) и ещё в некоторых местах при Cancel
 */
 function viewExSetCustomer() {
   // Сформируем доступные кнопки для вкладки со сформированным набором упражнений клиента на сегодня
@@ -2103,85 +1986,85 @@ $('#ulListDays li').click(function() {
 Функция генерирует данные для страницы статистики по выбранному упражнению, клиенту и дате
 */
 function generateStatistics() {
-	// Надо добавить кнопку Save
-	$('#linkSaveWorkEx').show();
+  // Надо добавить кнопку Save
+  $('#linkSaveWorkEx').show();
   var customerId = parseInt($('span#spanCustName').attr('data-item'));
   var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
-  var exerciseName = $('span#spanExWork').text();
+  //var exerciseName = $('span#spanExWork').text();
   var exerciseId = parseInt($('#spanExWork').attr('data-item'));
   var countBlock = 0; 
-  // 5 Slides Per View, 5px Between
+  // Определим, какое количество блоков информации надо выводить (количество записей по даному клиенту)
+  // Для этого сначала определим все действующие параметры текущего упражнения
   server.optionsExercises.query()
-  	.filter('exerciseId', exerciseId)
+    .filter('exerciseId', exerciseId)
     .execute()
-    .then(function(results) {
-      if (results.length < 5) {
-        countBlock = results.length;
-      } else {
-        countBlock = 5;
-      }
-      var mySlider3 = myApp.swiper('.swiper-stat', {
-        //pagination: '.swiper-stat .swiper-pagination',
-        freeMode: true,
-        spaceBetween: 15,
-        slidesPerView: countBlock,
-        //slidesPerView: 'auto',
-        grabCursor: true,
-        paginationHide: false,
-        paginationClickable: true,
-        nextButton: '.swiper-button-next',
-        prevButton: '.swiper-button-prev'
+    .then(function(resOptions) {
+      var countOptions = resOptions.length; // Это должно быть не нулевое значение
+      console.log('Количество всех собранных из БД характеристик: ' + countOptions);
+      // Найдём все характеристики упражнения и сформируем из них заголовки строк статистики
+      // Первым параметром всегда идёт Подход
+      var statName = '';
+      statName += '<span class="statistics-name">sets</span><br>';
+      var numberOption = 0;
+      // После подхода идут все остальные характеристики
+      resOptions.forEach(function (rowExOpt) {
+        statName += '<span class="statistics-name">' + rowExOpt.option + '</span><br>';
+        numberOption++;
+        document.getElementById("divStatName").innerHTML = statName;
       });
-    });
-  console.log('Получили id текущего упражнения: ' + exerciseId);
-  // Найдём все характеристики упражнения и сформируем из них заголовки строк статистики
-  // Первым параметром всегда идёт Подход
-  var statName = '';
-  statName += '<span class="statistics-name">sets</span><br>';
-  var countOptions = 0;
-  server.optionsExercises.query()
-  	.filter('exerciseId', exerciseId)
-    .execute()
-    .then(function(results) {
-      results.forEach(function (rowExOpt) {
-      	statName += '<span class="statistics-name">' + rowExOpt.option + '</span><br>';
-      	countOptions++;
-      });
-      document.getElementById("divStatName").innerHTML = statName;      
-      // Теперь найдём всю статистику по данному клиенту
+      // Найдём все записи по данному упражнению и клиенту (каждое упражнение повторяется в базе по столько раз, сколько характеристик есть в упражнении)
       server.workExercise.query()
-  	    .filter('customer', customerId)
+        .filter(function(blockData) {return ((blockData.exercise == exerciseId) && (blockData.customer == customerId))})
         .execute()
-        .then(function(result) {
-          console.log('Статистика по клиенту: ' + JSON.stringify(result));
+        .then(function(workEx) {
+          //console.log('Найденные блоки информации: ' + JSON.stringify(workEx));
+          console.log('Найдено количество записей по упражнению и клиенту: ' + workEx.length);
+          var amountBlock = workEx.length / countOptions;
+          console.log('amountBlock =  ' + amountBlock);
+          if (amountBlock < 5) {
+            countBlock = amountBlock;
+          } else {
+            countBlock = 5;
+          }
+          console.log('Определили количество показываемых блоков информации: ' + countBlock);
           var block = '';
           var i = 0; // Счётчик параметров. Будем отсчитывать параметры и формировать блоки информации
-          result.forEach(function (item, index) {
-          	console.log('Выводим построчно всё, что нашлось: ' + JSON.stringify(item));
-            if(item.exercise == exerciseId) { // Нас интересует только определённое упражнение
-            	console.log('Считаем итерации: i = ' + i);
-          	  if(i == 0) {
-          	    // Пошёл первый параметр в новом блоке
-          	    console.log('Открываем новый блок');
-          	    block += '<div class="swiper-slide">';
-          	    // Первым параметром всегда идёт Подход
-          	    block += '<span>' + item.set + '</span>';
-          	  }
-          	  block += '<br><span>' + item.value + '</span>';
-          	  i++;
-          	  if(i === countOptions) {
-          	  	console.log('Закрываем блок и обнуляем счётчик.');
-          	    // Пора закрывать блок и обнулять счётчик параметров упражнения
-          	    block += '</div>';
-          	    i = 0;
-          	  }
-          	}
+          workEx.forEach(function (item, index) {
+           	console.log('Выводим построчно всё, что нашлось: ' + JSON.stringify(item));
+            console.log('Считаем итерации: i = ' + i);
+           	if(i === 0) {
+           	  // Пошёл первый параметр в новом блоке
+           	  console.log('Открываем новый блок');
+           	  block += '<div class="swiper-slide">';
+           	  // Первым параметром всегда идёт Подход
+           	  block += '<span>' + item.set + '</span>';
+           	}
+           	block += '<br><span>' + item.value + '</span>';
+           	i++;
+           	if(i === numberOption) {
+           	  console.log('Закрываем блок и обнуляем счётчик.');
+           	  // Пора закрывать блок и обнулять счётчик параметров упражнения
+           	  block += '</div>';
+           	  i = 0;
+           	}
+            console.log('Выводим блок на страницу.');
+            document.getElementById("divStatistics").innerHTML = block;
           });
-          console.log('Выводим блок на страницу.');
-          document.getElementById("divStatistics").innerHTML = block;
-          //mySlider3.updateContainerSize();
+          var mySlider3 = myApp.swiper('.swiper-stat', {
+            //pagination: '.swiper-stat .swiper-pagination',
+            freeMode: true,
+            spaceBetween: 15,
+            slidesPerView: countBlock,
+            //slidesPerView: 'auto',
+            grabCursor: true,
+            paginationHide: false,
+            paginationClickable: true,
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev'
+          });
         });
     });
+
 }
 // Функция срабатывает при нажатии кнопки Note на странице работы с упражнением index-24
 $('#aWorkNote').on('click', function() {
@@ -2201,7 +2084,7 @@ $('#aWorkGraph').on('click', function() {
 	// Надо скрыть кнопку Save
 	$('#linkSaveWorkEx').hide();
 	// Получим все параметры данного упражнения
-	var exerciseName = $('span#spanExWork').text();
+	//var exerciseName = $('span#spanExWork').text();
 	var exerciseId = parseInt($('#spanExWork').attr('data-item'));
 	var customerId = parseInt($('span#spanCustName').attr('data-item'));
 	var arrOptEx = []; // Список всех параметров данного упражнения
@@ -2212,7 +2095,7 @@ $('#aWorkGraph').on('click', function() {
     .execute()
     .then(function(results) {
       results.forEach(function (rowExercise, index) {
-    		arrOptEx[index] = rowExercise.option;
+    	arrOptEx[index] = rowExercise.option;
       });
       // Определим количество характеристик
       var countOptions = arrOptEx.length;
@@ -2223,79 +2106,79 @@ $('#aWorkGraph').on('click', function() {
   	    .filter('customer', customerId)
         .execute()
         .then(function(result) {
-      		var analitCount = 0;
-					var arrSetEx = [];
-					var arrDateEx = [];
-					var arrRepeats = [];
-					var arrWeight = [];
-					var arrTime = [];
-					var arrDistance = [];
-					var arrSpeed = [];
-					var arrSlope = [];
-					var arrLoad = [];
+      	  var analitCount = 0;
+		  var arrSetEx = [];
+		  var arrDateEx = [];
+		  var arrRepeats = [];
+		  var arrWeight = [];
+		  var arrTime = [];
+		  var arrDistance = [];
+		  var arrSpeed = [];
+		  var arrSlope = [];
+		  var arrLoad = [];
           result.forEach(function (item) {
             if(item.exercise == exerciseId) { // Нас интересует только определённое упражнение
-            	// Добрались до данных, теперь их надо собрать в массивы
-            	if (i == 0) {
-            		arrDateEx[analitCount] = item.date;
-            		arrSetEx[analitCount] = item.set;
-            	}	else { 
-            		if (item.option == 'repeats') {
-	            		arrRepeats[analitCount] = item.value;
-	            	} else if (item.option == 'weight') {
-	            		arrWeight[analitCount] = item.value;
-	            	} else if (item.option == 'time') {
-	            		arrTime[analitCount] = item.value;
-	            	} else if (item.option == 'distance') {
-	            		arrDistance[analitCount] = item.value;
-	            	} else if (item.option == 'speed') {
-	            		arrSpeed[analitCount] = item.value;
-	            	} else if (item.option == 'slope') {
-	            		arrSlope[analitCount] = item.value;
-	            	} else if (item.option == 'load') {
-	            		arrLoad[analitCount] = item.value;
-	            	}
-            	}
-            	i++; // Счётчик по параметрам одного аналитического разреза
-            	if(i == countOptions) {
-            		i = 0; // Начало нового аналитического разреза
-	            	analitCount++;
-            	}
-            	console.log('Номер характеристики в текущей итерации: ' + i);
+              // Добрались до данных, теперь их надо собрать в массивы
+              if (i == 0) {
+            	arrDateEx[analitCount] = item.date;
+            	arrSetEx[analitCount] = item.set;
+              }	else {
+            	if (item.option == 'repeats') {
+	              arrRepeats[analitCount] = item.value;
+	            } else if (item.option == 'weight') {
+	              arrWeight[analitCount] = item.value;
+	            } else if (item.option == 'time') {
+	              arrTime[analitCount] = item.value;
+	            } else if (item.option == 'distance') {
+	              arrDistance[analitCount] = item.value;
+	            } else if (item.option == 'speed') {
+	              arrSpeed[analitCount] = item.value;
+	            } else if (item.option == 'slope') {
+	              arrSlope[analitCount] = item.value;
+	            } else if (item.option == 'load') {
+	              arrLoad[analitCount] = item.value;
+	            }
+              }
+              i++; // Счётчик по параметрам одного аналитического разреза
+              if(i == countOptions) {
+            	i = 0; // Начало нового аналитического разреза
+	           	analitCount++;
+              }
+              console.log('Номер характеристики в текущей итерации: ' + i);
             }
           });
           // Данные собрали в массив. Теперь готовим к показу график по данным
           var test = [1, 2, 3];
-					var data = {
-					  //labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-					  labels: arrDateEx,
-					  series: [
-					    arrRepeats,
-					    arrWeight,
-					    arrTime,
-					    arrDistance,
-					    arrSpeed,
-					    arrSlope,
-					    arrLoad
-					  ]
-					};
-					console.log('Собираем данные в массивы для показа на графике.');
-					var options = {
-					  seriesBarDistance: 10
-					};
+		  var data = {
+		    //labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		    labels: arrDateEx,
+		    series: [
+		      arrRepeats,
+		      arrWeight,
+		      arrTime,
+			  arrDistance,
+			  arrSpeed,
+			  arrSlope,
+			  arrLoad
+			]
+		  };
+		  console.log('Собираем данные в массивы для показа на графике.');
+		  var options = {
+		    seriesBarDistance: 10
+		  };
 					
-					var responsiveOptions = [
-					  ['screen and (max-width: 640px)', {
-					    seriesBarDistance: 5,
-					    axisX: {
-					      labelInterpolationFnc: function (value) {
-					        return value[0];
-					      }
-					    }
-					  }]
-					];
-					console.log('Показываем график.');
-					new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+		  var responsiveOptions = [
+		    ['screen and (max-width: 640px)', {
+		      seriesBarDistance: 5,
+		      axisX: {
+		        labelInterpolationFnc: function (value) {
+		          return value[0];
+		        }
+		      }
+		    }]
+		  ];
+		  console.log('Показываем график.');
+		  new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
         });
     });  
 });
