@@ -913,35 +913,32 @@ function addExType() {
 Функция удаления названия группы упражнений. В функцию передаётся id одной выбранной группы упражнений
 */
 function deleteExType(idExType) {
-	// Сначала проверим, есть ли по данной группе упражнений упражнения в базе
-	server.exercise.query('name')
-  	.filter('type', idExType)
-    //.all()
-    //.distinct()
-    //.keys()
+  // Сначала проверим, есть ли по данной группе упражнений упражнения в базе
+  server.exercise.query('type')
+  	.only(idExType)
+  	.count()
     .execute()
-    .then(function(res){
-    	if(res.length) {
-    		// В базе есть упражнения из этой группы. Удалять нельзя
-    		myApp.addNotification({
-		      title: 'Delete',
+    .then(function(countExercises) {
+      if(countExercises) {
+    	// В базе есть упражнения из этой группы. Удалять нельзя
+    	myApp.addNotification({
+		  title: 'Can not be deleted',
           hold: messageDelay,
-		      message: 'This item can not be delete while there are exercises in it.'
-		    });
-    	} else {
-    		// В базе нет упражнений из этой группы, поэтому смело удаляем эту группу упражнений
-    		server.remove('exerciseType', parseInt(idExType)).then(function(res1) {
-    			server.exerciseType.query('name')
-				    .all()
-				    .distinct()
-				    //.keys()
-				    .execute()
-				    .then(function(results) {
-				      //console.log('exerciseType results = ' + JSON.stringify(results));
-				      updateListExerciseType(results);
-				    });
-    		});
-    	}
+		  message: 'This item can not be delete while there are exercises in it.'
+		});
+      } else {
+    	// В базе нет упражнений из этой группы, поэтому смело удаляем эту группу упражнений
+    	server.remove('exerciseType', parseInt(idExType)).then(function(res1) {
+    	  server.exerciseType.query('name')
+			.all()
+			.distinct()
+			.execute()
+			.then(function(results) {
+			  //console.log('exerciseType results = ' + JSON.stringify(results));
+			  updateListExerciseType(results);
+			});
+    	});
+      }
     });
 }
 // Управляем видимостью кнопок Delete в настройках упражнений
