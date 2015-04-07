@@ -594,20 +594,20 @@ function showRenameLinkExType(exType) {
 Функция переименования названия группы упражнений. В функцию передаётся id одной выбранной группы упражнений
 */
 function renameExType(idExType) {
-	newName = document.getElementById("ex-compl-name-" + idExType).value;
-	//console.log('newName = ' + newName);
-	server.exerciseType.update({
-	  'id': parseInt(idExType),
-	  'name': newName
-	}).then(function(res) { 	
+  newName = document.getElementById("ex-compl-name-" + idExType).value;
+  //console.log('newName = ' + newName);
+  server.exerciseType.update({
+    'id': parseInt(idExType),
+    'name': newName
+  }).then(function(res) {
     console.log('Переименованная группа упражнений в базе: ' + JSON.stringify(res));
     if(!$("#ex-compl-rename-" + idExType).hasClass('hidden')) {
       $("#ex-compl-rename-" + idExType).addClass('hidden');
     } 
     myApp.addNotification({
-        title: 'Successful rename',
-        hold: messageDelay,
-        message: 'Gpoup of exercises was renamed.'
+      title: 'Successful rename',
+      hold: messageDelay,
+      message: 'Gpoup of exercises was renamed.'
     });
   });
 }
@@ -675,10 +675,10 @@ function showRenameLinkExercise(exercise) {
 Функция переименования названия упражнения. В функцию передаётся id одного выбранного упражнения
 */
 function renameExercise(idExercise) {
-	newExName = document.getElementById("ex-name-" + idExercise).value;
-	console.log('newExName = ' + newExName);
-	// Cначала найдём текущие данные по упражнению
-	server.exercise.get(idExercise).then(function (exercise) {
+  newExName = document.getElementById("ex-name-" + idExercise).value;
+  console.log('newExName = ' + newExName);
+  // Cначала найдём текущие данные по упражнению
+  server.exercise.get(idExercise).then(function (exercise) {
     server.exercise.update({
   	  'id': parseInt(idExercise),
   	  'name': newExName,
@@ -694,14 +694,13 @@ function renameExercise(idExercise) {
         });
       }
     });
-	});
+  });
 }
 /*
 Функция добавления упражнения и его характеристик. Вызывается из страницы #view-7a (список упражнений определённой группы) по кнопке Save
 */
 function addExercise() {
   var newExercise = $('input#inputNewExercise').val();
-  //var typeExercise = $('div#view-7a div.ex-of-type').text();
   var idTypeExercise = parseInt($('div#view-7a div.ex-of-type').attr('data-item'));
   console.log('Вычислили группу упражнений - это ' + idTypeExercise);
   if(newExercise != '') {
@@ -746,38 +745,55 @@ function addExercise() {
 Функция удаления упражнения. В функцию передаётся id упражнения
 */
 function deleteExercise(exerciseId) {
-	// Сначала проверим, есть ли по данному упражнению записи в базе
-	/*server.exercise.query('name')
-  	.filter('type', exerciseType)
-    .distinct()
+  // Сначала проверим, есть ли по данному упражнению записи в базе
+  server.workExercise.query('exercise')
+  	.filter('exercise', parseInt(exerciseId))
     .execute()
-    .then(function(res){
-    	if(res.length) {
-    		// В базе есть записи с этим упражнением. Удалять нельзя
-    		myApp.addNotification({
-		        title: 'Delete',
-		        message: 'This item can not be delete while there are exercises in it.'
-		    });
-    	} else {*/
-    		// В базе нет записей по этому упражнению, поэтому смело удаляем его
-    		// Сначала найдём все id записей с опциями по этому упражнению
-    		console.log('exercise для удаления: ' + exerciseId);
-    		server.optionsExercises.query()
-    		  .filter('exerciseId', exerciseId)
-    		  .execute()
-    		  .then(function (optEx) {
-            optEx.forEach(function (rowOptEx) {
-              server.remove('optionsExercises', parseInt(rowOptEx.id));
-            });
-            // После того, как все опции данного упражнения удалили, можно удалять и само упражнение
-            server.remove('exercise', parseInt(exerciseId)).then(function () {
-              // Упражнение удалил, теперь обновим список упражнений в данной группе
-    		      var typeExercise = parseInt($('div#view-7a div.ex-of-type').attr('data-item'));
-    		      updateListExercises(typeExercise);
-            });
-    		  });
-    	//}
-    //});
+    .then(function(resWorkEx){
+      if(resWorkEx.length) {
+    	// В базе есть записи с этим упражнением. Удалять нельзя
+    	myApp.addNotification({
+		  title: 'Exercise ' + resWorkEx[0].name + ' can not be deleted',
+          hold: messageDelay,
+		  message: 'This item can not be delete because of history by this exercise.'
+		});
+      } else {
+        // Данных по выполнению данного упражнения не нашлось
+        // Надо проверить, не запланировано ли оно у кого-нибудь
+        server.schedule.query('exercise')
+          .only(parseInt(exerciseId))
+          .count()
+          .execute()
+          .then(function(countExSchedule){
+            if(countExSchedule) {
+              // В базе есть записи в расписании с этим упражнением. Удалять нельзя
+              myApp.addNotification({
+                title: 'Exercise ' + resWorkEx[0].name + ' can not be deleted',
+                hold: messageDelay,
+                message: 'This item can not be delete because there are schedule with this exercise.'
+              });
+            } else {
+              // В базе нет записей по этому упражнению, поэтому смело удаляем его
+              // Сначала найдём все id записей с опциями по этому упражнению
+                console.log('exercise для удаления: ' + exerciseId);
+                server.optionsExercises.query()
+                  .filter('exerciseId', parseInt(exerciseId))
+                  .execute()
+                  .then(function (optEx) {
+                    optEx.forEach(function (rowOptEx) {
+                      server.remove('optionsExercises', parseInt(rowOptEx.id));
+                    });
+                    // После того, как все опции данного упражнения удалили, можно удалять и само упражнение
+                    server.remove('exercise', parseInt(exerciseId)).then(function () {
+                      // Упражнение удалил, теперь обновим список упражнений в данной группе
+                  	  var typeExercise = parseInt($('div#view-7a div.ex-of-type').attr('data-item'));
+                  	  updateListExercises(typeExercise);
+                    });
+                  });
+            }
+          });
+    	}
+    });
 }
 /*
 Функция обновления списка опций конкретного упражнения. В функцию передаётся id выбранного упражнения
