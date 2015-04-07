@@ -25,7 +25,7 @@ You will need the following to run a local development enviroment.
 1. `cd` into your local copy of the repository.
 2. Run `npm install` to install dependencies located in `package.json`.
 3. Run `bower install` to install bower dependencies.
-5. Run `grunt serve` to start the watch task, and the web server should automatically open. Congrats, you should now be able to see your local copy of the demo site.
+5. Run `grunt preview` to start the watch task, and the web server should automatically open. Congrats, you should now be able to see your local copy of the demo site.
 
 ## <a name="submit"></a> Submission Guidelines
 
@@ -37,14 +37,15 @@ Check out the [Coding Style document](CODINGSTYLE.md)
 
 ### Grunt
 
-We have three grunt tasks:
+We have five grunt tasks:
 
-1. `grunt build` - Creates the distribution of the example / demo site which is used as visual development help of the charts but also serves as the documentation site / gh-pages.
-2. `grunt serve` - Starts watch with livereload that is executing the same things as the site dist default task but for live development.
-3. `grunt test` - Executes jasmine tests separately, although we have a very big lack of tests.
-4. `grunt serve:dist` - Executes a dist and serves the directory statically in order to serve with the production example / demo site.
+1. `grunt build` - Combines the scripts and creates the library for distribution
+2. `grunt public` - Creates the distribution of the example / demo site which is used as visual development help of the charts but also serves as the documentation site / gh-pages.
+3. `grunt dev` - Starts watch with livereload that is executing the same things as the site build default task but for live development.
+4. `grunt preview` - Executes a dist and serves the directory statically in order to serve with the production example / demo site.
+5. `grunt test` - Executes jasmine tests separately, although we have a very big lack of tests.
 
-`libdist` should **not** be included in any Pull Requests. So please ensure that code is not being committed as part of the Pull Request.
+`dist` should **not** be included in any Pull Requests. So please ensure that code is not being committed as part of the Pull Request.
 
 ### Documentation
 

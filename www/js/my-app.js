@@ -2158,7 +2158,7 @@ $('#aWorkGraph').on('click', function() {
 		  var data = {
 		    //labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 		    labels: arrDateEx,
-		    series: [
+		    /*series: [
 		      arrRepeats,
 		      arrWeight,
 		      arrTime,
@@ -2166,11 +2166,50 @@ $('#aWorkGraph').on('click', function() {
 			  arrSpeed,
 			  arrSlope,
 			  arrLoad
-			]
+			]*/
+			series: [
+			  {
+                name: 'Repeats',
+                data: arrRepeats
+              },
+              {
+                name: 'Weight',
+                data: arrWeight
+              },
+              {
+                name: 'Time',
+                data: arrTime
+              },
+              {
+                name: 'Distance',
+                date: arrDistance
+              },
+              {
+                name: 'Speed',
+                data: arrSpeed
+              },
+              {
+                name: 'Slope',
+                data: arrSlope
+              },
+              {
+                name: 'Load',
+                data: arrLoad
+              }
+            ]
 		  };
 		  console.log('Собираем данные в массивы для показа на графике.');
 		  var options = {
-		    seriesBarDistance: 10
+		    //seriesBarDistance: 10,
+		    lineSmooth: Chartist.Interpolation.simple({
+              divisor: 2
+            }),
+            fullWidth: true,
+            chartPadding: {
+              right: 80
+            },
+            id: 'test'
+            //low: 0
 		  };
 					
 		  var responsiveOptions = [
@@ -2184,7 +2223,84 @@ $('#aWorkGraph').on('click', function() {
 		    }]
 		  ];
 		  console.log('Показываем график.');
-		  new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+		  //new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+		  new Chartist.Line('.ct-chart', data, options, responsiveOptions);
+
+          var $chart = $('.ct-chart');
+          //$$('.ct-point').on('click', function () {
+          $chart.on('click', '.ct-point', function (event) {
+
+            var clickedLink = this;
+            var $point = $(this),
+              value = $point.attr('ct:value'),
+              seriesName = $point.parent().attr('ct:series-name');
+            var popoverHTML = '<div class="popover">'+
+                                 '<div class="popover-inner">'+
+                                   '<div class="content-block">'+
+                                     '<p>' + seriesName + '</p>'+
+                                     '<p>' + value + '</p>'+
+                                   '</div>'+
+                                 '</div>'+
+                               '</div>';
+            /*$popoverHTML.css({
+              left: (event.offsetX || event.originalEvent.layerX) - $popoverHTML.width() / 2 - 10,
+              top: (event.offsetY || event.originalEvent.layerY) - $popoverHTML.height() - 40
+            })*/
+            myApp.popover(popoverHTML, clickedLink);
+          });
+		  /*var $chart = $('.ct-chart');
+
+          var $toolTip = $chart
+            .append('<div class="tooltip"></div>')
+            .find('.tooltip')
+            .hide();
+
+          $chart.on('mouseenter', '.ct-point', function() {
+            var $point = $(this),
+              value = $point.attr('ct:value'),
+              seriesName = $point.parent().attr('ct:series-name');
+            $toolTip.html(seriesName + '<br>' + value).show();
+          });
+
+          $chart.on('mouseleave', '.ct-point', function() {
+            $toolTip.hide();
+          });
+
+          $chart.on('mousemove', function(event) {
+            $toolTip.css({
+              left: (event.offsetX || event.originalEvent.layerX) - $toolTip.width() / 2 - 10,
+              top: (event.offsetY || event.originalEvent.layerY) - $toolTip.height() - 40
+            });
+          });*/
+
+		  /*Chartist.createLabel = function(projectedValue, index, labels, axis, axisOffset, labelOffset, group, classes, useForeignObject, eventEmitter) {
+            var labelElement,
+              positionalData = {};
+            positionalData[axis.units.pos] = projectedValue.pos + labelOffset[axis.units.pos];
+            positionalData[axis.counterUnits.pos] = labelOffset[axis.counterUnits.pos];
+            positionalData[axis.units.len] = projectedValue.len;
+            positionalData[axis.counterUnits.len] = axisOffset;
+
+            if(useForeignObject) {
+              var content = '<span class="' + classes.join(' ') + '">' + labels[index] + '</span>';
+              labelElement = group.foreignObject(content, Chartist.extend({
+                style: 'overflow: visible;'
+              }, positionalData));
+            } else {
+              labelElement = group.elem('text', positionalData, classes.join(' ')).text(labels[index]);
+            }
+
+            eventEmitter.emit('draw', Chartist.extend({
+              type: 'label',
+              axis: axis,
+              index: index,
+              group: group,
+              element: labelElement,
+              text: labels[index]
+            }, positionalData));
+          };*/
         });
     });  
 });
+
+

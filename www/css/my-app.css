@@ -1,3 +1,14 @@
+@keyframes exploding-stroke {
+  0% {
+    stroke-width: 2px;
+    opacity: 1;
+  }
+  100% {
+    stroke-width: 20px;
+    opacity: 0;
+  }
+}
+
 i.tabbar-icon-1 {
   width:30px;
   height:30px;
@@ -96,4 +107,18 @@ div.page-content>div.my-toolbar-inner {
 }
 .item-media-right {
   padding-right: 15px;
+}
+.ct-chart.statistics .ct-label.ct-vertical, .ct-chart.statistics .ct-label.ct-horizontal {
+  color: #ccc;
+}
+.ct-series .ct-point {
+  /*-webkit-animation:exploding-stroke 1s ease-out infinite;
+  -moz-animation:exploding-stroke 1s ease-out infinite;
+  -o-animation:exploding-stroke 1s ease-out infinite;
+  animation:exploding-stroke 1s ease-out infinite;*/
+  animation: 1.5s ease-out 0s normal none infinite running exploding-stroke;
+}
+.ct-point {
+  stroke-width: 15px;
+  stroke-linecap: round;
 }

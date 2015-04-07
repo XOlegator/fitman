@@ -1,25 +1,29 @@
 {
   "name": "chartist",
-  "version": "0.4.1",
+  "version": "0.7.3",
   "main": [
-    "./libdist/chartist.min.js",
-    "./libdist/chartist.min.css"
+    "./dist/chartist.min.js",
+    "./dist/chartist.min.css"
   ],
   "devDependencies": {
-    "snap.svg": "~0.2.0",
-    "foundation": "~5.1.1",
-    "highlightjs": "~8.0.0",
-    "compass-mixins": "~1.0.0",
-    "codemirror": "~4.5.0",
-    "base64": "~0.3.0"
+    "snap.svg": "~0.3.0",
+    "foundation": "~5.5.1",
+    "highlightjs": "~8.4.0",
+    "compass-mixins": "~1.0.2",
+    "codemirror": "~4.12.0",
+    "base64": "~0.3.0",
+    "chartist-plugin-pointlabels": "~0.0.2",
+    "chartist-plugin-sketchy": "~0.0.1"
   },
   "ignore": [
     ".*",
     "Gruntfile.js",
+    "tasks",
     "package.json",
     "node_modules",
-    "sitedist",
-    "source",
+    "public",
+    "site",
+    "src",
     "test"
   ]
 }
