@@ -4,7 +4,31 @@ var myApp = new Framework7({
   modalTitle: 'Personal trainer',
   init: false
 });
-
+var lang = 'en';
+var fLang;
+if (lang === 'ru') {
+  //console.log('Готовимся грузить языковой файл');
+  fLang = './ru.json';
+  //langData = JSON.parse(fRu);
+  console.log('Загрузили русский язык!');
+} else if (lang === 'en') {
+  fLang = './en.json';
+  console.log('Загрузили английский язык!');
+}
+$.getJSON(fLang, function(response) {
+  console.log('Загрузили языковой файл!');
+  i18n = new Jed(response);
+  Template7.registerHelper('_', function(msgid) {
+    //console.log('Внутри хелпера: ' + msgid);
+    return i18n.gettext(msgid);
+  });
+  Template7.registerHelper('ngettext', function(msgid, plural, count) {
+    //var i18n = new Jed(langData);
+    //return i18n.ngettext(msgid, plural, count);
+    return msgid + '222';
+  });
+  //myApp.init();
+});
 // Функция для приведения дат в нужный вид
 Date.prototype.toDateInputValue = (function() {
   var local = new Date(this);
@@ -65,7 +89,7 @@ return new Promise(function(resolve, reject){
 });
 }*/
 
-$.getJSON('default/bd-schema.json', function(data){
+$.getJSON('default/bd-schema.json', function(data) {
 //getJSON('default/bd-schema.json').then(function(data) {
   bdSchema = data;
   console.log("Схема БД: " + JSON.stringify(data));
@@ -128,6 +152,12 @@ $.getJSON('default/bd-schema.json', function(data){
       $('#inputDateStartClasses').val(new Date().toDateInputValue());
     });
     myApp.init();
+    // Переводим все шаблоны текстов в html на нужный язык
+    var template = $$('.app-text').each(function() {
+      var compiledTemplate = Template7.compile($( this ).text());
+      var htmlText = compiledTemplate();
+      $( this ).text(htmlText);
+    });
   });
 });
 // Функция изменения системы единиц измерения в настройках
@@ -276,7 +306,7 @@ $$('.confirm-fill-demo').on('click', function () {
 
 // Модальное окно для подтверждения очистки базы данных
 $$('.confirm-clean-db').on('click', function () {
-    myApp.confirm('Are you sure? It will erase all of your data!', 
+    myApp.confirm(i18n.gettext('Are you sure? It will erase all of your data!'),
       function () {
         console.log('Start cleaning DB');
         // Очистим все таблицы
@@ -305,7 +335,7 @@ $$('.confirm-clean-db').on('click', function () {
             updateListExerciseType(results);
           });*/
         updateListExerciseType('');
-        myApp.alert('Database is clean');
+        myApp.alert(i18n.gettext('Database is clean'));
       },
       function () {
         // Действие отменено
@@ -315,7 +345,7 @@ $$('.confirm-clean-db').on('click', function () {
 
 // Модальное окно для создания базы данных
 $$('.confirm-create-db').on('click', function () {
-  myApp.confirm('Are you sure?', function () {
+  myApp.confirm(i18n.gettext('Are you sure?'), function () {
     db.open(bdSchema).then(function(serv) {
       server = serv;
     });
@@ -323,7 +353,7 @@ $$('.confirm-create-db').on('click', function () {
 });
 // Модальное окно для удаления базы данных
 $$('.confirm-remove-db').on('click', function () {
-  myApp.confirm('Are you sure?', function () {
+  myApp.confirm(i18n.gettext('Are you sure?'), function () {
 	// Удаление самой базы данных
 	indexedDB.deleteDatabase('my-app');
 	document.getElementById("ulListCustomers").innerHTML = '';
@@ -406,9 +436,9 @@ function addCustomer() {
       .execute()
       .then(function(results) {
       	myApp.addNotification({
-          title: 'Add new Customer',
+          title: i18n.gettext('Add new Customer'),
           hold: messageDelay,
-          message: 'Data was saved'
+          message: i18n.gettext('Data was saved')
         });
         // Запросом получили массив объектов customers
         updateListCustomers(results);
@@ -416,9 +446,9 @@ function addCustomer() {
     //$$('a[href="#view-3"]').click();
   } else {
     myApp.addNotification({
-      title: 'Error while adding',
+      title: i18n.gettext('Error while adding'),
       hold: messageDelay,
-      message: 'Nothing to add!'
+      message: i18n.gettext('Nothing to add!')
     });
   }
 }
@@ -436,9 +466,9 @@ function editCustomer() {
   server.customers.get(customerId).then(function (customer) {
     if ((newNameCustomer === customer.name) && (newCommentsCustomer === customer.comments)) {
       myApp.addNotification({
-        title: 'Nothing to save',
+        title: i18n.gettext('Nothing to save'),
         hold: messageDelay,
-        message: 'New data already exist in database.'
+        message: i18n.gettext('New data already exist in database.')
       });
     } else {
       server.customers.update({
@@ -449,9 +479,9 @@ function editCustomer() {
       }).then(function (newDataCustomer) {
         console.log('Обновили данные по клиенту: ' + JSON.stringify(newDataCustomer));
         myApp.addNotification({
-          title: 'Successful updated',
+          title: i18n.gettext('Successful updated'),
           hold: messageDelay,
-          message: 'Data was updated.'
+          message: i18n.gettext('Data was updated.')
         });    
       });
     }
@@ -465,7 +495,7 @@ function editCustomer() {
 function removeCustomers() {
   // Модальное окно для подтверждения удаления клиентов
   //$$('.confirm-delete-customers').on('click', function () {
-  myApp.confirm('Are you sure?', function () {
+  myApp.confirm(i18n.gettext('Are you sure?'), function () {
     // Найдём все value всех отмеченных чекбоксов в ul#forDeleteCustomers. Эти значения есть id клиентов для удаления из базы
     // Начинаем цикл по всем отмеченным для удаления клиентам
     $('input[name="inputCustomerForDelete"]:checked').each(function() {
@@ -482,9 +512,9 @@ function removeCustomers() {
           .then(function(resWorkEx) {
             if(resWorkEx.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
               myApp.addNotification({
-                title: 'Customer ' + resCustomer.name + ' can not be deleted',
+                title: i18n.gettext('Customer ') + resCustomer.name + i18n.gettext(' can not be deleted'),
                 hold: messageDelay,
-                message: 'There is data in history.'
+                message: i18n.gettext('There is data in history.')
               });
             } else { // Ничего не нашли тут, проверяем в следующей таблице
               server.schedule.query()
@@ -493,9 +523,9 @@ function removeCustomers() {
                 .then(function(resSchedule) {
                   if(resSchedule.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
                     myApp.addNotification({
-                      title: 'Customer ' + resCustomer.name + ' can not be deleted',
+                      title: i18n.gettext('Customer ') + resCustomer.name + i18n.gettext(' can not be deleted'),
                       hold: messageDelay,
-                      message: 'There is data in schedule by that customer.'
+                      message: i18n.gettext('There is data in schedule by that customer.')
                     });
                   } else { // Ничего не нашли тут, проверяем в следующей таблице
                     server.workout.query()
@@ -504,9 +534,9 @@ function removeCustomers() {
                       .then(function(resWorkout) {
                         if(resWorkout.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
                           myApp.addNotification({
-                            title: 'Customer ' + resCustomer.name + ' can not be deleted',
+                            title: i18n.gettext('Customer ') + resCustomer.name + i18n.gettext(' can not be deleted'),
                             hold: messageDelay,
-                            message: 'There is data in workout.'
+                            message: i18n.gettext('There is data in workout.')
                           });
                         } else { // Ничего не нашли тут - искать уже нигде больше не надо, - можно смело удалять пользователя
                           server.remove('customers', parseInt(resCustomer.id)).then(function(res3) {
@@ -532,7 +562,7 @@ function removeCustomers() {
     });
   },
   function () {
-    myApp.alert('You clicked Cancel button');
+    //myApp.alert('You clicked Cancel button');
   }
   );
 }
@@ -621,9 +651,9 @@ function renameExType(idExType) {
       $("#ex-compl-rename-" + idExType).addClass('hidden');
     } 
     myApp.addNotification({
-      title: 'Successful rename',
+      title: i18n.gettext('Successful rename'),
       hold: messageDelay,
-      message: 'Gpoup of exercises was renamed.'
+      message: i18n.gettext('Group of exercises was renamed.')
     });
   });
 }
@@ -705,9 +735,9 @@ function renameExercise(idExercise) {
       if(!$("#ex-rename-" + idExercise).hasClass('hidden')) {
         $("#ex-rename-" + idExercise).addClass('hidden'); 
         myApp.addNotification({
-          title: 'Successful rename',
+          title: i18n.gettext('Successful rename'),
           hold: messageDelay,
-          message: 'Exercise was renamed.'
+          message: i18n.gettext('Exercise was renamed.')
         });
       }
     });
@@ -729,9 +759,9 @@ function addExercise() {
       .then(function (resultExist) {
         if(resultExist.length) { // В базе есть запись с таким упражнением.
           myApp.addNotification({
-            title: 'Can not be added',
+            title: i18n.gettext('Can not be added'),
             hold: messageDelay,
-            message: 'That name of exercise already exist in database.'
+            message: i18n.gettext('That name of exercise already exist in database.')
           });
         } else { // Такого упражнения ещё нет. Можно добавлять
           server.exercise.add({
@@ -747,7 +777,7 @@ function addExercise() {
         	      'option': this.value,
         	      'exerciseId': parseInt(rowNewExercise[0].id)
         	    }).then(function(rowOptEx) {
-                console.log('Добавили новую связку параметр-упражнение: ' + JSON.stringify(rowOptEx));
+                  console.log('Добавили новую связку параметр-упражнение: ' + JSON.stringify(rowOptEx));
         	    });
             });
             // Обновляем список упражнений на соответствующей странице
@@ -771,9 +801,9 @@ function deleteExercise(exerciseId) {
       if(resWorkEx.length) {
     	// В базе есть записи с этим упражнением. Удалять нельзя
     	myApp.addNotification({
-		  title: 'Exercise ' + resWorkEx[0].name + ' can not be deleted',
+		  title: i18n.gettext('Exercise ') + resWorkEx[0].name + i18n.gettext(' can not be deleted'),
           hold: messageDelay,
-		  message: 'This item can not be delete because of history by this exercise.'
+		  message: i18n.gettext('This item can not be delete because of history by this exercise.')
 		});
       } else {
         // Данных по выполнению данного упражнения не нашлось
@@ -786,9 +816,9 @@ function deleteExercise(exerciseId) {
             if(countExSchedule) {
               // В базе есть записи в расписании с этим упражнением. Удалять нельзя
               myApp.addNotification({
-                title: 'Exercise ' + resWorkEx[0].name + ' can not be deleted',
+                title: i18n.gettext('Exercise ') + resWorkEx[0].name + i18n.gettext(' can not be deleted'),
                 hold: messageDelay,
-                message: 'This item can not be delete because there are schedule with this exercise.'
+                message: i18n.gettext('This item can not be delete because there are schedule with this exercise.')
               });
             } else {
               // В базе нет записей по этому упражнению, поэтому смело удаляем его
@@ -874,9 +904,9 @@ function updateExerciseProperties() {
               if (resWorkEx.length) { // Какие-то данные есть в базе
                 // Выведем сообщение, что такой-то параметр нельзя удалить, т.к. он используется
                 myApp.addNotification({
-                  title: 'Error while deleting',
+                  title: i18n.gettext('Error while deleting'),
                   hold: messageDelay,
-                  message: 'Option ' + rowOldOpt.option + ' already used in database. It can not be deleted!'
+                  message: i18n.gettext('Option ') + rowOldOpt.option + i18n.gettext(' already used in database. It can not be deleted!')
                 });
                 // Надо снять отметку с этой опции
                 $$('input[name="checkbox-ex-prop"][value="' + rowOldOpt.option + '"]').prop('checked', false);
@@ -903,9 +933,9 @@ function updateExerciseProperties() {
       if (!deletedOpt.length && !addedOpt.length) { // Ничего не изменили. Тупо нажали Сохранить
         // Покажем сообщение, что сохранять нечего
         myApp.addNotification({
-          title: 'Nothing to save',
+          title: i18n.gettext('Nothing to save'),
           hold: messageDelay,
-          message: 'New set of options are equal to existent.'
+          message: i18n.gettext('New set of options are equal to existent.')
         });
       }
     });
@@ -942,9 +972,9 @@ function deleteExType(idExType) {
       if(countExercises) {
     	// В базе есть упражнения из этой группы. Удалять нельзя
     	myApp.addNotification({
-		  title: 'Can not be deleted',
+		  title: i18n.gettext('Can not be deleted'),
           hold: messageDelay,
-		  message: 'This item can not be delete while there are exercises in it.'
+		  message: i18n.gettext('This item can not be delete while there are exercises in it.')
 		});
       } else {
     	// В базе нет упражнений из этой группы, поэтому смело удаляем эту группу упражнений
@@ -1455,10 +1485,10 @@ function saveExerciseWork() {
         // 2. Добавить к записанному
         // 3. Отменить запись
         myApp.modal({
-          title: 'Current set already exist in DB',
-          text: 'What do you want to do with current values?',
+          title: i18n.gettext('Current set already exist in DB'),
+          text: i18n.gettext('What do you want to do with current values?'),
           buttons: [{
-            text: 'Rewrite',
+            text: i18n.gettext('Rewrite'),
             onClick: function() {
               var flagSavedData = 0;
               // Выбрали вариант перезаписи.
@@ -1504,9 +1534,9 @@ function saveExerciseWork() {
                   if (flagSavedData == 1) {
                     // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                     myApp.addNotification({
-                      title: 'Data was saved',
+                      title: i18n.gettext('Data was saved'),
                       hold: messageDelay,
-                      message: 'Data was updated'
+                      message: i18n.gettext('Data was updated')
                     });
                   }
                 });
@@ -1557,9 +1587,9 @@ function saveExerciseWork() {
                   if (flagSavedData == 1) {
                     // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                     myApp.addNotification({
-                      title: 'Data was saved',
+                      title: i18n.gettext('Data was saved'),
                       hold: messageDelay,
-                      message: 'Data was updated'
+                      message: i18n.gettext('Data was updated')
                     });
                   }
                 });
@@ -1567,7 +1597,7 @@ function saveExerciseWork() {
             } // Конец функции добавления значений к сохранённым в БД
           },
           {
-            text: 'Cancel',
+            text: i18n.gettext('Cancel'),
             bold: true,
             onClick: function() {
             } // Конец функции отмены сохранения
@@ -1625,9 +1655,9 @@ function saveExerciseWork() {
               if (flagSavedData == 1) {
                 // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                 myApp.addNotification({
-                  title: 'Data was saved',
+                  title: i18n.gettext('Data was saved'),
                   hold: messageDelay,
-                  message: 'Data was added'
+                  message: i18n.gettext('Data was added')
                 });
               }
             });
@@ -1648,9 +1678,9 @@ function saveExerciseWork() {
               if (flagSavedData == 1) {
                 // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                 myApp.addNotification({
-                  title: 'Data was saved',
+                  title: i18n.gettext('Data was saved'),
                   hold: messageDelay,
-                  message: 'Data was added'
+                  message: i18n.gettext('Data was added')
                 });
               }
             });
@@ -2169,31 +2199,31 @@ $('#aWorkGraph').on('click', function() {
 			]*/
 			series: [
 			  {
-                name: 'Repeats',
+                name: i18n.gettext('Repeats'),
                 data: arrRepeats
               },
               {
-                name: 'Weight',
+                name: i18n.gettext('Weight'),
                 data: arrWeight
               },
               {
-                name: 'Time',
+                name: i18n.gettext('Time'),
                 data: arrTime
               },
               {
-                name: 'Distance',
+                name: i18n.gettext('Distance'),
                 date: arrDistance
               },
               {
-                name: 'Speed',
+                name: i18n.gettext('Speed'),
                 data: arrSpeed
               },
               {
-                name: 'Slope',
+                name: i18n.gettext('Slope'),
                 data: arrSlope
               },
               {
-                name: 'Load',
+                name: i18n.gettext('Load'),
                 data: arrLoad
               }
             ]
@@ -2208,7 +2238,6 @@ $('#aWorkGraph').on('click', function() {
             chartPadding: {
               right: 80
             },
-            id: 'test'
             //low: 0
 		  };
 					
@@ -2229,7 +2258,6 @@ $('#aWorkGraph').on('click', function() {
           var $chart = $('.ct-chart');
           //$$('.ct-point').on('click', function () {
           $chart.on('click', '.ct-point', function (event) {
-
             var clickedLink = this;
             var $point = $(this),
               value = $point.attr('ct:value'),
@@ -2248,57 +2276,6 @@ $('#aWorkGraph').on('click', function() {
             })*/
             myApp.popover(popoverHTML, clickedLink);
           });
-		  /*var $chart = $('.ct-chart');
-
-          var $toolTip = $chart
-            .append('<div class="tooltip"></div>')
-            .find('.tooltip')
-            .hide();
-
-          $chart.on('mouseenter', '.ct-point', function() {
-            var $point = $(this),
-              value = $point.attr('ct:value'),
-              seriesName = $point.parent().attr('ct:series-name');
-            $toolTip.html(seriesName + '<br>' + value).show();
-          });
-
-          $chart.on('mouseleave', '.ct-point', function() {
-            $toolTip.hide();
-          });
-
-          $chart.on('mousemove', function(event) {
-            $toolTip.css({
-              left: (event.offsetX || event.originalEvent.layerX) - $toolTip.width() / 2 - 10,
-              top: (event.offsetY || event.originalEvent.layerY) - $toolTip.height() - 40
-            });
-          });*/
-
-		  /*Chartist.createLabel = function(projectedValue, index, labels, axis, axisOffset, labelOffset, group, classes, useForeignObject, eventEmitter) {
-            var labelElement,
-              positionalData = {};
-            positionalData[axis.units.pos] = projectedValue.pos + labelOffset[axis.units.pos];
-            positionalData[axis.counterUnits.pos] = labelOffset[axis.counterUnits.pos];
-            positionalData[axis.units.len] = projectedValue.len;
-            positionalData[axis.counterUnits.len] = axisOffset;
-
-            if(useForeignObject) {
-              var content = '<span class="' + classes.join(' ') + '">' + labels[index] + '</span>';
-              labelElement = group.foreignObject(content, Chartist.extend({
-                style: 'overflow: visible;'
-              }, positionalData));
-            } else {
-              labelElement = group.elem('text', positionalData, classes.join(' ')).text(labels[index]);
-            }
-
-            eventEmitter.emit('draw', Chartist.extend({
-              type: 'label',
-              axis: axis,
-              index: index,
-              group: group,
-              element: labelElement,
-              text: labels[index]
-            }, positionalData));
-          };*/
         });
     });  
 });

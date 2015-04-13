@@ -6,29 +6,33 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>Personal trainer</title>
-    <script src="js/IndexedDBShim.min.js"></script>
+    <!--<script src="js/IndexedDBShim.min.js"></script>-->
+    <script src="js/IndexedDBShim.js"></script>
+    <script src="js/es6-promise-2.0.1.min.js"></script>
     <script type="text/javascript">
         var server;
         window.shimIndexedDB && window.shimIndexedDB.__useShim();
         function printResult(){
           write("Executed : ", arguments);
         }
+        if (!window.Promise) window.Promise = ES6Promise.Promise;
     </script>
     <!--<script src="js/rsvp.js"></script>-->
-    <script src="js/promise-1.0.0.min.js"></script>
+    <!--<script src="js/promise-1.0.0.min.js"></script>-->
     <script src="js/db.js"></script>
     <script src="assets/components/chartist/libdist/chartist.min.js"></script>
     <!--<script src="js/modernizr.custom.js"></script>-->
     <!-- Path to Framework7 Library CSS-->
     <link rel="stylesheet" href="css/framework7.min.css">
+    <link rel="stylesheet" href="css/framework7.themes.css">
     <!-- Path to your custom app styles-->
     <link rel="stylesheet" href="css/my-app.css">
-    <link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.min.css">
+    <!--<link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.min.css">
     <link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.structure.min.css">
-    <link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="assets/components/jquery-ui-1.11.1.custom/jquery-ui.theme.min.css">-->
     <link rel="stylesheet" href="assets/components/chartist/libdist/chartist.min.css">
   </head>
-  <body>
+  <body class="layout-dark theme-orange">
     <!-- Status bar overlay for fullscreen mode-->
     <div class="statusbar-overlay"></div>
     <!-- Panels overlay-->
@@ -203,7 +207,7 @@
               <div class="page-content grad-body">
                 <div class="content-block-title">
                   <!--<a href="#" class="back tab-link btn-left-top">Cancel</a>-->
-                  <a href="#view-10" class="tab-link btn-right-top">Add</a>
+                  <a href="#view-10" class="tab-link btn-right-top" onclick="emptyDataCustomer()">Add</a>
                 </div>
                 <!-- Search bar -->
                 <form data-search-list=".list-block-search" data-search-in=".item-title" class="searchbar">
@@ -222,7 +226,7 @@
                   </div>
                
                   <!-- This block will be displayed if anything found, and this list block is used a searbar target -->
-                  <div class="list-block list-block-search searchbar-found">
+                  <div class="list-block list-block-search searchbar-found list-block-without-margin">
                     <ul id="ulListCustomers">
                       <!--<li class="item-content">
                         <div class="item-inner">
@@ -333,7 +337,7 @@
                   <a href="#view-5" class="tab-link btn-left-top">Cancel</a>
                   <a href="#view-7a" class="tab-link btn-right-top">Add</a>
                 </div>
-                <div class="content-block-title ex-of-type"></div>
+                <div class="content-block-title ex-of-type" data-item=""></div>
                 <div class="content-block">
                   <div class="list-block">
                     <ul id="ulListExercises">
@@ -376,7 +380,7 @@
                   <a href="#view-7" class="tab-link btn-left-top">Cancel</a>
                   <a href="" class="tab-link btn-right-top" onclick="addExercise()">Save</a>
                 </div>
-                <div class="content-block-title ex-of-type"></div>
+                <div class="content-block-title ex-of-type" data-item=""></div>
                 <div class="content-block">
                   <div class="list-block">
                     <ul>
@@ -511,7 +515,7 @@
                   <a href="#view-7" class="tab-link btn-left-top">Cancel</a>
                   <a href="" class="tab-link btn-right-top" onclick="updateExerciseProperties()">Save</a>
                 </div>
-                <div class="content-block-title" id="ex-prop"></div>
+                <div class="content-block-title" id="ex-prop" data-item=""></div>
                 <div class="content-block">
                   <div class="row">
                       <!-- Each "cell" has col-[widht in percents] class -->
@@ -632,7 +636,8 @@
               <div class="page-content grad-body">
                 <div class="content-block-title">
                   <a href="#view-3" class="tab-link btn-left-top">Cancel</a>
-                  <a href="" class="tab-link btn-right-top" onclick="addCustomer()">Save</a>
+                  <a href="" class="tab-link btn-right-top" id="linkAddCustomer" onclick="addCustomer()">Save</a>
+                  <a href="" class="tab-link btn-right-top hidden" id="linkEditCustomer" onclick="editCustomer()">Save</a>
                 </div>
                 <div class="content-block">
                   <div class="list-block">
@@ -654,7 +659,7 @@
                           <div class="item-media"><i class="icon icon-form-name"></i></div>
                           <div class="item-inner">
                             <div class="item-input">
-                              <input type="text" placeholder="Name" id="inputNewCustomer">
+                              <input type="text" placeholder="Name" id="inputNewCustomer" data-item="" oninput="showEditLinkCustomer()">
                             </div>
                           </div>
                         </div>
@@ -664,7 +669,7 @@
                           <div class="item-media"><i class="icon icon-form-comment"></i></div>
                           <div class="item-inner">
                             <div class="item-input">
-                              <textarea placeholder="Comments" id="newCustomerComments"></textarea>
+                              <textarea placeholder="Comments" id="newCustomerComments" oninput="showEditLinkCustomer()"></textarea>
                             </div>
                           </div>
                         </div>
@@ -763,16 +768,16 @@
                 <div class="tabs">
                   <!-- Tab 0, Текущий набор упражнений клиента -->
                   <div id="tab0" class="tab">
+                    <p class="hidden" id="noWorkout">На сегодня пока ещё не сформирован комплекс упражнений.</p>
                     <div class="list-block">
                       <ul id="ulListCurrentExercises"></ul>
                     </div>
                   </div>
                   <!-- Tab 1, Календарь -->
                   <div id="tab1" class="tab">
-                    <div class="content-block">
                       <div class="row">
                       	<div class="col-60">
-                          <div class="list-block">
+                          <div class="list-block list-block-without-margin">
                             <ul id="ulListPastExercises">
                               <!--<li>
                                 <div class="item-content">
@@ -788,22 +793,22 @@
                         </div>
                       	<div class="col-40">
                           <div id="calendar"></div>
+                          <div id="calendar-inline-container"></div>
                         </div>
                       </div>
-                    </div>
                   </div>
                   <!-- Tab 2 -->
                   <div id="tab2" class="tab">
                     <div class="row">
                       	<div class="col-50">
-                          <div class="list-block">
+                          <div class="list-block list-block-without-margin">
                           	<!-- Сформированный набор упражнений -->
                             <ul id="ulListScheduleEx">
                             </ul>
                           </div>
                         </div>
                       	<div class="col-50">
-                          <div class="list-block">
+                          <div class="list-block list-block-without-margin">
                           	<!-- Упражнения из базы данных -->
                             <ul id="ulListDays">
                               <li data-item="today">
@@ -915,7 +920,7 @@
                     <!--<div class="content-block">-->
                       <div class="row">
                       	<div class="col-50">
-                          <div class="list-block">
+                          <div class="list-block list-block-without-margin">
                           	<!-- Сформированный набор упражнений -->
                             <ul id="ulListSelectedExercises">
                               <!--<li class="swipeout">
@@ -936,7 +941,7 @@
                           </div>
                         </div>
                       	<div class="col-50">
-                          <div class="list-block">
+                          <div class="list-block list-block-without-margin">
                           	<!-- Упражнения из базы данных -->
                             <ul id="ulListAllExWithTypes">
                               <!--<li class="swipeout">
@@ -1017,19 +1022,23 @@
                       	<span class="statistics-name">time</span>-->
                       </div>
                       <div class="col-80">
-				        <div class="slider-container slider-stat">
-				          <div class="slider-pagination"></div>
-				          <div class="slider-wrapper" id="divStatistics">
-				            <!--<div class="slider-slide"><span>1</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-				            <div class="slider-slide"><span>2</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-				            <div class="slider-slide"><span>3</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-				            <div class="slider-slide"><span>4</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-				            <div class="slider-slide"><span>5</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-				            <div class="slider-slide"><span>6</span><br><span>1</span><br><span>1</span><br><span>1</span></div>-->
-				          </div>
-				        </div>
-				      </div>
-				    </div>
+                        <div class="slider-custom">
+          				        <div class="swiper-container swiper-stat">
+          				          <div class="swiper-pagination"></div>
+          				          <div class="swiper-wrapper" id="divStatistics">
+          				            <!--<div class="slider-slide"><span>1</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+          				            <div class="slider-slide"><span>2</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+          				            <div class="slider-slide"><span>3</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+          				            <div class="slider-slide"><span>4</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+          				            <div class="slider-slide"><span>5</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+          				            <div class="slider-slide"><span>6</span><br><span>1</span><br><span>1</span><br><span>1</span></div>-->
+          				          </div>
+          				        </div>
+                          <div class="slider-button-prev"></div>
+                          <div class="slider-button-next"></div>
+          				      </div>
+        				      </div>
+        				    </div>
                   </div>
                 </div><!-- End of Tabs, tabs wrapper -->
               </div>
@@ -1077,7 +1086,7 @@
         }
     </script>-->
     <script type="text/javascript" src="js/my-app.js"></script>
-    <script type="text/javascript" src="assets/components/jquery-ui-1.11.1.custom/jquery-ui.min.js"></script>
+    <!--<script type="text/javascript" src="assets/components/jquery-ui-1.11.1.custom/jquery-ui.min.js"></script>-->
     <!--<script type="text/javascript">
       Modernizr.load([
         {

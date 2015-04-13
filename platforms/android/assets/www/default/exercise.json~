@@ -1,0 +1,87 @@
+[
+  {
+    "id": 0,
+    "type": 0,
+    "name": "WG pull down"
+  },
+  {
+    "id": 1,
+    "type": 0,
+    "name": "NG pull down"
+  },
+  {
+    "id": 2,
+    "type": 0,
+    "name": "Chin up"
+  },
+  {
+    "id": 3
+    "type": 0,
+    "name": "Eccentric chin up"
+  },
+  {
+    "id": 4,
+    "type": 0,
+    "name": "Seated row M"
+  },
+  {
+    "id": 5,
+    "type": 0,
+    "name": "Seated row cable"
+  },
+  {
+    "id": 6,
+    "type": 0,
+    "name": "Bicep curl Bar"
+  },
+  {
+    "id": 7,
+    "type": 0,
+    "name": "Bicep curl DB"
+  },
+  {
+    "id": 8,
+    "type": 1,
+    "name": "Push Up"
+  },
+  {
+    "id": 9,
+    "type": 1,
+    "name": "Push Up knee"
+  },
+  {
+    "id": 10,
+    "type": 1,
+    "name": "Eccentric Push Up"
+  },
+  {
+    "id": 11,
+    "type": 1,
+    "name": "Dips M"
+  },
+  {
+    "id": 12,
+    "type": 1,
+    "name": "Dips"
+  },
+  {
+    "id": 13,
+    "type": 1,
+    "name": "Tricep M"
+  },
+  {
+    "id": 14,
+    "type": 2,
+    "name": "OH sh press M"
+  },
+  {
+    "id": 15,
+    "type": 2,
+    "name": "OH sh press Bar"
+  },
+  {
+    "id": 16,
+    "type": 2,
+    "name": "OH drive press Bar"
+  }
+]}

@@ -34,12 +34,23 @@
 			},
 			"indexes": {
 				"name": {
-					"unique": false
+					"unique": true
 				},
 				"type": {
 					"unique": false
+				}
+			}
+		},
+		"optionsExercises": {
+			"key": {
+				"keyPath": "id",
+				"autoIncrement": true
+			},
+			"indexes": {
+				"option": {
+					"unique": false
 				},
-				"options": {
+				"exerciseId": {
 					"unique": false
 				}
 			}
