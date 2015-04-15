@@ -152,8 +152,10 @@ $.getJSON('default/bd-schema.json', function(data) {
       $('#inputDateStartClasses').val(new Date().toDateInputValue());
     });
     myApp.init();
+    console.log('Инициализирования приложение myApp');
     // Переводим все шаблоны текстов в html на нужный язык
     var template = $$('.app-text').each(function() {
+      console.log('Переводим очередную строку');
       var compiledTemplate = Template7.compile($( this ).text());
       var htmlText = compiledTemplate();
       $( this ).text(htmlText);
