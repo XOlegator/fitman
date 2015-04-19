@@ -331,7 +331,7 @@
               <div class="page-content grad-body">
                 <div class="content-block-title">
                   <a href="#view-5" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                  <a href="#view-7a" class="tab-link btn-right-top app-text">{{_ "Add"}}</a>
+                  <a href="#view-7a" class="tab-link btn-right-top app-text" onclick="emptyDataExercise()">{{_ "Add"}}</a>
                 </div>
                 <div class="content-block-title ex-of-type" data-item=""></div>
                 <div class="content-block">
@@ -372,9 +372,9 @@
           <div class="pages">
             <div data-page="index-7a" class="page">
               <div class="page-content grad-body">
-                <div class="content-block-title">
-                  <a href="#view-7" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                  <a href="" class="tab-link btn-right-top app-text" onclick="addExercise()">{{_ "Save"}}</a>
+                <div class="content-block-title" id="divAddExercise">
+                  <!--<a href="#view-7" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
+                  <a href="" class="tab-link btn-right-top app-text" onclick="addExercise()">{{_ "Save"}}</a>-->
                 </div>
                 <div class="content-block-title ex-of-type" data-item=""></div>
                 <div class="content-block">

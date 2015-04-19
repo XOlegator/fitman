@@ -369,7 +369,7 @@ $$('.confirm-remove-db').on('click', function () {
   });
 });
 /*
-Функция очистки данных на странице данных клиента. Вызывается со страницы index-3 (списко клиентв) по кнопке Add
+Функция очистки данных на странице данных клиента. Вызывается со страницы index-3 (список клиентв) по кнопке Add
 */
 function emptyDataCustomer() {
   // Сформируем доступные кнопки для вкладки добавления нового клиента
@@ -380,6 +380,18 @@ function emptyDataCustomer() {
   $$('#inputNewCustomer').val('');
   $$('#inputNewCustomer').attr('data-item', '');
   $$('#newCustomerComments').val('');
+}
+/*
+Функция очистки данных на странице данных упражнения. Вызывается со страницы index-7 (списоко упражнений) по кнопке Add
+*/
+function emptyDataExercise() {
+  // Сформируем доступные кнопки для вкладки добавления нового клиента
+  var menuAddExercise = '';
+  menuAddExercise =  '<a href="#view-7" class="tab-link btn-left-top app-text">' + i18n.gettext('Cancel') + '</a></a>';
+  menuAddExercise += '<a href="" class="tab-link btn-right-top app-text" onclick="addExercise()">' + i18n.gettext('Save') + '</a>';
+  document.getElementById("divAddExercise").innerHTML = menuAddExercise;
+  $$('#inputNewExercise').val('');
+  $$('#view-7a input').prop('checked', false);
 }
 /*
 Функция построения списка клиентов. В функцию передаётся массив объектов customers
@@ -686,9 +698,6 @@ function updateListExercises(exerciseTypeId) {
     .execute()
     .then(function(results) {
       console.log('Найденные упражнения по выбранному id ' + exerciseTypeId + ' группы упражнений: results = ' + JSON.stringify(results));
-      //for (var rowExercise in results) {
-      //results.forEach(function (rowExercise) {
-      //results.each(function (rowExercise) {
       for (var index in results) {
         rowExercise = results[index];
       	//console.log('rowExercise.name = ' + rowExercise.name);
@@ -718,7 +727,6 @@ function updateListExercises(exerciseTypeId) {
   	    listExercise += '    </div>';
   	    listExercise += '  </div>';
   	    listExercise += '</li>';
-      //});
       }
       document.getElementById("ulListExercises").innerHTML = listExercise;
       //console.log('exerciseType results = ' + JSON.stringify(results));
@@ -845,9 +853,12 @@ function deleteExercise(exerciseId) {
                   .execute()
                   .then(function (optEx) {
                     //optEx.forEach(function (rowOptEx) {
-                    optEx.each(function (rowOptEx) {
+                    //optEx.each(function (rowOptEx) {
+                    for (var index in optEx) {
+                      rowOptEx = optEx[index];
                       server.remove('optionsExercises', parseInt(rowOptEx.id));
-                    });
+                    //});
+                    }
                     // После того, как все опции данного упражнения удалили, можно удалять и само упражнение
                     server.remove('exercise', parseInt(exerciseId)).then(function () {
                       // Упражнение удалил, теперь обновим список упражнений в данной группе
@@ -866,10 +877,10 @@ function deleteExercise(exerciseId) {
 function updateViewExProp(exerciseId) {
   console.log('Формируем список характеристик данного упражнения');
   // Сначала снимаем все галочки параметров
-  $$('div#view-8 input[name="checkbox-ex-prop"]').removeAttr('checked');
+  $$('#view-8 input').prop('checked', false);
   // Найдём и покажем название текущего упражнения
   server.exercise.get(exerciseId).then(function (exercise) {
-    $$('div#ex-prop').text(exercise.name).attr('data-item', exerciseId); // Обновим на странице название и id текущего упражнения
+    $$('#ex-prop').html(exercise.name).attr('data-item', exerciseId); // Обновим на странице название и id текущего упражнения
   });
   server.optionsExercises.query()
     .filter('exerciseId', exerciseId)
@@ -877,12 +888,12 @@ function updateViewExProp(exerciseId) {
     .then(function (exerciseOptions) {
       // Теперь ставим только те галочки, которые нужны по данным БД
       console.log('Список найденных характеристик по упражнению: ' + JSON.stringify(exerciseOptions));
-      //exerciseOptions.forEach(function (rowExOpt) {
-      exerciseOptions.each(function (rowExOpt) {
+      for (var index in exerciseOptions) {
+        rowExOpt = exerciseOptions[index];
       	console.log('rowExOpt.option = ' + rowExOpt.option);
       	//$$('input[name="checkbox-ex-prop"][value="' + rowExOpt.option + '"]').click();
       	$$('input[name="checkbox-ex-prop"][value="' + rowExOpt.option + '"]').prop('checked', true);
-      });
+      }
     });
 }
 /*
