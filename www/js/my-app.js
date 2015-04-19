@@ -372,16 +372,14 @@ $$('.confirm-remove-db').on('click', function () {
 Функция очистки данных на странице данных клиента. Вызывается со страницы index-3 (списко клиентв) по кнопке Add
 */
 function emptyDataCustomer() {
+  // Сформируем доступные кнопки для вкладки добавления нового клиента
+  var menuEditCustomer = '';
+  menuEditCustomer =  '<a href="#view-3" class="tab-link btn-left-top app-text">' + i18n.gettext('Cancel') + '</a></a>';
+  menuEditCustomer += '<a href="" class="tab-link btn-right-top app-text" style="display: none;" id="linkEditCustomer" onclick="addCustomer()">' + i18n.gettext('Save') + '</a>';
+  document.getElementById("divEditCustomer").innerHTML = menuEditCustomer;
   $$('#inputNewCustomer').val('');
   $$('#inputNewCustomer').attr('data-item', '');
   $$('#newCustomerComments').val('');
-  // Кнопку сохранения добавления клиента покажем, а кнопку редактирования клиента скроем
-  if ($$('#linkAddCustomer').hasClass('hidden')) {
-    $$('#linkAddCustomer').removeClass('hidden');
-  }
-  if (!$$('#linkEditCustomer').hasClass('hidden')) {
-    $$('#linkEditCustomer').addClass('hidden');
-  }
 }
 /*
 Функция построения списка клиентов. В функцию передаётся массив объектов customers
@@ -468,8 +466,8 @@ function addCustomer() {
 Функция сохранения изменений в данных клиента. Вызывается по кнопке Save из формы редактирования данных клиента
 */
 function editCustomer() {
-  var customerId = parseInt($$('#inputNewCustomer').attr('data-item'));
-  var temp = $('#inputNewCustomer').val();
+  var customerId = parseInt($$('#inputNewCustomer').data('item'));
+  var temp = $$('#inputNewCustomer').val();
   var newNameCustomer = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   temp = '';
   temp = $$('#newCustomerComments').val();
@@ -582,26 +580,24 @@ function removeCustomers() {
 Функция заполнения данными страницы клиента (#index-3). В функцию передаётся id клиента. Вызывается из списка клиентов при выборе клиента
 */
 function fillCustomerData(customerId) {
+  // Сформируем доступные кнопки для вкладки существующего клиента
+  var menuEditCustomer = '';
+  menuEditCustomer =  '<a href="#view-3" class="tab-link btn-left-top app-text">' + i18n.gettext('Cancel') + '</a></a>';
+  menuEditCustomer += '<a href="" class="tab-link btn-right-top" style="display: none;" id="linkEditCustomer" onclick="editCustomer()">' + i18n.gettext('Save') + '</a>';
+  document.getElementById("divEditCustomer").innerHTML = menuEditCustomer;
   console.log('Заполняем данные по клиенту с id = ' + customerId);
   server.customers.get(parseInt(customerId)).then(function(customer) {
     $$('input#inputNewCustomer').val(customer.name);
     $$('#inputNewCustomer').attr('data-item', customerId);
     $$('textarea#newCustomerComments').val(customer.comments);
   });
-  // Кнопки добавления и редактирования клиента скроем
-  if (!$$('#linkAddCustomer').hasClass('hidden')) {
-    $$('#linkAddCustomer').addClass('hidden');
-  }
-  if (!$$('#linkEditCustomer').hasClass('hidden')) {
-    $$('#linkEditCustomer').addClass('hidden');
-  }
-}/*
+}
+/*
 Функция выполняется, когда начали изменять данные клиента. Функция делает видимой нужную кнопку для сохранения новых данных клиента 
 */
 function showEditLinkCustomer() {
-  if($$('#linkEditCustomer').hasClass('hidden')) {
-    $$('#linkEditCustomer').removeClass('hidden');
-  }
+  console.log('Показываем кнопку Update');
+  $$('#linkEditCustomer').show();
 }
 /*
 Функция построения списка групп упражнений. В функцию передаётся массив объектов exerciseType
