@@ -765,7 +765,7 @@ function renameExercise(idExercise) {
 function addExercise() {
   var temp = $$('input#inputNewExercise').val();
   var newExercise = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
-  var idTypeExercise = parseInt($$('div#view-7a div.ex-of-type').attr('data-item'));
+  var idTypeExercise = parseInt($$('div#view-7a div.ex-of-type').data('item'));
   console.log('Вычислили группу упражнений - это ' + idTypeExercise);
   if(newExercise != '') {
     // Сначала надо проверить, нет ли уже такого названия упражнения в базе
@@ -851,7 +851,7 @@ function deleteExercise(exerciseId) {
                     // После того, как все опции данного упражнения удалили, можно удалять и само упражнение
                     server.remove('exercise', parseInt(exerciseId)).then(function () {
                       // Упражнение удалил, теперь обновим список упражнений в данной группе
-                  	  var typeExercise = parseInt($$('div#view-7a div.ex-of-type').attr('data-item'));
+                  	  var typeExercise = parseInt($$('div#view-7a div.ex-of-type').data('item'));
                   	  updateListExercises(typeExercise);
                     });
                   });
@@ -890,7 +890,7 @@ function updateViewExProp(exerciseId) {
 */
 function updateExerciseProperties() {
   // Определяем редактируемое упражнение
-  var exerciseId = parseInt($$('div#ex-prop').attr('data-item'));
+  var exerciseId = parseInt($$('div#ex-prop').data('item'));
   console.log('Идёт обновление параметров упражнения с id = ' + exerciseId);
   // Нужно понять, что изменили. Тут возможны варианты: добавили опции, убрали опции, одновременно что-то добавили и что-то убрали, вообще ничего не поменяли
   // Для начала соберём в массив всё, что сейчас отмечено
@@ -1042,7 +1042,7 @@ function upgradeViewWorkout() {
   var isWorkout = 0; // Установим флаг наличия расписания на сегодня
   var temp = $$('input#inputNewCustomer').val();
   var customerName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
-  var customerId = parseInt($$('#inputNewCustomer').attr('data-item'));
+  var customerId = parseInt($$('#inputNewCustomer').data('item'));
   $$('#spanCustName').html(customerName).attr('data-item', customerId);
   var today = new Date().toDateInputValue();
   $$('#spanDateEx').html(today);
@@ -1196,7 +1196,7 @@ function makeSetExCustomer() {
   	console.log('Разбор очередной позиции упражнения: ' + JSON.stringify($$(this)));
   	// На всякий случай поставим заглушку от инъекций
   	exercise = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
-  	var exerciseId = parseInt($$(this).attr('data-item')); // Находим id упражнения
+  	var exerciseId = parseInt($$(this).data('item')); // Находим id упражнения
   	excludeEx[index] = exercise;
     console.log('exercise = ' + exercise);
     listEx += '<li class="swipeout swipeout-selected">';
@@ -1271,7 +1271,7 @@ $$(document).on('opened', '.swipeout-all', function (e) {
   console.log($$(this).find('div.item-title').text());
   var exercise = $$(this).find('div.item-title').text();
   var listEx = '';
-  var exerciseId = $$(this).find('div.item-title').attr('data-item');
+  var exerciseId = $$(this).find('div.item-title').data('item');
   console.log('Определили id свайпнутого упражнения: ' + exerciseId);
   listEx += '<li class="swipeout swipeout-selected">';
   listEx += '  <div class="swipeout-content item-content">';
@@ -1294,7 +1294,7 @@ $$(document).on('opened', '.swipeout-selected', function (e) {
   console.log($$(this).find('div.item-title').text());
   var exerciseName = $$(this).find('div.item-title').text();
   var listExercises = '';
-  var exerciseId = parseInt($$(this).find('div.item-title').attr('data-item'));
+  var exerciseId = parseInt($$(this).find('div.item-title').data('item'));
   listExercises += '<li class="swipeout swipeout-all">';
   listExercises += '  <div class="swipeout-content item-content">';
   listExercises += '    <div class="item-inner">';
@@ -1339,7 +1339,7 @@ function saveSetExCustomer(flagFrom) {
   console.log('Сохраняем набор');
   var temp = '';
   var listExCust = '';
-  var customerId = parseInt($$('span#spanCustName').attr('data-item'));
+  var customerId = parseInt($$('span#spanCustName').data('item'));
   var dateEx = $$('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
   // Перед сохранением нового списка упражнений, надо удалить уже существующие в базе данные
   server.workout.query()
@@ -1363,8 +1363,8 @@ function saveSetExCustomer(flagFrom) {
   	  var exerciseName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
       console.log('exerciseName = ' + exerciseName + '; customerId = ' + customerId + '; dateEx = ' + dateEx);
       // Определим id упражнения
-      console.log('Смотрим в html в поисках id упражнения: ' + $$(this).attr('data-item'));
-      var exerciseId = parseInt($$(this).attr('data-item'));
+      console.log('Смотрим в html в поисках id упражнения: ' + $$(this).data('item'));
+      var exerciseId = parseInt($$(this).data('item'));
   	  server.workout.add({'customer': customerId, 'date': dateEx, 'exercise': exerciseId});
   	  listExCust += '<li>';
       listExCust += '  <a href="#view-24" class="tab-link item-link item-content" onclick="makeViewExWork(' + exerciseId + ')">';
@@ -1383,8 +1383,8 @@ function saveSetExCustomer(flagFrom) {
   	  exerciseName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
       console.log('exerciseName = ' + exerciseName + '; customerId = ' + customerId + '; dateEx = ' + dateEx);
       // Определим id упражнения
-      console.log('Смотрим в html в поисках id упражнения: ' + $$(this).attr('data-item'));
-      var exerciseId = parseInt($$(this).attr('data-item'));
+      console.log('Смотрим в html в поисках id упражнения: ' + $$(this).data('item'));
+      var exerciseId = parseInt($$(this).data('item'));
   	  server.workout.add({'customer': customerId, 'date': dateEx, 'exercise': exerciseId});
   	  listExCust += '<li>';
       listExCust += '  <a href="#view-24" class="tab-link item-link item-content" onclick="makeViewExWork(' + exerciseId + ')">';
@@ -1486,8 +1486,8 @@ function makeViewExWork(exerciseId) {
 Вызывается со страницы #view-24 #workTab1 по нажатию на кнопку Save
 */
 function saveExerciseWork() {
-  var customerId = parseInt($$('span#spanCustName').attr('data-item'));
-  var exerciseId = parseInt($$('#spanExWork').attr('data-item'));
+  var customerId = parseInt($$('span#spanCustName').data('item'));
+  var exerciseId = parseInt($$('#spanExWork').data('item'));
   var dateEx = $$('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
   var workSet = parseInt($$('select[data-item="sets"]').val()); // Узнаём номер подхода
   var noDoubles = 1; // Флаг, показывающий, что дубли не встретились
