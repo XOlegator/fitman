@@ -1,0 +1,464 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Fitman 1.0\n"
+"POT-Creation-Date: 2015-04-13 16:19+0300\n"
+"PO-Revision-Date: 2015-04-13 16:20+0300\n"
+"Last-Translator: Oleg Ekhlakov <subspam@mail.ru>\n"
+"Language-Team:  <subspam@mail.ru>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.5\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _;gettext;ngettext:1,2\n"
+"X-Poedit-SearchPath-0: /home/oleg/workspace/fitman/www\n"
+
+#: /home/oleg/workspace/fitman/www/index.hbs:40
+msgid "Left panel content goes here"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:46
+msgid "Right panel content goes here"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:60
+msgid "Help"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:64
+msgid "Settings"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:68
+#: /home/oleg/workspace/fitman/www/index.hbs:147
+msgid "Customers"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:72
+msgid "www"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:90
+msgid "Personal trainer"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:92
+msgid "User agreement"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:93
+msgid ""
+"This application is intended for professional coaches. They should have "
+"appropriate training, experience as a personal trainer, certificates "
+"confirming the right to work in this specialty. They assume all "
+"responsibility for damages that they may cause to the client during the "
+"training process."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:94
+msgid ""
+"Exercises that initially there are, present in the quality of the example "
+"and the coach can delete and create your list of exercises, grouping them on "
+"your own."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:95
+msgid ""
+"This application allows you to organize and monitor the training process, "
+"the rational use of exercise, to monitor the dynamics of training and "
+"visually, in graphs, to see the results of their work with this client."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:111
+msgid "Units"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:114
+msgid "Imperial"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:115
+msgid "Metric"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:124
+msgid "Language"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:127
+msgid "English"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:128
+msgid "Russian"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:137
+msgid "Exercises"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:139
+#: /home/oleg/workspace/fitman/www/index.hbs:760
+msgid "Change"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:149
+msgid "Remove"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:157
+msgid "Fill demo data"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:159
+msgid "Fill demo"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:167
+msgid "Clean database"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:169
+msgid "Drop all"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:177
+msgid "Create database"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:179
+msgid "Create DB"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:187
+msgid "Remove database"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:189
+msgid "Remove DB"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:207
+#: /home/oleg/workspace/fitman/www/index.hbs:265
+#: /home/oleg/workspace/fitman/www/index.hbs:335
+msgid "Add"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:213
+#: /home/oleg/workspace/fitman/www/index.hbs:264
+#: /home/oleg/workspace/fitman/www/index.hbs:306
+#: /home/oleg/workspace/fitman/www/index.hbs:334
+#: /home/oleg/workspace/fitman/www/index.hbs:377
+#: /home/oleg/workspace/fitman/www/index.hbs:512
+#: /home/oleg/workspace/fitman/www/index.hbs:635
+#: /home/oleg/workspace/fitman/www/index.hbs:702
+#: /home/oleg/workspace/fitman/www/index.hbs:751
+#: /home/oleg/workspace/fitman/www/index.hbs:981
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1604
+msgid "Cancel"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:222
+msgid "Nothing found"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:252
+msgid ""
+"Registration will allow You to participate in the improvement program, "
+"invite other users with your exercises, simply download the program of the "
+"exercise, other users and share on the forum his vision of the training "
+"process with the help of this program."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:253
+msgid "Sign in"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:307
+#: /home/oleg/workspace/fitman/www/index.hbs:378
+#: /home/oleg/workspace/fitman/www/index.hbs:513
+#: /home/oleg/workspace/fitman/www/index.hbs:636
+#: /home/oleg/workspace/fitman/www/index.hbs:983
+msgid "Save"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:410
+#: /home/oleg/workspace/fitman/www/index.hbs:531
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2206
+msgid "Repeats"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:433
+#: /home/oleg/workspace/fitman/www/index.hbs:554
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2210
+msgid "Weight"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:444
+#: /home/oleg/workspace/fitman/www/index.hbs:565
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2214
+msgid "Time"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:455
+#: /home/oleg/workspace/fitman/www/index.hbs:576
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2218
+msgid "Distance"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:472
+#: /home/oleg/workspace/fitman/www/index.hbs:593
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2222
+msgid "Speed"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:483
+#: /home/oleg/workspace/fitman/www/index.hbs:604
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2226
+msgid "Slope"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:494
+#: /home/oleg/workspace/fitman/www/index.hbs:615
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2230
+msgid "Load"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:679
+msgid "Photo"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:683
+#: /home/oleg/workspace/fitman/www/index.hbs:744
+#: /home/oleg/workspace/fitman/www/index.hbs:977
+msgid "Workout of the day"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:703
+msgid "Delete"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:754
+msgid "Calendar"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:757
+msgid "Schedule"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:768
+msgid "Today still not formed a set of exercises."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:818
+msgid "Only today"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:829
+msgid "Everyday"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:840
+msgid "Sunday"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:851
+msgid "Monday"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:862
+msgid "Tuesday"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:873
+msgid "Wednesday"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:884
+msgid "Thursday"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:895
+msgid "Friday"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:906
+msgid "Saturday"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:989
+msgid "Note"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:992
+msgid "Graph"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:995
+msgid "Statistics"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/index.hbs:1067
+msgid "here is the place to advertise"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:313
+msgid "Are you sure? It will erase all of your data!"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:342
+msgid "Database is clean"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:352
+#: /home/oleg/workspace/fitman/www/js/my-app.js:360
+#: /home/oleg/workspace/fitman/www/js/my-app.js:502
+msgid "Are you sure?"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:443
+msgid "Add new Customer"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:445
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1541
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1594
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1662
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1685
+msgid "Data was saved"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:453
+msgid "Error while adding"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:455
+msgid "Nothing to add!"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:473
+#: /home/oleg/workspace/fitman/www/js/my-app.js:940
+msgid "Nothing to save"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:475
+msgid "New data already exist in database."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:486
+msgid "Successful updated"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:488
+msgid "Data was updated."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:519
+#: /home/oleg/workspace/fitman/www/js/my-app.js:530
+#: /home/oleg/workspace/fitman/www/js/my-app.js:541
+msgid "Customer "
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:519
+#: /home/oleg/workspace/fitman/www/js/my-app.js:530
+#: /home/oleg/workspace/fitman/www/js/my-app.js:541
+#: /home/oleg/workspace/fitman/www/js/my-app.js:808
+#: /home/oleg/workspace/fitman/www/js/my-app.js:823
+msgid " can not be deleted"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:521
+msgid "There is data in history."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:532
+msgid "There is data in schedule by that customer."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:543
+msgid "There is data in workout."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:658
+#: /home/oleg/workspace/fitman/www/js/my-app.js:742
+msgid "Successful rename"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:660
+msgid "Group of exercises was renamed."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:744
+msgid "Exercise was renamed."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:766
+msgid "Can not be added"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:768
+msgid "That name of exercise already exist in database."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:808
+#: /home/oleg/workspace/fitman/www/js/my-app.js:823
+msgid "Exercise "
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:810
+msgid "This item can not be delete because of history by this exercise."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:825
+msgid ""
+"This item can not be delete because there are schedule with this exercise."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:911
+msgid "Error while deleting"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:913
+msgid "Option "
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:913
+msgid " already used in database. It can not be deleted!"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:942
+msgid "New set of options are equal to existent."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:979
+msgid "Can not be deleted"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:981
+msgid "This item can not be delete while there are exercises in it."
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1492
+msgid "Current set already exist in DB"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1493
+msgid "What do you want to do with current values?"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1495
+msgid "Rewrite"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1543
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1596
+msgid "Data was updated"
+msgstr ""
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1664
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1687
+msgid "Data was added"
+msgstr ""

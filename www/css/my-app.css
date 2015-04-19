@@ -122,3 +122,7 @@ div.page-content>div.my-toolbar-inner {
   stroke-width: 15px;
   stroke-linecap: round;
 }
+
+.selected-day {
+  background-color: #FF9500 !important;
+}

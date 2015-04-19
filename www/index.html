@@ -20,7 +20,6 @@
     <!--<script src="js/rsvp.js"></script>-->
     <!--<script src="js/promise-1.0.0.min.js"></script>-->
     <script src="js/db.js"></script>
-    <script src="assets/components/chartist/dist/chartist.min.js"></script>
     <!--<script src="js/modernizr.custom.js"></script>-->
     <!-- Path to Framework7 Library CSS-->
     <link rel="stylesheet" href="css/framework7.min.css">
@@ -111,8 +110,8 @@
                           <div class="item-title label app-text">{{_ "Units"}}</div>
                           <div class="item-input">
                             <select id="selectUnits">
-                              <option class="app-text">{{_ "Imperial"}}</option>
-                              <option class="app-text">{{_ "Metric"}}</option>
+                              <option class="app-text" data-item="imperial">{{_ "Imperial"}}</option>
+                              <option class="app-text" data-item="metric">{{_ "Metric"}}</option>
                             </select>
                           </div>
                         </div>
@@ -124,8 +123,8 @@
                           <div class="item-title label app-text">{{_ "Language"}}</div>
                           <div class="item-input">
                             <select id="selectLang">
-                              <option class="app-text">{{_ "English"}}</option>
-                              <option class="app-text">{{_ "Russian"}}</option>
+                              <option class="app-text" data-item="english">{{_ "English"}}</option>
+                              <option class="app-text" data-item="russian">{{_ "Russian"}}</option>
                             </select>
                           </div>
                         </div>
@@ -765,7 +764,7 @@
                 <div class="tabs">
                   <!-- Tab 0, Текущий набор упражнений клиента -->
                   <div id="tab0" class="tab">
-                    <p class="hidden app-text" id="noWorkout">{{_ "Today still not formed a set of exercises."}}</p>
+                    <p class="app-text" id="noWorkout">{{_ "Today still not formed a set of exercises."}}</p>
                     <div class="list-block">
                       <ul id="ulListCurrentExercises"></ul>
                     </div>
@@ -1069,7 +1068,7 @@
       <!--</div>-->
     </div>
     <!--<script type="text/javascript" src="cordova.js"></script>-->
-    <script src="assets/components/jquery/dist/jquery.min.js"></script>
+    <!--<script src="assets/components/jquery/dist/jquery.min.js"></script>-->
     <script type="text/javascript" src="js/jed.js"></script>
     <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="js/framework7.min.js"></script>
@@ -1084,6 +1083,7 @@
         }
     </script>-->
     <script type="text/javascript" src="js/my-app.js"></script>
+    <script src="assets/components/chartist/dist/chartist.min.js"></script>
     <!--<script type="text/javascript">
       Modernizr.load([
         {

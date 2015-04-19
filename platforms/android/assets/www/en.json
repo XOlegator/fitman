@@ -1,0 +1,159 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "en_US"
+         },
+         "Left panel content goes here": [
+            ""
+         ],
+         "Right panel content goes here": [
+            ""
+         ],
+         "Help": [
+            ""
+         ],
+         "Settings": [
+            ""
+         ],
+         "Customers": [
+            ""
+         ],
+         "www": [
+            ""
+         ],
+         "Are you sure? It will erase all of your data!": [
+            ""
+         ],
+         "Database is clean": [
+            ""
+         ],
+         "Are you sure?": [
+            ""
+         ],
+         "Add new Customer": [
+            ""
+         ],
+         "Data was saved": [
+            ""
+         ],
+         "Error while adding": [
+            ""
+         ],
+         "Nothing to add!": [
+            ""
+         ],
+         "Nothing to save": [
+            ""
+         ],
+         "New data already exist in database.": [
+            ""
+         ],
+         "Successful updated": [
+            ""
+         ],
+         "Data was updated.": [
+            ""
+         ],
+         "Customer ": [
+            ""
+         ],
+         " can not be deleted": [
+            ""
+         ],
+         "There is data in history.": [
+            ""
+         ],
+         "There is data in schedule by that customer.": [
+            ""
+         ],
+         "There is data in workout.": [
+            ""
+         ],
+         "Successful rename": [
+            ""
+         ],
+         "Group of exercises was renamed.": [
+            ""
+         ],
+         "Exercise was renamed.": [
+            ""
+         ],
+         "Can not be added": [
+            ""
+         ],
+         "That name of exercise already exist in database.": [
+            ""
+         ],
+         "Exercise ": [
+            ""
+         ],
+         "This item can not be delete because of history by this exercise.": [
+            ""
+         ],
+         "This item can not be delete because there are schedule with this exercise.": [
+            ""
+         ],
+         "Error while deleting": [
+            ""
+         ],
+         "Option ": [
+            ""
+         ],
+         " already used in database. It can not be deleted!": [
+            ""
+         ],
+         "New set of options are equal to existent.": [
+            ""
+         ],
+         "Can not be deleted": [
+            ""
+         ],
+         "This item can not be delete while there are exercises in it.": [
+            ""
+         ],
+         "Current set already exist in DB": [
+            ""
+         ],
+         "What do you want to do with current values?": [
+            ""
+         ],
+         "Rewrite": [
+            ""
+         ],
+         "Data was updated": [
+            ""
+         ],
+         "Cancel": [
+            ""
+         ],
+         "Data was added": [
+            ""
+         ],
+         "Repeats": [
+            ""
+         ],
+         "Weight": [
+            ""
+         ],
+         "Time": [
+            ""
+         ],
+         "Distance": [
+            ""
+         ],
+         "Speed": [
+            ""
+         ],
+         "Slope": [
+            ""
+         ],
+         "Load": [
+            ""
+         ]
+      }
+   }
+}

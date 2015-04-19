@@ -4,6 +4,8 @@ var myApp = new Framework7({
   modalTitle: 'Personal trainer',
   init: false
 });
+// Export selectors engine
+var $$ = Framework7.$;
 var lang = 'en';
 var fLang;
 if (lang === 'ru') {
@@ -15,7 +17,7 @@ if (lang === 'ru') {
   fLang = './en.json';
   console.log('Загрузили английский язык!');
 }
-$.getJSON(fLang, function(response) {
+$$.getJSON(fLang, function(response) {
   console.log('Загрузили языковой файл!');
   i18n = new Jed(response);
   Template7.registerHelper('_', function(msgid) {
@@ -48,8 +50,7 @@ document.addEventListener( 'touchstart', function(e){ onStart(e); }, false );
 document.ontouchmove = function(event) {
     event.preventDefault();
 };*/
-// Export selectors engine
-var $$ = Framework7.$;
+
 var server;
 //indexedDB.deleteDatabase('my-app');
 
@@ -89,7 +90,7 @@ return new Promise(function(resolve, reject){
 });
 }*/
 
-$.getJSON('default/bd-schema.json', function(data) {
+$$.getJSON('default/bd-schema.json', function(data) {
 //getJSON('default/bd-schema.json').then(function(data) {
   bdSchema = data;
   console.log("Схема БД: " + JSON.stringify(data));
@@ -105,9 +106,11 @@ $.getJSON('default/bd-schema.json', function(data) {
         .execute()
         .then(function(results) {
           console.log('Получили список настроек');
-          if(results.length) {
-          	$("#selectUnits :contains('" + results.units + "')").attr("selected", "selected");
-          	$("#selectLang :contains('" + results.language + "')").attr("selected", "selected");
+          if(results.length) { // Установим значения настроек из БД
+          	/*$("#selectUnits :contains('" + results.units + "')").attr("selected", "selected");
+          	$("#selectLang :contains('" + results.language + "')").attr("selected", "selected");*/
+          	$$('#selectUnits').children('option[data-item="' + results.units + '"]').prop('selected', true);
+          	$$('#selectUnits').children('option[data-item="' + results.language + '"]').prop('selected', true);
           } else {
           	// Настроек в базе никаких не было (значит в первый раз открыли программу). Допишем их туда.
           	// По-умолчанию язык будет - English, система единиц измерения - Metric
@@ -116,8 +119,10 @@ $.getJSON('default/bd-schema.json', function(data) {
               'language': 'English'
             }).then(function(item){
               console.log('Записали настройки по-умолчанию в базу: ' + JSON.stringify(item));
-          	  $("#selectUnits :contains('Metric')").attr("selected", "selected");
-          	  $("#selectLang :contains('English')").attr("selected", "selected");
+          	  /*$("#selectUnits :contains('Metric')").attr("selected", "selected");
+          	  $("#selectLang :contains('English')").attr("selected", "selected");*/
+          	  $$('#selectUnits').children('option[data-item="metric"]').prop('selected', true);
+              $$('#selectUnits').children('option[data-item="english"]').prop('selected', true);
             });
           }
         });
@@ -149,21 +154,21 @@ $.getJSON('default/bd-schema.json', function(data) {
     // Инициализация страницы добавления клиента
     myApp.onPageInit('index-10', function (page) {
       // Устанавливаем дату начала занятий на текущую дату
-      $('#inputDateStartClasses').val(new Date().toDateInputValue());
+      $$('#inputDateStartClasses').val(new Date().toDateInputValue());
     });
     myApp.init();
     console.log('Инициализирования приложение myApp');
     // Переводим все шаблоны текстов в html на нужный язык
     var template = $$('.app-text').each(function() {
       console.log('Переводим очередную строку');
-      var compiledTemplate = Template7.compile($( this ).text());
+      var compiledTemplate = Template7.compile($$( this ).text());
       var htmlText = compiledTemplate();
-      $( this ).text(htmlText);
+      $$( this ).text(htmlText);
     });
   });
 });
 // Функция изменения системы единиц измерения в настройках
-$('#selectUnits').on('change', function() {
+$$('#selectUnits').on('change', function() {
   console.log('Зашли в изменение настроек единиц измерения');
   // Сначала найдём то, что уже есть в базе
   server.settings.query()
@@ -171,7 +176,7 @@ $('#selectUnits').on('change', function() {
     .execute()
     .then(function(results) {
       var setLang = results[0].language;
-      var setUnits = $("#selectUnits :selected").html();
+      var setUnits = $$("#selectUnits :selected").html();
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
 	  server.settings.update({
 	    'id': parseInt(results[0].id),
@@ -183,14 +188,14 @@ $('#selectUnits').on('change', function() {
     });
 });
 // Функция изменения языка приложения в настройках
-$('#selectLang').on('change', function() {
+$$('#selectLang').on('change', function() {
   console.log('Зашли в изменение настроек языка');
   // Сначала найдём то, что уже есть в базе
   server.settings.query()
     .all()
     .execute()
     .then(function(results) {
-      var setLang = $("#selectLang :selected").html();
+      var setLang = $$("#selectLang :selected").html();
       var setUnits = results[0].units;
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
       server.settings.update({
@@ -217,7 +222,7 @@ $$('.confirm-fill-demo').on('click', function () {
     // Заполняем таблицы данными из json файлов
     console.log('Начинаем обрабатывать упражнения');
     var dataExercisesJSON = '';
-    $.getJSON('default/exercises.json', function(data) {
+    $$.getJSON('default/exercises.json', function(data) {
     //getJSON('default/exercises.json').then(function(data) {
       dataExercisesJSON = data;
       // Запускаем цикл по группам упражнений (exerciseType)
@@ -286,7 +291,7 @@ $$('.confirm-fill-demo').on('click', function () {
         });
     });  
     
-    $.getJSON('default/customers.json', function(data) {
+    $$.getJSON('default/customers.json', function(data) {
     //getJSON('default/customers.json').then(function(data) {
       for (var i in data.customers) {
         // Добавляем клиентов в базу
@@ -367,24 +372,28 @@ $$('.confirm-remove-db').on('click', function () {
 Функция очистки данных на странице данных клиента. Вызывается со страницы index-3 (списко клиентв) по кнопке Add
 */
 function emptyDataCustomer() {
-  $('#inputNewCustomer').val('');
-  $('#inputNewCustomer').attr('data-item', '');
-  $('#newCustomerComments').val('');
+  $$('#inputNewCustomer').val('');
+  $$('#inputNewCustomer').attr('data-item', '');
+  $$('#newCustomerComments').val('');
   // Кнопку сохранения добавления клиента покажем, а кнопку редактирования клиента скроем
-  if ($('#linkAddCustomer').hasClass('hidden')) {
-    $('#linkAddCustomer').removeClass('hidden');
+  if ($$('#linkAddCustomer').hasClass('hidden')) {
+    $$('#linkAddCustomer').removeClass('hidden');
   }
-  if (!$('#linkEditCustomer').hasClass('hidden')) {
-    $('#linkEditCustomer').addClass('hidden');
+  if (!$$('#linkEditCustomer').hasClass('hidden')) {
+    $$('#linkEditCustomer').addClass('hidden');
   }
 }
 /*
 Функция построения списка клиентов. В функцию передаётся массив объектов customers
 */
 function updateListCustomers(customers) {
+  //console.log($$.serializeObject(customers[0]));
   var listCustomers = '';
   var listCustomersForDelete = '';
-  customers.forEach(function (value) {
+  //customers.forEach(function (value) {
+  //customers.each(function (value) {
+  for (var index in customers) {
+    value = customers[index];
     // Список пользователей
     listCustomers += '<li>';
     listCustomers += '  <a href="#view-10" class="tab-link item-link item-content" onclick="fillCustomerData(' + value.id + ')">';
@@ -407,7 +416,8 @@ function updateListCustomers(customers) {
     listCustomersForDelete += '    </div>';
     listCustomersForDelete += '  </label>';
     listCustomersForDelete += '</li>';
-  });
+  //});
+  }
   document.getElementById("ulListCustomers").innerHTML = listCustomers;
   document.getElementById("forDeleteCustomers").innerHTML = listCustomersForDelete;
   document.getElementById("badgeCountCustomers").innerHTML = customers.length;
@@ -416,16 +426,16 @@ function updateListCustomers(customers) {
 Функция добавления клиента. Вызывается из страницы #view-10 по кнопке Save
 */
 function addCustomer() {
-  var temp = $('input#inputNewCustomer').val();
+  var temp = $$('input#inputNewCustomer').val();
   // На всякий случай поставим заглушку от инъекций
   var newCustomer = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   temp = '';
-  temp = $('input#inputDateStartClasses').val();
+  temp = $$('input#inputDateStartClasses').val();
   var dateStartClasses = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   var timeVal = new Date().toISOString();
   var photo = 'somepic' + timeVal + '.jpg'; // TODO фото надо куда-то сохранять, а тут указывать путь к файлу
   temp = '';
-  temp = $('textarea#newCustomerComments').val();
+  temp = $$('textarea#newCustomerComments').val();
   var newCustomerComments = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   //console.log('Добавляем клиента ' + newCustomer + ' фотография ' + photo + ' комментарий: ' + newCustomerComments);
   if(newCustomer != '') {
@@ -458,11 +468,11 @@ function addCustomer() {
 Функция сохранения изменений в данных клиента. Вызывается по кнопке Save из формы редактирования данных клиента
 */
 function editCustomer() {
-  var customerId = parseInt($('#inputNewCustomer').attr('data-item'));
+  var customerId = parseInt($$('#inputNewCustomer').attr('data-item'));
   var temp = $('#inputNewCustomer').val();
   var newNameCustomer = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   temp = '';
-  temp = $('#newCustomerComments').val();
+  temp = $$('#newCustomerComments').val();
   var newCommentsCustomer = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   console.log('Сейчас будем обновлять данные по клиенту с id = ' + customerId);
   server.customers.get(customerId).then(function (customer) {
@@ -500,7 +510,7 @@ function removeCustomers() {
   myApp.confirm(i18n.gettext('Are you sure?'), function () {
     // Найдём все value всех отмеченных чекбоксов в ul#forDeleteCustomers. Эти значения есть id клиентов для удаления из базы
     // Начинаем цикл по всем отмеченным для удаления клиентам
-    $('input[name="inputCustomerForDelete"]:checked').each(function() {
+    $$('input[name="inputCustomerForDelete"]:checked').each(function() {
       console.log('Проверяем пользователя с id = ' + this.value);
 	  server.customers.get(parseInt(this.value)).then(function(resCustomer) {
         console.log('Нашли удаляемого клиента в базе: ' + JSON.stringify(resCustomer));
@@ -574,23 +584,23 @@ function removeCustomers() {
 function fillCustomerData(customerId) {
   console.log('Заполняем данные по клиенту с id = ' + customerId);
   server.customers.get(parseInt(customerId)).then(function(customer) {
-    $('input#inputNewCustomer').val(customer.name);
+    $$('input#inputNewCustomer').val(customer.name);
     $$('#inputNewCustomer').attr('data-item', customerId);
-    $('textarea#newCustomerComments').val(customer.comments);
+    $$('textarea#newCustomerComments').val(customer.comments);
   });
   // Кнопки добавления и редактирования клиента скроем
-  if (!$('#linkAddCustomer').hasClass('hidden')) {
-    $('#linkAddCustomer').addClass('hidden');
+  if (!$$('#linkAddCustomer').hasClass('hidden')) {
+    $$('#linkAddCustomer').addClass('hidden');
   }
-  if (!$('#linkEditCustomer').hasClass('hidden')) {
-    $('#linkEditCustomer').addClass('hidden');
+  if (!$$('#linkEditCustomer').hasClass('hidden')) {
+    $$('#linkEditCustomer').addClass('hidden');
   }
 }/*
 Функция выполняется, когда начали изменять данные клиента. Функция делает видимой нужную кнопку для сохранения новых данных клиента 
 */
 function showEditLinkCustomer() {
-  if($('#linkEditCustomer').hasClass('hidden')) {
-    $('#linkEditCustomer').removeClass('hidden');
+  if($$('#linkEditCustomer').hasClass('hidden')) {
+    $$('#linkEditCustomer').removeClass('hidden');
   }
 }
 /*
@@ -598,7 +608,10 @@ function showEditLinkCustomer() {
 */
 function updateListExerciseType(exerciseType) {
   var listExerciseType = '';
-  exerciseType.forEach(function (value) {
+  //exerciseType.forEach(function (value) {
+  //exerciseType.each(function (value) {
+  for (var index in exerciseType) {
+    value = exerciseType[index];
     listExerciseType += '<li>';
     listExerciseType += '  <div class="item-content">';
     listExerciseType += '    <div class="item-inner">';
@@ -625,7 +638,8 @@ function updateListExerciseType(exerciseType) {
     listExerciseType += '    </div>';
     listExerciseType += '  </div>';
     listExerciseType += '</li>';
-  });
+  //});
+  }
   document.getElementById("ulListExerciseType").innerHTML = listExerciseType;
 }
 
@@ -633,8 +647,8 @@ function updateListExerciseType(exerciseType) {
 Функция выполняется, когда начали изменять название группы упражнений. Функция делает видимой нужную кнопку для сохранения нового имени группы упражнений 
 */
 function showRenameLinkExType(exType) {
-  if($("#ex-compl-rename-" + exType).hasClass('hidden')) {
-    $("#ex-compl-rename-" + exType).removeClass('hidden');
+  if($$("#ex-compl-rename-" + exType).hasClass('hidden')) {
+    $$("#ex-compl-rename-" + exType).removeClass('hidden');
   }
 }
 /*
@@ -649,8 +663,8 @@ function renameExType(idExType) {
     'name': newName
   }).then(function(res) {
     console.log('Переименованная группа упражнений в базе: ' + JSON.stringify(res));
-    if(!$("#ex-compl-rename-" + idExType).hasClass('hidden')) {
-      $("#ex-compl-rename-" + idExType).addClass('hidden');
+    if(!$$("#ex-compl-rename-" + idExType).hasClass('hidden')) {
+      $$("#ex-compl-rename-" + idExType).addClass('hidden');
     } 
     myApp.addNotification({
       title: i18n.gettext('Successful rename'),
@@ -665,8 +679,8 @@ function renameExType(idExType) {
 */
 function updateListExercises(exerciseTypeId) {
   server.exerciseType.get(exerciseTypeId).then(function (rowExerciseType) {
-    $('div.ex-of-type').text(rowExerciseType.name); // Показываем, в какой группе мы сейчас находимся
-    $('div.ex-of-type').attr('data-item', exerciseTypeId); // Устанавливаем значение id текущей группы упражнений
+    $$('div.ex-of-type').text(rowExerciseType.name); // Показываем, в какой группе мы сейчас находимся
+    $$('div.ex-of-type').attr('data-item', exerciseTypeId); // Устанавливаем значение id текущей группы упражнений
   });
   var listExercise = '';
   // Запросом отбираем все упражнения данной группы (exerciseType)
@@ -677,7 +691,10 @@ function updateListExercises(exerciseTypeId) {
     .then(function(results) {
       console.log('Найденные упражнения по выбранному id ' + exerciseTypeId + ' группы упражнений: results = ' + JSON.stringify(results));
       //for (var rowExercise in results) {
-      results.forEach(function (rowExercise) {
+      //results.forEach(function (rowExercise) {
+      //results.each(function (rowExercise) {
+      for (var index in results) {
+        rowExercise = results[index];
       	//console.log('rowExercise.name = ' + rowExercise.name);
       	listExercise += '<li>';
         listExercise += '  <div class="item-content">';
@@ -705,7 +722,8 @@ function updateListExercises(exerciseTypeId) {
   	    listExercise += '    </div>';
   	    listExercise += '  </div>';
   	    listExercise += '</li>';
-      });
+      //});
+      }
       document.getElementById("ulListExercises").innerHTML = listExercise;
       //console.log('exerciseType results = ' + JSON.stringify(results));
       //updateListExerciseType(results);
@@ -715,8 +733,8 @@ function updateListExercises(exerciseTypeId) {
 Функция выполняется, когда начали изменять название упражнения. Функция делает видимой нужную кнопку для сохранения нового имени группы упражнений 
 */
 function showRenameLinkExercise(exercise) {
-  if($("#ex-rename-" + exercise).hasClass('hidden')) {
-    $("#ex-rename-" + exercise).removeClass('hidden');
+  if($$("#ex-rename-" + exercise).hasClass('hidden')) {
+    $$("#ex-rename-" + exercise).removeClass('hidden');
   }
 }
 /*
@@ -734,8 +752,8 @@ function renameExercise(idExercise) {
   	  'type': exercise.type
   	}).then(function(res) { 	
       console.log('Переименованная группа упражнений в базе: ' + JSON.stringify(res));
-      if(!$("#ex-rename-" + idExercise).hasClass('hidden')) {
-        $("#ex-rename-" + idExercise).addClass('hidden'); 
+      if(!$$("#ex-rename-" + idExercise).hasClass('hidden')) {
+        $$("#ex-rename-" + idExercise).addClass('hidden');
         myApp.addNotification({
           title: i18n.gettext('Successful rename'),
           hold: messageDelay,
@@ -749,9 +767,9 @@ function renameExercise(idExercise) {
 Функция добавления упражнения и его характеристик. Вызывается из страницы #view-7a (список упражнений определённой группы) по кнопке Save
 */
 function addExercise() {
-  var temp = $('input#inputNewExercise').val();
+  var temp = $$('input#inputNewExercise').val();
   var newExercise = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
-  var idTypeExercise = parseInt($('div#view-7a div.ex-of-type').attr('data-item'));
+  var idTypeExercise = parseInt($$('div#view-7a div.ex-of-type').attr('data-item'));
   console.log('Вычислили группу упражнений - это ' + idTypeExercise);
   if(newExercise != '') {
     // Сначала надо проверить, нет ли уже такого названия упражнения в базе
@@ -772,7 +790,7 @@ function addExercise() {
           }).then(function(rowNewExercise) {
             console.log('Добавили новое упражнение: ' + JSON.stringify(rowNewExercise));
             // Повторяем запись в базу по каждому отмеченному свойству упражнения
-            $('input[name="checkbox-new-ex-prop"]:checked').each(function() {
+            $$('input[name="checkbox-new-ex-prop"]:checked').each(function() {
               //console.log('Мы в цикле по действующим параметрам упражнения!');
               //console.log('rowNewExercise[0].id = ' + rowNewExercise[0].id);
         	    server.optionsExercises.add({
@@ -830,13 +848,14 @@ function deleteExercise(exerciseId) {
                   .filter('exerciseId', parseInt(exerciseId))
                   .execute()
                   .then(function (optEx) {
-                    optEx.forEach(function (rowOptEx) {
+                    //optEx.forEach(function (rowOptEx) {
+                    optEx.each(function (rowOptEx) {
                       server.remove('optionsExercises', parseInt(rowOptEx.id));
                     });
                     // После того, как все опции данного упражнения удалили, можно удалять и само упражнение
                     server.remove('exercise', parseInt(exerciseId)).then(function () {
                       // Упражнение удалил, теперь обновим список упражнений в данной группе
-                  	  var typeExercise = parseInt($('div#view-7a div.ex-of-type').attr('data-item'));
+                  	  var typeExercise = parseInt($$('div#view-7a div.ex-of-type').attr('data-item'));
                   	  updateListExercises(typeExercise);
                     });
                   });
@@ -851,10 +870,10 @@ function deleteExercise(exerciseId) {
 function updateViewExProp(exerciseId) {
   console.log('Формируем список характеристик данного упражнения');
   // Сначала снимаем все галочки параметров
-  $('div#view-8 input[name="checkbox-ex-prop"]').removeAttr('checked');
+  $$('div#view-8 input[name="checkbox-ex-prop"]').removeAttr('checked');
   // Найдём и покажем название текущего упражнения
   server.exercise.get(exerciseId).then(function (exercise) {
-    $('div#ex-prop').text(exercise.name).attr('data-item', exerciseId); // Обновим на странице название и id текущего упражнения  
+    $$('div#ex-prop').text(exercise.name).attr('data-item', exerciseId); // Обновим на странице название и id текущего упражнения
   });
   server.optionsExercises.query()
     .filter('exerciseId', exerciseId)
@@ -862,7 +881,8 @@ function updateViewExProp(exerciseId) {
     .then(function (exerciseOptions) {
       // Теперь ставим только те галочки, которые нужны по данным БД
       console.log('Список найденных характеристик по упражнению: ' + JSON.stringify(exerciseOptions));
-      exerciseOptions.forEach(function (rowExOpt) {
+      //exerciseOptions.forEach(function (rowExOpt) {
+      exerciseOptions.each(function (rowExOpt) {
       	console.log('rowExOpt.option = ' + rowExOpt.option);
       	//$$('input[name="checkbox-ex-prop"][value="' + rowExOpt.option + '"]').click();
       	$$('input[name="checkbox-ex-prop"][value="' + rowExOpt.option + '"]').prop('checked', true);
@@ -874,7 +894,7 @@ function updateViewExProp(exerciseId) {
 */
 function updateExerciseProperties() {
   // Определяем редактируемое упражнение
-  var exerciseId = parseInt($('div#ex-prop').attr('data-item'));
+  var exerciseId = parseInt($$('div#ex-prop').attr('data-item'));
   console.log('Идёт обновление параметров упражнения с id = ' + exerciseId);
   // Нужно понять, что изменили. Тут возможны варианты: добавили опции, убрали опции, одновременно что-то добавили и что-то убрали, вообще ничего не поменяли
   // Для начала соберём в массив всё, что сейчас отмечено
@@ -882,7 +902,7 @@ function updateExerciseProperties() {
   var arrOldOpt = [];
   var deletedOpt = []; // Массив удалённых параметров
   var addedOpt = []; // Масси добавленных параметров
-  $('input[name="checkbox-ex-prop"]:checked').each(function(indexOpt, valueOpt) {
+  $$('input[name="checkbox-ex-prop"]:checked').each(function(indexOpt, valueOpt) {
     arrNewOpt[indexOpt] = valueOpt.value;
     console.log('Занесли в массив значение выбранной опции: ' + valueOpt.value);
   });
@@ -892,7 +912,8 @@ function updateExerciseProperties() {
     .execute()
     .then(function(results) {
       console.log('Список характеристик: ' + JSON.stringify(results));
-      results.forEach(function (rowOldOpt, indexOldOpt) {
+      //results.forEach(function (rowOldOpt, indexOldOpt) {
+      results.each(function (rowOldOpt, indexOldOpt) {
         // Сформируем массив старых параметров (те, что уже есть в базе данных)
         arrOldOpt[indexOldOpt] = rowOldOpt.option;
         // Сразу поищем, является ли данный элемент удалённым
@@ -946,7 +967,7 @@ function updateExerciseProperties() {
 Функция добавления названия группы упражнений
 */
 function addExType() {
-  var temp = $('input#inputNewExType').val();
+  var temp = $$('input#inputNewExType').val();
   var newExType = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   server.exerciseType.add({'name': newExType}).then(function(result) {
     // Обновляем список групп упражнений на соответствующей странице
@@ -994,7 +1015,7 @@ function deleteExType(idExType) {
     });
 }
 // Управляем видимостью кнопок Delete в настройках упражнений
-$(document).on('change', '.btn-delete-toggle', function() {
+$$(document).on('change', '.btn-delete-toggle', function() {
   var collapse_content_selector = '#' + $$(this).attr('name');
   $$(collapse_content_selector).toggleClass('hidden');
 });
@@ -1006,53 +1027,66 @@ $(document).on('change', '.btn-delete-toggle', function() {
 (в случае когда есть и то, и то, - приоритет за сформированным сегодня комплексом). 
 */
 function upgradeViewWorkout() {
-  // Кнопку Save надо заменить на Change
-  $('a[href="#tab0"]').replaceWith('<a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a>');
-  // Кнопку Clear all надо заменить на Cancel 
-  $('a#aClearAll').replaceWith('<a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a>');
+  // Сформируем доступные кнопки для вкладки сформированного комплекса упражнений
+  var menuWorkout = '';
+  menuWorkout =  '<div class="col-25">';
+  menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a></center>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a></center>';
+  //menuWorkout += '  <center><a href="#" class="tab-link">' + i18n.gettext('Schedule') + '</a></center>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
+  menuWorkout += '</div>';
+  document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   var isWorkout = 0; // Установим флаг наличия расписания на сегодня
-  var temp = $('input#inputNewCustomer').val();
+  var temp = $$('input#inputNewCustomer').val();
   var customerName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   var customerId = parseInt($$('#inputNewCustomer').attr('data-item'));
-  $('span#spanCustName').html(customerName).attr('data-item', customerId);
+  $$('#spanCustName').html(customerName).attr('data-item', customerId);
   var today = new Date().toDateInputValue();
-  $('span#spanDateEx').html(today);
+  $$('#spanDateEx').html(today);
   console.log('Клиент ' + customerName + ', дата ' + today);
-  // Формируем календарь занятий данного клиента
-  //$("#calendar").datepicker({ autoSize: true });
-  // Сформируем список упражнений, если он уже был сформирован на сегодня ранее
-  server.workout.query('customer')
-  	.filter('date', today)
+  // Сформируем список упражнений, если он уже был сформирован на сегодня ранее по данному клиенту
+  server.workout.query()
+  	.filter(function(currentWorkout) {return (currentWorkout.date === today) && (currentWorkout.customer === customerId)})
     .execute()
-    .then(function(result) {
+    .then(function(resWorkout) {
       var listExCust = '';
-      if(result.length) { // Если нашли сегодня сформированный комплекс упражнений, то проверим, есть ли тут нужный клиент и (если есть) сразу же покажем его
-        console.log('Нашли в базе данные по занятиям на сегодня: ' + JSON.stringify(result));
-        result.forEach(function(item) {
+      if(resWorkout.length) { // Если нашли сегодня сформированный комплекс упражнений, то покажем его
+        console.log('Нашли в базе данные по занятиям на сегодня: ' + JSON.stringify(resWorkout));
+        //resWorkout.forEach(function(item) {
+        //resWorkout.each(function(item) {
+        for (var index in resWorkout) {
+          var item = resWorkout[index];
           console.log('Обрабатываем первое занятие на сегодня. item = ' + JSON.stringify(item));
-      	  if(item.customer == customerId) {
-      	    // По id упражнения получим все данные по нему
-      	    server.exercise.get(item.exercise).then(function (rowExercise) {
-      	      console.log('Вот, что нашли по текущему упражнению: ' + JSON.stringify(rowExercise));
-      	      var exName = rowExercise.name; // Получили название упражнения, т.к. в workout хранится только код
-        	  listExCust += '<li>';
-              listExCust += '  <a href="#view-24" class="tab-link item-link item-content" onclick="makeViewExWork(' + rowExercise.id + ')">';
-              listExCust += '    <div class="item-inner">';
-              listExCust += '      <span data-item="' + rowExercise.id + '">' + exName + '</span>';
-              listExCust += '    </div>';
-              listExCust += '  </a>';
-              listExCust += '</li>';
-              // После того, как в цикле сформировали список упражнений не текущий день недели, покажем его на странице
-              console.log('Сейчас будем выводить подготовленный список упражнений');
-              if(!$('#noWorkout').hasClass('hidden')) {
-                $('#noWorkout').addClass('hidden');    
-              }
-              document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
-              SORTER.sort('#ulListCurrentExercises');
-            });
-            isWorkout = 1;
-      	  }
-        });
+      	  // По id упражнения получим все данные по нему
+      	  server.exercise.get(item.exercise).then(function (rowExercise) {
+      	    console.log('Вот, что нашли по текущему упражнению: ' + JSON.stringify(rowExercise));
+      	    var exName = rowExercise.name; // Получили название упражнения, т.к. в workout хранится только код
+        	listExCust += '<li>';
+            listExCust += '  <a href="#view-24" class="tab-link item-link item-content" onclick="makeViewExWork(' + rowExercise.id + ')">';
+            listExCust += '    <div class="item-inner">';
+            listExCust += '      <span data-item="' + rowExercise.id + '">' + exName + '</span>';
+            listExCust += '    </div>';
+            listExCust += '  </a>';
+            listExCust += '</li>';
+            // После того, как в цикле сформировали список упражнений не текущий день недели, покажем его на странице
+            console.log('Сейчас будем выводить подготовленный список упражнений');
+            /*if(!$$('#noWorkout').hasClass('hidden')) {
+              $$('#noWorkout').addClass('hidden');
+            }*/
+            $$('#noWorkout').hide();
+            document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
+            //SORTER.sort('#ulListCurrentExercises');
+          });
+          isWorkout = 1;
+        //});
+        }
       } else { // Сегодня комплекс занятий не формировался
       	console.log('Сегодня комплекс занятий не формировался, значит проверям по дням недели');
       	server.schedule.query()
@@ -1089,8 +1123,11 @@ function upgradeViewWorkout() {
               console.log('Сегодня: ' + nameToday);
               // Теперь пройдёмся по всем дням недели и проверим, нет ли там текущего
               // А если на текущий день недели ничего не запланировано, то покажем текст-заглушку. Для это используем флаг isWorkout
-              resSchedule.forEach(function(item) {
-      	        if((item.day == nameToday) || (item.day == 'everyday')) {
+              //resSchedule.forEach(function(item) {
+              //resSchedule.each(function(item) {
+              for (var index in resSchedule) {
+                item = resSchedule[index];
+      	        if((item.day === nameToday) || (item.day === 'everyday')) {
       	          server.exercise.get(item.exercise).then(function (rowExercise) {
       	            var exName = rowExercise.name; // Получили название упражнения, т.к. в workout хранится только код
         	        listExCust += '<li>';
@@ -1102,21 +1139,24 @@ function upgradeViewWorkout() {
                     listExCust += '</li>';
                     // После того, как в цикле сформировали список упражнений не текущий день недели, покажем его на странице
                     console.log('Сейчас будем выводить подготовленный список упражнений');
-                    if(!$('#noWorkout').hasClass('hidden')) {
-                      $('#noWorkout').addClass('hidden');    
-                    }
+                    /*if(!$$('#noWorkout').hasClass('hidden')) {
+                      $$('#noWorkout').addClass('hidden');
+                    }*/
+                    $$('#noWorkout').hide();
                     document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
                   });
                   isWorkout = 1;
       	        }
-              });
+              //});
+              }
            } // Конец проверки на наличие расписания по дням недели на данного клиента
       	  });
       }
       if (!isWorkout) { // Если упражнений на сегодня нет
-        if($('#noWorkout').hasClass('hidden')) {
-          $('#noWorkout').removeClass('hidden');    
-        }
+        /*if($$('#noWorkout').hasClass('hidden')) {
+          $$('#noWorkout').removeClass('hidden');
+        }*/
+        $$('#noWorkout').show();
       }
     });
   // По-умолчанию первым делом показываем вкладку с уже сформированным списком упражнений на сегодня
@@ -1134,21 +1174,33 @@ function in_array(value, array) {
 Вызывается со страницы #view-15 по кнопке "Change"
 */
 function makeSetExCustomer() {
-  // Кнопку Change надо заменить на Save
-  $('a[href="#tab3"]').replaceWith('<a href="#tab0" class="tab-link" onclick="saveSetExCustomer(\'fromChange\')">Save</a>');
-  // Кнопку Cancel надо заменить на Clear all
-  $('a#aCancelSetEx').replaceWith('<a href="" class="tab-link" onclick="makeSetExCustomer()" id="aClearAll">Clear all</a>');
-  // Очистим список готового набора
-  $('ul#ulListSelectedExercises').empty();
+  // Сформируем доступные кнопки для вкладки сформированного комплекса упражнений
+  var menuWorkout = '';
+  menuWorkout =  '<div class="col-25">';
+  menuWorkout += '  <center><a href="" class="tab-link" onclick="makeSetExCustomer()" id="aClearAll">' + i18n.gettext('Clear all') + '</a></center>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a></center>';
+  //menuWorkout += '  <center><a href="#" class="tab-link">' + i18n.gettext('Schedule') + '</a></center>';
+  menuWorkout += '</div>';
+  menuWorkout += '<div class="col-25">';
+  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="saveSetExCustomer(\'fromChange\')">' + i18n.gettext('Save') + '</a></center>';
+  menuWorkout += '</div>';
+  document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
+  // Очистим список готового набора (тот, что слева)
+  $$('#ulListSelectedExercises').html('');
   // Скопируем в левый список те упражнения, которые на сегодня уже отобраны (со вкладки #tab0)
   var listEx = '';
   var excludeEx = [];
-  $('#ulListCurrentExercises li a div span').each(function(index, item) {
+  $$('#ulListCurrentExercises li a div span').each(function(index, item) {
   	temp = item.innerHTML;
-  	console.log('Разбор очередной позиции упражнения: ' + JSON.stringify($(this)));
+  	console.log('Разбор очередной позиции упражнения: ' + JSON.stringify($$(this)));
   	// На всякий случай поставим заглушку от инъекций
   	exercise = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
-  	var exerciseId = parseInt($(this).attr('data-item')); // Находим id упражнения
+  	var exerciseId = parseInt($$(this).attr('data-item')); // Находим id упражнения
   	excludeEx[index] = exercise;
     console.log('exercise = ' + exercise);
     listEx += '<li class="swipeout swipeout-selected">';
@@ -1162,96 +1214,68 @@ function makeSetExCustomer() {
     listEx += '  </div>';
     listEx += '</li>';
   });
-  $('ul#ulListSelectedExercises').append(listEx);
-  $('#ulListAllExWithTypes').empty();
+  $$('ul#ulListSelectedExercises').append(listEx);
+  $$('#ulListAllExWithTypes').html('');
   // Формируем полный список групп упражнений (тот, что справа)
   server.exerciseType.query('name')
     .all()
     .execute()
-    .then(function(results) {
+    .then(function(typeEx) {
        console.log('Формируем список групп упражнений');
-       console.log('Список групп упражнений: ' + JSON.stringify(results));
-       // Упражнения без сортировки (библиотека db.js не поддерживает сортировку) - добавим её,
-       // но сначала сформируем массив для сортировки по наименованию
-       var arrExTypes = [];
-       results.forEach(function (rowExerciseType, indexType) {
-       	 //console.log('indexType: ' + indexType);
-       	 arrExTypes[indexType] = rowExerciseType.name + '@#' + rowExerciseType.id;
-       	 //console.log('arrExTypes[indexType] = ' + rowExerciseType.name);
-       });
-       arrExTypes.sort(); // Теперь имеем отсортированный по названиям список групп упражнений
-       var arrEx = [];
-       //console.log('arrExTypes = ' + arrExTypes);
        // Пройдём циклом по всем названиям групп упражнений, которые уже упорядочены по наименованию
-       arrExTypes.forEach(function(exTypeNameId) {
-         var arrTempNameId = exTypeNameId.split('@#');
-         var exTypeId = arrTempNameId[1]; // Получили код группы упражнений
-         var exTypeName = arrTempNameId[0]; // Получили наименование текущей группы упражнений
+       for (var index in typeEx) {
+         var exTypeId = typeEx[index].id; // Получили код текущей группы упражнений
+         var exTypeName = typeEx[index].name; // Получили наименование текущей группы упражнений
          console.log('Текущая группа упражнений: ' + exTypeName + ' с id = ' + exTypeId);
          // Добавляем на страницу наименования групп упражнений
-         $('ul#ulListAllExWithTypes').append('<li class="item-divider" data-item="' + exTypeId + '">' + exTypeName + '</li>');
-         var testExercise = [];
+         $$('#ulListAllExWithTypes').append('<li class="item-divider" data-item="' + exTypeId + '">' + exTypeName + '</li>');
+         console.log('Добавили название очередной группы упражнений: ' + exTypeName + ' с id = ' + exTypeId);
          // Формируем список упражнений из данной группы
          server.exercise.query('name')
   	       .filter('type', parseInt(exTypeId))
-           .distinct()
            .execute()
-           .then(function(res2) {
-             res2.forEach(function (rowExercise, indexEx) {
-               arrEx[indexEx] = rowExercise.name + '@#' + rowExercise.id; // Создаём массив наименований упражнений для того, чтобы отсортировать
-               //console.log('arrEx[indexEx]: ' + rowExercise.name);
-             });
-             arrEx.sort(function (a, b) {
-               return b - a;             
-             }); // Теперь упражнения отсортированы по названиям в порядке убывания
-             //console.log('Упорядоченный список упражнений: ' + arrEx);
+           .then(function(arrEx) {
              // По отсортированному массиву названий упражнений пройдём циклом
-             arrEx.forEach(function(exerciseNameId, index) {
-               var arrTempExNameId = exerciseNameId.split('@#');
-               var exerciseId = arrTempExNameId[1]; // Получили id текущего упражнения
-               var exerciseName = arrTempExNameId[0]; // Получили наименование текущего упражнения
-               testExercise[index] = exerciseName;
-               //console.log('testExercise[index] = ' + testExercise[index]);
-               //console.log('testExercise[index - 1] = ' + testExercise[index - 1]);
-               if((index == 0) || (testExercise[index] != testExercise[index - 1])) {
-               	 // Если упражнение было уже отобрано ранее, то его не надо включать в полный список справа 
-               	 //console.log('Вот наш список исключений: ' + excludeEx[0] + '; ' + excludeEx[1]);
-               	 if(!(in_array(exerciseName, excludeEx))) {
-               	   //console.log('Проверили, что этого упражнения нет в списке исключений: ' + exercise);
-               	   var listExercises = '';
-                   listExercises += '<li class="swipeout swipeout-all">';
-                   listExercises += '  <div class="swipeout-content item-content">';
-                   listExercises += '    <div class="item-inner">';
-                   listExercises += '      <div class="item-title" data-item="' + exerciseId + '">' + exerciseName + '</div>';
-                   listExercises += '      </div>';
-                   listExercises += '    </div>';
-                   listExercises += '  </div>';
-                   listExercises += '  <div class="swipeout-actions-right">'; // Действие появится справа
-                   //listExercises += '    <div class="swipeout-actions-inner">';
-                   listExercises += '    <a href="#" class="action1">Added</a>';
-                   listExercises += '  </div>';
-                   listExercises += '</li>';
-                   // Элемент сформирован, надо вставлять на место
-                   $('ul#ulListAllExWithTypes li[data-item="' + exTypeId + '"]').after(listExercises);
-                 }
+             for (var indexArrEx in arrEx) {
+               var exerciseId = arrEx[indexArrEx].id; // Получили id текущего упражнения
+               var exerciseName = arrEx[indexArrEx].name; // Получили наименование текущего упражнения
+               var exerciseType = arrEx[indexArrEx].type; // Получили название группы упражнения
+               // Если упражнение было уже отобрано ранее, то его не надо включать в полный список справа
+               //console.log('Вот наш список исключений: ' + excludeEx[0] + '; ' + excludeEx[1]);
+               if(!(in_array(exerciseName, excludeEx))) {
+               	 console.log('Проверили, что этого упражнения нет в списке исключений: ' + exerciseName);
+               	 var listExercises = '';
+                 listExercises += '<li class="swipeout swipeout-all">';
+                 listExercises += '  <div class="swipeout-content item-content">';
+                 listExercises += '    <div class="item-inner">';
+                 listExercises += '      <div class="item-title" data-item="' + exerciseId + '">' + exerciseName + '</div>';
+                 listExercises += '      </div>';
+                 listExercises += '    </div>';
+                 listExercises += '  </div>';
+                 listExercises += '  <div class="swipeout-actions-right">'; // Действие появится справа
+                 listExercises += '    <a href="#" class="action1">Added</a>';
+                 listExercises += '  </div>';
+                 listExercises += '</li>';
+                 // Элемент сформирован, надо вставлять на место
+                 $$('#ulListAllExWithTypes').find('li.item-divider[data-item="' + exerciseType + '"]').append(listExercises);
                }
-             });
+             }
              arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
            });
-       });
+       }
   });
 }
 
 // Обработаем свайпы на упражнениях. Нужно такое упражнение убрать из списка справа и добавить в список слева
-$(document).on('opened', '.swipeout-all', function (e) {
+$$(document).on('opened', '.swipeout-all', function (e) {
   //console.log('Item opened on: ' + e.detail.progress + '%');
   console.log('Item opened');
   myApp.swipeoutDelete(this);
   //console.log(this);
-  console.log($(this).find('div.item-title').text());
-  var exercise = $(this).find('div.item-title').text();
+  console.log($$(this).find('div.item-title').text());
+  var exercise = $$(this).find('div.item-title').text();
   var listEx = '';
-  var exerciseId = $(this).find('div.item-title').attr('data-item');
+  var exerciseId = $$(this).find('div.item-title').attr('data-item');
   console.log('Определили id свайпнутого упражнения: ' + exerciseId);
   listEx += '<li class="swipeout swipeout-selected">';
   listEx += '  <div class="swipeout-content item-content">';
@@ -1265,20 +1289,20 @@ $(document).on('opened', '.swipeout-all', function (e) {
   //listEx += '    </div>';
   listEx += '  </div>';
   listEx += '</li>';
-  $('ul#ulListSelectedExercises').append(listEx);
+  $$('ul#ulListSelectedExercises').append(listEx);
 });
 // Обработаем свайпы на упражнениях, которые уже успели отобрать. Нужно такое упражнение убрать из списка слева и добавить в список справа
-$(document).on('opened', '.swipeout-selected', function (e) {
+$$(document).on('opened', '.swipeout-selected', function (e) {
   myApp.swipeoutDelete(this);
   //console.log(this);
-  console.log($(this).find('div.item-title').text());
-  var exercise = $(this).find('div.item-title').text();
+  console.log($$(this).find('div.item-title').text());
+  var exerciseName = $$(this).find('div.item-title').text();
   var listExercises = '';
-  var exerciseId = parseInt($(this).find('div.item-title').attr('data-item'));
+  var exerciseId = parseInt($$(this).find('div.item-title').attr('data-item'));
   listExercises += '<li class="swipeout swipeout-all">';
   listExercises += '  <div class="swipeout-content item-content">';
   listExercises += '    <div class="item-inner">';
-  listExercises += '      <div class="item-title" data-item="' + exerciseId + '">' + exercise + '</div>';
+  listExercises += '      <div class="item-title" data-item="' + exerciseId + '">' + exerciseName + '</div>';
   listExercises += '      </div>';
   listExercises += '    </div>';
   listExercises += '    <div class="swipeout-actions-right">';
@@ -1290,9 +1314,9 @@ $(document).on('opened', '.swipeout-selected', function (e) {
   // Элемент сформирован, надо вставлять на место
   // Но сначала найти нужную группу упражнений
   server.exercise.get(exerciseId).then(function (exercise) {
-    console.log('Нашли тип этого упражнения: ' + exercise.type);
+    console.log('Нашли группу этого упражнения: ' + exercise.type);
     // TODO Тут вставляем запись в конец списка, хотя правильнее было бы в нужном порядке (сортировка по алфавиту)
-    $('ul#ulListAllExWithTypes li[data-item="' + exercise.type + '"]').after(listExercises);
+    $$('#ulListAllExWithTypes').find('li.item-divider[data-item="' + exercise.type + '"]').append(listExercises);
   });
 });  
 /*
@@ -1303,50 +1327,48 @@ function saveSetExCustomer(flagFrom) {
   // Сформируем доступные кнопки для вкладки сформированного комплекса упражнений
   var menuWorkout = '';
   menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a></center>';
+  menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
+  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  //menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
-  menuWorkout += '  <center><a href="#" class="tab-link">Schedule</a></center>';
+  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a></center>';
+  //menuWorkout += '  <center><a href="#" class="tab-link">' + i18n.gettext('Schedule') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a></center>';
+  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
   menuWorkout += '</div>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   console.log('Сохраняем набор');
   var temp = '';
   var listExCust = '';
-  var customerId = parseInt($('span#spanCustName').attr('data-item'));
-  var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
+  var customerId = parseInt($$('span#spanCustName').attr('data-item'));
+  var dateEx = $$('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
   // Перед сохранением нового списка упражнений, надо удалить уже существующие в базе данные
-  server.workout.query('customer')
-  	.filter('date', dateEx)
+  server.workout.query()
+  	.filter(function(workoutCustomer) {return (workoutCustomer.date === dateEx) && (workoutCustomer.customer === customerId)})
     .execute()
     .then(function(result) {
       console.log('Нашли в базе данные по занятиям на сегодня: ' + JSON.stringify(result));
       var listExCust = '';
-      result.forEach(function(item) {
-      	// Отбираем занятия только нужного клиента
-      	if(item.customer === customerId) {
-      	  server.remove('workout', parseInt(item.id)).then(function(res3) {
-            console.log('Удалили workout с id = ' + item.id);
-            console.log(JSON.stringify(res3));
-          });
-      	}
-      });
+      for (var index in result) {
+        var item = typeEx[index];
+      	server.remove('workout', parseInt(item.id)).then(function(res3) {
+          console.log('Удалили workout с id = ' + item.id);
+          console.log(JSON.stringify(res3));
+        });
+      }
     });
   if(flagFrom === 'fromCalendar') { // Если мы в эту функцию попали из календаря
-    $('#ulListPastExercises li span').each(function(index, item) {
+    $$('#ulListPastExercises li span').each(function(index, item) {
   	  temp = item.innerHTML;
   	  // На всякий случай поставим заглушку от инъекций
   	  var exerciseName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
       console.log('exerciseName = ' + exerciseName + '; customerId = ' + customerId + '; dateEx = ' + dateEx);
       // Определим id упражнения
-      console.log('Смотрим в html в поисках id упражнения: ' + $(this).attr('data-item'));
-      var exerciseId = parseInt($(this).attr('data-item'));
+      console.log('Смотрим в html в поисках id упражнения: ' + $$(this).attr('data-item'));
+      var exerciseId = parseInt($$(this).attr('data-item'));
   	  server.workout.add({'customer': customerId, 'date': dateEx, 'exercise': exerciseId});
   	  listExCust += '<li>';
       listExCust += '  <a href="#view-24" class="tab-link item-link item-content" onclick="makeViewExWork(' + exerciseId + ')">';
@@ -1355,16 +1377,18 @@ function saveSetExCustomer(flagFrom) {
       listExCust += '    </div>';
       listExCust += '  </a>';
       listExCust += '</li>';
+      // После того, как в цикле сформировали список упражнений, покажем его на странице
+      document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
     });
   } else { // Если в эту функцию мы попали из сохранения нового набора упражнений
-    $('div.set-of-exercises').each(function(index, item) {
+    $$('div.set-of-exercises').each(function(index, item) {
   	  temp = item.innerHTML;
   	  // На всякий случай поставим заглушку от инъекций
   	  exerciseName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
       console.log('exerciseName = ' + exerciseName + '; customerId = ' + customerId + '; dateEx = ' + dateEx);
       // Определим id упражнения
-      console.log('Смотрим в html в поисках id упражнения: ' + $(this).attr('data-item'));
-      var exerciseId = parseInt($(this).attr('data-item'));
+      console.log('Смотрим в html в поисках id упражнения: ' + $$(this).attr('data-item'));
+      var exerciseId = parseInt($$(this).attr('data-item'));
   	  server.workout.add({'customer': customerId, 'date': dateEx, 'exercise': exerciseId});
   	  listExCust += '<li>';
       listExCust += '  <a href="#view-24" class="tab-link item-link item-content" onclick="makeViewExWork(' + exerciseId + ')">';
@@ -1373,14 +1397,12 @@ function saveSetExCustomer(flagFrom) {
       listExCust += '    </div>';
       listExCust += '  </a>';
       listExCust += '</li>';
+      // После того, как в цикле сформировали список упражнений, покажем его на странице
+      document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
     });
   }
-  if(!$('#noWorkout').hasClass('hidden')) {
-    $('#noWorkout').addClass('hidden');    
-  }
-  // После того, как в цикле сформировали список упражнений, покажем его на странице
-  document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
-  SORTER.sort('#ulListCurrentExercises');
+  $$('#noWorkout').hide();
+  //SORTER.sort('#ulListCurrentExercises');
 }
 /*
 Функция подготовки отображения страницы работы с упражнением клиента.
@@ -1388,16 +1410,16 @@ function saveSetExCustomer(flagFrom) {
 */
 function makeViewExWork(exerciseId) {
   console.log('Подготавливаем к работе страницу упражнения с id = ' + exerciseId);
-  var customerId = parseInt($('#spanCustName').attr('data-item'));
-  var temp = $('#spanCustName').html();
+  var customerId = parseInt($$('#spanCustName').data('item'));
+  var temp = $$('#spanCustName').html();
   var customerName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   document.getElementById("spanWorkCustName").innerHTML = customerName;
   var today = new Date().toDateInputValue();
   document.getElementById("spanWorkDateEx").innerHTML = today;
-  // На форму покажен название упражнения, с которым сейчас работаем
+  // На форму покажем название упражнения, с которым сейчас работаем
   server.exercise.get(exerciseId).then(function (rowExercise) {
     document.getElementById("spanExWork").innerHTML = rowExercise.name;
-    $('#spanExWork').attr('data-item', exerciseId);
+    $$('#spanExWork').attr('data-item', exerciseId);
   });
   // Формируем к показу характеристики выбранного упражнения
   var propEx = '';
@@ -1418,7 +1440,7 @@ function makeViewExWork(exerciseId) {
   propEx += '  </div>';
   propEx += '</li>';
   
-  //var exerciseName = $('span#spanExWork').text();
+  //var exerciseName = $$('span#spanExWork').text();
   console.log('Идёт построение параметров упражнения с id = ' + exerciseId);
   // Сначала отберём все записи по данному упражнению из базы...
   server.optionsExercises.query()
@@ -1426,7 +1448,8 @@ function makeViewExWork(exerciseId) {
     .execute()
     .then(function(results) {
       console.log('Список характеристик: ' + JSON.stringify(results));
-      results.forEach(function (rowExOpt) {
+      for (var index in results) {
+        var rowExOpt = results[index];
       	console.log('rowExOpt.option = ' + rowExOpt.option);
       	// Параметр "Время" нужно оформить в виде двух окон ввода для минут и секунд 
       	if (rowExOpt.option == 'time') {
@@ -1458,7 +1481,7 @@ function makeViewExWork(exerciseId) {
       	  propEx += '  </div>';
       	  propEx += '</li>';
       	}
-      });
+      }
       document.getElementById("ulListCurrentWorkEx").innerHTML = propEx;
     });
 }
@@ -1467,10 +1490,10 @@ function makeViewExWork(exerciseId) {
 Вызывается со страницы #view-24 #workTab1 по нажатию на кнопку Save
 */
 function saveExerciseWork() {
-  var customerId = parseInt($('span#spanCustName').attr('data-item'));
-  var exerciseId = parseInt($('#spanExWork').attr('data-item'));
-  var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
-  var workSet = parseInt($('select[data-item="sets"]').val()); // Узнаём номер подхода
+  var customerId = parseInt($$('span#spanCustName').attr('data-item'));
+  var exerciseId = parseInt($$('#spanExWork').attr('data-item'));
+  var dateEx = $$('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
+  var workSet = parseInt($$('select[data-item="sets"]').val()); // Узнаём номер подхода
   var noDoubles = 1; // Флаг, показывающий, что дубли не встретились
   console.log('workSet = ' + workSet);
   var flagAdd = 0; // По-умолчанию запись в базу запрещена
@@ -1496,18 +1519,19 @@ function saveExerciseWork() {
               // Выбрали вариант перезаписи.
               // Значит найдём все записи по данному подходу данного клиента по данному упражнению на данную дату и обновим их
               console.log('Мы в обработчике перезаписи данных по выполнению упражнения');
-              result.forEach(function (item, index) {
+              for (var index in result) {
+                var item = result[index];
                 // Мы нашли данные по аналитическому разрезу!
                 console.log('В базе нашлось: item.option = ' + item.option + '; item.value = ' + item.value);
                 // Найдём текущий параметр в нашей форме
                 if(item.option == 'time') {
-                  var tempMinValue = $('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
+                  var tempMinValue = $$('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
                   if (tempMinValue == '') { // Не заполнили минуты
                     var intMinValue = 0;
                   } else {
                     var intMinValue = parseInt(tempMinValue);
                   }
-                  var tempSecValue = $('#ulListCurrentWorkEx input[data-item = "time-seconds"]').val();
+                  var tempSecValue = $$('#ulListCurrentWorkEx input[data-item = "time-seconds"]').val();
                   if (tempSecValue == '') {
                     var intSecValue = 0;
                   } else {
@@ -1515,7 +1539,7 @@ function saveExerciseWork() {
                   }
                   newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
                 } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
-                  var tempValue = $('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
+                  var tempValue = $$('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
                   if (tempValue == '') { // Если поле ввода оставили пустым
                     var newValOpt = 0;
                   } else {
@@ -1542,7 +1566,7 @@ function saveExerciseWork() {
                     });
                   }
                 });
-              });
+              }
             } // Конец функции перезаписи значений БД
           },
           {
@@ -1551,16 +1575,17 @@ function saveExerciseWork() {
               var flagSavedData = 0;
               // Выбрали вариант добавления текущих показателей к тем, что уже есть в базе по данному разрезу.
               // Значит найдём все записи по данному подходу данного клиента по данному упражнению и прибавим текущие значения
-              result.forEach(function (item, index) {
+              for (var index in result) {
+                var item = result[index];
                 // Найдём текущий параметр в нашей форме
                 if(item.option == 'time') {
-                  var tempMinValue = $('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
+                  var tempMinValue = $$('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
                   if (tempMinValue == '') { // Не заполнили минуты
                     var intMinValue = 0;
                   } else {
                     var intMinValue = parseInt(tempMinValue);
                   }
-                  var tempSecValue = $('#ulListCurrentWorkEx input[data-item = "time-seconds"]').val();
+                  var tempSecValue = $$('#ulListCurrentWorkEx input[data-item = "time-seconds"]').val();
                   if (tempSecValue == '') {
                     var intSecValue = 0;
                   } else {
@@ -1568,7 +1593,7 @@ function saveExerciseWork() {
                   }
                   newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
                 } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
-                  var tempValue = $('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
+                  var tempValue = $$('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
                   if (tempValue == '') { // Если поле ввода оставили пустым
                     var newValOpt = 0;
                   } else {
@@ -1595,7 +1620,7 @@ function saveExerciseWork() {
                     });
                   }
                 });
-              });
+              }
             } // Конец функции добавления значений к сохранённым в БД
           },
           {
@@ -1612,14 +1637,14 @@ function saveExerciseWork() {
         var time = 0; // Время будем записывать в секундах
         var isTime = 0;
         var flagSavedData = 0; // Флаг, что данные (первоя строка) сохранены
-        $('#ulListCurrentWorkEx li input').each(function(index, item) {
+        $$('#ulListCurrentWorkEx li input').each(function(index, item) {
           console.log('item.value ' + item.value + 'item.attributes[data-item].value ' + item.attributes['data-item'].value);
           option = item.attributes['data-item'].value;
           // Значение параметра заполнено
           if(option == 'time-minutes') {
             isTime = 1;
             // Запоминаем минуты, переведённые в секунды
-            var tempMinValue = $(this).val();
+            var tempMinValue = $$(this).val();
             if (tempMinValue == '') {
               var intMinValue = 0;
             } else {
@@ -1630,7 +1655,7 @@ function saveExerciseWork() {
           else if(option == 'time-seconds') {
             isTime = 1;
             // Запоминем секунды
-            var tempSecValue = $(this).val();
+            var tempSecValue = $$(this).val();
             if (tempSecValue == '') {
               var intSecValue = 0;
             } else {
@@ -1638,7 +1663,7 @@ function saveExerciseWork() {
             }
             time = time + intSecValue;
           } else {
-            var tempValue = $(this).val();
+            var tempValue = $$(this).val();
             if(tempValue == '') {
               var intValue = 0;
             } else {
@@ -1693,23 +1718,21 @@ function saveExerciseWork() {
 
 // Приводим даты в "русский вид" ("15.04.2013"))
 function makeCalDate(date) {
-    var d = date.getDate().toString();
-    var m = 1 + date.getMonth();
-    var y = date.getFullYear().toString();
-    if(d.length < 2)
-    {
-        d = "0" + d;    
-    }
-    m = m.toString();
-    if(m.length < 2)
-    {
-        m = "0" + m;    
-    }
+  var d = date.getDate().toString();
+  var m = 1 + date.getMonth();
+  var y = date.getFullYear().toString();
+  if(d.length < 2) {
+    d = "0" + d;
+  }
+  m = m.toString();
+  if(m.length < 2) {
+    m = "0" + m;
+  }
 
-    //var Date2 = d +"."+ m +"."+ y;
-    var Date2 = y +"-"+ m +"-"+ d;
+  //var Date2 = d +"."+ m +"."+ y;
+  var Date2 = y +"-"+ m +"-"+ d;
                         
-    return Date2;                        
+  return Date2;
 }
 /*
 Функция подготовки отображения календаря клиента.
@@ -1719,21 +1742,23 @@ function makeCalendExCustomer() {
   // Сформируем доступные кнопки для вкладки Календарь
   var menuWorkout = '';
   menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="viewExSetCustomer()">Cancel</a></center>';
+  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link active">Calendar</a></center>';
+  menuWorkout += '  <center><a href="#tab1" class="tab-link active">' + i18n.gettext('Calendar') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
+  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="saveSetExCustomer(\'fromCalendar\')">Save</a></center>';
+  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="saveSetExCustomer(\'fromCalendar\')">' + i18n.gettext('Save') + '</a></center>';
   menuWorkout += '</div>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
+  // Очистим список упражнений в левой части
+  $$('#ulListPastExercises').html('');
   console.log("Начинаем подгружать календарь");
   // Получим из базы данные, когда были занятия у данного клиента
-  var customerId = parseInt($('span#spanCustName').attr('data-item'));
+  var customerId = parseInt($$('span#spanCustName').data('item'));
   server.workout.query()
   	.filter('customer', customerId)
     .execute()
@@ -1743,20 +1768,21 @@ function makeCalendExCustomer() {
       var dateWork = '';
       var i = 0;
       var arrWorkEx = [];
-      var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
-      result.forEach(function (item, index) {
+      var dateEx = $$('#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
+      for (var index in result) {
+        var item = result[index];
         // Сформируем массив дат, когда были составлены списки упражнений для занятия текущего клиента
         dateWork = item.date;
         if (index == 0) {
           datesWork[0] = dateWork;
-          //console.log('Первый раз. Новая дата: ' + dateWork);
+          console.log('Первый раз. Новая дата: ' + dateWork);
           i = 1;
         } else { // Обрабатываем уже не первую запись
           // Если дата из новой записи ещё не встречалась, то запишем её в наш массив дат
           if(!(in_array(dateWork, datesWork))) {
             datesWork[i] = dateWork;
             i = 1; // Начинаем отсчёт упражнения по новой дате
-            //console.log('Новая дата: ' + dateWork);
+            console.log('Новая дата: ' + dateWork);
           } else {
             i = i + 1; // Продолжаем отсчёт упражнений по той же дате
           }
@@ -1767,17 +1793,20 @@ function makeCalendExCustomer() {
         } else { // Заносим id первого упражнения в массив по этой дате
           arrWorkEx[dateWork] = item.exercise;
         }
-      }); // Вышли из цикла после обработки всех строк
+      } // Вышли из цикла после обработки всех строк
       // Если на текущую дату уже есть какой-то набор упражнений, его надо тут показать
       if (result.length && (in_array(dateEx, datesWork))) { // Если на сегодня что-то есть по данному клиенту 
         console.log('Обрабатываем текущую дату (она нашлась в базе даных)!');
         console.log('arrWorkEx[dateEx] = ' + arrWorkEx[dateEx]);
         var workExercises = arrWorkEx[dateEx].split('@#');
         var listExCust = '';
-        workExercises.forEach(function(exerciseToday) {
+        //workExercises.forEach(function(exerciseToday) {
+        //workExercises.each(function(exerciseToday) {
+        for (var index in workExercises) {
+          var exerciseToday = workExercises[index];
           // Т.к. мы нашли id упражнения, определим его название
           server.exercise.get(parseInt(exerciseToday)).then(function (rowExercise) {
-    	      console.log('rowExercise.name = ' + rowExercise.name);
+    	    console.log('rowExercise.name = ' + rowExercise.name);
             listExCust += '<li>';
             listExCust += '  <div class="item-link item-content">';
             listExCust += '    <div class="item-inner">';
@@ -1786,9 +1815,10 @@ function makeCalendExCustomer() {
             listExCust += '  </div>';
             listExCust += '</li>';
             document.getElementById("ulListPastExercises").innerHTML = listExCust;
-            SORTER.sort('#ulListPastExercises');
+            //SORTER.sort('#ulListPastExercises');
           });
-        });
+        //});
+        }
       };
       //console.log('Цикл закончился, форматируем даты');
 
@@ -1797,8 +1827,8 @@ function makeCalendExCustomer() {
       console.log(datesWork[0]);
       var calendarInline = myApp.calendar({
         container: '#calendar-inline-container',
-        //value: [new Date()],
-        value: datesWork,
+        value: [new Date()],
+        //value: datesWork, // Выделяем те дни, когда были занятия.
         weekHeader: false,
         toolbarTemplate:
           '<div class="toolbar calendar-custom-toolbar">' +
@@ -1821,11 +1851,25 @@ function makeCalendExCustomer() {
             calendarInline.nextMonth();
           });
         },
+        onMonthAdd: function (calendar, monthContainer) {
+          $$(monthContainer).find('.picker-calendar-day').each(function() {
+            var day = $$(this);
+            var dayDate = day.attr('data-date').split('-'); //will give you array in format ['yyyy','m','d'];
+            // Собираем дату в виде строки по формату ГГГГ-ММ-ДД
+            var tempDate = new Date(dayDate[0], dayDate[1], dayDate[2]);
+            var dateText = makeCalDate(tempDate);
+            console.log('dateText = ' + dateText);
+            if (in_array(dateText, datesWork)) {
+              console.log('Совпадение даты найдено: ' + dayDate);
+              day.addClass('selected-day');
+            }
+          });
+        },
         onMonthYearChangeStart: function (p) {
           $$('.calendar-custom-toolbar .center').text(monthNames[p.currentMonth] +', ' + p.currentYear);
         },
         onDayClick: function (p, dayContainer, year, month, day) {
-          //console.log('Нажали на дату ' + year + '-' + (parseInt(month)+1) + '-' + day);
+          console.log('Нажали на дату ' + year + '-' + (parseInt(month)+1) + '-' + day);
           // Собираем дату в виде строки по формату ГГГГ-ММ-ДД
           var tempDate = new Date(year, month, day);
           var dateText = makeCalDate(tempDate);
@@ -1836,7 +1880,8 @@ function makeCalendExCustomer() {
             var workExercises = [];
             workExercises = arrWorkEx[dateText].split('@#');
             var listExCust = '';
-            workExercises.forEach(function(exerciseId) {
+            for (var index in workExercises) {
+              var exerciseId = workExercises[index];
               console.log('Мы в цикле по кодам упражнений. Текущая строка: ' + exerciseId);
               // Т.к. мы нашли id упражнения, определим его название
               server.exercise.get(parseInt(exerciseId)).then(function (rowExercise) {
@@ -1851,10 +1896,10 @@ function makeCalendExCustomer() {
                 // Надо слева показать список упражнений выделенного дня
                 console.log('listExCust = ' + listExCust);
                 document.getElementById("ulListPastExercises").innerHTML = listExCust;
-                SORTER.sort('#ulListPastExercises');
+                //SORTER.sort('#ulListPastExercises');
                 console.log('Обновили комплекс упражнений!');
               });
-            });
+            }
           }
         }
       });
@@ -1863,62 +1908,112 @@ function makeCalendExCustomer() {
 /*
 Функция сортировки списков <li>
 */
-var SORTER = {};
+/*var SORTER = {};
 SORTER.sort = function(which, dir) {
   SORTER.dir = (dir == "desc") ? -1 : 1;
-  $(which).each(function() {
+  $$(which).each(function() {
     // Find the list items and sort them
-    var sorted = $(this).find("> li").sort(function(a, b) {
-      return $(a).text().toLowerCase() > $(b).text().toLowerCase() ? SORTER.dir : -SORTER.dir;
+    //var sorted = $$(this).find("> li").sort(function(a, b) {
+    var sorted = $$(this).children().sort(function(a, b) {
+      return $$(a).text().toLowerCase() > $$(b).text().toLowerCase() ? SORTER.dir : -SORTER.dir;
     });
-    $(this).append(sorted);
+    $$(this).append(sorted);
   });
-};
+};*/
 
 /*
 Функция подготовки отображения расписания клиента по дням недели.
 Вызывается со страницы #view-15 #tab2 (при клике на вкладку Schedule)
+Текущий комплекс упражнений (если он есть) должен перекочевать сюда в левую часть, чтобы можно было выбрать дни недели
+и закрепить этот комплекс упражнений за определёнными днями недели.
+Если текущего комплекса упражнений ещё нет, то на данной вкладке должны "подсветиться" те дни недели,
+по которым расписание сформировано. Если выбрать заполненный день, то должен показаться его комплекс упражнений.
 */
 function makeScheduleExCustomer() {
   // Сформируем доступные кнопки для вкладки расписания по дням недели
   var menuWorkout = '';
   menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">Cancel</a>';
+  menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
+  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab2" class="tab-link active">Schedule</a></center>';
+  menuWorkout += '  <center><a href="#tab2" class="tab-link active">' + i18n.gettext('Schedule') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="makeScheduleCustomer()">Save</a></center>';
+  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="makeScheduleCustomer()">' + i18n.gettext('Save') + '</a></center>';
   menuWorkout += '</div>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   // Найдём сформированный на сегодня набор упражнений, чтобы тут же его показать
-  var customerId = parseInt($('span#spanCustName').attr('data-item'));
-  var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
-  server.workout.query()
-  	.filter(function(currentWorkout){ return ((currentWorkout.date == dateEx) && (currentWorkout.customer == customerId))})
-    .execute()
-    .then(function(result) {
-      //console.log('Нашли данные по занятиям на текущий день: ' + JSON.stringify(result));
-      var listExCust = '';
-      result.forEach(function (item, index) {
-        // Т.к. в базе хранятся id упражнения, то надо сначала найти их названия
-        server.exercise.get(item.exercise).then(function (rowExercise) {
-          listExCust += '<li>';
-          listExCust += '  <div class="item-link item-content">';
-          listExCust += '    <div class="item-inner">';
-          listExCust += '      <span data-item="' + rowExercise.id + '">' + rowExercise.name + '</span>';
-          listExCust += '    </div>';
-          listExCust += '  </div>';
-          listExCust += '</li>';
-          // Надо слева показать список упражнений выделенного дня
-          document.getElementById("ulListScheduleEx").innerHTML = listExCust;
-        });
-      }); // Конец цикла по упражнениям текущей даты
-    }); // Конец обработки запроса
+  var customerId = parseInt($$('span#spanCustName').data('item'));
+  var dateEx = $$('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
+  var currentListEx = $$('#ulListCurrentExercises li a div span');
+  var arrWorkEx = [];
+  if (currentListEx) { // Уже есть сформированный комплекс упражнений на сегодня
+    // Отобразим текущий комплекс упражнений в левой части вкладки
+    var listExCust = '';
+    $$('#ulListCurrentExercises li a div span').each(function(index, item) {
+      var temp = item.innerHTML;
+      //console.log('Разбор очередной позиции упражнения: ' + JSON.stringify($$(this)));
+      // На всякий случай поставим заглушку от инъекций
+      var exerciseName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
+      var exerciseId = parseInt($$(this).data('item')); // Находим id упражнения
+      arrWorkEx.push(exerciseId); // Формируем список выбранных упражнений
+      listExCust += '<li>';
+      listExCust += '  <div class="item-link item-content">';
+      listExCust += '    <div class="item-inner">';
+      listExCust += '      <span data-item="' + exerciseId + '">' + exerciseName + '</span>';
+      listExCust += '    </div>';
+      listExCust += '  </div>';
+      listExCust += '</li>';
+      // Надо слева показать список упражнений, сформированный на сегодня
+      document.getElementById("ulListScheduleEx").innerHTML = listExCust;
+    });
+    // В правой части вкладки отметим те дни недели, которые содержат данный набор упражнений
+    server.schedule.query('day')
+      .filter('customer', customerId)
+      .execute()
+      .then(function(result) {
+        var arrDays = [];
+        var arrExForCheck = [];
+        var num = 0;
+        var count = result.length;
+        console.log('Размер найденного массива = ' + count);
+        for (var index in result) {
+          var item = result[index];
+          // Результат отбора отсортирован по дням
+          arrDays[index] = item.day;
+          console.log('Проверяем день ' + item.day);
+          console.log('index = ' + index);
+          num = parseInt(index) + 1;
+          console.log('num = ' + num + '; count = ' + count);
+          if (((index > 0) && (arrDays[index] != arrDays[index - 1])) || (num == count)) { // Если начались записи по новому дню
+            // Проверяем список упражнений, назначенных на текущий день - совпадает ли он с сегодняшним комплексом упражнений
+            if (num == count) {
+              console.log('Новая запись того же дня (последняя): ' + item.exercise);
+              arrExForCheck.push(item.exercise); // Вносим упражнение следующего дня
+            }
+            console.log('arrExForCheck.sort().toString() = ' + arrExForCheck.sort().toString());
+            console.log('arrWorkEx.sort().toString() = ' + arrWorkEx.sort().toString());
+            console.log('Сверяем наборы упражнений');
+            if (arrExForCheck.sort().toString() === arrWorkEx.sort().toString()) {
+              // Отмечаем совпавший день
+              console.log('Отмечаем совпавший день ' + arrDays[index - 1]);
+              $$('#ulListDays li[data-item="' + arrDays[index - 1] + '"] input').prop('checked', true);
+            }
+            arrExForCheck.length = 0; // Сбрасываем массив для проверки следующего дня
+            arrExForCheck.push(item.exercise); // Вносим упражнение следующего дня
+          } else { // Продолжаются записи по одному дню
+            console.log('Новая запись того же дня: ' + item.exercise);
+            arrExForCheck.push(item.exercise); // Формируем список упражнений, назначенных на текущий день
+          }
+        }
+      });
+  } else { // На сегодня нет сформированного комплекса упражнений
+    // TODO Подсветим серым цветом те дни недели, на которые есть сохранённые комплексы упражнений
+
+  }
 }
 /*
 Функция сохранения расписания по сформированному набору упражнений клиента.
@@ -1928,27 +2023,32 @@ function makeScheduleCustomer() {
   // Сформируем доступные кнопки для вкладки текущего комплекса упражнений
   var menuWorkout = '';
   menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">Cancel</a>';
+  menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
+  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#" class="tab-link">Schedule</a></center>';
+  menuWorkout += '  <center><a href="#" class="tab-link">' + i18n.gettext('Schedule') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a></center>';
+  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
   menuWorkout += '</div>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   console.log('Сохраняем расписание');
-  var customerId = parseInt($('span#spanCustName').attr('data-item'));
+  var customerId = parseInt($$('span#spanCustName').data('item'));
   var day;
+  var isEveryday = 0; // По-умолчанию, считаем, что отметка "Каждый день" не стоит
   // Сформируем текущий рабочий список дней (всё, что отметили галочками)
-  var tempDays = $('input:checkbox[name=day-checkbox]:checked').map(function(index, element) {
-    return $(element).attr("value");
+  var arrNewDays = [];
+  $$('#ulListDays input:checked').each(function(item, index) {
+    arrNewDays.push($$(this).val());
+    console.log('$$(this).val() = ' + $$(this).val());
+    // Проверяем, появилась ли отметка everyday
+    if($$(this).val() === 'everyday') {
+      isEveryday = 1; // Выбрана опция "Каждый день", значит все другие записи из базы надо удалить
+    }
   });
-  var arrNewDays = tempDays.get();
-  //console.log('arrNewDays[1] = ' + arrNewDays[1]);
   // Найдём в базе все записи по расписаниям занятий на данного клиента
   server.schedule.query()
   	.filter('customer', customerId)
@@ -1956,29 +2056,27 @@ function makeScheduleCustomer() {
     .then(function(results) {
       // Удалим всё, что уже ранее было сохранено в качестве расписания клиента по выбранным сейчас дням
       // Остальные дни не трогаем. Таким образом можно сформировать разные группы упражнений для разных дней.
-      results.forEach(function (rowSchedule) {
-      	if(in_array(rowSchedule.day, arrNewDays)) {
-      	  server.remove('schedule', parseInt(rowSchedule.id));
+      for (var index in results) {
+        var rowSchedule = results[index];
+        if(in_array(rowSchedule.day, arrNewDays) || isEveryday) {
+          server.remove('schedule', parseInt(rowSchedule.id));
       	}
-      });
+      }
+      // После того, как удалили старые записи, внесём в базу новые записи
+      // Для этого в цикле по дням (из сформированного ранее массива) занесём все упражнения
+      for (var indexDay in arrNewDays) {
+        $$('#ulListScheduleEx span').each(function() {
+          var exerciseId = parseInt($$(this).data('item'));
+          console.log('Получили id текущего упражнения: ' + exerciseId);
+          server.schedule.add({
+            'customer': customerId,
+            'day': arrNewDays[indexDay],
+            'exercise': exerciseId
+          });
+          console.log('Были добавлены такие данные: customer = ' + customerId + '; day = ' + arrNewDays[indexDay] + '; exerciseId = ' + exerciseId);
+        });
+      }
     });
-  // После того, как удалили старые записи, внесём в базу новые записи
-  // Для этого в цикле по дням (из сформированного ранее массива) занесём все упражнения
-  arrNewDays.forEach(function(element, indexDay) {
-    $('#ulListScheduleEx span').each(function(index, item) {
-      temp = item.innerHTML;
-      // На всякий случай поставим заглушку от инъекций
-  	  //scheduleExercise = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
-  	  var exerciseId = parseInt($(this).attr('data-item'));
-  	  console.log('Получили id текущего упражнения: ' + exerciseId);
-  	  server.schedule.add({
-  	    'customer': customerId,
-  	    'day': arrNewDays[indexDay],
-  	    'exercise': exerciseId
-  	  });
-  	  console.log('Были добавлены такие данные: customer = ' + customerId + '; day = ' + arrNewDays[indexDay] + '; exerciseId = ' + exerciseId);
-    });
-  });
 }
 /*
 Функция отображения сформированного набора упражнений клиента на сегодня.
@@ -1988,39 +2086,39 @@ function viewExSetCustomer() {
   // Сформируем доступные кнопки для вкладки со сформированным набором упражнений клиента на сегодня
   var menuWorkout = '';
   menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">Cancel</a>';
+  menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">Calendar</a></center>';
+  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">Schedule</a></center>';
+  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">Change</a></center>';
+  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
   menuWorkout += '</div>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
 }
 /* Функция выполняется когда изменяется значение какого-либо флага дня из расписания (на странице #view-15 #tab2 - Schedule)
  Управляет автоматическим переключением флагов согласно логике.
 */
-$('#ulListDays li').click(function() {
-  console.log('$(this).find("input").val() = ' + $(this).find('input').val());
-  var checkBox = $(this).find('input').val();
-  var isChecked = $('#ulListDays input[value="' + checkBox + '"]').is(':checked'); // Проверяем, установлен ли флаг
+$$('#ulListDays li').click(function() {
+  console.log('$$(this).find("input").val() = ' + $$(this).find('input').val());
+  var checkBox = $$(this).find('input').val();
+  var isChecked = $$('#ulListDays input[value="' + checkBox + '"]').prop('checked'); // Проверяем, установлен ли флаг
   if (isChecked) {
-    if(checkBox == 'today') {
+    if(checkBox === 'today') {
       // Установлен флаг "только на сегодня", значит, надо снять отметки со всех остальных флагов
-      $('li[data-item="everyday"] input').removeAttr('checked');
-      $('li[data-item="week"] input').removeAttr('checked');
+      $$('li[data-item="everyday"] input').prop('checked', false);
+      $$('li[data-item="week"] input').prop('checked', false);
     } else if (checkBox == 'everyday') {
       // Установлен флаг "ежедневно", значит, надо снять отметки со всех остальных флагов
-      $('li[data-item="today"] input').removeAttr('checked');
-      $('li[data-item="week"] input').removeAttr('checked');
+      $$('li[data-item="today"] input').prop('checked', false);
+      $$('li[data-item="week"] input').prop('checked', false);
     } else {
   	  // Установлен флаг на каком-то дне недели, значит, надо снять отметки с флагов "только на сегодня" и "ежедневно"
-      $('li[data-item="today"] input').removeAttr('checked');
-      $('li[data-item="every"] input').removeAttr('checked');
+      $$('li[data-item="today"] input').prop('checked', false);
+      $$('li[data-item="every"] input').prop('checked', false);
     }
   }
 });
@@ -2029,10 +2127,10 @@ $('#ulListDays li').click(function() {
 */
 function generateStatistics() {
   // Надо добавить кнопку Save
-  $('#linkSaveWorkEx').show();
-  var customerId = parseInt($('span#spanCustName').attr('data-item'));
-  var dateEx = $('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
-  var exerciseId = parseInt($('#spanExWork').attr('data-item'));
+  $$('#linkSaveWorkEx').show();
+  var customerId = parseInt($$('span#spanCustName').data('item'));
+  var dateEx = $$('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
+  var exerciseId = parseInt($$('#spanExWork').data('item'));
   var countBlock = 0; 
   // Определим, какое количество блоков информации надо выводить (количество записей по даному клиенту)
   // Для этого сначала определим все действующие параметры текущего упражнения
@@ -2048,11 +2146,12 @@ function generateStatistics() {
       statName += '<span class="statistics-name">sets</span><br>';
       var numberOption = 0;
       // После подхода идут все остальные характеристики
-      resOptions.forEach(function (rowExOpt) {
+      for (var index in resOptions) {
+        var rowExOpt = resOptions[index];
         statName += '<span class="statistics-name">' + rowExOpt.option + '</span><br>';
         numberOption++;
         document.getElementById("divStatName").innerHTML = statName;
-      });
+      }
       // Найдём все записи по данному упражнению и клиенту (каждое упражнение повторяется в базе по столько раз, сколько характеристик есть в упражнении)
       server.workExercise.query()
         .filter(function(blockData) {return ((blockData.exercise == exerciseId) && (blockData.customer == customerId))})
@@ -2070,7 +2169,8 @@ function generateStatistics() {
           console.log('Определили количество показываемых блоков информации: ' + countBlock);
           var block = '';
           var i = 0; // Счётчик параметров. Будем отсчитывать параметры и формировать блоки информации
-          workEx.forEach(function (item, index) {
+          for (var index in workEx) {
+            var item = workEx[index];
            	console.log('Выводим построчно всё, что нашлось: ' + JSON.stringify(item));
             console.log('Считаем итерации: i = ' + i);
            	if(i === 0) {
@@ -2090,7 +2190,7 @@ function generateStatistics() {
            	}
             console.log('Выводим блок на страницу.');
             document.getElementById("divStatistics").innerHTML = block;
-          });
+          }
           var mySlider3 = myApp.swiper('.swiper-stat', {
             //pagination: '.swiper-stat .swiper-pagination',
             freeMode: true,
@@ -2108,25 +2208,25 @@ function generateStatistics() {
 
 }
 // Функция срабатывает при нажатии кнопки Note на странице работы с упражнением index-24
-$('#aWorkNote').on('click', function() {
+$$('#aWorkNote').on('click', function() {
 	// Надо добавить кнопку Save
-	$('#linkSaveWorkEx').show(); 
+	$$('#linkSaveWorkEx').show();
 });
 // Функция срабатывает при нажатии кнопки Statistics на странице работы с упражнением index-24
-$('#aWorkStatistics').on('click', function() {
+$$('#aWorkStatistics').on('click', function() {
 	// Надо скрыть кнопку Save
-	$('#linkSaveWorkEx').hide(); 
+	$$('#linkSaveWorkEx').hide();
 });
 /*
 Функция срабатывает при нажатии кнопки Graph на странице работы с упражнением index-24
 Функция рисует график по данным истории выполнения упражнения из БД
 */
-$('#aWorkGraph').on('click', function() {
+$$('#aWorkGraph').on('click', function() {
 	// Надо скрыть кнопку Save
-	$('#linkSaveWorkEx').hide();
+	$$('#linkSaveWorkEx').hide();
 	// Получим все параметры данного упражнения
-	var exerciseId = parseInt($('#spanExWork').attr('data-item'));
-	var customerId = parseInt($('span#spanCustName').attr('data-item'));
+	var exerciseId = parseInt($$('#spanExWork').data('item'));
+	var customerId = parseInt($$('span#spanCustName').data('item'));
 	var arrOptEx = []; // Список всех параметров данного упражнения
 	var i = 0; // Счётчик количества данных (фактически это количество подходов)
 	// Сначала определим состав и количество активных параметров у данного упражнения
@@ -2134,16 +2234,17 @@ $('#aWorkGraph').on('click', function() {
   	.filter('exerciseId', exerciseId)
     .execute()
     .then(function(results) {
-      results.forEach(function (rowExercise, index) {
+      for (var index in results) {
+        var rowExercise = results[index];
     	arrOptEx[index] = rowExercise.option;
-      });
+      }
       // Определим количество характеристик
       var countOptions = arrOptEx.length;
       console.log('Количество всех собранных из БД характеристик: ' + countOptions);
-      //console.log('Список всех собранных из БД характеристик: ' + JSON.stringify(arrOptEx));
+      console.log('Список всех собранных из БД характеристик: ' + JSON.stringify(arrOptEx));
       // Теперь надо сформировать данные для графика. Ищем в базе всё по данному упражнению и клиенту
       server.workExercise.query()
-  	    .filter(function(blockData) {return ((blockData.exercise == exerciseId) && (blockData.customer == customerId))})
+  	    .filter(function(blockData) {return ((blockData.exercise === exerciseId) && (blockData.customer === customerId))})
         .execute()
         .then(function(result) {
       	  var analitCount = 0;
@@ -2156,7 +2257,8 @@ $('#aWorkGraph').on('click', function() {
 		  var arrSpeed = [];
 		  var arrSlope = [];
 		  var arrLoad = [];
-          result.forEach(function (item) {
+          for (var index in result) {
+            var item = result[index];
             // Добрались до данных, теперь их надо собрать в массивы
             if (i === 0) {
               arrDateEx[analitCount] = item.date;
@@ -2184,9 +2286,9 @@ $('#aWorkGraph').on('click', function() {
 	          analitCount++;
             }
             console.log('Номер характеристики в текущей итерации: ' + i);
-          });
+          }
           // Данные собрали в массив. Теперь готовим к показу график по данным
-          var test = [1, 2, 3];
+          //var test = [1, 2, 3];
 		  var data = {
 		    //labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 		    labels: arrDateEx,
@@ -2242,7 +2344,7 @@ $('#aWorkGraph').on('click', function() {
             },
             //low: 0
 		  };
-					
+
 		  var responsiveOptions = [
 		    ['screen and (max-width: 640px)', {
 		      seriesBarDistance: 5,
@@ -2257,13 +2359,13 @@ $('#aWorkGraph').on('click', function() {
 		  //new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
 		  new Chartist.Line('.ct-chart', data, options, responsiveOptions);
 
-          var $chart = $('.ct-chart');
+          var chart = $$('.ct-chart');
           //$$('.ct-point').on('click', function () {
-          $chart.on('click', '.ct-point', function (event) {
+          chart.on('click', '.ct-point', function (event) {
             var clickedLink = this;
-            var $point = $(this),
-              value = $point.attr('ct:value'),
-              seriesName = $point.parent().attr('ct:series-name');
+            var point = $$(this),
+              value = point.attr('ct:value'),
+              seriesName = point.parent().attr('ct:series-name');
             var popoverHTML = '<div class="popover">'+
                                  '<div class="popover-inner">'+
                                    '<div class="content-block">'+
@@ -2272,14 +2374,12 @@ $('#aWorkGraph').on('click', function() {
                                    '</div>'+
                                  '</div>'+
                                '</div>';
-            /*$popoverHTML.css({
-              left: (event.offsetX || event.originalEvent.layerX) - $popoverHTML.width() / 2 - 10,
-              top: (event.offsetY || event.originalEvent.layerY) - $popoverHTML.height() - 40
+            /*popoverHTML.css({
+              left: (event.offsetX || event.originalEvent.layerX) - popoverHTML.width() / 2 - 10,
+              top: (event.offsetY || event.originalEvent.layerY) - popoverHTML.height() - 40
             })*/
             myApp.popover(popoverHTML, clickedLink);
           });
         });
     });  
 });
-
-
