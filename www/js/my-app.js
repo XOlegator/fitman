@@ -107,22 +107,19 @@ $$.getJSON('default/bd-schema.json', function(data) {
         .then(function(results) {
           console.log('Получили список настроек');
           if(results.length) { // Установим значения настроек из БД
-          	/*$("#selectUnits :contains('" + results.units + "')").attr("selected", "selected");
-          	$("#selectLang :contains('" + results.language + "')").attr("selected", "selected");*/
-          	$$('#selectUnits').children('option[data-item="' + results.units + '"]').prop('selected', true);
-          	$$('#selectUnits').children('option[data-item="' + results.language + '"]').prop('selected', true);
+          	console.log('Устанавливаем настройки по данным базы: results[0].units = ' + results[0].units + '; results[0].language = ' + results[0].language);
+          	$$('#selectUnits').val(results[0].units);
+          	$$('#selectLang').val(results[0].language);
           } else {
           	// Настроек в базе никаких не было (значит в первый раз открыли программу). Допишем их туда.
-          	// По-умолчанию язык будет - English, система единиц измерения - Metric
+          	// По-умолчанию язык будет - english, система единиц измерения - metric
           	server.settings.add({
-              'units': 'Metric',
-              'language': 'English'
-            }).then(function(item){
+              'units': 'metric',
+              'language': 'english'
+            }).then(function(item) {
               console.log('Записали настройки по-умолчанию в базу: ' + JSON.stringify(item));
-          	  /*$("#selectUnits :contains('Metric')").attr("selected", "selected");
-          	  $("#selectLang :contains('English')").attr("selected", "selected");*/
-          	  $$('#selectUnits').children('option[data-item="metric"]').prop('selected', true);
-              $$('#selectUnits').children('option[data-item="english"]').prop('selected', true);
+          	  $$('#selectUnits').val("metric");
+              $$('#selectUnits').val("english");
             });
           }
         });
@@ -169,14 +166,16 @@ $$.getJSON('default/bd-schema.json', function(data) {
 });
 // Функция изменения системы единиц измерения в настройках
 $$('#selectUnits').on('change', function() {
-  console.log('Зашли в изменение настроек единиц измерения');
+  console.log('Зашли в изменение настроек единиц измерения: ' + JSON.stringify($$(this).val()));
   // Сначала найдём то, что уже есть в базе
   server.settings.query()
     .all()
     .execute()
     .then(function(results) {
+      console.log('Обрабатываем изменения системы измерений');
       var setLang = results[0].language;
-      var setUnits = $$("#selectUnits :selected").html();
+      var setUnits = $$('#selectUnits').val();
+      console.log('Новая система измерений: ' + setUnits);
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
 	  server.settings.update({
 	    'id': parseInt(results[0].id),
@@ -195,7 +194,9 @@ $$('#selectLang').on('change', function() {
     .all()
     .execute()
     .then(function(results) {
-      var setLang = $$("#selectLang :selected").html();
+      //console.log('Обрабатываем изменения языка интерфейса: ' + JSON.stringify($$(this).val()));
+      var setLang = $$('#selectLang').val();
+      console.log('Новый язык интерфейса: ' + setLang);
       var setUnits = results[0].units;
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
       server.settings.update({
@@ -212,6 +213,7 @@ $$('.confirm-fill-demo').on('click', function () {
   myApp.confirm('Are you sure? It will erase all of your data!', function () {
     // Очистим всё
     console.log(JSON.stringify(server));
+    server.clear('settings');
     server.clear('workExercise');
     server.clear('schedule');
     server.clear('workout');
@@ -313,41 +315,24 @@ $$('.confirm-fill-demo').on('click', function () {
 
 // Модальное окно для подтверждения очистки базы данных
 $$('.confirm-clean-db').on('click', function () {
-    myApp.confirm(i18n.gettext('Are you sure? It will erase all of your data!'),
-      function () {
-        console.log('Start cleaning DB');
-        // Очистим все таблицы
-        server.clear('workExercise');
-        server.clear('schedule');
-        server.clear('workout');
-        server.clear('optionsExercises');
-        server.clear('exerciseType');
-        server.clear('exercise');
-        server.clear('customers');
-        console.log('Reload pages data');
-        /*server.customers.query('name')
-          .all()
-          .keys()
-          .distinct()
-          .execute()
-          .then(function(results) {
-            updateListCustomers(results);
-          });*/
-        updateListCustomers('');
-        /*server.exerciseType.query('name')
-          .all()
-          .keys()
-          .execute()
-          .then(function(results) {
-            updateListExerciseType(results);
-          });*/
-        updateListExerciseType('');
-        myApp.alert(i18n.gettext('Database is clean'));
-      },
-      function () {
-        // Действие отменено
-      }
-    );
+  myApp.confirm(i18n.gettext('Are you sure? It will erase all of your data!'), function () {
+    console.log('Start cleaning DB');
+    // Очистим все таблицы
+    server.clear('settings');
+    server.clear('workExercise');
+    server.clear('schedule');
+    server.clear('workout');
+    server.clear('optionsExercises');
+    server.clear('exerciseType');
+    server.clear('exercise');
+    server.clear('customers');
+    console.log('Reload pages data');
+    updateListCustomers('');
+    updateListExerciseType('');
+    myApp.alert(i18n.gettext('Database is clean'));
+  }, function () {
+    // Действие отменено
+  });
 });
 
 // Модальное окно для создания базы данных
@@ -941,8 +926,8 @@ function updateExerciseProperties() {
                 // Надо снять отметку с этой опции
                 $$('input[name="checkbox-ex-prop"][value="' + rowOldOpt.option + '"]').prop('checked', false);
               } else { // Никаких данных нет - можно смело удалять
-        	      server.remove('optionsExercises', parseInt(rowOldOpt.id));
-        	      console.log('Удалили связку параметр-упражнение с id = ' + rowOldOpt.id);
+        	    server.remove('optionsExercises', parseInt(rowOldOpt.id));
+        	    console.log('Удалили связку параметр-упражнение с id = ' + rowOldOpt.id);
               }
             });
         }
