@@ -6,20 +6,19 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title class="app-text">{{_ "Personal trainer"}}</title>
+    <script src="js/es6-promise.min.js"></script>
     <script src="js/indexeddbshim.min.js"></script>
-    <!--<script src="js/IndexedDBShim.js"></script>-->
-    <script src="js/es6-promise-2.0.1.min.js"></script>
     <script type="text/javascript">
         var server;
-        window.shimIndexedDB && window.shimIndexedDB.__useShim();
+        /*window.shimIndexedDB && window.shimIndexedDB.__useShim();
         function printResult(){
           write("Executed : ", arguments);
-        }
+        }*/
         if (!window.Promise) window.Promise = ES6Promise.Promise;
     </script>
     <!--<script src="js/rsvp.js"></script>-->
     <!--<script src="js/promise-1.0.0.min.js"></script>-->
-    <script src="js/db.js"></script>
+    <script src="js/jed.min.js"></script>
     <!--<script src="js/modernizr.custom.js"></script>-->
     <!-- Path to Framework7 Library CSS-->
     <link rel="stylesheet" href="css/framework7.min.css">
@@ -1068,10 +1067,6 @@
       <!--</div>-->
     </div>
     <!--<script type="text/javascript" src="cordova.js"></script>-->
-    <!--<script src="assets/components/jquery/dist/jquery.min.js"></script>-->
-    <script type="text/javascript" src="js/jed.js"></script>
-    <!-- Path to Framework7 Library JS-->
-    <script type="text/javascript" src="js/framework7.min.js"></script>
     <!--<script type="text/javascript" src="js/IndexedDBShim.min.js"></script>-->
     <!--<script type="text/javascript" src="js/db.js"></script>-->
     <!-- Path to your app js-->
@@ -1082,15 +1077,15 @@
           write("Executed : ", arguments);
         }
     </script>-->
-    <script type="text/javascript" src="js/my-app.js"></script>
+    <script src="js/db.js"></script>
+    <!-- Path to Framework7 Library JS-->
+    <script src="js/framework7.min.js"></script>
+    <script src="js/my-app.min.js"></script>
     <script src="assets/components/chartist/dist/chartist.min.js"></script>
     <!--<script type="text/javascript">
       Modernizr.load([
         {
           load: 'js/framework7.min.js'
-        },
-        {
-          load: 'assets/components/jquery/dist/jquery.min.js'
         },
         {
           load: 'js/promise-1.0.0.min.js'

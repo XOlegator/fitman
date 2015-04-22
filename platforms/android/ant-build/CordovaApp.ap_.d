@@ -38,7 +38,6 @@
 /home/oleg/workspace/fitman/platforms/android/assets/www/cordova_plugins.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/index.html \
 /home/oleg/workspace/fitman/platforms/android/assets/www/spec.html \
-/home/oleg/workspace/fitman/platforms/android/assets/www/index.hbs \
 /home/oleg/workspace/fitman/platforms/android/assets/www/assets \
 /home/oleg/workspace/fitman/platforms/android/assets/www/about.html \
 /home/oleg/workspace/fitman/platforms/android/assets/www/css/framework7.css \
@@ -136,11 +135,15 @@
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/index.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/indexeddbshim.min.js.map \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/promise-1.0.0.min.js \
+/home/oleg/workspace/fitman/platforms/android/assets/www/js/es6-promise.min.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/framework7.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/es6-promise-2.0.1.min.js \
+/home/oleg/workspace/fitman/platforms/android/assets/www/js/jed.min.js \
+/home/oleg/workspace/fitman/platforms/android/assets/www/js/my-app.min.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/framework7.js.map \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/indexeddbshim.min.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/framework7.min.js.map \
+/home/oleg/workspace/fitman/platforms/android/assets/www/js/db.min.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/framework7.min.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/modernizr.custom.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/db.js \

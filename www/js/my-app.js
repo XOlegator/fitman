@@ -51,7 +51,7 @@ document.ontouchmove = function(event) {
     event.preventDefault();
 };*/
 
-var server;
+//var server;
 //indexedDB.deleteDatabase('my-app');
 
 /*
@@ -91,13 +91,14 @@ return new Promise(function(resolve, reject){
 }*/
 
 $$.getJSON('default/bd-schema.json', function(data) {
+  //console.log(data);
 //getJSON('default/bd-schema.json').then(function(data) {
   bdSchema = data;
-  console.log("Схема БД: " + JSON.stringify(data));
-  db.open(data).then(function(serv) {
-  	console.log('Получили схему БД, открыли базу');
-    server = serv;
-    console.log(JSON.stringify(server));
+  //console.log("Схема БД: " + JSON.stringify(bdSchema));
+  db.open(bdSchema).then(function(serverData) {
+  	//console.log('Получили схему БД, открыли базу');
+    server = serverData;
+    console.log('JSON.stringify(server)' + JSON.stringify(server));
     console.log('Инициализируем страницу index-2');
     myApp.onPageInit('index-2', function (page) {
       // Перед инициализацией страницы с настройками, нужно получить некоторые настройки из БД
@@ -119,7 +120,7 @@ $$.getJSON('default/bd-schema.json', function(data) {
             }).then(function(item) {
               console.log('Записали настройки по-умолчанию в базу: ' + JSON.stringify(item));
           	  $$('#selectUnits').val("metric");
-              $$('#selectUnits').val("english");
+              $$('#selectLang').val("english");
             });
           }
         });
@@ -213,7 +214,7 @@ $$('.confirm-fill-demo').on('click', function () {
   myApp.confirm('Are you sure? It will erase all of your data!', function () {
     // Очистим всё
     console.log(JSON.stringify(server));
-    server.clear('settings');
+    //server.clear('settings');
     server.clear('workExercise');
     server.clear('schedule');
     server.clear('workout');
@@ -1051,8 +1052,6 @@ function upgradeViewWorkout() {
       var listExCust = '';
       if(resWorkout.length) { // Если нашли сегодня сформированный комплекс упражнений, то покажем его
         console.log('Нашли в базе данные по занятиям на сегодня: ' + JSON.stringify(resWorkout));
-        //resWorkout.forEach(function(item) {
-        //resWorkout.each(function(item) {
         for (var index in resWorkout) {
           var item = resWorkout[index];
           console.log('Обрабатываем первое занятие на сегодня. item = ' + JSON.stringify(item));
@@ -1077,7 +1076,6 @@ function upgradeViewWorkout() {
             //SORTER.sort('#ulListCurrentExercises');
           });
           isWorkout = 1;
-        //});
         }
       } else { // Сегодня комплекс занятий не формировался
       	console.log('Сегодня комплекс занятий не формировался, значит проверям по дням недели');
@@ -1484,10 +1482,10 @@ function makeViewExWork(exerciseId) {
 function saveExerciseWork() {
   var customerId = parseInt($$('span#spanCustName').data('item'));
   var exerciseId = parseInt($$('#spanExWork').data('item'));
-  var dateEx = $$('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
+  var dateEx = $$('#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
   var workSet = parseInt($$('select[data-item="sets"]').val()); // Узнаём номер подхода
   var noDoubles = 1; // Флаг, показывающий, что дубли не встретились
-  console.log('workSet = ' + workSet);
+  //console.log('workSet = ' + workSet);
   var flagAdd = 0; // По-умолчанию запись в базу запрещена
   // Перед тем, как записать что-либо в базу данных, нужно проверить нет ли уже там записи о текущем аналитическом разрезе
   server.workExercise.query()
@@ -1630,10 +1628,10 @@ function saveExerciseWork() {
         var isTime = 0;
         var flagSavedData = 0; // Флаг, что данные (первоя строка) сохранены
         $$('#ulListCurrentWorkEx li input').each(function(index, item) {
-          console.log('item.value ' + item.value + 'item.attributes[data-item].value ' + item.attributes['data-item'].value);
+          console.log('item.value ' + item.value + '; item.attributes[data-item].value ' + item.attributes["data-item"].value);
           option = item.attributes['data-item'].value;
           // Значение параметра заполнено
-          if(option == 'time-minutes') {
+          if(option === 'time-minutes') {
             isTime = 1;
             // Запоминаем минуты, переведённые в секунды
             var tempMinValue = $$(this).val();
@@ -1644,7 +1642,7 @@ function saveExerciseWork() {
             }
             time = time + (intMinValue * 60);
           }
-          else if(option == 'time-seconds') {
+          else if(option === 'time-seconds') {
             isTime = 1;
             // Запоминем секунды
             var tempSecValue = $$(this).val();
@@ -1656,11 +1654,13 @@ function saveExerciseWork() {
             time = time + intSecValue;
           } else {
             var tempValue = $$(this).val();
+            console.log('tempValue = ' + tempValue);
             if(tempValue == '') {
               var intValue = 0;
             } else {
               var intValue = parseInt(tempValue);
             }
+            console.log('Перед записью: customerId = ' + customerId + '; dateEx = ' + dateEx + '; exerciseId = ' + exerciseId + '; option = ' + option + '; intValue = ' + intValue + '; workSet = ' + workSet);
             // Любой параметр, кроме времени
             server.workExercise.add({
               'customer': customerId,
@@ -1670,6 +1670,7 @@ function saveExerciseWork() {
               'value': intValue,
               'set': workSet
             }).then(function (savedData) {
+              console.log('Проверяем, что записали: ' + JSON.stringify(savedData));
               flagSavedData++;
               if (flagSavedData == 1) {
                 // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
@@ -2149,7 +2150,7 @@ function generateStatistics() {
         .filter(function(blockData) {return ((blockData.exercise == exerciseId) && (blockData.customer == customerId))})
         .execute()
         .then(function(workEx) {
-          //console.log('Найденные блоки информации: ' + JSON.stringify(workEx));
+          console.log('Найденные блоки информации: ' + JSON.stringify(workEx));
           console.log('Найдено количество записей по упражнению и клиенту: ' + workEx.length);
           var amountBlock = workEx.length / countOptions;
           console.log('amountBlock =  ' + amountBlock);
@@ -2201,28 +2202,28 @@ function generateStatistics() {
 }
 // Функция срабатывает при нажатии кнопки Note на странице работы с упражнением index-24
 $$('#aWorkNote').on('click', function() {
-	// Надо добавить кнопку Save
-	$$('#linkSaveWorkEx').show();
+  // Надо добавить кнопку Save
+  $$('#linkSaveWorkEx').show();
 });
 // Функция срабатывает при нажатии кнопки Statistics на странице работы с упражнением index-24
 $$('#aWorkStatistics').on('click', function() {
-	// Надо скрыть кнопку Save
-	$$('#linkSaveWorkEx').hide();
+  // Надо скрыть кнопку Save
+  $$('#linkSaveWorkEx').hide();
 });
 /*
 Функция срабатывает при нажатии кнопки Graph на странице работы с упражнением index-24
 Функция рисует график по данным истории выполнения упражнения из БД
 */
 $$('#aWorkGraph').on('click', function() {
-	// Надо скрыть кнопку Save
-	$$('#linkSaveWorkEx').hide();
-	// Получим все параметры данного упражнения
-	var exerciseId = parseInt($$('#spanExWork').data('item'));
-	var customerId = parseInt($$('span#spanCustName').data('item'));
-	var arrOptEx = []; // Список всех параметров данного упражнения
-	var i = 0; // Счётчик количества данных (фактически это количество подходов)
-	// Сначала определим состав и количество активных параметров у данного упражнения
-	server.optionsExercises.query()
+  // Надо скрыть кнопку Save
+  $$('#linkSaveWorkEx').hide();
+  // Получим все параметры данного упражнения
+  var exerciseId = parseInt($$('#spanExWork').data('item'));
+  var customerId = parseInt($$('#spanCustName').data('item'));
+  var arrOptEx = []; // Список всех параметров данного упражнения
+  var i = 0; // Счётчик количества данных (фактически это количество подходов)
+  // Сначала определим состав и количество активных параметров у данного упражнения
+  server.optionsExercises.query()
   	.filter('exerciseId', exerciseId)
     .execute()
     .then(function(results) {
@@ -2333,8 +2334,7 @@ $$('#aWorkGraph').on('click', function() {
             fullWidth: true,
             chartPadding: {
               right: 80
-            },
-            //low: 0
+            }
 		  };
 
 		  var responsiveOptions = [
