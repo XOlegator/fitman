@@ -1666,7 +1666,7 @@ function saveExerciseWork() {
                   if (flagSavedData == 1) {
                     // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                     myApp.addNotification({
-                      title: i18n.gettext('Data was saved'),
+                      title: i18n.gettext('Saved'),
                       hold: messageDelay,
                       message: i18n.gettext('Data was updated')
                     });
@@ -1791,7 +1791,7 @@ function saveExerciseWork() {
               if (flagSavedData == 1) {
                 // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                 myApp.addNotification({
-                  title: i18n.gettext('Data was saved'),
+                  title: i18n.gettext('Saved'),
                   hold: messageDelay,
                   message: i18n.gettext('Data was added')
                 });

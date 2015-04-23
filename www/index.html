@@ -10,10 +10,6 @@
     <script src="js/indexeddbshim.min.js"></script>
     <script type="text/javascript">
         var server;
-        /*window.shimIndexedDB && window.shimIndexedDB.__useShim();
-        function printResult(){
-          write("Executed : ", arguments);
-        }*/
         if (!window.Promise) window.Promise = ES6Promise.Promise;
     </script>
     <!--<script src="js/rsvp.js"></script>-->
@@ -1111,10 +1107,10 @@
           write("Executed : ", arguments);
         }
     </script>-->
-    <script src="js/db.js"></script>
+    <script src="js/db.min.js"></script>
     <!-- Path to Framework7 Library JS-->
     <script src="js/framework7.min.js"></script>
-    <script src="js/my-app.js"></script>
+    <script src="js/my-app.min.js"></script>
     <script src="assets/components/chartist/dist/chartist.min.js"></script>
     <!--<script type="text/javascript">
       Modernizr.load([

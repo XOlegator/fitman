@@ -111,16 +111,26 @@ $$.getJSON('default/bd-schema.json', function(data) {
           	console.log('Устанавливаем настройки по данным базы: results[0].units = ' + results[0].units + '; results[0].language = ' + results[0].language);
           	$$('#selectUnits').val(results[0].units);
           	$$('#selectLang').val(results[0].language);
+          	$$('#selectColorThemes').val(results[0].colorTheme);
+          	$$('#selectLayoutThemes').val(results[0].layoutTheme);
+          	$$('body').addClass('theme-' + results[0].colorTheme);
+          	$$('body').addClass('layout-' + results[0].layoutTheme);
           } else {
           	// Настроек в базе никаких не было (значит в первый раз открыли программу). Допишем их туда.
           	// По-умолчанию язык будет - english, система единиц измерения - metric
           	server.settings.add({
               'units': 'metric',
-              'language': 'english'
+              'language': 'english',
+              'colorTheme': 'orange',
+              'layoutTheme': 'dark'
             }).then(function(item) {
               console.log('Записали настройки по-умолчанию в базу: ' + JSON.stringify(item));
           	  $$('#selectUnits').val("metric");
               $$('#selectLang').val("english");
+          	  $$('#selectColorThemes').val("orange");
+          	  $$('#selectLayoutThemes').val("dark");
+          	  $$('body').addClass('theme-orange');
+          	  $$('body').addClass('layout-dark');
             });
           }
         });
@@ -176,12 +186,16 @@ $$('#selectUnits').on('change', function() {
       console.log('Обрабатываем изменения системы измерений');
       var setLang = results[0].language;
       var setUnits = $$('#selectUnits').val();
+      var setColorTheme = results[0].colorTheme;
+      var setLayoutTheme = results[0].layoutTheme;
       console.log('Новая система измерений: ' + setUnits);
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
 	  server.settings.update({
 	    'id': parseInt(results[0].id),
         'units': setUnits, // Ставим новое значение
-        'language': setLang // Оставляем то, что было ранее
+        'language': setLang,
+        'colorTheme': setColorTheme,
+        'layoutTheme': setLayoutTheme
 	  }).then(function(item) {
         console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
       });
@@ -199,12 +213,96 @@ $$('#selectLang').on('change', function() {
       var setLang = $$('#selectLang').val();
       console.log('Новый язык интерфейса: ' + setLang);
       var setUnits = results[0].units;
+      var setColorTheme = results[0].colorTheme;
+      var setLayoutTheme = results[0].layoutTheme;
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
       server.settings.update({
 	    'id': parseInt(results[0].id),
-        'units': setUnits, // Оставляем то, что было ранее
-        'language': setLang // Ставим новое значение
+        'units': setUnits,
+        'language': setLang,
+        'colorTheme': setColorTheme,
+        'layoutTheme': setLayoutTheme
       }).then(function(item) {
+        console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
+      });
+    });
+});
+// Функция изменения цвета темы оформления в настройках
+$$('#selectColorThemes').on('change', function() {
+  console.log('Зашли в изменение настроек цвета темы оформления: ' + JSON.stringify($$(this).val()));
+  // Сначала найдём то, что уже есть в базе
+  server.settings.query()
+    .all()
+    .execute()
+    .then(function(results) {
+      console.log('Обрабатываем изменение цвета оформления');
+      var setLang = results[0].language;
+      var setUnits = results[0].units;
+      var setColorTheme = $$('#selectColorThemes').val();
+      var setLayoutTheme = results[0].layoutTheme;
+      if ($$('body').hasClass('theme-gray')) {
+        $$('body').removeClass('theme-gray');
+      } else if ($$('body').hasClass('theme-white')) {
+        $$('body').removeClass('theme-white');
+      } else if ($$('body').hasClass('theme-black')) {
+        $$('body').removeClass('theme-black');
+      } else if ($$('body').hasClass('theme-lightblue')) {
+        $$('body').removeClass('theme-lightblue');
+      } else if ($$('body').hasClass('theme-yellow')) {
+        $$('body').removeClass('theme-yellow');
+      } else if ($$('body').hasClass('theme-orange')) {
+        $$('body').removeClass('theme-orange');
+      } else if ($$('body').hasClass('theme-pink')) {
+        $$('body').removeClass('theme-pink');
+      } else if ($$('body').hasClass('theme-blue')) {
+        $$('body').removeClass('theme-blue');
+      } else if ($$('body').hasClass('theme-green')) {
+        $$('body').removeClass('theme-green');
+      } else if ($$('body').hasClass('theme-red')) {
+        $$('body').removeClass('theme-red');
+      }
+      $$('body').addClass('theme-' + setColorTheme);
+      console.log('Новый цвет оформления: ' + setColorTheme);
+      // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
+	  server.settings.update({
+	    'id': parseInt(results[0].id),
+        'units': setUnits,
+        'language': setLang,
+        'colorTheme': setColorTheme,
+        'layoutTheme': setLayoutTheme
+	  }).then(function(item) {
+        console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
+      });
+    });
+});
+// Функция изменения стиля темы оформления в настройках
+$$('#selectLayoutThemes').on('change', function() {
+  console.log('Зашли в изменение настроек стиля темы оформления: ' + JSON.stringify($$(this).val()));
+  // Сначала найдём то, что уже есть в базе
+  server.settings.query()
+    .all()
+    .execute()
+    .then(function(results) {
+      console.log('Обрабатываем изменения стиля темы оформления');
+      var setLang = results[0].language;
+      var setUnits = results[0].units;
+      var setColorTheme = results[0].colorTheme;
+      var setLayoutTheme = $$('#selectLayoutThemes').val();
+      if ($$('body').hasClass('layout-dark')) {
+        $$('body').removeClass('layout-dark');
+      } else if ($$('body').hasClass('layout-white')) {
+        $$('body').removeClass('layout-white');
+      }
+      $$('body').addClass('layout-' + setLayoutTheme);
+      console.log('Новый стиль оформления: ' + setLayoutTheme);
+      // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
+	  server.settings.update({
+	    'id': parseInt(results[0].id),
+        'units': setUnits,
+        'language': setLang,
+        'colorTheme': setColorTheme,
+        'layoutTheme': setLayoutTheme
+	  }).then(function(item) {
         console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
       });
     });
@@ -1568,7 +1666,7 @@ function saveExerciseWork() {
                   if (flagSavedData == 1) {
                     // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                     myApp.addNotification({
-                      title: i18n.gettext('Data was saved'),
+                      title: i18n.gettext('Saved'),
                       hold: messageDelay,
                       message: i18n.gettext('Data was updated')
                     });
@@ -1693,7 +1791,7 @@ function saveExerciseWork() {
               if (flagSavedData == 1) {
                 // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                 myApp.addNotification({
-                  title: i18n.gettext('Data was saved'),
+                  title: i18n.gettext('Saved'),
                   hold: messageDelay,
                   message: i18n.gettext('Data was added')
                 });

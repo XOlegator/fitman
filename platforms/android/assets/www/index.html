@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="css/my-app.css">
     <link rel="stylesheet" href="assets/components/chartist/dist/chartist.min.css">
   </head>
-  <body class="layout-dark theme-orange">
+  <body>
     <!-- Status bar overlay for fullscreen mode-->
     <div class="statusbar-overlay"></div>
     <!-- Panels overlay-->
@@ -145,6 +145,40 @@
                           <div class="item-title label app-text">{{_ "Customers"}}</div>
                           <div class="item-input">
                             <a href="#view-13" class="tab-link button button-round app-text">{{_ "Remove"}}</a>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title label app-text">{{_ "Color themes"}}</div>
+                          <div class="item-input">
+                            <select id="selectColorThemes">
+                              <option class="app-text" value="gray">{{_ "Gray"}}</option>
+                              <option class="app-text" value="white">{{_ "White"}}</option>
+                              <option class="app-text" value="black">{{_ "Black"}}</option>
+                              <option class="app-text" value="lightblue">{{_ "Lightblue"}}</option>
+                              <option class="app-text" value="yellow">{{_ "Yellow"}}</option>
+                              <option class="app-text" value="orange">{{_ "Orange"}}</option>
+                              <option class="app-text" value="pink">{{_ "Pink"}}</option>
+                              <option class="app-text" value="blue">{{_ "Blue"}}</option>
+                              <option class="app-text" value="green">{{_ "Green"}}</option>
+                              <option class="app-text" value="red">{{_ "Red"}}</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title label app-text">{{_ "Layout themes"}}</div>
+                          <div class="item-input">
+                            <select id="selectLayoutThemes">
+                              <option class="app-text" value="white">{{_ "White"}}</option>
+                              <option class="app-text" value="dark">{{_ "Dark"}}</option>
+                            </select>
                           </div>
                         </div>
                       </div>
@@ -1077,10 +1111,10 @@
           write("Executed : ", arguments);
         }
     </script>-->
-    <script src="js/db.js"></script>
+    <script src="js/db.min.js"></script>
     <!-- Path to Framework7 Library JS-->
     <script src="js/framework7.min.js"></script>
-    <script src="js/my-app.js"></script>
+    <script src="js/my-app.min.js"></script>
     <script src="assets/components/chartist/dist/chartist.min.js"></script>
     <!--<script type="text/javascript">
       Modernizr.load([

@@ -22,8 +22,6 @@
 /home/oleg/workspace/fitman/platforms/android/assets/www \
 /home/oleg/workspace/fitman/platforms/android/assets/_where-is-www.txt \
 /home/oleg/workspace/fitman/platforms/android/assets/www/en.json \
-/home/oleg/workspace/fitman/platforms/android/assets/www/form.html \
-/home/oleg/workspace/fitman/platforms/android/assets/www/services.html \
 /home/oleg/workspace/fitman/platforms/android/assets/www/css \
 /home/oleg/workspace/fitman/platforms/android/assets/www/icon.png \
 /home/oleg/workspace/fitman/platforms/android/assets/www/en_US.po \
@@ -38,9 +36,7 @@
 /home/oleg/workspace/fitman/platforms/android/assets/www/cordova_plugins.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/index.html \
 /home/oleg/workspace/fitman/platforms/android/assets/www/photo \
-/home/oleg/workspace/fitman/platforms/android/assets/www/spec.html \
 /home/oleg/workspace/fitman/platforms/android/assets/www/assets \
-/home/oleg/workspace/fitman/platforms/android/assets/www/about.html \
 /home/oleg/workspace/fitman/platforms/android/assets/www/css/framework7.css \
 /home/oleg/workspace/fitman/platforms/android/assets/www/css/framework7.themes.min.css \
 /home/oleg/workspace/fitman/platforms/android/assets/www/css/index.css \
@@ -129,9 +125,6 @@
 /home/oleg/workspace/fitman/platforms/android/assets/www/res/icon/android/icon-36-ldpi.png \
 /home/oleg/workspace/fitman/platforms/android/assets/www/default/exercises.json \
 /home/oleg/workspace/fitman/platforms/android/assets/www/default/customers.json \
-/home/oleg/workspace/fitman/platforms/android/assets/www/default/exercise-type.json \
-/home/oleg/workspace/fitman/platforms/android/assets/www/default/exercise.json \
-/home/oleg/workspace/fitman/platforms/android/assets/www/default/bd-schema1.json \
 /home/oleg/workspace/fitman/platforms/android/assets/www/default/bd-schema.json \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/index.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/js/indexeddbshim.min.js.map \
