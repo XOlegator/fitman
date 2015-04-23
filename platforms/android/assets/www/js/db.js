@@ -63,7 +63,7 @@
     var Server = function ( db , name ) {
         var that = this,
             closed = false;
-console.log('Добрались до точки 2');
+
         this.add = function( table ) {
             if ( closed ) {
                 throw 'Database has been closed';
@@ -506,7 +506,7 @@ console.log('Добрались до точки 2');
         var db = e.target.result;
         var s = new Server( db , server );
         var upgrade;
-console.log('Добрались до точки 1');
+
         dbCache[ server ] = db;
 
         return Promise.resolve(s)
@@ -521,7 +521,6 @@ console.log('Добрались до точки 1');
 
             return new Promise(function(resolve, reject){
               if ( dbCache[ options.server ] ) {
-              console.log('Добрались до точки 3');
                   open( {
                       target: {
                           result: dbCache[ options.server ]
@@ -529,11 +528,9 @@ console.log('Добрались до точки 1');
                   } , options.server , options.version , options.schema )
                   .then(resolve, reject)
               } else {
-              console.log('Добрались до точки 4');
                   request = getIndexedDB().open( options.server , options.version );
 
                   request.onsuccess = function ( e ) {
-                  console.log('Добрались до точки 5');
                       open( e , options.server , options.version , options.schema )
                           .then(resolve, reject)
                   };
@@ -543,7 +540,6 @@ console.log('Добрались до точки 1');
                   };
                   request.onerror = function ( e ) {
                       reject( e );
-                      console.log('Добрались до точки 6');
                   };
               }
             });

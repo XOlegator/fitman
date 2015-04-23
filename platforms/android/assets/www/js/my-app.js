@@ -575,6 +575,18 @@ function removeCustomers() {
   );
 }
 /*
+Включаем функционал показа фотографий клиентов
+*/
+var myPhotoBrowserDark = myApp.photoBrowser({
+  photos: [{
+    'url': '',
+    'caption': ''
+  }]
+});
+$$('#aCustomerPhoto').on('click', function () {
+  myPhotoBrowserDark.open();
+});
+/*
 Функция заполнения данными страницы клиента (#index-3). В функцию передаётся id клиента. Вызывается из списка клиентов при выборе клиента
 */
 function fillCustomerData(customerId) {
@@ -588,6 +600,12 @@ function fillCustomerData(customerId) {
     $$('input#inputNewCustomer').val(customer.name);
     $$('#inputNewCustomer').attr('data-item', customerId);
     $$('textarea#newCustomerComments').val(customer.comments);
+    myPhotoBrowserDark = myApp.photoBrowser({
+      photos: [{
+        'url': './photo/' + customer.photo,
+        'caption': customer.name
+      }]
+    });
   });
 }
 /*

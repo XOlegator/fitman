@@ -13,7 +13,13 @@
 				},
 				"language": {
 					"unique": true
-				}
+				},
+                "colorTheme": {
+                    "unique": true
+                },
+                "layoutTheme": {
+                    "unique": true
+                }
 			}
 		},
 		"exerciseType": {

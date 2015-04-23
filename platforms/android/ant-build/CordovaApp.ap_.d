@@ -37,6 +37,7 @@
 /home/oleg/workspace/fitman/platforms/android/assets/www/img \
 /home/oleg/workspace/fitman/platforms/android/assets/www/cordova_plugins.js \
 /home/oleg/workspace/fitman/platforms/android/assets/www/index.html \
+/home/oleg/workspace/fitman/platforms/android/assets/www/photo \
 /home/oleg/workspace/fitman/platforms/android/assets/www/spec.html \
 /home/oleg/workspace/fitman/platforms/android/assets/www/assets \
 /home/oleg/workspace/fitman/platforms/android/assets/www/about.html \
@@ -180,6 +181,8 @@
 /home/oleg/workspace/fitman/platforms/android/assets/www/img/bulb.svg \
 /home/oleg/workspace/fitman/platforms/android/assets/www/img/i-form-email.png \
 /home/oleg/workspace/fitman/platforms/android/assets/www/img/i-form-checkbox-blue.png \
+/home/oleg/workspace/fitman/platforms/android/assets/www/photo/agent-smitt.jpg \
+/home/oleg/workspace/fitman/platforms/android/assets/www/photo/007.jpg \
 /home/oleg/workspace/fitman/platforms/android/assets/www/assets/css \
 /home/oleg/workspace/fitman/platforms/android/assets/www/assets/components \
 /home/oleg/workspace/fitman/platforms/android/assets/www/assets/fonts \
