@@ -8,6 +8,7 @@ var myApp = new Framework7({
 var $$ = Framework7.$;
 var lang = 'en';
 var fLang;
+var i18n;
 if (lang === 'ru') {
   //console.log('Готовимся грузить языковой файл');
   fLang = './ru.json';
@@ -21,15 +22,11 @@ $$.getJSON(fLang, function(response) {
   console.log('Загрузили языковой файл!');
   i18n = new Jed(response);
   Template7.registerHelper('_', function(msgid) {
-    //console.log('Внутри хелпера: ' + msgid);
     return i18n.gettext(msgid);
   });
   Template7.registerHelper('ngettext', function(msgid, plural, count) {
-    //var i18n = new Jed(langData);
-    //return i18n.ngettext(msgid, plural, count);
-    return msgid + '222';
+    return i18n.ngettext(msgid, plural, count);
   });
-  //myApp.init();
 });
 // Функция для приведения дат в нужный вид
 Date.prototype.toDateInputValue = (function() {
@@ -67,28 +64,6 @@ var view13 = myApp.addView('#view-13'); // Удаление клиентов и�
 */
 
 var bdSchema = '';
-
-/*function getJSON(url) {
-return new Promise(function(resolve, reject){
-  var xhr = new XMLHttpRequest();
-
-  xhr.open('GET', url);
-  xhr.onreadystatechange = handler;
-  xhr.responseType = 'json';
-  xhr.setRequestHeader('Accept', 'application/json');
-  xhr.send();
-
-  function handler() {
-    if (this.readyState === this.DONE) {
-      if (this.status === 200) {
-        resolve(this.response);
-      } else {
-        reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
-      }
-    }
-  };
-});
-}*/
 
 $$.getJSON('default/bd-schema.json', function(data) {
   //console.log(data);
@@ -324,7 +299,6 @@ $$('.confirm-fill-demo').on('click', function () {
     console.log('Начинаем обрабатывать упражнения');
     var dataExercisesJSON = '';
     $$.getJSON('default/exercises.json', function(data) {
-    //getJSON('default/exercises.json').then(function(data) {
       dataExercisesJSON = data;
       // Запускаем цикл по группам упражнений (exerciseType)
       for (var j in data.exerciseType) {
@@ -393,7 +367,6 @@ $$('.confirm-fill-demo').on('click', function () {
     });  
     
     $$.getJSON('default/customers.json', function(data) {
-    //getJSON('default/customers.json').then(function(data) {
       for (var i in data.customers) {
         // Добавляем клиентов в базу
         server.customers.add(data.customers[i]);
@@ -484,8 +457,6 @@ function updateListCustomers(customers) {
   //console.log($$.serializeObject(customers[0]));
   var listCustomers = '';
   var listCustomersForDelete = '';
-  //customers.forEach(function (value) {
-  //customers.each(function (value) {
   for (var index in customers) {
     value = customers[index];
     // Список пользователей
@@ -510,7 +481,6 @@ function updateListCustomers(customers) {
     listCustomersForDelete += '    </div>';
     listCustomersForDelete += '  </label>';
     listCustomersForDelete += '</li>';
-  //});
   }
   document.getElementById("ulListCustomers").innerHTML = listCustomers;
   document.getElementById("forDeleteCustomers").innerHTML = listCustomersForDelete;
@@ -549,7 +519,6 @@ function addCustomer() {
         // Запросом получили массив объектов customers
         updateListCustomers(results);
       });
-    //$$('a[href="#view-3"]').click();
   } else {
     myApp.addNotification({
       title: i18n.gettext('Error while adding'),
@@ -600,7 +569,6 @@ function editCustomer() {
 */
 function removeCustomers() {
   // Модальное окно для подтверждения удаления клиентов
-  //$$('.confirm-delete-customers').on('click', function () {
   myApp.confirm(i18n.gettext('Are you sure?'), function () {
     // Найдём все value всех отмеченных чекбоксов в ul#forDeleteCustomers. Эти значения есть id клиентов для удаления из базы
     // Начинаем цикл по всем отмеченным для удаления клиентам
@@ -608,64 +576,59 @@ function removeCustomers() {
       console.log('Проверяем пользователя с id = ' + this.value);
 	  server.customers.get(parseInt(this.value)).then(function(resCustomer) {
         console.log('Нашли удаляемого клиента в базе: ' + JSON.stringify(resCustomer));
-        // Проверяем, можно ли удалять этого клиента из базы
-        // Если по клиенту есть записи в истории занятий или расписании, то спрашиваем, точно ли всё по нему удалить
-        // Искать нужно в трёх таблицах сразу: workout (хотя это можно, пожалуй, пропустить), schedule и workExercise
-        console.log('resCustomer.id = ' + resCustomer.id);
-        server.workExercise.query()
-          .filter('customer', parseInt(resCustomer.id))
+        // Без лишних вопросов сразу удаляем клиента из справочника
+        server.remove('customers', resCustomer.id).then(function(res3) {
+          console.log('Удалили пользователя с id = ' + resCustomer.id);
+          console.log(JSON.stringify(res3));
+          // После всех удалений, обновим списки клиентов на соответствующих страницах
+          server.customers.query('name')
+            .all()
+            .distinct()
+            .execute()
+            .then(function(res2) {
+              console.log('Клиенты после удаления res2 = ' + JSON.stringify(res2));
+              updateListCustomers(res2);
+            });
+        });
+        console.log('Подчищаем за удалённым пользователем с id = ' + resCustomer.id);
+        // 1. Подчищаем workout
+        server.workout.query()
+          .filter('customer', resCustomer.id)
           .execute()
-          .then(function(resWorkEx) {
-            if(resWorkEx.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
-              myApp.addNotification({
-                title: i18n.gettext('Customer ') + resCustomer.name + i18n.gettext(' can not be deleted'),
-                hold: messageDelay,
-                message: i18n.gettext('There is data in history.')
+          .then(function(resWorkout) {
+            console.log('Нашли данные для удаления resWorkout: ' + JSON.stringify(resWorkout));
+            for(var indexWorkout in resWorkout) {
+              server.remove('workout', parseInt(resWorkout[indexWorkout].id)).then(function() {
+                console.log('Удалили workout');
               });
-            } else { // Ничего не нашли тут, проверяем в следующей таблице
-              server.schedule.query()
-                .filter('customer', parseInt(resCustomer.id))
-                .execute()
-                .then(function(resSchedule) {
-                  if(resSchedule.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
-                    myApp.addNotification({
-                      title: i18n.gettext('Customer ') + resCustomer.name + i18n.gettext(' can not be deleted'),
-                      hold: messageDelay,
-                      message: i18n.gettext('There is data in schedule by that customer.')
-                    });
-                  } else { // Ничего не нашли тут, проверяем в следующей таблице
-                    server.workout.query()
-                      .filter('customer', parseInt(resCustomer.id))
-                      .execute()
-                      .then(function(resWorkout) {
-                        if(resWorkout.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
-                          myApp.addNotification({
-                            title: i18n.gettext('Customer ') + resCustomer.name + i18n.gettext(' can not be deleted'),
-                            hold: messageDelay,
-                            message: i18n.gettext('There is data in workout.')
-                          });
-                        } else { // Ничего не нашли тут - искать уже нигде больше не надо, - можно смело удалять пользователя
-                          server.remove('customers', parseInt(resCustomer.id)).then(function(res3) {
-                            console.log('Удалили пользователя с id = ' + resCustomer.id);
-                            console.log(JSON.stringify(res3));
-                            // После всех удалений, обновим списки клиентов на соответствующих страницах
-                            server.customers.query('name')
-                          	  .all()
-                              .distinct()
-                              .execute()
-                              .then(function(res2) {
-                                console.log('Клиенты после удаления res2 = ' + JSON.stringify(res2));
-                                updateListCustomers(res2);
-                        	  });
-                          });
-                        }
-                      });
-                  }
-                });
+            }
+          });
+        // 2. Подчищаем schedule
+        server.schedule.query()
+          .filter('customer', resCustomer.id)
+          .execute()
+          .then(function(resSchedule) {
+            console.log('Нашли данные для удаления resSchedule: ' + JSON.stringify(resSchedule));
+            for(var indexSchedule in resSchedule) {
+              server.remove('schedule', parseInt(resSchedule[indexSchedule].id)).then(function() {
+                console.log('Удалили schedule');
+              });
+            }
+          });
+        // 3. Подчищаем workExercise
+        server.workExercise.query()
+          .filter('customer', resCustomer.id)
+          .execute()
+          .then(function(resWorkExercise) {
+            console.log('Нашли данные для удаления resWorkExercise: ' + JSON.stringify(resWorkExercise));
+            for(var indexWorkExercise in resWorkExercise) {
+              server.remove('workExercise', parseInt(resWorkExercise[indexWorkExercise].id)).then(function() {
+                console.log('Удалили workExercise');
+              });
             }
           });
       });
-    });
+    }); // Кончился цикл по всем отмеченным клиентам для удаления
   },
   function () {
     //myApp.alert('You clicked Cancel button');
@@ -1152,6 +1115,8 @@ function upgradeViewWorkout() {
   menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
   menuWorkout += '</div>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
+  // Очистим список ранее созданного комплекса упражнений
+  document.getElementById("ulListCurrentExercises").innerHTML = '';
   var isWorkout = 0; // Установим флаг наличия расписания на сегодня
   var temp = $$('input#inputNewCustomer').val();
   var customerName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
