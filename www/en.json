@@ -1,8 +1,8 @@
 {
    "": {
       "project-id-version": "",
-      "pot-creation-date": "2015-04-27 13:44+0300",
-      "po-revision-date": "2015-04-27 13:45+0300",
+      "pot-creation-date": "2015-04-27 14:07+0300",
+      "po-revision-date": "2015-04-27 14:08+0300",
       "last-translator": "Oleg Ekhlakov <subspam@mail.ru>",
       "language-team": "",
       "language": "en_US",
@@ -348,10 +348,6 @@
       null,
       ""
    ],
-   "New Customer": [
-      null,
-      ""
-   ],
    "Saved": [
       null,
       ""
@@ -373,10 +369,6 @@
       ""
    ],
    "Updated": [
-      null,
-      ""
-   ],
-   "Data was updated.": [
       null,
       ""
    ],
@@ -437,14 +429,6 @@
       ""
    ],
    "Rewrite": [
-      null,
-      ""
-   ],
-   "Data was updated": [
-      null,
-      ""
-   ],
-   "Data was added": [
       null,
       ""
    ]

@@ -513,9 +513,8 @@ function addCustomer() {
       .execute()
       .then(function(results) {
       	myApp.addNotification({
-          title: i18n.gettext('New Customer'),
-          hold: messageDelay,
-          message: i18n.gettext('Saved')
+          title: i18n.gettext('Saved'),
+          hold: messageDelay
         });
         // Запросом получили массив объектов customers
         updateListCustomers(results);
@@ -556,8 +555,7 @@ function editCustomer() {
         console.log('Обновили данные по клиенту: ' + JSON.stringify(newDataCustomer));
         myApp.addNotification({
           title: i18n.gettext('Updated'),
-          hold: messageDelay,
-          message: i18n.gettext('Data was updated.')
+          hold: messageDelay
         });    
       });
     }
@@ -1595,8 +1593,7 @@ function saveExerciseWork() {
         // Текущая проверяемая запись из базы данных совпала с текущим клиентом, текущим упражнением и текущим подходом
         // Если текущий аналитический разрез присутствует в базе, предложим пользователю три варианта:
         // 1. Перезаписать данные
-        // 2. Добавить к записанному
-        // 3. Отменить запись
+        // 2. Отменить запись
         myApp.modal({
           title: i18n.gettext('Current set already exist in DB'),
           text: i18n.gettext('What do you want to do with current values?'),
@@ -1648,68 +1645,13 @@ function saveExerciseWork() {
                   if (flagSavedData == 1) {
                     // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                     myApp.addNotification({
-                      title: i18n.gettext('Saved'),
-                      hold: messageDelay,
-                      message: i18n.gettext('Data was updated')
+                      title: i18n.gettext('Updated'),
+                      hold: messageDelay
                     });
                   }
                 });
               }
             } // Конец функции перезаписи значений БД
-          },
-          {
-            text: 'Add',
-            onClick: function() {
-              var flagSavedData = 0;
-              // Выбрали вариант добавления текущих показателей к тем, что уже есть в базе по данному разрезу.
-              // Значит найдём все записи по данному подходу данного клиента по данному упражнению и прибавим текущие значения
-              for (var index in result) {
-                var item = result[index];
-                // Найдём текущий параметр в нашей форме
-                if(item.option == 'time') {
-                  var tempMinValue = $$('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
-                  if (tempMinValue == '') { // Не заполнили минуты
-                    var intMinValue = 0;
-                  } else {
-                    var intMinValue = parseInt(tempMinValue);
-                  }
-                  var tempSecValue = $$('#ulListCurrentWorkEx input[data-item = "time-seconds"]').val();
-                  if (tempSecValue == '') {
-                    var intSecValue = 0;
-                  } else {
-                    var intSecValue = parseInt(tempSecValue);
-                  }
-                  newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
-                } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
-                  var tempValue = $$('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
-                  if (tempValue == '') { // Если поле ввода оставили пустым
-                    var newValOpt = 0;
-                  } else {
-                    var newValOpt = parseInt(tempValue);
-                  }
-                }
-                server.workExercise.update({
-                  'id': parseInt(item.id),
-                  'customer': customerId,
-                  'date': dateEx,
-                  'exercise': exerciseId,
-                  'option': item.option,
-                  'value': newValOpt + item.value,
-                  'set': workSet
-                }).then(function (updatedWorkEx) {
-                  console.log('Обновили очередную строку в БД (сложили показатели): ' + JSON.stringify(updatedWorkEx));
-                  flagSavedData++;
-                  if (flagSavedData == 1) {
-                    // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
-                    myApp.addNotification({
-                      title: i18n.gettext('Saved'),
-                      hold: messageDelay,
-                      message: i18n.gettext('Data was updated')
-                    });
-                  }
-                });
-              }
-            } // Конец функции добавления значений к сохранённым в БД
           },
           {
             text: i18n.gettext('Cancel'),
@@ -1774,8 +1716,7 @@ function saveExerciseWork() {
                 // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                 myApp.addNotification({
                   title: i18n.gettext('Saved'),
-                  hold: messageDelay,
-                  message: i18n.gettext('Data was added')
+                  hold: messageDelay
                 });
               }
             });
@@ -1797,8 +1738,7 @@ function saveExerciseWork() {
                 // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                 myApp.addNotification({
                   title: i18n.gettext('Saved'),
-                  hold: messageDelay,
-                  message: i18n.gettext('Data was added')
+                  hold: messageDelay
                 });
               }
             });
