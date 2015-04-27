@@ -513,9 +513,9 @@ function addCustomer() {
       .execute()
       .then(function(results) {
       	myApp.addNotification({
-          title: i18n.gettext('Add new Customer'),
+          title: i18n.gettext('New Customer'),
           hold: messageDelay,
-          message: i18n.gettext('Data was saved')
+          message: i18n.gettext('Saved')
         });
         // Запросом получили массив объектов customers
         updateListCustomers(results);
@@ -555,7 +555,7 @@ function editCustomer() {
       }).then(function (newDataCustomer) {
         console.log('Обновили данные по клиенту: ' + JSON.stringify(newDataCustomer));
         myApp.addNotification({
-          title: i18n.gettext('Successful updated'),
+          title: i18n.gettext('Updated'),
           hold: messageDelay,
           message: i18n.gettext('Data was updated.')
         });    
@@ -848,9 +848,9 @@ function addExercise() {
       .then(function (resultExist) {
         if(resultExist.length) { // В базе есть запись с таким упражнением.
           myApp.addNotification({
-            title: i18n.gettext('Can not be added'),
+            title: i18n.gettext("Can&#39;t be added"),
             hold: messageDelay,
-            message: i18n.gettext('That name of exercise already exist in database.')
+            message: i18n.gettext('The name already exist')
           });
         } else { // Такого упражнения ещё нет. Можно добавлять
           server.exercise.add({
@@ -1019,7 +1019,7 @@ function updateExerciseProperties() {
                 myApp.addNotification({
                   title: i18n.gettext('Error while deleting'),
                   hold: messageDelay,
-                  message: i18n.gettext('Option ') + rowOldOpt.option + i18n.gettext(' already used in database. It can not be deleted!')
+                  message: i18n.gettext('Option ') + rowOldOpt.option + i18n.gettext(" already used in database. It can&#39;t be deleted!")
                 });
                 // Надо снять отметку с этой опции
                 $$('input[name="checkbox-ex-prop"][value="' + rowOldOpt.option + '"]').prop('checked', false);
@@ -1057,7 +1057,7 @@ function updateExerciseProperties() {
 Функция добавления названия группы упражнений
 */
 function addExType() {
-  var temp = $$('input#inputNewExType').val();
+  var temp = $$('#inputNewExType').val();
   var newExType = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   server.exerciseType.add({'name': newExType}).then(function(result) {
     // Обновляем список групп упражнений на соответствующей странице
@@ -1085,7 +1085,7 @@ function deleteExType(idExType) {
       if(countExercises) {
     	// В базе есть упражнения из этой группы. Удалять нельзя
     	myApp.addNotification({
-		  title: i18n.gettext('Can not be deleted'),
+		  title: i18n.gettext("Can&#39;t be deleted"),
           hold: messageDelay,
 		  message: i18n.gettext('This item can not be delete while there are exercises in it.')
 		});
@@ -1702,7 +1702,7 @@ function saveExerciseWork() {
                   if (flagSavedData == 1) {
                     // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                     myApp.addNotification({
-                      title: i18n.gettext('Data was saved'),
+                      title: i18n.gettext('Saved'),
                       hold: messageDelay,
                       message: i18n.gettext('Data was updated')
                     });
@@ -1796,7 +1796,7 @@ function saveExerciseWork() {
               if (flagSavedData == 1) {
                 // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                 myApp.addNotification({
-                  title: i18n.gettext('Data was saved'),
+                  title: i18n.gettext('Saved'),
                   hold: messageDelay,
                   message: i18n.gettext('Data was added')
                 });
@@ -2221,7 +2221,7 @@ $$('#ulListDays li').click(function() {
 /*
 Функция генерирует данные для страницы статистики по выбранному упражнению, клиенту и дате
 */
-function generateStatistics() {
+function generateHistory() {
   // Надо добавить кнопку Save
   $$('#linkSaveWorkEx').show();
   var customerId = parseInt($$('span#spanCustName').data('item'));
@@ -2285,7 +2285,7 @@ function generateStatistics() {
            	  i = 0;
            	}
             console.log('Выводим блок на страницу.');
-            document.getElementById("divStatistics").innerHTML = block;
+            document.getElementById("divHistory").innerHTML = block;
           }
           var mySlider3 = myApp.swiper('.swiper-stat', {
             //pagination: '.swiper-stat .swiper-pagination',
@@ -2308,16 +2308,16 @@ $$('#aWorkNote').on('click', function() {
   // Надо добавить кнопку Save
   $$('#linkSaveWorkEx').show();
 });
-// Функция срабатывает при нажатии кнопки Statistics на странице работы с упражнением index-24
-$$('#aWorkStatistics').on('click', function() {
+// Функция срабатывает при нажатии кнопки History на странице работы с упражнением index-24
+$$('#aWorkHistory').on('click', function() {
   // Надо скрыть кнопку Save
   $$('#linkSaveWorkEx').hide();
 });
 /*
-Функция срабатывает при нажатии кнопки Graph на странице работы с упражнением index-24
+Функция срабатывает при нажатии кнопки Progress на странице работы с упражнением index-24
 Функция рисует график по данным истории выполнения упражнения из БД
 */
-$$('#aWorkGraph').on('click', function() {
+$$('#aWorkProgress').on('click', function() {
   // Надо скрыть кнопку Save
   $$('#linkSaveWorkEx').hide();
   // Получим все параметры данного упражнения
@@ -2351,8 +2351,8 @@ $$('#aWorkGraph').on('click', function() {
 		  var arrTime = [];
 		  var arrDistance = [];
 		  var arrSpeed = [];
-		  var arrSlope = [];
-		  var arrLoad = [];
+		  var arrIncline = [];
+		  var arrResistance = [];
           for (var index in result) {
             var item = result[index];
             // Добрались до данных, теперь их надо собрать в массивы
@@ -2371,10 +2371,10 @@ $$('#aWorkGraph').on('click', function() {
 	          arrDistance[analitCount] = item.value;
 	        } else if (item.option === 'speed') {
 	          arrSpeed[analitCount] = item.value;
-	        } else if (item.option === 'slope') {
-	          arrSlope[analitCount] = item.value;
-	        } else if (item.option === 'load') {
-	          arrLoad[analitCount] = item.value;
+	        } else if (item.option === 'incline') {
+	          arrIncline[analitCount] = item.value;
+	        } else if (item.option === 'resistance') {
+	          arrResistance[analitCount] = item.value;
 	        }
             i++; // Счётчик по параметрам одного аналитического разреза
             if(i === countOptions) {
@@ -2394,8 +2394,8 @@ $$('#aWorkGraph').on('click', function() {
 		      arrTime,
 			  arrDistance,
 			  arrSpeed,
-			  arrSlope,
-			  arrLoad
+			  arrIncline,
+			  arrResistance
 			]*/
 			series: [
 			  {
@@ -2419,12 +2419,12 @@ $$('#aWorkGraph').on('click', function() {
                 data: arrSpeed
               },
               {
-                name: i18n.gettext('Slope'),
-                data: arrSlope
+                name: i18n.gettext('Incline'),
+                data: arrIncline
               },
               {
-                name: i18n.gettext('Load'),
-                data: arrLoad
+                name: i18n.gettext('Resistance'),
+                data: arrResistance
               }
             ]
 		  };

@@ -1,159 +1,451 @@
 {
-   "domain": "messages",
-   "locale_data": {
-      "messages": {
-         "": {
-            "domain": "messages",
-            "plural_forms": "nplurals=2; plural=(n != 1);",
-            "lang": "en_US"
-         },
-         "Left panel content goes here": [
-            ""
-         ],
-         "Right panel content goes here": [
-            ""
-         ],
-         "Help": [
-            ""
-         ],
-         "Settings": [
-            ""
-         ],
-         "Customers": [
-            ""
-         ],
-         "www": [
-            ""
-         ],
-         "Are you sure? It will erase all of your data!": [
-            ""
-         ],
-         "Database is clean": [
-            ""
-         ],
-         "Are you sure?": [
-            ""
-         ],
-         "Add new Customer": [
-            ""
-         ],
-         "Data was saved": [
-            ""
-         ],
-         "Error while adding": [
-            ""
-         ],
-         "Nothing to add!": [
-            ""
-         ],
-         "Nothing to save": [
-            ""
-         ],
-         "New data already exist in database.": [
-            ""
-         ],
-         "Successful updated": [
-            ""
-         ],
-         "Data was updated.": [
-            ""
-         ],
-         "Customer ": [
-            ""
-         ],
-         " can not be deleted": [
-            ""
-         ],
-         "There is data in history.": [
-            ""
-         ],
-         "There is data in schedule by that customer.": [
-            ""
-         ],
-         "There is data in workout.": [
-            ""
-         ],
-         "Successful rename": [
-            ""
-         ],
-         "Group of exercises was renamed.": [
-            ""
-         ],
-         "Exercise was renamed.": [
-            ""
-         ],
-         "Can not be added": [
-            ""
-         ],
-         "That name of exercise already exist in database.": [
-            ""
-         ],
-         "Exercise ": [
-            ""
-         ],
-         "This item can not be delete because of history by this exercise.": [
-            ""
-         ],
-         "This item can not be delete because there are schedule with this exercise.": [
-            ""
-         ],
-         "Error while deleting": [
-            ""
-         ],
-         "Option ": [
-            ""
-         ],
-         " already used in database. It can not be deleted!": [
-            ""
-         ],
-         "New set of options are equal to existent.": [
-            ""
-         ],
-         "Can not be deleted": [
-            ""
-         ],
-         "This item can not be delete while there are exercises in it.": [
-            ""
-         ],
-         "Current set already exist in DB": [
-            ""
-         ],
-         "What do you want to do with current values?": [
-            ""
-         ],
-         "Rewrite": [
-            ""
-         ],
-         "Data was updated": [
-            ""
-         ],
-         "Cancel": [
-            ""
-         ],
-         "Data was added": [
-            ""
-         ],
-         "Repeats": [
-            ""
-         ],
-         "Weight": [
-            ""
-         ],
-         "Time": [
-            ""
-         ],
-         "Distance": [
-            ""
-         ],
-         "Speed": [
-            ""
-         ],
-         "Slope": [
-            ""
-         ],
-         "Load": [
-            ""
-         ]
-      }
-   }
+   "": {
+      "project-id-version": "",
+      "pot-creation-date": "2015-04-27 13:44+0300",
+      "po-revision-date": "2015-04-27 13:45+0300",
+      "last-translator": "Oleg Ekhlakov <subspam@mail.ru>",
+      "language-team": "",
+      "language": "en_US",
+      "mime-version": "1.0",
+      "content-type": "text/plain; charset=UTF-8",
+      "content-transfer-encoding": "8bit",
+      "x-generator": "Poedit 1.7.5",
+      "x-poedit-basepath": ".",
+      "plural-forms": "nplurals=2; plural=(n != 1);",
+      "x-poedit-sourcecharset": "UTF-8",
+      "x-poedit-searchpath-0": "/home/oleg/workspace/fitman/www",
+      "x-poedit-searchpathexcluded-0": "/home/oleg/workspace/fitman/www/js/my-app.min.js"
+   },
+   "Personal trainer": [
+      null,
+      ""
+   ],
+   "Left panel content goes here": [
+      null,
+      ""
+   ],
+   "Right panel content goes here": [
+      null,
+      ""
+   ],
+   "Help": [
+      null,
+      ""
+   ],
+   "Settings": [
+      null,
+      ""
+   ],
+   "Customers": [
+      null,
+      ""
+   ],
+   "www": [
+      null,
+      ""
+   ],
+   "User agreement": [
+      null,
+      ""
+   ],
+   "&laquo;Personal Trainer program&raquo; is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way.": [
+      null,
+      ""
+   ],
+   "All exercises in &laquo;Personal Trainer program&raquo; can be used as provided, deleted or re-created to be added to your own favorite exercises library.": [
+      null,
+      ""
+   ],
+   "In &laquo;Personal Trainer program&raquo; you can create a group of exercises, combinations or use individual exercise every time you follow the program.": [
+      null,
+      ""
+   ],
+   "&laquo;Personal Trainer program&raquo; allows you to:": [
+      null,
+      ""
+   ],
+   "control the training process": [
+      null,
+      ""
+   ],
+   "use different techniques to develop strength": [
+      null,
+      ""
+   ],
+   "add your own exercise and combine them in groups": [
+      null,
+      ""
+   ],
+   "create workouts for a few weeks in advance, so you don&#39;t have to think about your workout every time you meet your client": [
+      null,
+      ""
+   ],
+   "rationally use exercises": [
+      null,
+      ""
+   ],
+   "see the progress visually, by using graphics and send the result by email to your client after they finish their program or reached their goals.": [
+      null,
+      ""
+   ],
+   "Units": [
+      null,
+      ""
+   ],
+   "Imperial": [
+      null,
+      ""
+   ],
+   "Metric": [
+      null,
+      ""
+   ],
+   "Language": [
+      null,
+      ""
+   ],
+   "English": [
+      null,
+      ""
+   ],
+   "Russian": [
+      null,
+      ""
+   ],
+   "Exercises": [
+      null,
+      ""
+   ],
+   "Change": [
+      null,
+      ""
+   ],
+   "Remove": [
+      null,
+      ""
+   ],
+   "Color themes": [
+      null,
+      ""
+   ],
+   "Gray": [
+      null,
+      ""
+   ],
+   "White": [
+      null,
+      ""
+   ],
+   "Black": [
+      null,
+      ""
+   ],
+   "Lightblue": [
+      null,
+      ""
+   ],
+   "Yellow": [
+      null,
+      ""
+   ],
+   "Orange": [
+      null,
+      ""
+   ],
+   "Pink": [
+      null,
+      ""
+   ],
+   "Blue": [
+      null,
+      ""
+   ],
+   "Green": [
+      null,
+      ""
+   ],
+   "Red": [
+      null,
+      ""
+   ],
+   "Layout themes": [
+      null,
+      ""
+   ],
+   "Dark": [
+      null,
+      ""
+   ],
+   "Fill demo data": [
+      null,
+      ""
+   ],
+   "Fill demo": [
+      null,
+      ""
+   ],
+   "Clean database": [
+      null,
+      ""
+   ],
+   "Drop all": [
+      null,
+      ""
+   ],
+   "Create database": [
+      null,
+      ""
+   ],
+   "Create DB": [
+      null,
+      ""
+   ],
+   "Remove database": [
+      null,
+      ""
+   ],
+   "Remove DB": [
+      null,
+      ""
+   ],
+   "Add": [
+      null,
+      ""
+   ],
+   "Cancel": [
+      null,
+      ""
+   ],
+   "Nothing found": [
+      null,
+      ""
+   ],
+   "Registration on the website will allow you to participate in the improvement of the program, update your program, exchange exercise and ideas with other users on the forum.": [
+      null,
+      ""
+   ],
+   "Sign in": [
+      null,
+      ""
+   ],
+   "Save": [
+      null,
+      ""
+   ],
+   "Repeats": [
+      null,
+      ""
+   ],
+   "Weight": [
+      null,
+      ""
+   ],
+   "Time": [
+      null,
+      ""
+   ],
+   "Distance": [
+      null,
+      ""
+   ],
+   "Speed": [
+      null,
+      ""
+   ],
+   "Incline": [
+      null,
+      ""
+   ],
+   "Resistance": [
+      null,
+      ""
+   ],
+   "Photo": [
+      null,
+      ""
+   ],
+   "Workout of the day": [
+      null,
+      ""
+   ],
+   "Delete": [
+      null,
+      ""
+   ],
+   "Calendar": [
+      null,
+      ""
+   ],
+   "Schedule": [
+      null,
+      ""
+   ],
+   "Today still not formed a set of exercises.": [
+      null,
+      ""
+   ],
+   "Only today": [
+      null,
+      ""
+   ],
+   "Everyday": [
+      null,
+      ""
+   ],
+   "Sunday": [
+      null,
+      ""
+   ],
+   "Monday": [
+      null,
+      ""
+   ],
+   "Tuesday": [
+      null,
+      ""
+   ],
+   "Wednesday": [
+      null,
+      ""
+   ],
+   "Thursday": [
+      null,
+      ""
+   ],
+   "Friday": [
+      null,
+      ""
+   ],
+   "Saturday": [
+      null,
+      ""
+   ],
+   "Note": [
+      null,
+      ""
+   ],
+   "Progress": [
+      null,
+      ""
+   ],
+   "History": [
+      null,
+      ""
+   ],
+   "here is the place to advertise": [
+      null,
+      ""
+   ],
+   "Are you sure? It will erase all of your data!": [
+      null,
+      ""
+   ],
+   "Database is clean": [
+      null,
+      ""
+   ],
+   "Are you sure?": [
+      null,
+      ""
+   ],
+   "New Customer": [
+      null,
+      ""
+   ],
+   "Saved": [
+      null,
+      ""
+   ],
+   "Error while adding": [
+      null,
+      ""
+   ],
+   "Nothing to add!": [
+      null,
+      ""
+   ],
+   "Nothing to save": [
+      null,
+      ""
+   ],
+   "New data already exist in database.": [
+      null,
+      ""
+   ],
+   "Updated": [
+      null,
+      ""
+   ],
+   "Data was updated.": [
+      null,
+      ""
+   ],
+   "Successful rename": [
+      null,
+      ""
+   ],
+   "Group of exercises was renamed.": [
+      null,
+      ""
+   ],
+   "Exercise was renamed.": [
+      null,
+      ""
+   ],
+   "Can&#39;t be added": [
+      null,
+      ""
+   ],
+   "The name already exist": [
+      null,
+      ""
+   ],
+   "Error while deleting": [
+      null,
+      ""
+   ],
+   "Option ": [
+      null,
+      ""
+   ],
+   " already used in database. It can&#39;t be deleted!": [
+      null,
+      ""
+   ],
+   "New set of options are equal to existent.": [
+      null,
+      ""
+   ],
+   "Can&#39;t be deleted": [
+      null,
+      ""
+   ],
+   "This item can not be delete while there are exercises in it.": [
+      null,
+      ""
+   ],
+   "Clear all": [
+      null,
+      ""
+   ],
+   "Current set already exist in DB": [
+      null,
+      ""
+   ],
+   "What do you want to do with current values?": [
+      null,
+      ""
+   ],
+   "Rewrite": [
+      null,
+      ""
+   ],
+   "Data was updated": [
+      null,
+      ""
+   ],
+   "Data was added": [
+      null,
+      ""
+   ]
 }
