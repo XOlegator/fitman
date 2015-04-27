@@ -332,7 +332,8 @@ $$('.confirm-fill-demo').on('click', function () {
             server.exercise.add({
               'id': newExerciseId,
               'name': newExerciseName,
-              'type': parseInt(exType[0].id)
+              'type': parseInt(exType[0].id),
+              'deleted': 0
             }).then(function(itemEx) {
               //console.log('Добавили в БД новое упражнение: ' + JSON.stringify(itemEx));
             });
@@ -747,7 +748,7 @@ function renameExType(idExType) {
   });
 }
 /*
-Функция построения списка упражнений определённой группы.
+Функция построения списка неудалённых упражнений определённой группы.
 В функцию передаётся id одной выбранной группы упражнений
 */
 function updateListExercises(exerciseTypeId) {
@@ -756,10 +757,9 @@ function updateListExercises(exerciseTypeId) {
     $$('div.ex-of-type').attr('data-item', exerciseTypeId); // Устанавливаем значение id текущей группы упражнений
   });
   var listExercise = '';
-  // Запросом отбираем все упражнения данной группы (exerciseType)
+  // Запросом отбираем все неудалённые упражнения данной группы (exerciseType)
   server.exercise.query('name')
-  	.filter('type', parseInt(exerciseTypeId))
-    //.distinct()
+  	.filter(function(exFilter) {return (exFilter.type == exerciseTypeId) && (exFilter.deleted == 0)})
     .execute()
     .then(function(results) {
       console.log('Найденные упражнения по выбранному id ' + exerciseTypeId + ' группы упражнений: results = ' + JSON.stringify(results));
@@ -879,61 +879,79 @@ function addExercise() {
   }
 }
 /*
-Функция удаления упражнения. В функцию передаётся id упражнения
+Функция удаления упражнения. В функцию передаётся id упражнения.
+Если по упражнению есть история занятий, оставляем историю, а упражнение помечаем как удалённое.
+Если по упражнению нет истории занятий, но есть запланированные занятия, то удаляем упражнение из плана, а само упражнение помечаем удалённым
+Если по упражнению нет ни истории занятий, ни запланированных занятий, то удаляем упражнения
 */
 function deleteExercise(exerciseId) {
   // Сначала проверим, есть ли по данному упражнению записи в базе
   server.workExercise.query('exercise')
-  	.filter('exercise', parseInt(exerciseId))
+  	.filter('exercise', exerciseId)
     .execute()
     .then(function(resWorkEx){
       if(resWorkEx.length) {
-    	// В базе есть записи с этим упражнением. Удалять нельзя
-    	myApp.addNotification({
-		  title: i18n.gettext('Exercise ') + resWorkEx[0].name + i18n.gettext(' can not be deleted'),
-          hold: messageDelay,
-		  message: i18n.gettext('This item can not be delete because of history by this exercise.')
-		});
+    	// В базе есть записи с этим упражнением. Не трогаем эти записи (это историческая ценность)
+    	// Но само упражнение помечаем как удалённое
+    	server.exercise.get(exerciseId).then(function(exercise) {
+    	  server.exercise.update({
+    	    'id': exerciseId,
+    	    'name': exercise.name,
+    	    'type': exercise.type,
+    	    'deleted': 1
+    	  }).then(function (updEx) {
+            console.log('Упражнение после обновления: ' + JSON.stringify(updEx));
+            // Упражнение пометили удалённым, теперь обновим список упражнений в данной группе
+            var typeExercise = parseInt($$('div#view-7a div.ex-of-type').data('item'));
+            updateListExercises(typeExercise);
+          });
+        });
       } else {
-        // Данных по выполнению данного упражнения не нашлось
+        // Данных по выполнению данного упражнения не нашлось, поэтому смело удаляем его
+        // Сначала найдём все id записей с опциями по этому упражнению
+        console.log('exercise для удаления: ' + exerciseId);
+        server.optionsExercises.query()
+          .filter('exerciseId', exerciseId)
+          .execute()
+          .then(function (optEx) {
+            for (var index in optEx) {
+              server.remove('optionsExercises', optEx[index].id);
+            }
+            // После того, как все опции данного упражнения удалили, можно удалять и само упражнение
+            server.remove('exercise', exerciseId).then(function () {
+              // Упражнение удалил, теперь обновим список упражнений в данной группе
+              var typeExercise = parseInt($$('div#view-7a div.ex-of-type').data('item'));
+              updateListExercises(typeExercise);
+             });
+          });
+        }
         // Надо проверить, не запланировано ли оно у кого-нибудь
         server.schedule.query('exercise')
-          .only(parseInt(exerciseId))
-          .count()
+          .filter('exercise', exerciseId)
           .execute()
-          .then(function(countExSchedule){
-            if(countExSchedule) {
-              // В базе есть записи в расписании с этим упражнением. Удалять нельзя
-              myApp.addNotification({
-                title: i18n.gettext('Exercise ') + resWorkEx[0].name + i18n.gettext(' can not be deleted'),
-                hold: messageDelay,
-                message: i18n.gettext('This item can not be delete because there are schedule with this exercise.')
+          .then(function(exSchedule) {
+            console.log('Нашлись данные расписания: ' + JSON.stringify(exSchedule));
+            for(var indexExSchedule in exSchedule) {
+              server.remove('schedule', exSchedule[indexExSchedule].id).then(function () {
+                // Запись из расписания удалили
+                console.log('Запись из расписания удалили');
               });
-            } else {
-              // В базе нет записей по этому упражнению, поэтому смело удаляем его
-              // Сначала найдём все id записей с опциями по этому упражнению
-                console.log('exercise для удаления: ' + exerciseId);
-                server.optionsExercises.query()
-                  .filter('exerciseId', parseInt(exerciseId))
-                  .execute()
-                  .then(function (optEx) {
-                    //optEx.forEach(function (rowOptEx) {
-                    //optEx.each(function (rowOptEx) {
-                    for (var index in optEx) {
-                      rowOptEx = optEx[index];
-                      server.remove('optionsExercises', parseInt(rowOptEx.id));
-                    //});
-                    }
-                    // После того, как все опции данного упражнения удалили, можно удалять и само упражнение
-                    server.remove('exercise', parseInt(exerciseId)).then(function () {
-                      // Упражнение удалил, теперь обновим список упражнений в данной группе
-                  	  var typeExercise = parseInt($$('div#view-7a div.ex-of-type').data('item'));
-                  	  updateListExercises(typeExercise);
-                    });
-                  });
+            }
+    	  });
+        // Проверяем есть ли данные в таблице workout - удаляем их
+        console.log('Сейчас будем искать данные workout');
+        server.workout.query('exercise')
+          .filter('exercise', exerciseId)
+          .execute()
+          .then(function(resWorkout) {
+            console.log('Нашли данные workout: ' + JSON.stringify(resWorkout));
+            for(var indexWorkout in resWorkout) {
+              server.remove('workout', resWorkout[indexWorkout].id).then(function () {
+                // Удалили запись из workout
+                console.log('Удалили запись из workout');
+              });
             }
           });
-    	}
     });
 }
 /*
@@ -1265,19 +1283,20 @@ function makeSetExCustomer() {
   $$('#ulListSelectedExercises').html('');
   // Скопируем в левый список те упражнения, которые на сегодня уже отобраны (со вкладки #tab0)
   var listEx = '';
-  var excludeEx = [];
+  var excludeEx = []; // Массив id упражнений, которые уже отобраны
   $$('#ulListCurrentExercises li a div span').each(function(index, item) {
   	temp = item.innerHTML;
   	console.log('Разбор очередной позиции упражнения: ' + JSON.stringify($$(this)));
   	// На всякий случай поставим заглушку от инъекций
-  	exercise = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
+  	exerciseName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   	var exerciseId = parseInt($$(this).data('item')); // Находим id упражнения
-  	excludeEx[index] = exercise;
-    console.log('exercise = ' + exercise);
+  	//excludeEx[index] = exercise;
+  	excludeEx[index] = exerciseId;
+    console.log('exerciseName = ' + exerciseName);
     listEx += '<li class="swipeout swipeout-selected">';
     listEx += '  <div class="swipeout-content item-content">';
     listEx += '    <div class="item-inner">';
-    listEx += '      <div class="item-title set-of-exercises" data-item="' + exerciseId + '">' + exercise + '</div>';
+    listEx += '      <div class="item-title set-of-exercises" data-item="' + exerciseId + '">' + exerciseName + '</div>';
     listEx += '    </div>';
     listEx += '  </div>';
     listEx += '  <div class="swipeout-actions-left">';
@@ -1301,40 +1320,38 @@ function makeSetExCustomer() {
          // Добавляем на страницу наименования групп упражнений
          $$('#ulListAllExWithTypes').append('<li class="item-divider" data-item="' + exTypeId + '">' + exTypeName + '</li>');
          console.log('Добавили название очередной группы упражнений: ' + exTypeName + ' с id = ' + exTypeId);
-         // Формируем список упражнений из данной группы
-         server.exercise.query('name')
-  	       .filter('type', parseInt(exTypeId))
-           .execute()
-           .then(function(arrEx) {
-             // По отсортированному массиву названий упражнений пройдём циклом
-             for (var indexArrEx in arrEx) {
-               var exerciseId = arrEx[indexArrEx].id; // Получили id текущего упражнения
-               var exerciseName = arrEx[indexArrEx].name; // Получили наименование текущего упражнения
-               var exerciseType = arrEx[indexArrEx].type; // Получили название группы упражнения
-               // Если упражнение было уже отобрано ранее, то его не надо включать в полный список справа
-               //console.log('Вот наш список исключений: ' + excludeEx[0] + '; ' + excludeEx[1]);
-               if(!(in_array(exerciseName, excludeEx))) {
-               	 console.log('Проверили, что этого упражнения нет в списке исключений: ' + exerciseName);
-               	 var listExercises = '';
-                 listExercises += '<li class="swipeout swipeout-all">';
-                 listExercises += '  <div class="swipeout-content item-content">';
-                 listExercises += '    <div class="item-inner">';
-                 listExercises += '      <div class="item-title" data-item="' + exerciseId + '">' + exerciseName + '</div>';
-                 listExercises += '      </div>';
-                 listExercises += '    </div>';
-                 listExercises += '  </div>';
-                 listExercises += '  <div class="swipeout-actions-right">'; // Действие появится справа
-                 listExercises += '    <a href="#" class="action1">Added</a>';
-                 listExercises += '  </div>';
-                 listExercises += '</li>';
-                 // Элемент сформирован, надо вставлять на место
-                 $$('#ulListAllExWithTypes').find('li.item-divider[data-item="' + exerciseType + '"]').append(listExercises);
-               }
-             }
-             arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
-           });
        }
+       // Формируем и покажем список неудалённых упражнений из данной группы
+       server.exercise.query('name')
+         .filter(function(filterEx) {return (filterEx.deleted == 0) && (!(in_array(filterEx.id, excludeEx)))}) // Если упражнение было уже отобрано ранее, то его не надо включать в полный список справа
+         .execute()
+         .then(function(arrEx) {
+           console.log('exTypeId = ' + exTypeId);
+           console.log('Все найденные упражнения: ' + JSON.stringify(arrEx));
+           // По отсортированному массиву названий упражнений пройдём циклом
+           for (var indexArrEx in arrEx) {
+             var exerciseId = arrEx[indexArrEx].id; // Получили id текущего упражнения
+             var exerciseName = arrEx[indexArrEx].name; // Получили наименование текущего упражнения
+             var exerciseType = arrEx[indexArrEx].type; // Получили название группы упражнения
+             var listExercises = '';
+             listExercises += '<li class="swipeout swipeout-all">';
+             listExercises += '  <div class="swipeout-content item-content">';
+             listExercises += '    <div class="item-inner">';
+             listExercises += '      <div class="item-title" data-item="' + exerciseId + '">' + exerciseName + '</div>';
+             listExercises += '      </div>';
+             listExercises += '    </div>';
+             listExercises += '  </div>';
+             listExercises += '  <div class="swipeout-actions-right">'; // Действие появится справа
+             listExercises += '    <a href="#" class="action1">Added</a>';
+             listExercises += '  </div>';
+             listExercises += '</li>';
+             // Элемент сформирован, надо вставлять на место
+             $$('#ulListAllExWithTypes').find('li.item-divider[data-item="' + exerciseType + '"]').append(listExercises);
+           }
+           arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
+         });
   });
+
 }
 
 // Обработаем свайпы на упражнениях. Нужно такое упражнение убрать из списка справа и добавить в список слева
@@ -2021,6 +2038,8 @@ function makeScheduleExCustomer() {
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   // Найдём сформированный на сегодня набор упражнений, чтобы тут же его показать
   var customerId = parseInt($$('span#spanCustName').data('item'));
+  // Очистим все галочки с предыдущего раза
+  $$('#ulListDays li input').prop('checked', false);
   var dateEx = $$('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
   var currentListEx = $$('#ulListCurrentExercises li a div span');
   var arrWorkEx = [];
@@ -2177,22 +2196,25 @@ function viewExSetCustomer() {
  Управляет автоматическим переключением флагов согласно логике.
 */
 $$('#ulListDays li').click(function() {
-  console.log('$$(this).find("input").val() = ' + $$(this).find('input').val());
+  console.log('Кликнули на опции $$(this).find("input").val() = ' + $$(this).find('input').val());
   var checkBox = $$(this).find('input').val();
   var isChecked = $$('#ulListDays input[value="' + checkBox + '"]').prop('checked'); // Проверяем, установлен ли флаг
   if (isChecked) {
     if(checkBox === 'today') {
       // Установлен флаг "только на сегодня", значит, надо снять отметки со всех остальных флагов
+      console.log('Выделили Сегодня');
       $$('li[data-item="everyday"] input').prop('checked', false);
       $$('li[data-item="week"] input').prop('checked', false);
     } else if (checkBox == 'everyday') {
+      console.log('Выделили Каждый день');
       // Установлен флаг "ежедневно", значит, надо снять отметки со всех остальных флагов
       $$('li[data-item="today"] input').prop('checked', false);
       $$('li[data-item="week"] input').prop('checked', false);
     } else {
+      console.log('Выделили какой-то день недели');
   	  // Установлен флаг на каком-то дне недели, значит, надо снять отметки с флагов "только на сегодня" и "ежедневно"
       $$('li[data-item="today"] input').prop('checked', false);
-      $$('li[data-item="every"] input').prop('checked', false);
+      $$('li[data-item="everyday"] input').prop('checked', false);
     }
   }
 });

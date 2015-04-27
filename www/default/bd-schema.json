@@ -44,7 +44,10 @@
 				},
 				"type": {
 					"unique": false
-				}
+				},
+                "deleted": {
+                    "unique": false
+                }
 			}
 		},
 		"optionsExercises": {
