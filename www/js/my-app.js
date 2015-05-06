@@ -816,7 +816,8 @@ function renameExercise(idExercise) {
     server.exercise.update({
   	  'id': parseInt(idExercise),
   	  'name': newExName,
-  	  'type': exercise.type
+  	  'type': exercise.type,
+      'deleted': exercise.deleted
   	}).then(function(res) { 	
       console.log('Переименованная группа упражнений в базе: ' + JSON.stringify(res));
       if(!$$("#ex-rename-" + idExercise).hasClass('hidden')) {
@@ -853,7 +854,8 @@ function addExercise() {
         } else { // Такого упражнения ещё нет. Можно добавлять
           server.exercise.add({
             'name': newExercise,
-            'type': idTypeExercise
+            'type': idTypeExercise,
+            'deleted': 0
           }).then(function(rowNewExercise) {
             console.log('Добавили новое упражнение: ' + JSON.stringify(rowNewExercise));
             // Повторяем запись в базу по каждому отмеченному свойству упражнения
