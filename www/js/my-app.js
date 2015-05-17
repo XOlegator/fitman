@@ -6,6 +6,7 @@ var myApp = new Framework7({
 });
 // Export selectors engine
 var $$ = Framework7.$;
+var t = 0; // Переменная для секундомера
 var fLang = '/i18n/en_US.json'; // Язык по-умолчанию английский
 // Инициализируем пустой объект i18n, чтобы зарегистрировать хелперы
 var i18n = new Jed({
@@ -1521,6 +1522,64 @@ function saveSetExCustomer(flagFrom) {
   //SORTER.sort('#ulListCurrentExercises');
 }
 /*
+Функция запуска таймера. Запускается функция секундомера и диалоговое окно, которое отображает текущее значение
+*/
+function launcherTimer() {
+  modalTimer();
+  t = 0;
+  stopped(false); // открыли возможность выполнять тело функции секундомера
+  timer();
+}
+/*
+Функция для прерывание рекурсивного вызова секундомера
+*/
+timer.stopped = false;
+function stopped(boolean) { return timer.stopped = boolean; };
+/*
+Функция секундомера
+*/
+function timer() {
+  if(timer.stopped === true) {
+    return;
+  } else {
+    document.getElementById('timer-minutes').innerHTML = parseInt(t/60);
+    document.getElementById('timer-seconds').innerHTML = t - parseInt(t/60) * 60;
+    console.log("t = " + t);
+    t++;
+    setTimeout("timer()", 1000);
+  }
+}
+/*
+Функция обработки диалогового окна с таймером
+*/
+function modalTimer() {
+  myApp.modal({
+    title:  'Timer',
+    text: '<div>' +
+            '<span id="timer-minutes">0</span>:<span id="timer-seconds">0</span>' +
+          '</div>',
+    buttons: [
+      {
+        text: i18n.gettext("Stop"),
+        onClick: function() {
+          // Записываем результат в соответствующие поля.
+          stopped(true);// остановили секундомер
+          $$('input[data-item="time-minutes"]').val(parseInt($$('#timer-minutes').html()));
+          $$('input[data-item="time-seconds"]').val(parseInt($$('#timer-seconds').html()));
+        }
+      },
+      {
+        text: i18n.gettext("Cancel"),
+        bold: true,
+        onClick: function() {
+          stopped(true); // остановили секундомер
+          // Ничего не делаем
+        }
+      },
+    ]
+  })
+}
+/*
 Функция подготовки отображения страницы работы с упражнением клиента.
 Вызывается со страницы #view-15 #tab0 по нажатию на какое-то упражнение (его id передаётся в параметре)
 */
@@ -1573,11 +1632,12 @@ function makeViewExWork(exerciseId) {
       	  propEx += '  <div class="item-content">';
       	  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
       	  propEx += '    <div class="item-inner">';
-      	  propEx += '      <div class="item-title label">' + rowExOpt.option + '</div>';
+      	  propEx += '      <div class="item-title label">' + i18n.gettext("time") + '</div>';
       	  propEx += '      <div class="item-input">';
       	  propEx += '        <div class="row">';
-      	  propEx += '          <div class="col-50"><input type="number" min="0" data-item="' + rowExOpt.option + '-minutes" placeholder="Minutes"></div>';
-      	  propEx += '          <div class="col-50"><input type="number" min="0" data-item="' + rowExOpt.option + '-seconds" placeholder="Seconds"></div>';
+      	  propEx += '          <div class="col-33"><input type="number" min="0" data-item="time-minutes" placeholder="Minutes"></div>';
+      	  propEx += '          <div class="col-33"><input type="number" min="0" data-item="time-seconds" placeholder="Seconds"></div>';
+      	  propEx += '          <div class="col-33"><a href="#" class="button" onclick="launcherTimer()">' + i18n.gettext("Start timer") + '</a></div>';
       	  propEx += '        </div>';
       	  propEx += '      </div>';
       	  propEx += '    </div>';
