@@ -6,30 +6,21 @@ var myApp = new Framework7({
 });
 // Export selectors engine
 var $$ = Framework7.$;
-var lang = 'en';
-var fLang;
-if (lang === 'ru') {
-  //console.log('Готовимся грузить языковой файл');
-  fLang = './ru.json';
-  //langData = JSON.parse(fRu);
-  console.log('Загрузили русский язык!');
-} else if (lang === 'en') {
-  fLang = './en.json';
-  console.log('Загрузили английский язык!');
-}
+//var fLang = './en.json'; // Язык по-умолчанию английский
+var fLang = './ru_RU.json';
+var i18n;
+console.log('Первый раз инициализируем все инструменты для перевода');
 $$.getJSON(fLang, function(response) {
-  console.log('Загрузили языковой файл!');
+  console.log('Загрузили языковой файл по-умолчанию!');
   i18n = new Jed(response);
+  console.log('По-умолчанию i18n = ' + JSON.stringify(i18n));
   Template7.registerHelper('_', function(msgid) {
-    //console.log('Внутри хелпера: ' + msgid);
+    //console.log('i18n.gettext(msgid) = ' + i18n.gettext(msgid));
     return i18n.gettext(msgid);
   });
   Template7.registerHelper('ngettext', function(msgid, plural, count) {
-    //var i18n = new Jed(langData);
-    //return i18n.ngettext(msgid, plural, count);
-    return msgid + '222';
+    return i18n.ngettext(msgid, plural, count);
   });
-  //myApp.init();
 });
 // Функция для приведения дат в нужный вид
 Date.prototype.toDateInputValue = (function() {
@@ -68,31 +59,7 @@ var view13 = myApp.addView('#view-13'); // Удаление клиентов и�
 
 var bdSchema = '';
 
-/*function getJSON(url) {
-return new Promise(function(resolve, reject){
-  var xhr = new XMLHttpRequest();
-
-  xhr.open('GET', url);
-  xhr.onreadystatechange = handler;
-  xhr.responseType = 'json';
-  xhr.setRequestHeader('Accept', 'application/json');
-  xhr.send();
-
-  function handler() {
-    if (this.readyState === this.DONE) {
-      if (this.status === 200) {
-        resolve(this.response);
-      } else {
-        reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
-      }
-    }
-  };
-});
-}*/
-
 $$.getJSON('default/bd-schema.json', function(data) {
-  //console.log(data);
-//getJSON('default/bd-schema.json').then(function(data) {
   bdSchema = data;
   //console.log("Схема БД: " + JSON.stringify(bdSchema));
   db.open(bdSchema).then(function(serverData) {
@@ -115,6 +82,15 @@ $$.getJSON('default/bd-schema.json', function(data) {
           	$$('#selectLayoutThemes').val(results[0].layoutTheme);
           	$$('body').addClass('theme-' + results[0].colorTheme);
           	$$('body').addClass('layout-' + results[0].layoutTheme);
+            if (results[0].language === 'russian') {
+              console.log('Готовимся грузить русский языковой файл');
+              fLang = './ru_RU.json';
+            } else if (results[0].language === 'english') {
+              console.log('Готовимся грузить английский языковой файл');
+              fLang = './en.json';
+            }
+            console.log('Переходим в функцию перевода строк');
+            translate(fLang);
           } else {
           	// Настроек в базе никаких не было (значит в первый раз открыли программу). Допишем их туда.
           	// По-умолчанию язык будет - english, система единиц измерения - metric
@@ -164,17 +140,46 @@ $$.getJSON('default/bd-schema.json', function(data) {
       // Устанавливаем дату начала занятий на текущую дату
       $$('#inputDateStartClasses').val(new Date().toDateInputValue());
     });
+    //translate(fLang);
+    /*$$.getJSON(fLang, function(response) {
+      console.log('Загрузили языковой файл!');
+      i18n = new Jed(response);
+      Template7.registerHelper('_', function(msgid) {
+        return i18n.gettext(msgid);
+      });
+      Template7.registerHelper('ngettext', function(msgid, plural, count) {
+        return i18n.ngettext(msgid, plural, count);
+      });
+    });*/
     myApp.init();
-    console.log('Инициализирования приложение myApp');
+    console.log('Инициализация приложения myApp выполнена');
+  });
+});
+/*
+Функция перевода строк приложения на другой язык. В функцию передаётся файл с переводом
+*/
+function translate(fLang) {
+  /*$$.getJSON(fLang, function(response) {
+    console.log('Загрузили новый языковой файл!');
+    i18n = new Jed(response);*/
+    /*Template7.registerHelper('_', function(msgid) {
+      return i18n.gettext(msgid);
+    });
+    Template7.registerHelper('ngettext', function(msgid, plural, count) {
+      return i18n.ngettext(msgid, plural, count);
+    });*/
+    //console.log('i18n = ' + JSON.stringify(i18n));
     // Переводим все шаблоны текстов в html на нужный язык
     var template = $$('.app-text').each(function() {
       console.log('Переводим очередную строку');
       var compiledTemplate = Template7.compile($$( this ).text());
+      //console.log('compiledTemplate = ' + compiledTemplate);
       var htmlText = compiledTemplate();
+      //console.log('htmlText = ' + htmlText);
       $$( this ).text(htmlText);
     });
-  });
-});
+  //});
+}
 // Функция изменения системы единиц измерения в настройках
 $$('#selectUnits').on('change', function() {
   console.log('Зашли в изменение настроек единиц измерения: ' + JSON.stringify($$(this).val()));
@@ -324,7 +329,6 @@ $$('.confirm-fill-demo').on('click', function () {
     console.log('Начинаем обрабатывать упражнения');
     var dataExercisesJSON = '';
     $$.getJSON('default/exercises.json', function(data) {
-    //getJSON('default/exercises.json').then(function(data) {
       dataExercisesJSON = data;
       // Запускаем цикл по группам упражнений (exerciseType)
       for (var j in data.exerciseType) {
@@ -358,7 +362,8 @@ $$('.confirm-fill-demo').on('click', function () {
             server.exercise.add({
               'id': newExerciseId,
               'name': newExerciseName,
-              'type': parseInt(exType[0].id)
+              'type': parseInt(exType[0].id),
+              'deleted': 0
             }).then(function(itemEx) {
               //console.log('Добавили в БД новое упражнение: ' + JSON.stringify(itemEx));
             });
@@ -393,7 +398,6 @@ $$('.confirm-fill-demo').on('click', function () {
     });  
     
     $$.getJSON('default/customers.json', function(data) {
-    //getJSON('default/customers.json').then(function(data) {
       for (var i in data.customers) {
         // Добавляем клиентов в базу
         server.customers.add(data.customers[i]);
@@ -484,8 +488,6 @@ function updateListCustomers(customers) {
   //console.log($$.serializeObject(customers[0]));
   var listCustomers = '';
   var listCustomersForDelete = '';
-  //customers.forEach(function (value) {
-  //customers.each(function (value) {
   for (var index in customers) {
     value = customers[index];
     // Список пользователей
@@ -510,7 +512,6 @@ function updateListCustomers(customers) {
     listCustomersForDelete += '    </div>';
     listCustomersForDelete += '  </label>';
     listCustomersForDelete += '</li>';
-  //});
   }
   document.getElementById("ulListCustomers").innerHTML = listCustomers;
   document.getElementById("forDeleteCustomers").innerHTML = listCustomersForDelete;
@@ -542,14 +543,12 @@ function addCustomer() {
       .execute()
       .then(function(results) {
       	myApp.addNotification({
-          title: i18n.gettext('Add new Customer'),
-          hold: messageDelay,
-          message: i18n.gettext('Data was saved')
+          title: i18n.gettext('Saved'),
+          hold: messageDelay
         });
         // Запросом получили массив объектов customers
         updateListCustomers(results);
       });
-    //$$('a[href="#view-3"]').click();
   } else {
     myApp.addNotification({
       title: i18n.gettext('Error while adding'),
@@ -585,9 +584,8 @@ function editCustomer() {
       }).then(function (newDataCustomer) {
         console.log('Обновили данные по клиенту: ' + JSON.stringify(newDataCustomer));
         myApp.addNotification({
-          title: i18n.gettext('Successful updated'),
-          hold: messageDelay,
-          message: i18n.gettext('Data was updated.')
+          title: i18n.gettext('Updated'),
+          hold: messageDelay
         });    
       });
     }
@@ -600,7 +598,6 @@ function editCustomer() {
 */
 function removeCustomers() {
   // Модальное окно для подтверждения удаления клиентов
-  //$$('.confirm-delete-customers').on('click', function () {
   myApp.confirm(i18n.gettext('Are you sure?'), function () {
     // Найдём все value всех отмеченных чекбоксов в ul#forDeleteCustomers. Эти значения есть id клиентов для удаления из базы
     // Начинаем цикл по всем отмеченным для удаления клиентам
@@ -608,64 +605,59 @@ function removeCustomers() {
       console.log('Проверяем пользователя с id = ' + this.value);
 	  server.customers.get(parseInt(this.value)).then(function(resCustomer) {
         console.log('Нашли удаляемого клиента в базе: ' + JSON.stringify(resCustomer));
-        // Проверяем, можно ли удалять этого клиента из базы
-        // Если по клиенту есть записи в истории занятий или расписании, то спрашиваем, точно ли всё по нему удалить
-        // Искать нужно в трёх таблицах сразу: workout (хотя это можно, пожалуй, пропустить), schedule и workExercise
-        console.log('resCustomer.id = ' + resCustomer.id);
-        server.workExercise.query()
-          .filter('customer', parseInt(resCustomer.id))
+        // Без лишних вопросов сразу удаляем клиента из справочника
+        server.remove('customers', resCustomer.id).then(function(res3) {
+          console.log('Удалили пользователя с id = ' + resCustomer.id);
+          console.log(JSON.stringify(res3));
+          // После всех удалений, обновим списки клиентов на соответствующих страницах
+          server.customers.query('name')
+            .all()
+            .distinct()
+            .execute()
+            .then(function(res2) {
+              console.log('Клиенты после удаления res2 = ' + JSON.stringify(res2));
+              updateListCustomers(res2);
+            });
+        });
+        console.log('Подчищаем за удалённым пользователем с id = ' + resCustomer.id);
+        // 1. Подчищаем workout
+        server.workout.query()
+          .filter('customer', resCustomer.id)
           .execute()
-          .then(function(resWorkEx) {
-            if(resWorkEx.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
-              myApp.addNotification({
-                title: i18n.gettext('Customer ') + resCustomer.name + i18n.gettext(' can not be deleted'),
-                hold: messageDelay,
-                message: i18n.gettext('There is data in history.')
+          .then(function(resWorkout) {
+            console.log('Нашли данные для удаления resWorkout: ' + JSON.stringify(resWorkout));
+            for(var indexWorkout in resWorkout) {
+              server.remove('workout', parseInt(resWorkout[indexWorkout].id)).then(function() {
+                console.log('Удалили workout');
               });
-            } else { // Ничего не нашли тут, проверяем в следующей таблице
-              server.schedule.query()
-                .filter('customer', parseInt(resCustomer.id))
-                .execute()
-                .then(function(resSchedule) {
-                  if(resSchedule.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
-                    myApp.addNotification({
-                      title: i18n.gettext('Customer ') + resCustomer.name + i18n.gettext(' can not be deleted'),
-                      hold: messageDelay,
-                      message: i18n.gettext('There is data in schedule by that customer.')
-                    });
-                  } else { // Ничего не нашли тут, проверяем в следующей таблице
-                    server.workout.query()
-                      .filter('customer', parseInt(resCustomer.id))
-                      .execute()
-                      .then(function(resWorkout) {
-                        if(resWorkout.length) { // Если что-то нашлось, то сообщаем, что удалить нельзя пока есть данные
-                          myApp.addNotification({
-                            title: i18n.gettext('Customer ') + resCustomer.name + i18n.gettext(' can not be deleted'),
-                            hold: messageDelay,
-                            message: i18n.gettext('There is data in workout.')
-                          });
-                        } else { // Ничего не нашли тут - искать уже нигде больше не надо, - можно смело удалять пользователя
-                          server.remove('customers', parseInt(resCustomer.id)).then(function(res3) {
-                            console.log('Удалили пользователя с id = ' + resCustomer.id);
-                            console.log(JSON.stringify(res3));
-                            // После всех удалений, обновим списки клиентов на соответствующих страницах
-                            server.customers.query('name')
-                          	  .all()
-                              .distinct()
-                              .execute()
-                              .then(function(res2) {
-                                console.log('Клиенты после удаления res2 = ' + JSON.stringify(res2));
-                                updateListCustomers(res2);
-                        	  });
-                          });
-                        }
-                      });
-                  }
-                });
+            }
+          });
+        // 2. Подчищаем schedule
+        server.schedule.query()
+          .filter('customer', resCustomer.id)
+          .execute()
+          .then(function(resSchedule) {
+            console.log('Нашли данные для удаления resSchedule: ' + JSON.stringify(resSchedule));
+            for(var indexSchedule in resSchedule) {
+              server.remove('schedule', parseInt(resSchedule[indexSchedule].id)).then(function() {
+                console.log('Удалили schedule');
+              });
+            }
+          });
+        // 3. Подчищаем workExercise
+        server.workExercise.query()
+          .filter('customer', resCustomer.id)
+          .execute()
+          .then(function(resWorkExercise) {
+            console.log('Нашли данные для удаления resWorkExercise: ' + JSON.stringify(resWorkExercise));
+            for(var indexWorkExercise in resWorkExercise) {
+              server.remove('workExercise', parseInt(resWorkExercise[indexWorkExercise].id)).then(function() {
+                console.log('Удалили workExercise');
+              });
             }
           });
       });
-    });
+    }); // Кончился цикл по всем отмеченным клиентам для удаления
   },
   function () {
     //myApp.alert('You clicked Cancel button');
@@ -784,7 +776,7 @@ function renameExType(idExType) {
   });
 }
 /*
-Функция построения списка упражнений определённой группы.
+Функция построения списка неудалённых упражнений определённой группы.
 В функцию передаётся id одной выбранной группы упражнений
 */
 function updateListExercises(exerciseTypeId) {
@@ -793,10 +785,9 @@ function updateListExercises(exerciseTypeId) {
     $$('div.ex-of-type').attr('data-item', exerciseTypeId); // Устанавливаем значение id текущей группы упражнений
   });
   var listExercise = '';
-  // Запросом отбираем все упражнения данной группы (exerciseType)
+  // Запросом отбираем все неудалённые упражнения данной группы (exerciseType)
   server.exercise.query('name')
-  	.filter('type', parseInt(exerciseTypeId))
-    //.distinct()
+  	.filter(function(exFilter) {return (exFilter.type == exerciseTypeId) && (exFilter.deleted == 0)})
     .execute()
     .then(function(results) {
       console.log('Найденные упражнения по выбранному id ' + exerciseTypeId + ' группы упражнений: results = ' + JSON.stringify(results));
@@ -855,7 +846,8 @@ function renameExercise(idExercise) {
     server.exercise.update({
   	  'id': parseInt(idExercise),
   	  'name': newExName,
-  	  'type': exercise.type
+  	  'type': exercise.type,
+      'deleted': exercise.deleted
   	}).then(function(res) { 	
       console.log('Переименованная группа упражнений в базе: ' + JSON.stringify(res));
       if(!$$("#ex-rename-" + idExercise).hasClass('hidden')) {
@@ -885,14 +877,15 @@ function addExercise() {
       .then(function (resultExist) {
         if(resultExist.length) { // В базе есть запись с таким упражнением.
           myApp.addNotification({
-            title: i18n.gettext('Can not be added'),
+            title: i18n.gettext("Can&#39;t be added"),
             hold: messageDelay,
-            message: i18n.gettext('That name of exercise already exist in database.')
+            message: i18n.gettext('The name already exist')
           });
         } else { // Такого упражнения ещё нет. Можно добавлять
           server.exercise.add({
             'name': newExercise,
-            'type': idTypeExercise
+            'type': idTypeExercise,
+            'deleted': 0
           }).then(function(rowNewExercise) {
             console.log('Добавили новое упражнение: ' + JSON.stringify(rowNewExercise));
             // Повторяем запись в базу по каждому отмеченному свойству упражнения
@@ -916,61 +909,79 @@ function addExercise() {
   }
 }
 /*
-Функция удаления упражнения. В функцию передаётся id упражнения
+Функция удаления упражнения. В функцию передаётся id упражнения.
+Если по упражнению есть история занятий, оставляем историю, а упражнение помечаем как удалённое.
+Если по упражнению нет истории занятий, но есть запланированные занятия, то удаляем упражнение из плана, а само упражнение помечаем удалённым
+Если по упражнению нет ни истории занятий, ни запланированных занятий, то удаляем упражнения
 */
 function deleteExercise(exerciseId) {
   // Сначала проверим, есть ли по данному упражнению записи в базе
   server.workExercise.query('exercise')
-  	.filter('exercise', parseInt(exerciseId))
+  	.filter('exercise', exerciseId)
     .execute()
     .then(function(resWorkEx){
       if(resWorkEx.length) {
-    	// В базе есть записи с этим упражнением. Удалять нельзя
-    	myApp.addNotification({
-		  title: i18n.gettext('Exercise ') + resWorkEx[0].name + i18n.gettext(' can not be deleted'),
-          hold: messageDelay,
-		  message: i18n.gettext('This item can not be delete because of history by this exercise.')
-		});
+    	// В базе есть записи с этим упражнением. Не трогаем эти записи (это историческая ценность)
+    	// Но само упражнение помечаем как удалённое
+    	server.exercise.get(exerciseId).then(function(exercise) {
+    	  server.exercise.update({
+    	    'id': exerciseId,
+    	    'name': exercise.name,
+    	    'type': exercise.type,
+    	    'deleted': 1
+    	  }).then(function (updEx) {
+            console.log('Упражнение после обновления: ' + JSON.stringify(updEx));
+            // Упражнение пометили удалённым, теперь обновим список упражнений в данной группе
+            var typeExercise = parseInt($$('div#view-7a div.ex-of-type').data('item'));
+            updateListExercises(typeExercise);
+          });
+        });
       } else {
-        // Данных по выполнению данного упражнения не нашлось
+        // Данных по выполнению данного упражнения не нашлось, поэтому смело удаляем его
+        // Сначала найдём все id записей с опциями по этому упражнению
+        console.log('exercise для удаления: ' + exerciseId);
+        server.optionsExercises.query()
+          .filter('exerciseId', exerciseId)
+          .execute()
+          .then(function (optEx) {
+            for (var index in optEx) {
+              server.remove('optionsExercises', optEx[index].id);
+            }
+            // После того, как все опции данного упражнения удалили, можно удалять и само упражнение
+            server.remove('exercise', exerciseId).then(function () {
+              // Упражнение удалил, теперь обновим список упражнений в данной группе
+              var typeExercise = parseInt($$('div#view-7a div.ex-of-type').data('item'));
+              updateListExercises(typeExercise);
+             });
+          });
+        }
         // Надо проверить, не запланировано ли оно у кого-нибудь
         server.schedule.query('exercise')
-          .only(parseInt(exerciseId))
-          .count()
+          .filter('exercise', exerciseId)
           .execute()
-          .then(function(countExSchedule){
-            if(countExSchedule) {
-              // В базе есть записи в расписании с этим упражнением. Удалять нельзя
-              myApp.addNotification({
-                title: i18n.gettext('Exercise ') + resWorkEx[0].name + i18n.gettext(' can not be deleted'),
-                hold: messageDelay,
-                message: i18n.gettext('This item can not be delete because there are schedule with this exercise.')
+          .then(function(exSchedule) {
+            console.log('Нашлись данные расписания: ' + JSON.stringify(exSchedule));
+            for(var indexExSchedule in exSchedule) {
+              server.remove('schedule', exSchedule[indexExSchedule].id).then(function () {
+                // Запись из расписания удалили
+                console.log('Запись из расписания удалили');
               });
-            } else {
-              // В базе нет записей по этому упражнению, поэтому смело удаляем его
-              // Сначала найдём все id записей с опциями по этому упражнению
-                console.log('exercise для удаления: ' + exerciseId);
-                server.optionsExercises.query()
-                  .filter('exerciseId', parseInt(exerciseId))
-                  .execute()
-                  .then(function (optEx) {
-                    //optEx.forEach(function (rowOptEx) {
-                    //optEx.each(function (rowOptEx) {
-                    for (var index in optEx) {
-                      rowOptEx = optEx[index];
-                      server.remove('optionsExercises', parseInt(rowOptEx.id));
-                    //});
-                    }
-                    // После того, как все опции данного упражнения удалили, можно удалять и само упражнение
-                    server.remove('exercise', parseInt(exerciseId)).then(function () {
-                      // Упражнение удалил, теперь обновим список упражнений в данной группе
-                  	  var typeExercise = parseInt($$('div#view-7a div.ex-of-type').data('item'));
-                  	  updateListExercises(typeExercise);
-                    });
-                  });
+            }
+    	  });
+        // Проверяем есть ли данные в таблице workout - удаляем их
+        console.log('Сейчас будем искать данные workout');
+        server.workout.query('exercise')
+          .filter('exercise', exerciseId)
+          .execute()
+          .then(function(resWorkout) {
+            console.log('Нашли данные workout: ' + JSON.stringify(resWorkout));
+            for(var indexWorkout in resWorkout) {
+              server.remove('workout', resWorkout[indexWorkout].id).then(function () {
+                // Удалили запись из workout
+                console.log('Удалили запись из workout');
+              });
             }
           });
-    	}
     });
 }
 /*
@@ -1038,7 +1049,7 @@ function updateExerciseProperties() {
                 myApp.addNotification({
                   title: i18n.gettext('Error while deleting'),
                   hold: messageDelay,
-                  message: i18n.gettext('Option ') + rowOldOpt.option + i18n.gettext(' already used in database. It can not be deleted!')
+                  message: i18n.gettext('Option ') + rowOldOpt.option + i18n.gettext(" already used in database. It can&#39;t be deleted!")
                 });
                 // Надо снять отметку с этой опции
                 $$('input[name="checkbox-ex-prop"][value="' + rowOldOpt.option + '"]').prop('checked', false);
@@ -1076,7 +1087,7 @@ function updateExerciseProperties() {
 Функция добавления названия группы упражнений
 */
 function addExType() {
-  var temp = $$('input#inputNewExType').val();
+  var temp = $$('#inputNewExType').val();
   var newExType = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   server.exerciseType.add({'name': newExType}).then(function(result) {
     // Обновляем список групп упражнений на соответствующей странице
@@ -1104,7 +1115,7 @@ function deleteExType(idExType) {
       if(countExercises) {
     	// В базе есть упражнения из этой группы. Удалять нельзя
     	myApp.addNotification({
-		  title: i18n.gettext('Can not be deleted'),
+		  title: i18n.gettext("Can&#39;t be deleted"),
           hold: messageDelay,
 		  message: i18n.gettext('This item can not be delete while there are exercises in it.')
 		});
@@ -1152,6 +1163,8 @@ function upgradeViewWorkout() {
   menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
   menuWorkout += '</div>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
+  // Очистим список ранее созданного комплекса упражнений
+  document.getElementById("ulListCurrentExercises").innerHTML = '';
   var isWorkout = 0; // Установим флаг наличия расписания на сегодня
   var temp = $$('input#inputNewCustomer').val();
   var customerName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
@@ -1300,19 +1313,20 @@ function makeSetExCustomer() {
   $$('#ulListSelectedExercises').html('');
   // Скопируем в левый список те упражнения, которые на сегодня уже отобраны (со вкладки #tab0)
   var listEx = '';
-  var excludeEx = [];
+  var excludeEx = []; // Массив id упражнений, которые уже отобраны
   $$('#ulListCurrentExercises li a div span').each(function(index, item) {
   	temp = item.innerHTML;
   	console.log('Разбор очередной позиции упражнения: ' + JSON.stringify($$(this)));
   	// На всякий случай поставим заглушку от инъекций
-  	exercise = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
+  	exerciseName = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   	var exerciseId = parseInt($$(this).data('item')); // Находим id упражнения
-  	excludeEx[index] = exercise;
-    console.log('exercise = ' + exercise);
+  	//excludeEx[index] = exercise;
+  	excludeEx[index] = exerciseId;
+    console.log('exerciseName = ' + exerciseName);
     listEx += '<li class="swipeout swipeout-selected">';
     listEx += '  <div class="swipeout-content item-content">';
     listEx += '    <div class="item-inner">';
-    listEx += '      <div class="item-title set-of-exercises" data-item="' + exerciseId + '">' + exercise + '</div>';
+    listEx += '      <div class="item-title set-of-exercises" data-item="' + exerciseId + '">' + exerciseName + '</div>';
     listEx += '    </div>';
     listEx += '  </div>';
     listEx += '  <div class="swipeout-actions-left">';
@@ -1336,40 +1350,38 @@ function makeSetExCustomer() {
          // Добавляем на страницу наименования групп упражнений
          $$('#ulListAllExWithTypes').append('<li class="item-divider" data-item="' + exTypeId + '">' + exTypeName + '</li>');
          console.log('Добавили название очередной группы упражнений: ' + exTypeName + ' с id = ' + exTypeId);
-         // Формируем список упражнений из данной группы
-         server.exercise.query('name')
-  	       .filter('type', parseInt(exTypeId))
-           .execute()
-           .then(function(arrEx) {
-             // По отсортированному массиву названий упражнений пройдём циклом
-             for (var indexArrEx in arrEx) {
-               var exerciseId = arrEx[indexArrEx].id; // Получили id текущего упражнения
-               var exerciseName = arrEx[indexArrEx].name; // Получили наименование текущего упражнения
-               var exerciseType = arrEx[indexArrEx].type; // Получили название группы упражнения
-               // Если упражнение было уже отобрано ранее, то его не надо включать в полный список справа
-               //console.log('Вот наш список исключений: ' + excludeEx[0] + '; ' + excludeEx[1]);
-               if(!(in_array(exerciseName, excludeEx))) {
-               	 console.log('Проверили, что этого упражнения нет в списке исключений: ' + exerciseName);
-               	 var listExercises = '';
-                 listExercises += '<li class="swipeout swipeout-all">';
-                 listExercises += '  <div class="swipeout-content item-content">';
-                 listExercises += '    <div class="item-inner">';
-                 listExercises += '      <div class="item-title" data-item="' + exerciseId + '">' + exerciseName + '</div>';
-                 listExercises += '      </div>';
-                 listExercises += '    </div>';
-                 listExercises += '  </div>';
-                 listExercises += '  <div class="swipeout-actions-right">'; // Действие появится справа
-                 listExercises += '    <a href="#" class="action1">Added</a>';
-                 listExercises += '  </div>';
-                 listExercises += '</li>';
-                 // Элемент сформирован, надо вставлять на место
-                 $$('#ulListAllExWithTypes').find('li.item-divider[data-item="' + exerciseType + '"]').append(listExercises);
-               }
-             }
-             arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
-           });
        }
+       // Формируем и покажем список неудалённых упражнений из данной группы
+       server.exercise.query('name')
+         .filter(function(filterEx) {return (filterEx.deleted == 0) && (!(in_array(filterEx.id, excludeEx)))}) // Если упражнение было уже отобрано ранее, то его не надо включать в полный список справа
+         .execute()
+         .then(function(arrEx) {
+           console.log('exTypeId = ' + exTypeId);
+           console.log('Все найденные упражнения: ' + JSON.stringify(arrEx));
+           // По отсортированному массиву названий упражнений пройдём циклом
+           for (var indexArrEx in arrEx) {
+             var exerciseId = arrEx[indexArrEx].id; // Получили id текущего упражнения
+             var exerciseName = arrEx[indexArrEx].name; // Получили наименование текущего упражнения
+             var exerciseType = arrEx[indexArrEx].type; // Получили название группы упражнения
+             var listExercises = '';
+             listExercises += '<li class="swipeout swipeout-all">';
+             listExercises += '  <div class="swipeout-content item-content">';
+             listExercises += '    <div class="item-inner">';
+             listExercises += '      <div class="item-title" data-item="' + exerciseId + '">' + exerciseName + '</div>';
+             listExercises += '      </div>';
+             listExercises += '    </div>';
+             listExercises += '  </div>';
+             listExercises += '  <div class="swipeout-actions-right">'; // Действие появится справа
+             listExercises += '    <a href="#" class="action1">Added</a>';
+             listExercises += '  </div>';
+             listExercises += '</li>';
+             // Элемент сформирован, надо вставлять на место
+             $$('#ulListAllExWithTypes').find('li.item-divider[data-item="' + exerciseType + '"]').append(listExercises);
+           }
+           arrEx.length = 0; // Очищаем массив упражнений для заполнения по новой группе
+         });
   });
+
 }
 
 // Обработаем свайпы на упражнениях. Нужно такое упражнение убрать из списка справа и добавить в список слева
@@ -1613,8 +1625,7 @@ function saveExerciseWork() {
         // Текущая проверяемая запись из базы данных совпала с текущим клиентом, текущим упражнением и текущим подходом
         // Если текущий аналитический разрез присутствует в базе, предложим пользователю три варианта:
         // 1. Перезаписать данные
-        // 2. Добавить к записанному
-        // 3. Отменить запись
+        // 2. Отменить запись
         myApp.modal({
           title: i18n.gettext('Current set already exist in DB'),
           text: i18n.gettext('What do you want to do with current values?'),
@@ -1666,68 +1677,13 @@ function saveExerciseWork() {
                   if (flagSavedData == 1) {
                     // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                     myApp.addNotification({
-                      title: i18n.gettext('Saved'),
-                      hold: messageDelay,
-                      message: i18n.gettext('Data was updated')
+                      title: i18n.gettext('Updated'),
+                      hold: messageDelay
                     });
                   }
                 });
               }
             } // Конец функции перезаписи значений БД
-          },
-          {
-            text: 'Add',
-            onClick: function() {
-              var flagSavedData = 0;
-              // Выбрали вариант добавления текущих показателей к тем, что уже есть в базе по данному разрезу.
-              // Значит найдём все записи по данному подходу данного клиента по данному упражнению и прибавим текущие значения
-              for (var index in result) {
-                var item = result[index];
-                // Найдём текущий параметр в нашей форме
-                if(item.option == 'time') {
-                  var tempMinValue = $$('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
-                  if (tempMinValue == '') { // Не заполнили минуты
-                    var intMinValue = 0;
-                  } else {
-                    var intMinValue = parseInt(tempMinValue);
-                  }
-                  var tempSecValue = $$('#ulListCurrentWorkEx input[data-item = "time-seconds"]').val();
-                  if (tempSecValue == '') {
-                    var intSecValue = 0;
-                  } else {
-                    var intSecValue = parseInt(tempSecValue);
-                  }
-                  newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
-                } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
-                  var tempValue = $$('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
-                  if (tempValue == '') { // Если поле ввода оставили пустым
-                    var newValOpt = 0;
-                  } else {
-                    var newValOpt = parseInt(tempValue);
-                  }
-                }
-                server.workExercise.update({
-                  'id': parseInt(item.id),
-                  'customer': customerId,
-                  'date': dateEx,
-                  'exercise': exerciseId,
-                  'option': item.option,
-                  'value': newValOpt + item.value,
-                  'set': workSet
-                }).then(function (updatedWorkEx) {
-                  console.log('Обновили очередную строку в БД (сложили показатели): ' + JSON.stringify(updatedWorkEx));
-                  flagSavedData++;
-                  if (flagSavedData == 1) {
-                    // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
-                    myApp.addNotification({
-                      title: i18n.gettext('Data was saved'),
-                      hold: messageDelay,
-                      message: i18n.gettext('Data was updated')
-                    });
-                  }
-                });
-              }
-            } // Конец функции добавления значений к сохранённым в БД
           },
           {
             text: i18n.gettext('Cancel'),
@@ -1792,8 +1748,7 @@ function saveExerciseWork() {
                 // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                 myApp.addNotification({
                   title: i18n.gettext('Saved'),
-                  hold: messageDelay,
-                  message: i18n.gettext('Data was added')
+                  hold: messageDelay
                 });
               }
             });
@@ -1814,9 +1769,8 @@ function saveExerciseWork() {
               if (flagSavedData == 1) {
                 // TODO Надо бы выводить сообщение об успешном сохранении после успешного сохранения...
                 myApp.addNotification({
-                  title: i18n.gettext('Data was saved'),
-                  hold: messageDelay,
-                  message: i18n.gettext('Data was added')
+                  title: i18n.gettext('Saved'),
+                  hold: messageDelay
                 });
               }
             });
@@ -2056,6 +2010,8 @@ function makeScheduleExCustomer() {
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   // Найдём сформированный на сегодня набор упражнений, чтобы тут же его показать
   var customerId = parseInt($$('span#spanCustName').data('item'));
+  // Очистим все галочки с предыдущего раза
+  $$('#ulListDays li input').prop('checked', false);
   var dateEx = $$('span#spanDateEx').text(); // TODO Тут, вероятно, надо предусмотреть сохранение в базе даты в одном каком-то формате, чтобы не было путаницы при смене региональных настроек
   var currentListEx = $$('#ulListCurrentExercises li a div span');
   var arrWorkEx = [];
@@ -2212,29 +2168,32 @@ function viewExSetCustomer() {
  Управляет автоматическим переключением флагов согласно логике.
 */
 $$('#ulListDays li').click(function() {
-  console.log('$$(this).find("input").val() = ' + $$(this).find('input').val());
+  console.log('Кликнули на опции $$(this).find("input").val() = ' + $$(this).find('input').val());
   var checkBox = $$(this).find('input').val();
   var isChecked = $$('#ulListDays input[value="' + checkBox + '"]').prop('checked'); // Проверяем, установлен ли флаг
   if (isChecked) {
     if(checkBox === 'today') {
       // Установлен флаг "только на сегодня", значит, надо снять отметки со всех остальных флагов
+      console.log('Выделили Сегодня');
       $$('li[data-item="everyday"] input').prop('checked', false);
       $$('li[data-item="week"] input').prop('checked', false);
     } else if (checkBox == 'everyday') {
+      console.log('Выделили Каждый день');
       // Установлен флаг "ежедневно", значит, надо снять отметки со всех остальных флагов
       $$('li[data-item="today"] input').prop('checked', false);
       $$('li[data-item="week"] input').prop('checked', false);
     } else {
+      console.log('Выделили какой-то день недели');
   	  // Установлен флаг на каком-то дне недели, значит, надо снять отметки с флагов "только на сегодня" и "ежедневно"
       $$('li[data-item="today"] input').prop('checked', false);
-      $$('li[data-item="every"] input').prop('checked', false);
+      $$('li[data-item="everyday"] input').prop('checked', false);
     }
   }
 });
 /*
 Функция генерирует данные для страницы статистики по выбранному упражнению, клиенту и дате
 */
-function generateStatistics() {
+function generateHistory() {
   // Надо добавить кнопку Save
   $$('#linkSaveWorkEx').show();
   var customerId = parseInt($$('span#spanCustName').data('item'));
@@ -2298,7 +2257,7 @@ function generateStatistics() {
            	  i = 0;
            	}
             console.log('Выводим блок на страницу.');
-            document.getElementById("divStatistics").innerHTML = block;
+            document.getElementById("divHistory").innerHTML = block;
           }
           var mySlider3 = myApp.swiper('.swiper-stat', {
             //pagination: '.swiper-stat .swiper-pagination',
@@ -2321,16 +2280,16 @@ $$('#aWorkNote').on('click', function() {
   // Надо добавить кнопку Save
   $$('#linkSaveWorkEx').show();
 });
-// Функция срабатывает при нажатии кнопки Statistics на странице работы с упражнением index-24
-$$('#aWorkStatistics').on('click', function() {
+// Функция срабатывает при нажатии кнопки History на странице работы с упражнением index-24
+$$('#aWorkHistory').on('click', function() {
   // Надо скрыть кнопку Save
   $$('#linkSaveWorkEx').hide();
 });
 /*
-Функция срабатывает при нажатии кнопки Graph на странице работы с упражнением index-24
+Функция срабатывает при нажатии кнопки Progress на странице работы с упражнением index-24
 Функция рисует график по данным истории выполнения упражнения из БД
 */
-$$('#aWorkGraph').on('click', function() {
+$$('#aWorkProgress').on('click', function() {
   // Надо скрыть кнопку Save
   $$('#linkSaveWorkEx').hide();
   // Получим все параметры данного упражнения
@@ -2364,8 +2323,8 @@ $$('#aWorkGraph').on('click', function() {
 		  var arrTime = [];
 		  var arrDistance = [];
 		  var arrSpeed = [];
-		  var arrSlope = [];
-		  var arrLoad = [];
+		  var arrIncline = [];
+		  var arrResistance = [];
           for (var index in result) {
             var item = result[index];
             // Добрались до данных, теперь их надо собрать в массивы
@@ -2384,10 +2343,10 @@ $$('#aWorkGraph').on('click', function() {
 	          arrDistance[analitCount] = item.value;
 	        } else if (item.option === 'speed') {
 	          arrSpeed[analitCount] = item.value;
-	        } else if (item.option === 'slope') {
-	          arrSlope[analitCount] = item.value;
-	        } else if (item.option === 'load') {
-	          arrLoad[analitCount] = item.value;
+	        } else if (item.option === 'incline') {
+	          arrIncline[analitCount] = item.value;
+	        } else if (item.option === 'resistance') {
+	          arrResistance[analitCount] = item.value;
 	        }
             i++; // Счётчик по параметрам одного аналитического разреза
             if(i === countOptions) {
@@ -2407,8 +2366,8 @@ $$('#aWorkGraph').on('click', function() {
 		      arrTime,
 			  arrDistance,
 			  arrSpeed,
-			  arrSlope,
-			  arrLoad
+			  arrIncline,
+			  arrResistance
 			]*/
 			series: [
 			  {
@@ -2432,12 +2391,12 @@ $$('#aWorkGraph').on('click', function() {
                 data: arrSpeed
               },
               {
-                name: i18n.gettext('Slope'),
-                data: arrSlope
+                name: i18n.gettext('Incline'),
+                data: arrIncline
               },
               {
-                name: i18n.gettext('Load'),
-                data: arrLoad
+                name: i18n.gettext('Resistance'),
+                data: arrResistance
               }
             ]
 		  };

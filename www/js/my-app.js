@@ -6,27 +6,27 @@ var myApp = new Framework7({
 });
 // Export selectors engine
 var $$ = Framework7.$;
-var lang = 'en';
-var fLang;
-var i18n;
-if (lang === 'ru') {
-  //console.log('Готовимся грузить языковой файл');
-  fLang = './ru.json';
-  //langData = JSON.parse(fRu);
-  console.log('Загрузили русский язык!');
-} else if (lang === 'en') {
-  fLang = './en.json';
-  console.log('Загрузили английский язык!');
-}
-$$.getJSON(fLang, function(response) {
-  console.log('Загрузили языковой файл!');
-  i18n = new Jed(response);
-  Template7.registerHelper('_', function(msgid) {
-    return i18n.gettext(msgid);
-  });
-  Template7.registerHelper('ngettext', function(msgid, plural, count) {
-    return i18n.ngettext(msgid, plural, count);
-  });
+var fLang = '/i18n/en_US.json'; // Язык по-умолчанию английский
+// Инициализируем пустой объект i18n, чтобы зарегистрировать хелперы
+var i18n = new Jed({
+  locale_data : {
+    "messages" : {
+      "" : {
+        "domain" : "messages",
+        "lang"   : "ru_RU",
+        "plural_forms" : "nplurals=2; plural=(n != 1);"
+      },
+      "some key" : [ "some value"]
+    }
+  },
+  "domain" : "messages"
+});
+console.log('Первый раз инициализируем все инструменты для перевода');
+Template7.registerHelper('_', function(msgid) {
+  return i18n.gettext(msgid);
+});
+Template7.registerHelper('ngettext', function(msgid, plural, count) {
+  return i18n.ngettext(msgid, plural, count);
 });
 // Функция для приведения дат в нужный вид
 Date.prototype.toDateInputValue = (function() {
@@ -66,8 +66,6 @@ var view13 = myApp.addView('#view-13'); // Удаление клиентов и�
 var bdSchema = '';
 
 $$.getJSON('default/bd-schema.json', function(data) {
-  //console.log(data);
-//getJSON('default/bd-schema.json').then(function(data) {
   bdSchema = data;
   //console.log("Схема БД: " + JSON.stringify(bdSchema));
   db.open(bdSchema).then(function(serverData) {
@@ -90,6 +88,15 @@ $$.getJSON('default/bd-schema.json', function(data) {
           	$$('#selectLayoutThemes').val(results[0].layoutTheme);
           	$$('body').addClass('theme-' + results[0].colorTheme);
           	$$('body').addClass('layout-' + results[0].layoutTheme);
+            if (results[0].language === 'russian') {
+              console.log('Готовимся грузить русский языковой файл');
+              fLang = '/i18n/ru_RU.json';
+            } else if (results[0].language === 'english') {
+              console.log('Готовимся грузить английский языковой файл');
+              fLang = '/i18n/en_US.json';
+            }
+            console.log('Переходим в функцию перевода строк');
+            translate(fLang);
           } else {
           	// Настроек в базе никаких не было (значит в первый раз открыли программу). Допишем их туда.
           	// По-умолчанию язык будет - english, система единиц измерения - metric
@@ -106,6 +113,10 @@ $$.getJSON('default/bd-schema.json', function(data) {
           	  $$('#selectLayoutThemes').val("dark");
           	  $$('body').addClass('theme-orange');
           	  $$('body').addClass('layout-dark');
+              console.log('Готовимся грузить английский языковой файл');
+              fLang = '/i18n/en_US.json';
+              console.log('Переходим в функцию перевода строк');
+              translate(fLang);
             });
           }
         });
@@ -140,16 +151,28 @@ $$.getJSON('default/bd-schema.json', function(data) {
       $$('#inputDateStartClasses').val(new Date().toDateInputValue());
     });
     myApp.init();
-    console.log('Инициализирования приложение myApp');
+    console.log('Инициализация приложения myApp выполнена');
+  });
+});
+/*
+Функция перевода строк приложения на другой язык. В функцию передаётся файл с переводом
+*/
+function translate(fLang) {
+  $$.getJSON(fLang, function(response) {
+    console.log('Загрузили новый языковой файл! fLang = ' + fLang);
+    i18n = new Jed(response);
+    console.log('i18n = ' + JSON.stringify(i18n));
     // Переводим все шаблоны текстов в html на нужный язык
     var template = $$('.app-text').each(function() {
-      console.log('Переводим очередную строку');
+      //console.log('Переводим очередную строку');
       var compiledTemplate = Template7.compile($$( this ).text());
+      //console.log('compiledTemplate = ' + compiledTemplate);
       var htmlText = compiledTemplate();
+      console.log('New htmlText = ' + htmlText);
       $$( this ).text(htmlText);
     });
   });
-});
+}
 // Функция изменения системы единиц измерения в настройках
 $$('#selectUnits').on('change', function() {
   console.log('Зашли в изменение настроек единиц измерения: ' + JSON.stringify($$(this).val()));
@@ -192,13 +215,18 @@ $$('#selectLang').on('change', function() {
       var setLayoutTheme = results[0].layoutTheme;
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
       server.settings.update({
-	    'id': parseInt(results[0].id),
+	      'id': parseInt(results[0].id),
         'units': setUnits,
         'language': setLang,
         'colorTheme': setColorTheme,
         'layoutTheme': setLayoutTheme
       }).then(function(item) {
         console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
+        myApp.addNotification({
+          title: i18n.gettext('Saved'),
+          hold: messageDelay,
+          message: i18n.gettext('The changes will take effect after you restart!')
+        });
       });
     });
 });

@@ -1,435 +1,313 @@
 {
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
    "": {
-      "project-id-version": "",
-      "pot-creation-date": "2015-04-27 14:07+0300",
-      "po-revision-date": "2015-04-27 14:08+0300",
-      "last-translator": "Oleg Ekhlakov <subspam@mail.ru>",
-      "language-team": "",
-      "language": "en_US",
-      "mime-version": "1.0",
-      "content-type": "text/plain; charset=UTF-8",
-      "content-transfer-encoding": "8bit",
-      "x-generator": "Poedit 1.7.5",
-      "x-poedit-basepath": ".",
-      "plural-forms": "nplurals=2; plural=(n != 1);",
-      "x-poedit-sourcecharset": "UTF-8",
-      "x-poedit-searchpath-0": "/home/oleg/workspace/fitman/www",
-      "x-poedit-searchpathexcluded-0": "/home/oleg/workspace/fitman/www/js/my-app.min.js"
+      "domain": "messages",
+      "lang": "ru_RU",
+      "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
    },
    "Personal trainer": [
-      null,
-      ""
+      "Личный тренер"
    ],
    "Left panel content goes here": [
-      null,
       ""
    ],
    "Right panel content goes here": [
-      null,
       ""
    ],
    "Help": [
-      null,
-      ""
+      "Помощь"
    ],
    "Settings": [
-      null,
-      ""
+      "Настройки"
    ],
    "Customers": [
-      null,
       ""
    ],
    "www": [
-      null,
       ""
    ],
    "User agreement": [
-      null,
-      ""
+      "Пользовательское соглашение"
    ],
    "&laquo;Personal Trainer program&raquo; is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way.": [
-      null,
       ""
    ],
    "All exercises in &laquo;Personal Trainer program&raquo; can be used as provided, deleted or re-created to be added to your own favorite exercises library.": [
-      null,
-      ""
+      "Все упражнения в приложении &laquo;Личный тренер&raquo; могут быть использованы как есть, удалены или заменены вашими собственными."
    ],
    "In &laquo;Personal Trainer program&raquo; you can create a group of exercises, combinations or use individual exercise every time you follow the program.": [
-      null,
       ""
    ],
    "&laquo;Personal Trainer program&raquo; allows you to:": [
-      null,
       ""
    ],
    "control the training process": [
-      null,
       ""
    ],
    "use different techniques to develop strength": [
-      null,
       ""
    ],
    "add your own exercise and combine them in groups": [
-      null,
-      ""
+      "добавляйте ваши собственные упражнения и сортируйте их по группам"
    ],
    "create workouts for a few weeks in advance, so you don&#39;t have to think about your workout every time you meet your client": [
-      null,
       ""
    ],
    "rationally use exercises": [
-      null,
       ""
    ],
    "see the progress visually, by using graphics and send the result by email to your client after they finish their program or reached their goals.": [
-      null,
       ""
    ],
    "Units": [
-      null,
-      ""
+      "Единицы измерения"
    ],
    "Imperial": [
-      null,
       ""
    ],
    "Metric": [
-      null,
-      ""
+      "Метрическая"
    ],
    "Language": [
-      null,
-      ""
+      "Язык"
    ],
    "English": [
-      null,
       ""
    ],
    "Russian": [
-      null,
-      ""
+      "Русский"
    ],
    "Exercises": [
-      null,
-      ""
+      "Упражнения"
    ],
    "Change": [
-      null,
       ""
    ],
    "Remove": [
-      null,
-      ""
+      "Удалить"
    ],
    "Color themes": [
-      null,
       ""
    ],
    "Gray": [
-      null,
-      ""
+      "Серый"
    ],
    "White": [
-      null,
-      ""
+      "Белый"
    ],
    "Black": [
-      null,
       ""
    ],
    "Lightblue": [
-      null,
-      ""
+      "Голубой"
    ],
    "Yellow": [
-      null,
-      ""
+      "Жёлтый"
    ],
    "Orange": [
-      null,
-      ""
+      "Оранжевый"
    ],
    "Pink": [
-      null,
-      ""
+      "Розовый"
    ],
    "Blue": [
-      null,
       ""
    ],
    "Green": [
-      null,
-      ""
+      "Зелёный"
    ],
    "Red": [
-      null,
-      ""
+      "Красный"
    ],
    "Layout themes": [
-      null,
       ""
    ],
    "Dark": [
-      null,
       ""
    ],
    "Fill demo data": [
-      null,
-      ""
-   ],
-   "Fill demo": [
-      null,
-      ""
+      "Заполнить демонстрационными данными"
    ],
    "Clean database": [
-      null,
       ""
    ],
    "Drop all": [
-      null,
-      ""
-   ],
-   "Create database": [
-      null,
-      ""
-   ],
-   "Create DB": [
-      null,
       ""
    ],
    "Remove database": [
-      null,
-      ""
+      "Удалить базу данных"
    ],
    "Remove DB": [
-      null,
-      ""
+      "Удалить базу данных"
    ],
    "Add": [
-      null,
-      ""
+      "Добавить"
    ],
    "Cancel": [
-      null,
       ""
    ],
    "Nothing found": [
-      null,
-      ""
+      "Ничего не найдено"
    ],
    "Registration on the website will allow you to participate in the improvement of the program, update your program, exchange exercise and ideas with other users on the forum.": [
-      null,
       ""
    ],
    "Sign in": [
-      null,
-      ""
+      "Зарегистрировать"
    ],
    "Save": [
-      null,
-      ""
+      "Сохранить"
    ],
    "Repeats": [
-      null,
-      ""
+      "Повторы"
    ],
    "Weight": [
-      null,
-      ""
+      "Вес"
    ],
    "Time": [
-      null,
-      ""
+      "Время"
    ],
    "Distance": [
-      null,
       ""
    ],
    "Speed": [
-      null,
-      ""
+      "Скорость"
    ],
    "Incline": [
-      null,
       ""
    ],
    "Resistance": [
-      null,
       ""
    ],
    "Photo": [
-      null,
-      ""
+      "Фотография"
    ],
    "Workout of the day": [
-      null,
-      ""
+      "Расписание занятий"
    ],
    "Delete": [
-      null,
       ""
    ],
    "Calendar": [
-      null,
       ""
    ],
    "Schedule": [
-      null,
-      ""
+      "Расписание"
    ],
    "Today still not formed a set of exercises.": [
-      null,
-      ""
+      "На сегодня не сформирован комплекс упражнений"
    ],
    "Only today": [
-      null,
-      ""
+      "На сегодня"
    ],
    "Everyday": [
-      null,
-      ""
+      "Ежедневно"
    ],
    "Sunday": [
-      null,
-      ""
+      "Воскресенье"
    ],
    "Monday": [
-      null,
-      ""
+      "Понедельник"
    ],
    "Tuesday": [
-      null,
-      ""
+      "Вторник"
    ],
    "Wednesday": [
-      null,
       ""
    ],
    "Thursday": [
-      null,
-      ""
+      "Четверг"
    ],
    "Friday": [
-      null,
-      ""
+      "Пятница"
    ],
    "Saturday": [
-      null,
-      ""
+      "Суббота"
    ],
    "Note": [
-      null,
       ""
    ],
    "Progress": [
-      null,
       ""
    ],
    "History": [
-      null,
       ""
    ],
    "here is the place to advertise": [
-      null,
-      ""
-   ],
-   "Are you sure? It will erase all of your data!": [
-      null,
-      ""
-   ],
-   "Database is clean": [
-      null,
-      ""
-   ],
-   "Are you sure?": [
-      null,
       ""
    ],
    "Saved": [
-      null,
+      "Сохранено"
+   ],
+   "The changes will take effect after you restart!": [
+      ""
+   ],
+   "Are you sure? It will erase all of your data!": [
+      ""
+   ],
+   "Database is clean": [
+      ""
+   ],
+   "Are you sure?": [
       ""
    ],
    "Error while adding": [
-      null,
       ""
    ],
    "Nothing to add!": [
-      null,
-      ""
+      "Нечего добавлять!"
    ],
    "Nothing to save": [
-      null,
-      ""
+      "Нечего сохранять"
    ],
    "New data already exist in database.": [
-      null,
       ""
    ],
    "Updated": [
-      null,
-      ""
+      "Обновлено"
    ],
    "Successful rename": [
-      null,
-      ""
-   ],
-   "Group of exercises was renamed.": [
-      null,
-      ""
+      "Успешно переименовано"
    ],
    "Exercise was renamed.": [
-      null,
-      ""
+      "Упражнение переименовано."
    ],
    "Can&#39;t be added": [
-      null,
       ""
    ],
    "The name already exist": [
-      null,
-      ""
+      "Такое название уже существует"
    ],
    "Error while deleting": [
-      null,
       ""
    ],
    "Option ": [
-      null,
       ""
    ],
    " already used in database. It can&#39;t be deleted!": [
-      null,
-      ""
+      " уже используется в базе данных. Невозможно удалить!"
    ],
    "New set of options are equal to existent.": [
-      null,
       ""
    ],
    "Can&#39;t be deleted": [
-      null,
       ""
    ],
    "This item can not be delete while there are exercises in it.": [
-      null,
       ""
    ],
    "Clear all": [
-      null,
       ""
    ],
    "Current set already exist in DB": [
-      null,
       ""
    ],
    "What do you want to do with current values?": [
-      null,
       ""
    ],
    "Rewrite": [
-      null,
-      ""
+      "Перезаписать"
    ]
-}
+}}}
