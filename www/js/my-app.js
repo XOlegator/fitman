@@ -27,7 +27,8 @@ Template7.registerHelper('_', function(msgid) {
   return i18n.gettext(msgid);
 });
 Template7.registerHelper('ngettext', function(msgid, plural, count) {
-  return i18n.ngettext(msgid, plural, count);
+  //return i18n.ngettext(msgid, plural, count);
+  return i18n.translate(msgid).ifPlural(count, plural).fetch(count);
 });
 // Функция для приведения дат в нужный вид
 Date.prototype.toDateInputValue = (function() {
@@ -1196,10 +1197,7 @@ function upgradeViewWorkout() {
             listExCust += '</li>';
             // После того, как в цикле сформировали список упражнений не текущий день недели, покажем его на странице
             console.log('Сейчас будем выводить подготовленный список упражнений');
-            /*if(!$$('#noWorkout').hasClass('hidden')) {
-              $$('#noWorkout').addClass('hidden');
-            }*/
-            $$('#noWorkout').hide();
+            $$('.noWorkout').hide();
             document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
             //SORTER.sort('#ulListCurrentExercises');
           });
@@ -1257,10 +1255,7 @@ function upgradeViewWorkout() {
                     listExCust += '</li>';
                     // После того, как в цикле сформировали список упражнений не текущий день недели, покажем его на странице
                     console.log('Сейчас будем выводить подготовленный список упражнений');
-                    /*if(!$$('#noWorkout').hasClass('hidden')) {
-                      $$('#noWorkout').addClass('hidden');
-                    }*/
-                    $$('#noWorkout').hide();
+                    $$('.noWorkout').hide();
                     document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
                   });
                   isWorkout = 1;
@@ -1271,10 +1266,7 @@ function upgradeViewWorkout() {
       	  });
       }
       if (!isWorkout) { // Если упражнений на сегодня нет
-        /*if($$('#noWorkout').hasClass('hidden')) {
-          $$('#noWorkout').removeClass('hidden');
-        }*/
-        $$('#noWorkout').show();
+        $$('.noWorkout').show();
       }
     });
   // По-умолчанию первым делом показываем вкладку с уже сформированным списком упражнений на сегодня
@@ -1470,7 +1462,7 @@ function saveSetExCustomer(flagFrom) {
       console.log('Нашли в базе данные по занятиям на сегодня: ' + JSON.stringify(result));
       var listExCust = '';
       for (var index in result) {
-        var item = typeEx[index];
+        var item = result[index];
       	server.remove('workout', parseInt(item.id)).then(function(res3) {
           console.log('Удалили workout с id = ' + item.id);
           console.log(JSON.stringify(res3));
@@ -1518,7 +1510,7 @@ function saveSetExCustomer(flagFrom) {
       document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
     });
   }
-  $$('#noWorkout').hide();
+  $$('.noWorkout').hide();
   //SORTER.sort('#ulListCurrentExercises');
 }
 /*
@@ -2047,8 +2039,8 @@ SORTER.sort = function(which, dir) {
 Вызывается со страницы #view-15 #tab2 (при клике на вкладку Schedule)
 Текущий комплекс упражнений (если он есть) должен перекочевать сюда в левую часть, чтобы можно было выбрать дни недели
 и закрепить этот комплекс упражнений за определёнными днями недели.
-Если текущего комплекса упражнений ещё нет, то на данной вкладке должны "подсветиться" те дни недели,
-по которым расписание сформировано. Если выбрать заполненный день, то должен показаться его комплекс упражнений.
+На данной вкладке должны "подсветиться" те дни недели, по которым расписание сформировано.
+Внизу текущей вкладки кнопка для просмотра уже существующих комплексов упражнений по дням недели.
 */
 function makeScheduleExCustomer() {
   // Сформируем доступные кнопки для вкладки расписания по дням недели
@@ -2123,7 +2115,7 @@ function makeScheduleExCustomer() {
             if (arrExForCheck.sort().toString() === arrWorkEx.sort().toString()) {
               // Отмечаем совпавший день
               console.log('Отмечаем совпавший день ' + arrDays[index - 1]);
-              $$('#ulListDays li[data-item="' + arrDays[index - 1] + '"] input').prop('checked', true);
+              $$('#ulListDays li input[value="' + arrDays[index - 1] + '"]').prop('checked', true);
             }
             arrExForCheck.length = 0; // Сбрасываем массив для проверки следующего дня
             arrExForCheck.push(item.exercise); // Вносим упражнение следующего дня
@@ -2134,9 +2126,77 @@ function makeScheduleExCustomer() {
         }
       });
   } else { // На сегодня нет сформированного комплекса упражнений
-    // TODO Подсветим серым цветом те дни недели, на которые есть сохранённые комплексы упражнений
 
   }
+  // Подсветим те дни недели, на которые есть сохранённые комплексы упражнений
+  server.schedule.query()
+    .filter('customer', customerId)
+    .execute()
+    .then(function(resultCountExSch) {
+      if(resultCountExSch.length) {
+        var countExEveryday = 0;
+        var countExMonday = 0;
+        var countExTuesday = 0;
+        var countExWednesday = 0;
+        var countExThursday = 0;
+        var countExFriday = 0;
+        var countExSaturday = 0;
+        var countExSunday = 0;
+        for (var indexCountExSch in resultCountExSch) {
+          if(resultCountExSch[indexCountExSch].day === 'sunday') {
+            countExSunday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'monday') {
+            countExMonday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'tuesday') {
+            countExTuesday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'wednesday') {
+            countExWednesday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'thursday') {
+            countExThursday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'friday') {
+            countExFriday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'saturday') {
+            countExSaturday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'everyday') {
+            countExEveryday++;
+          }
+        }
+        // Скроем все уведомления о наличии упражнений по дням недели
+        $$('[id^="badgeCount"]').hide();
+        if(countExSunday) {
+          $$('#badgeCountSunday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExSunday));
+          $$('#badgeCountSunday').show();
+        }
+        if(countExMonday) {
+          $$('#badgeCountMonday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExMonday));
+          $$('#badgeCountMonday').show();
+        }
+        if(countExTuesday) {
+          $$('#badgeCountTuesday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExTuesday));
+          $$('#badgeCountTuesday').show();
+        }
+        if(countExWednesday) {
+          $$('#badgeCountWednesday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExWednesday));
+          $$('#badgeCountWednesday').show();
+        }
+        if(countExThursday) {
+          $$('#badgeCountThursday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExThursday));
+          $$('#badgeCountThursday').show();
+        }
+        if(countExFriday) {
+          $$('#badgeCountFriday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExFriday));
+          $$('#badgeCountFriday').show();
+        }
+        if(countExSaturday) {
+          $$('#badgeCountSaturday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExSaturday));
+          $$('#badgeCountSaturday').show();
+        }
+        if(countExEveryday) {
+          $$('#badgeCountEveryday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExEveryday));
+          $$('#badgeCountEveryday').show();
+        }
+      }
+    });
 }
 /*
 Функция сохранения расписания по сформированному набору упражнений клиента.

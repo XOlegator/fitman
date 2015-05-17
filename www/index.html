@@ -797,7 +797,7 @@
                 <div class="tabs">
                   <!-- Tab 0, Текущий набор упражнений клиента -->
                   <div id="tab0" class="tab">
-                    <p class="app-text" id="noWorkout">{{_ "Today still not formed a set of exercises."}}</p>
+                    <p class="noWorkout app-text">{{_ "Today still not formed a set of exercises."}}</p>
                     <div class="list-block">
                       <ul id="ulListCurrentExercises"></ul>
                     </div>
@@ -830,6 +830,7 @@
                   <div id="tab2" class="tab">
                     <div class="row">
                       	<div class="col-50">
+                          <p class="noWorkout app-text">{{_ "Today still not formed a set of exercises."}}</p>
                           <div class="list-block list-block-without-margin">
                           	<!-- Сформированный набор упражнений -->
                             <ul id="ulListScheduleEx">
@@ -857,7 +858,12 @@
                                     <i class="icon icon-form-checkbox"></i>
                                   </div>
                                   <div class="item-inner">
-                                    <div class="item-title app-text">{{_ "Everyday"}}</div>
+                                    <div class="item-title-row">
+                                      <div class="item-title app-text">{{_ "Everyday"}}</div>
+                                      <div class="item-after">
+                                        <span class="badge badge-red hidden" id="badgeCountEveryday"></span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </label>
                               </li>
@@ -868,7 +874,12 @@
                                     <i class="icon icon-form-checkbox"></i>
                                   </div>
                                   <div class="item-inner">
-                                    <div class="item-title app-text">{{_ "Sunday"}}</div>
+                                    <div class="item-title-row">
+                                      <div class="item-title app-text">{{_ "Sunday"}}</div>
+                                      <div class="item-after">
+                                        <span class="badge badge-red hidden" id="badgeCountSunday"></span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </label>
                               </li>
@@ -879,7 +890,12 @@
                                     <i class="icon icon-form-checkbox"></i>
                                   </div>
                                   <div class="item-inner">
-                                    <div class="item-title app-text">{{_ "Monday"}}</div>
+                                    <div class="item-title-row">
+                                      <div class="item-title app-text">{{_ "Monday"}}</div>
+                                      <div class="item-after">
+                                        <span class="badge badge-red hidden" id="badgeCountMonday"></span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </label>
                               </li>
@@ -890,7 +906,12 @@
                                     <i class="icon icon-form-checkbox"></i>
                                   </div>
                                   <div class="item-inner">
-                                    <div class="item-title app-text">{{_ "Tuesday"}}</div>
+                                    <div class="item-title-row">
+                                      <div class="item-title app-text">{{_ "Tuesday"}}</div>
+                                      <div class="item-after">
+                                        <span class="badge badge-red hidden" id="badgeCountTuesday"></span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </label>
                               </li>
@@ -901,7 +922,12 @@
                                     <i class="icon icon-form-checkbox"></i>
                                   </div>
                                   <div class="item-inner">
-                                    <div class="item-title app-text">{{_ "Wednesday"}}</div>
+                                    <div class="item-title-row">
+                                      <div class="item-title app-text">{{_ "Wednesday"}}</div>
+                                      <div class="item-after">
+                                        <span class="badge badge-red hidden" id="badgeCountWednesday"></span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </label>
                               </li>
@@ -912,7 +938,12 @@
                                     <i class="icon icon-form-checkbox"></i>
                                   </div>
                                   <div class="item-inner">
-                                    <div class="item-title app-text">{{_ "Thursday"}}</div>
+                                    <div class="item-title-row">
+                                      <div class="item-title app-text">{{_ "Thursday"}}</div>
+                                      <div class="item-after">
+                                        <span class="badge badge-red hidden" id="badgeCountThursday"></span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </label>
                               </li>
@@ -923,7 +954,12 @@
                                     <i class="icon icon-form-checkbox"></i>
                                   </div>
                                   <div class="item-inner">
-                                    <div class="item-title app-text">{{_ "Friday"}}</div>
+                                    <div class="item-title-row">
+                                      <div class="item-title app-text">{{_ "Friday"}}</div>
+                                      <div class="item-after">
+                                        <span class="badge badge-red hidden" id="badgeCountFriday"></span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </label>
                               </li>
@@ -934,7 +970,12 @@
                                     <i class="icon icon-form-checkbox"></i>
                                   </div>
                                   <div class="item-inner">
-                                    <div class="item-title app-text">{{_ "Saturday"}}</div>
+                                    <div class="item-title-row">
+                                      <div class="item-title app-text">{{_ "Saturday"}}</div>
+                                      <div class="item-after">
+                                        <span class="badge badge-red hidden" id="badgeCountSaturday"></span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </label>
                               </li>
