@@ -39,725 +39,282 @@
     </div> -->
     <!-- Views-->
     <div class="views tabs toolbar-through">
-      <!-- Your main view, should have "view-main" class-->
-      <!--<div class="view view-main">-->
-        <!-- Top Navbar-->
-        <!--<div class="navbar">-->
-          <!--<div class="navbar-inner">-->
-            <div class="navbar tabbar tabbar-labels grad-menu">
-              <div class="toolbar-inner">
-                <a href="#view-1" class="tab-link active">
-                  <i class="icon tabbar-icon-1 active"></i>
-                  <span class="tabbar-label app-text">{{_ "Help"}}</span>
-                </a>
-                <a href="#view-2" class="tab-link">
-                  <i class="icon tabbar-icon-2"></i>
-                  <span class="tabbar-label app-text">{{_ "Settings"}}</span>
-                </a>
-                <a href="#view-3" class="tab-link">
-                  <i class="icon tabbar-icon-3"><span class="badge badge-red" id="badgeCountCustomers"></span></i>
-                  <span class="tabbar-label app-text">{{_ "Customers"}}</span>
-                </a>
-                <!-- <a href="#view-4" class="tab-link">
-                  <i class="icon tabbar-icon-4"></i>
-                  <span class="tabbar-label app-text">{{_ "www"}}</span>
-                </a> -->
+      <!-- Top Navbar-->
+      <div class="navbar tabbar tabbar-labels grad-menu">
+        <div class="toolbar-inner">
+          <div class="center">
+            <a href="#view-1" class="tab-link active">
+              <i class="icon tabbar-icon-1 active"></i>
+              <span class="tabbar-label app-text">{{_ "Help"}}</span>
+            </a>
+            <a href="#view-2" class="tab-link">
+              <i class="icon tabbar-icon-2"></i>
+              <span class="tabbar-label app-text">{{_ "Settings"}}</span>
+            </a>
+            <a href="#view-3" class="tab-link">
+              <i class="icon tabbar-icon-3"><span class="badge badge-red" id="badgeCountCustomers"></span></i>
+              <span class="tabbar-label app-text">{{_ "Customers"}}</span>
+            </a>
+            <!-- <a href="#view-4" class="tab-link">
+              <i class="icon tabbar-icon-4"></i>
+              <span class="tabbar-label app-text">{{_ "www"}}</span>
+            </a> -->
+          </div>
+        </div>
+      </div>
+      <!-- Начальная страница с описанием приложения -->
+      <div data-page="index-1" id="view-1" class="navbar-through toolbar-through view view-main tab active">
+        <div class="pages">
+          <div data-page="index-1" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title app-text">{{_ "Personal trainer"}}</div>
+              <div class="content-block">
+                <p class="app-text">{{_ "User agreement"}}</p>
+                <p class="app-text">{{_ "&laquo;Personal Trainer program&raquo; is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way."}}</p>
+                <p class="app-text">{{_ "All exercises in &laquo;Personal Trainer program&raquo; can be used as provided, deleted or re-created to be added to your own favorite exercises library."}}</p>
+                <p class="app-text">{{_ "In &laquo;Personal Trainer program&raquo; you can create a group of exercises, combinations or use individual exercise every time you follow the program."}}</p>
+                <p class="app-text">{{_ "&laquo;Personal Trainer program&raquo; allows you to:"}}</p>
+                <ul>
+                  <li class="app-text">{{_ "control the training process"}}</li>
+                  <li class="app-text">{{_ "use different techniques to develop strength"}}</li>
+                  <li class="app-text">{{_ "add your own exercise and combine them in groups"}}</li>
+                  <li class="app-text">{{_ "create workouts for a few weeks in advance, so you don&#39;t have to think about your workout every time you meet your client"}}</li>
+                  <li class="app-text">{{_ "rationally use exercises"}}</li>
+                  <li class="app-text">{{_ "see the progress visually, by using graphics and send the result by email to your client after they finish their program or reached their goals."}}</li>
+                </ul>
               </div>
             </div>
-            <!-- We have home navbar without left link-->
-            <!--<div class="center sliding">Awesome App</div>-->
-            <!--<div class="right">-->
-              <!-- Right link contains only icon - additional "icon-only" class-->
-              <!-- <a href="#" class="link icon-only open-panel"><i class="icon icon-bars-blue"></i></a> -->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-        <div data-page="index-1" id="view-1" class="navbar-through toolbar-through view view-main tab active">
-          <div class="pages">
-            <div data-page="index-1" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title app-text">{{_ "Personal trainer"}}</div>
-                <div class="content-block">
-                  <p class="app-text">{{_ "User agreement"}}</p>
-                  <p class="app-text">{{_ "&laquo;Personal Trainer program&raquo; is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way."}}</p>
-                  <p class="app-text">{{_ "All exercises in &laquo;Personal Trainer program&raquo; can be used as provided, deleted or re-created to be added to your own favorite exercises library."}}</p>
-                  <p class="app-text">{{_ "In &laquo;Personal Trainer program&raquo; you can create a group of exercises, combinations or use individual exercise every time you follow the program."}}</p>
-                  <p class="app-text">{{_ "&laquo;Personal Trainer program&raquo; allows you to:"}}</p>
-                  <ul>
-                    <li class="app-text">{{_ "control the training process"}}</li>
-                    <li class="app-text">{{_ "use different techniques to develop strength"}}</li>
-                    <li class="app-text">{{_ "add your own exercise and combine them in groups"}}</li>
-                    <li class="app-text">{{_ "create workouts for a few weeks in advance, so you don&#39;t have to think about your workout every time you meet your client"}}</li>
-                    <li class="app-text">{{_ "rationally use exercises"}}</li>
-                    <li class="app-text">{{_ "see the progress visually, by using graphics and send the result by email to your client after they finish their program or reached their goals."}}</li>
+          </div>
+        </div>
+      </div>
+      <!-- Страница с настройками приложения -->
+      <div data-page="index-2" id="view-2" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-2" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title"></div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label app-text">{{_ "Units"}}</div>
+                        <div class="item-input">
+                          <select id="selectUnits">
+                            <option class="app-text" value="imperial">{{_ "Imperial"}}</option>
+                            <option class="app-text" value="metric">{{_ "Metric"}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label app-text">{{_ "Language"}}</div>
+                        <div class="item-input">
+                          <select id="selectLang">
+                            <option class="app-text" value="english">{{_ "English"}}</option>
+                            <option class="app-text" value="russian">{{_ "Russian"}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label app-text">{{_ "Exercises"}}</div>
+                        <div class="item-input">
+                          <a href="#view-5" class="button button-round tab-link app-text">{{_ "Change"}}</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label app-text">{{_ "Customers"}}</div>
+                        <div class="item-input">
+                          <a href="#view-13" class="tab-link button button-round app-text">{{_ "Remove"}}</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label app-text">{{_ "Color themes"}}</div>
+                        <div class="item-input">
+                          <select id="selectColorThemes">
+                            <option class="app-text" value="gray">{{_ "Gray"}}</option>
+                            <option class="app-text" value="white">{{_ "White"}}</option>
+                            <option class="app-text" value="black">{{_ "Black"}}</option>
+                            <option class="app-text" value="lightblue">{{_ "Lightblue"}}</option>
+                            <option class="app-text" value="yellow">{{_ "Yellow"}}</option>
+                            <option class="app-text" value="orange">{{_ "Orange"}}</option>
+                            <option class="app-text" value="pink">{{_ "Pink"}}</option>
+                            <option class="app-text" value="blue">{{_ "Blue"}}</option>
+                            <option class="app-text" value="green">{{_ "Green"}}</option>
+                            <option class="app-text" value="red">{{_ "Red"}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label app-text">{{_ "Layout themes"}}</div>
+                        <div class="item-input">
+                          <select id="selectLayoutThemes">
+                            <option class="app-text" value="white">{{_ "White"}}</option>
+                            <option class="app-text" value="dark">{{_ "Dark"}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label app-text">{{_ "Fill demo data"}}</div>
+                        <div class="item-input">
+                          <a href="#" class="button button-round confirm-fill-demo app-text">{{_ "Fill demo"}}</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label app-text">{{_ "Clean database"}}</div>
+                        <div class="item-input">
+                          <a href="#" class="button button-round confirm-clean-db app-text">{{_ "Drop all"}}</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label app-text">{{_ "Create database"}}</div>
+                        <div class="item-input">
+                          <a href="#" class="button button-round confirm-create-db app-text">{{_ "Create DB"}}</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title label app-text">{{_ "Remove database"}}</div>
+                        <div class="item-input">
+                          <a href="#" class="button button-round confirm-remove-db app-text">{{_ "Remove DB"}}</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Страница со списком клиентов -->
+      <div data-page="index-3" id="view-3" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-3" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title">
+                <!--<a href="#" class="back tab-link btn-left-top">Cancel</a>-->
+                <a href="#view-10" class="tab-link btn-right-top app-text" onclick="emptyDataCustomer()">{{_ "Add"}}</a>
+              </div>
+              <!-- Search bar -->
+              <form data-search-list=".list-block-search" data-search-in=".item-title" class="searchbar">
+                <div class="searchbar-input">
+                  <input type="search" placeholder="Search"><a href="#" class="searchbar-clear"></a>
+                </div><a href="#" class="searchbar-cancel app-text">{{_ "Cancel"}}</a>
+              </form>
+
+              <!-- Search bar overlay -->
+              <div class="searchbar-overlay"></div>
+
+              <div class="page-content">
+                <!-- This block will be displayed if nothing found -->
+                <div class="content-block searchbar-not-found">
+                  <div class="content-block-inner app-text">{{_ "Nothing found"}}</div>
+                </div>
+
+                <!-- This block will be displayed if anything found, and this list block is used a searbar target -->
+                <div class="list-block list-block-search searchbar-found list-block-without-margin">
+                  <ul id="ulListCustomers">
+                    <!--<li class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title">Acura </div>
+                      </div>
+                    </li>
+                    <li class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title">Audi</div>
+                      </div>
+                    </li>
+                    ...-->
                   </ul>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div data-page="index-2" id="view-2" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-2" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title"></div>
+      </div>
+      <!-- Страница www с внешним функционалом -->
+      <div data-page="index-4" id="view-4" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-4" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title"></div>
+              <div class="content-block">
+                <p class="app-text">{{_ "Registration on the website will allow you to participate in the improvement of the program, update your program, exchange exercise and ideas with other users on the forum."}}</p>
+                <a href="#" class="button button-round app-text">{{_ "Sign in"}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Страница со списком групп упражнений, возможностью их удаления и редактирования -->
+      <div data-page="index-5" id="view-5" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-5" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title">
+                <a href="#view-2" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
+                <a href="#view-5a" class="tab-link btn-right-top app-text">{{_ "Add"}}</a>
+              </div>
+              <div class="content-block">
                 <div class="list-block">
-                  <ul>
-                    <li>
+                  <ul id="ulListExerciseType">
+                    <!--<li>
                       <div class="item-content">
                         <div class="item-inner">
-                          <div class="item-title label app-text">{{_ "Units"}}</div>
+                          <div class="item-media">
+                            <a href="#view-7" class="tab-link"><i class="icon icon-form-settings"></i></a>
+                          </div>
                           <div class="item-input">
-                            <select id="selectUnits">
-                              <option class="app-text" value="imperial">{{_ "Imperial"}}</option>
-                              <option class="app-text" value="metric">{{_ "Metric"}}</option>
-                            </select>
+                            <input type="text" placeholder="Exercise" value="Exercise 1 (демо группа упражнений)">
+                          </div>
+                          <div class="item-input hidden" id="ex-compl-1">
+                            <a href="#" class="button button-round">Delete</a>
+                          </div>
+                          <div class="item-media">
+                            <label class="label-checkbox item-content">
+                              <input type="checkbox" name="ex-compl-1" class="btn-delete-toggle">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                            </label>
                           </div>
                         </div>
                       </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title label app-text">{{_ "Language"}}</div>
-                          <div class="item-input">
-                            <select id="selectLang">
-                              <option class="app-text" value="english">{{_ "English"}}</option>
-                              <option class="app-text" value="russian">{{_ "Russian"}}</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title label app-text">{{_ "Exercises"}}</div>
-                          <div class="item-input">
-                            <a href="#view-5" class="button button-round tab-link app-text">{{_ "Change"}}</a>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title label app-text">{{_ "Customers"}}</div>
-                          <div class="item-input">
-                            <a href="#view-13" class="tab-link button button-round app-text">{{_ "Remove"}}</a>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title label app-text">{{_ "Color themes"}}</div>
-                          <div class="item-input">
-                            <select id="selectColorThemes">
-                              <option class="app-text" value="gray">{{_ "Gray"}}</option>
-                              <option class="app-text" value="white">{{_ "White"}}</option>
-                              <option class="app-text" value="black">{{_ "Black"}}</option>
-                              <option class="app-text" value="lightblue">{{_ "Lightblue"}}</option>
-                              <option class="app-text" value="yellow">{{_ "Yellow"}}</option>
-                              <option class="app-text" value="orange">{{_ "Orange"}}</option>
-                              <option class="app-text" value="pink">{{_ "Pink"}}</option>
-                              <option class="app-text" value="blue">{{_ "Blue"}}</option>
-                              <option class="app-text" value="green">{{_ "Green"}}</option>
-                              <option class="app-text" value="red">{{_ "Red"}}</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title label app-text">{{_ "Layout themes"}}</div>
-                          <div class="item-input">
-                            <select id="selectLayoutThemes">
-                              <option class="app-text" value="white">{{_ "White"}}</option>
-                              <option class="app-text" value="dark">{{_ "Dark"}}</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title label app-text">{{_ "Fill demo data"}}</div>
-                          <div class="item-input">
-                            <a href="#" class="button button-round confirm-fill-demo app-text">{{_ "Fill demo"}}</a>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title label app-text">{{_ "Clean database"}}</div>
-                          <div class="item-input">
-                            <a href="#" class="button button-round confirm-clean-db app-text">{{_ "Drop all"}}</a>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title label app-text">{{_ "Create database"}}</div>
-                          <div class="item-input">
-                            <a href="#" class="button button-round confirm-create-db app-text">{{_ "Create DB"}}</a>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title label app-text">{{_ "Remove database"}}</div>
-                          <div class="item-input">
-                            <a href="#" class="button button-round confirm-remove-db app-text">{{_ "Remove DB"}}</a>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Страница со списком клиентов -->
-        <div data-page="index-3" id="view-3" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-3" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title">
-                  <!--<a href="#" class="back tab-link btn-left-top">Cancel</a>-->
-                  <a href="#view-10" class="tab-link btn-right-top app-text" onclick="emptyDataCustomer()">{{_ "Add"}}</a>
-                </div>
-                <!-- Search bar -->
-                <form data-search-list=".list-block-search" data-search-in=".item-title" class="searchbar">
-                  <div class="searchbar-input">
-                    <input type="search" placeholder="Search"><a href="#" class="searchbar-clear"></a>
-                  </div><a href="#" class="searchbar-cancel app-text">{{_ "Cancel"}}</a>
-                </form>
-               
-                <!-- Search bar overlay -->
-                <div class="searchbar-overlay"></div>
-               
-                <div class="page-content">
-                  <!-- This block will be displayed if nothing found -->
-                  <div class="content-block searchbar-not-found">
-                    <div class="content-block-inner app-text">{{_ "Nothing found"}}</div>
-                  </div>
-               
-                  <!-- This block will be displayed if anything found, and this list block is used a searbar target -->
-                  <div class="list-block list-block-search searchbar-found list-block-without-margin">
-                    <ul id="ulListCustomers">
-                      <!--<li class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title">Acura </div>
-                        </div>
-                      </li>
-                      <li class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title">Audi</div>
-                        </div>
-                      </li>
-                      ...-->
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div data-page="index-4" id="view-4" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-4" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title"></div>
-                <div class="content-block">
-                  <p class="app-text">{{_ "Registration on the website will allow you to participate in the improvement of the program, update your program, exchange exercise and ideas with other users on the forum."}}</p>
-                  <a href="#" class="button button-round app-text">{{_ "Sign in"}}</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div data-page="index-5" id="view-5" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-5" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title">
-                  <a href="#view-2" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                  <a href="#view-5a" class="tab-link btn-right-top app-text">{{_ "Add"}}</a>
-                </div>
-                <div class="content-block">
-                  <div class="list-block">
-                    <ul id="ulListExerciseType">
-                      <!--<li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                            <div class="item-media">
-                              <a href="#view-7" class="tab-link"><i class="icon icon-form-settings"></i></a>
-                            </div>
-                            <div class="item-input">
-                              <input type="text" placeholder="Exercise" value="Exercise 1 (демо группа упражнений)">
-                            </div>
-                            <div class="item-input hidden" id="ex-compl-1">
-                              <a href="#" class="button button-round">Delete</a>
-                            </div>
-                            <div class="item-media">
-                              <label class="label-checkbox item-content">
-                                <input type="checkbox" name="ex-compl-1" class="btn-delete-toggle">
-                                <div class="item-media">
-                                  <i class="icon icon-form-checkbox"></i>
-                                </div>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </li>-->
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Страница добавления названия группы упражнений -->
-        <div data-page="index-5a" id="view-5a" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-5a" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title">
-                  <a href="#view-5" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                  <a href="" class="tab-link btn-right-top app-text" onclick="addExType()">{{_ "Save"}}</a>
-                </div>
-                <div class="content-block">
-                  <div class="list-block">
-                    <ul>
-                      <li>
-                      	<div class="item-content">
-                      	  <div class="item-inner">
-                            <div class="item-input">
-                              <input type="text" placeholder="Type of exercises" value="" id="inputNewExType">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Страница со списком упражнений определённой группы упражнений -->
-        <div data-page="index-7" id="view-7" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-7" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title">
-                  <a href="#view-5" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                  <a href="#view-7a" class="tab-link btn-right-top app-text" onclick="emptyDataExercise()">{{_ "Add"}}</a>
-                </div>
-                <div class="content-block-title ex-of-type" data-item=""></div>
-                <div class="content-block">
-                  <div class="list-block">
-                    <ul id="ulListExercises">
-                      <!--<li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                            <div class="item-input">
-                              <input type="text" placeholder="Exercise" value="Bicep curl DW">
-                            </div>
-                            <div class="item-input">
-                              <a href="#view-8" class="tab-link button button-round">Properties</a>
-                            </div>
-                            <div class="item-input hidden" id="ex1">
-                              <a href="#" class="button button-round">Delete</a>
-                            </div>
-                            <div class="item-media">
-                              <label class="label-checkbox item-content">
-                                <input type="checkbox" name="ex1" class="btn-delete-toggle">
-                                <div class="item-media">
-                                  <i class="icon icon-form-checkbox"></i>
-                                </div>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </li>-->
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Страница добавления упражнения -->
-        <div data-page="index-7a" id="view-7a" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-7a" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title" id="divAddExercise">
-                  <!--<a href="#view-7" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                  <a href="" class="tab-link btn-right-top app-text" onclick="addExercise()">{{_ "Save"}}</a>-->
-                </div>
-                <div class="content-block-title ex-of-type" data-item=""></div>
-                <div class="content-block">
-                  <div class="list-block">
-                    <ul>
-                      <li>
-                      	<div class="item-content">
-                      	  <div class="item-inner">
-                            <div class="item-input">
-                              <input type="text" placeholder="Exercise" value="" id="inputNewExercise">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="row">
-                  <!-- Each "cell" has col-[widht in percents] class -->
-                  <div class="col-50">
-                    <div class="list-block">
-                      <ul>
-                        <!-- Single chekbox item -->
-                        <li>
-                          <label class="label-checkbox item-content">
-                            <!-- Checked by default -->
-                            <input type="checkbox" name="checkbox-new-ex-prop" value="repeats">
-                            <div class="item-media">
-                              <i class="icon icon-form-checkbox"></i>
-                            </div>
-                            <div class="item-inner">
-                              <div class="item-title app-text">{{_ "Repeats"}}</div>
-                            </div>
-                          </label>
-                        </li>
-                        <!-- Another chekbox item -->
-                        <!--<li>
-                          <label class="label-checkbox item-content">
-                            <input type="checkbox" name="checkbox-new-ex-prop" value="sets">
-                            <div class="item-media">
-                              <i class="icon icon-form-checkbox"></i>
-                            </div>
-                            <div class="item-inner">
-                              <div class="item-title">Sets</div>
-                            </div>
-                          </label>
-                        </li>-->
-                        <li>
-                          <label class="label-checkbox item-content">
-                            <input type="checkbox" name="checkbox-new-ex-prop" value="weight">
-                            <div class="item-media">
-                              <i class="icon icon-form-checkbox"></i>
-                            </div>
-                            <div class="item-inner">
-                              <div class="item-title app-text">{{_ "Weight"}}</div>
-                            </div>
-                          </label>
-                        </li>
-                        <li>
-                          <label class="label-checkbox item-content">
-                            <input type="checkbox" name="checkbox-new-ex-prop" value="time">
-                            <div class="item-media">
-                              <i class="icon icon-form-checkbox"></i>
-                            </div>
-                            <div class="item-inner">
-                              <div class="item-title app-text">{{_ "Time"}}</div>
-                            </div>
-                          </label>
-                        </li>
-                        <li>
-                          <label class="label-checkbox item-content">
-                            <input type="checkbox" name="checkbox-new-ex-prop" value="distance">
-                            <div class="item-media">
-                              <i class="icon icon-form-checkbox"></i>
-                            </div>
-                            <div class="item-inner">
-                              <div class="item-title app-text">{{_ "Distance"}}</div>
-                            </div>
-                          </label>
-                        </li>
-                      </ul>
-                    </div>                    
-                  </div>
-                  <div class="col-50">
-                    <div class="list-block">
-                      <ul>
-                        <li>
-                          <label class="label-checkbox item-content">
-                            <input type="checkbox" name="checkbox-new-ex-prop" value="speed">
-                            <div class="item-media">
-                              <i class="icon icon-form-checkbox"></i>
-                            </div>
-                            <div class="item-inner">
-                              <div class="item-title app-text">{{_ "Speed"}}</div>
-                            </div>
-                          </label>
-                        </li>
-                        <li>
-                          <label class="label-checkbox item-content">
-                            <input type="checkbox" name="checkbox-new-ex-prop" value="incline">
-                            <div class="item-media">
-                              <i class="icon icon-form-checkbox"></i>
-                            </div>
-                            <div class="item-inner">
-                              <div class="item-title app-text">{{_ "Incline"}}</div>
-                            </div>
-                          </label>
-                        </li>
-                        <li>
-                          <label class="label-checkbox item-content">
-                            <input type="checkbox" name="checkbox-new-ex-prop" value="resistance">
-                            <div class="item-media">
-                              <i class="icon icon-form-checkbox"></i>
-                            </div>
-                            <div class="item-inner">
-                              <div class="item-title app-text">{{_ "Resistance"}}</div>
-                            </div>
-                          </label>
-                        </li>
-                      </ul>
-                    </div>                      
-                  </div>
-                </div>
-              </div>
-            </div><!-- End of data-page="index-7" class="page" -->
-          </div><!-- End of class="pages" -->
-        </div><!-- End of data-page="index-7a" -->
-        <!-- Страница параметров выбранного упражнения -->
-        <div data-page="index-8" id="view-8" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-8" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title">
-                  <a href="#view-7" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                  <a href="" class="tab-link btn-right-top app-text" onclick="updateExerciseProperties()">{{_ "Save"}}</a>
-                </div>
-                <div class="content-block-title" id="ex-prop" data-item=""></div>
-                <div class="content-block">
-                  <div class="row">
-                      <!-- Each "cell" has col-[widht in percents] class -->
-                      <div class="col-50">
-                        <div class="list-block">
-                          <ul>
-                            <!-- Single chekbox item -->
-                            <li>
-                              <label class="label-checkbox item-content">
-                                <!-- Checked by default -->
-                                <input type="checkbox" name="checkbox-ex-prop" value="repeats">
-                                <div class="item-media">
-                                  <i class="icon icon-form-checkbox"></i>
-                                </div>
-                                <div class="item-inner">
-                                  <div class="item-title app-text">{{_ "Repeats"}}</div>
-                                </div>
-                              </label>
-                            </li>
-                            <!-- Another chekbox item -->
-                            <!--<li>
-                              <label class="label-checkbox item-content">
-                                <input type="checkbox" name="checkbox-ex-prop" value="sets">
-                                <div class="item-media">
-                                  <i class="icon icon-form-checkbox"></i>
-                                </div>
-                                <div class="item-inner">
-                                  <div class="item-title">Sets</div>
-                                </div>
-                              </label>
-                            </li>-->
-                            <li>
-                              <label class="label-checkbox item-content">
-                                <input type="checkbox" name="checkbox-ex-prop" value="weight">
-                                <div class="item-media">
-                                  <i class="icon icon-form-checkbox"></i>
-                                </div>
-                                <div class="item-inner">
-                                  <div class="item-title app-text">{{_ "Weight"}}</div>
-                                </div>
-                              </label>
-                            </li>
-                            <li>
-                              <label class="label-checkbox item-content">
-                                <input type="checkbox" name="checkbox-ex-prop" value="time">
-                                <div class="item-media">
-                                  <i class="icon icon-form-checkbox"></i>
-                                </div>
-                                <div class="item-inner">
-                                  <div class="item-title app-text">{{_ "Time"}}</div>
-                                </div>
-                              </label>
-                            </li>
-                            <li>
-                              <label class="label-checkbox item-content">
-                                <input type="checkbox" name="checkbox-ex-prop" value="distance">
-                                <div class="item-media">
-                                  <i class="icon icon-form-checkbox"></i>
-                                </div>
-                                <div class="item-inner">
-                                  <div class="item-title app-text">{{_ "Distance"}}</div>
-                                </div>
-                              </label>
-                            </li>
-                          </ul>
-                        </div>                    
-                      </div>
-                      <div class="col-50">
-                        <div class="list-block">
-                          <ul>
-                            <li>
-                              <label class="label-checkbox item-content">
-                                <input type="checkbox" name="checkbox-ex-prop" value="speed">
-                                <div class="item-media">
-                                  <i class="icon icon-form-checkbox"></i>
-                                </div>
-                                <div class="item-inner">
-                                  <div class="item-title app-text">{{_ "Speed"}}</div>
-                                </div>
-                              </label>
-                            </li>
-                            <li>
-                              <label class="label-checkbox item-content">
-                                <input type="checkbox" name="checkbox-ex-prop" value="incline">
-                                <div class="item-media">
-                                  <i class="icon icon-form-checkbox"></i>
-                                </div>
-                                <div class="item-inner">
-                                  <div class="item-title app-text">{{_ "Incline"}}</div>
-                                </div>
-                              </label>
-                            </li>
-                            <li>
-                              <label class="label-checkbox item-content">
-                                <input type="checkbox" name="checkbox-ex-prop" value="resistance">
-                                <div class="item-media">
-                                  <i class="icon icon-form-checkbox"></i>
-                                </div>
-                                <div class="item-inner">
-                                  <div class="item-title app-text">{{_ "Resistance"}}</div>
-                                </div>
-                              </label>
-                            </li>
-                          </ul>
-                        </div>                      
-                      </div>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Страница добавления и редактирования данных клиента в базе данных -->
-        <div data-page="index-10" id="view-10" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-10" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title" id="divEditCustomer">
-                  <!--<a href="#view-3" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                  <a href="" class="tab-link btn-right-top app-text" id="linkAddCustomer" onclick="addCustomer()">{{_ "Save"}}</a>
-                  <a href="" class="tab-link btn-right-top" style="display: none;" id="linkEditCustomer" onclick="editCustomer()">{{_ "Save"}}</a>-->
-                </div>
-                <div class="content-block">
-                  <div class="list-block">
-                    <ul>
-                      <!-- Date -->
-                      <li>
-                        <div class="item-content">
-                          <div class="item-media"><i class="icon icon-form-calendar"></i></div>
-                          <div class="item-inner">
-                            <div class="item-input">
-                              <input type="date" placeholder="The date of the start of classes" value="2014-07-28" id="inputDateStartClasses">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <!-- Text inputs -->
-                      <li>
-                        <div class="item-content">
-                          <div class="item-media"><i class="icon icon-form-name"></i></div>
-                          <div class="item-inner">
-                            <div class="item-input">
-                              <input type="text" placeholder="Name" id="inputNewCustomer" data-item="" oninput="showEditLinkCustomer()">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-media"><i class="icon icon-form-comment"></i></div>
-                          <div class="item-inner">
-                            <div class="item-input">
-                              <textarea placeholder="Comments" id="newCustomerComments" oninput="showEditLinkCustomer()"></textarea>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <!-- Buttons -->
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                            <div class="item-input">
-                              <a href="#" class="tab-link button button-round app-text" id="aCustomerPhoto">{{_ "Photo"}}</a>
-                              <div class="hidden"></div>
-                            </div>
-                            <div class="item-input">
-                              <a href="#view-15" class="tab-link button button-round app-text" onclick="upgradeViewWorkout()">{{_ "Workout of the day"}}</a>
-                              <div class="hidden"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Страница удаления клиентов из базы -->
-        <div data-page="index-13" id="view-13" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-13" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title">
-                  <a href="#view-2" class="back tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                  <a href="" class="confirm-delete-customers btn-right-top app-text" onclick="removeCustomers()">{{_ "Delete"}}</a>
-                </div>
-                <div class="list-block">
-                  <ul id="forDeleteCustomers">
-                    <!--
-                    <li>
-                      <label class="label-checkbox item-content">
-                        <div class="item-inner">
-                          <div class="item-title">Customers 1</div>
-                        </div>
-                        <input type="checkbox" name="my-checkbox" value="Customers 1">
-                        <div class="item-media">
-                          <i class="icon icon-form-checkbox"></i>
-                        </div>
-                      </label>
-                    </li>
-                    <li>
-                      <label class="label-checkbox item-content">
-                        <div class="item-inner">
-                          <div class="item-title">Customers 2</div>
-                        </div>
-                        <input type="checkbox" name="my-checkbox" value="Customers 2">
-                        <div class="item-media">
-                          <i class="icon icon-form-checkbox"></i>
-                        </div>
-                      </label>
                     </li>-->
                   </ul>
                 </div>
@@ -765,363 +322,798 @@
             </div>
           </div>
         </div>
-        <!-- Страница для комплектования списка занятий по клиенту -->
-        <div data-page="index-15" id="view-15" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-15" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title">
-                  <div class="row">
-                    <div class="col-30"><span id="spanCustName" data-item=""></span></div>
-                    <div class="col-40"><center><strong class="app-text">{{_ "Workout of the day"}}</strong></center></div>
-                    <div class="col-30"><span id="spanDateEx"></span></div>
-                  </div>
-                </div>
-                <div class="content-block">
-                  <div class="row" id="divMenuWorkout">
-                    <div class="col-25">
-                      <center><a href="#view-10" class="back tab-link app-text" id="aCancelSetEx">{{_ "Cancel"}}</a></center>
-                    </div>
-                    <div class="col-25">
-                      <center><a href="#tab1" class="tab-link app-text" onclick="makeCalendExCustomer()">{{_ "Calendar"}}</a></center>
-                    </div>
-                    <div class="col-25">
-                      <center><a href="#tab2" class="tab-link app-text" onclick="makeScheduleExCustomer()">{{_ "Schedule"}}</a></center>
-                    </div>
-                    <div class="col-25">
-                      <center><a href="#tab3" class="tab-link app-text" onclick="makeSetExCustomer()">{{_ "Change"}}</a></center>
-                    </div>
-                  </div>
-                </div>
-                <!-- Tabs, tabs wrapper -->
-                <div class="tabs">
-                  <!-- Tab 0, Текущий набор упражнений клиента -->
-                  <div id="tab0" class="tab">
-                    <p class="noWorkout app-text">{{_ "Today still not formed a set of exercises."}}</p>
-                    <div class="list-block">
-                      <ul id="ulListCurrentExercises"></ul>
-                    </div>
-                  </div>
-                  <!-- Tab 1, Календарь -->
-                  <div id="tab1" class="tab">
-                      <div class="row">
-                      	<div class="col-60">
-                          <div class="list-block list-block-without-margin">
-                            <ul id="ulListPastExercises">
-                              <!--<li>
-                                <div class="item-content">
-                                  <div class="item-inner">
-                                    <div class="item-input">
-                                      <input type="text" placeholder="Exercise" value="Bicep curl DW">
-                                    </div>
-                                  </div>
-                                </div>
-                              </li>-->
-                            </ul>
-                          </div>
-                        </div>
-                      	<div class="col-40">
-                          <div id="calendar"></div>
-                          <div id="calendar-inline-container"></div>
-                        </div>
-                      </div>
-                  </div>
-                  <!-- Tab 2 -->
-                  <div id="tab2" class="tab">
-                    <div class="row">
-                      	<div class="col-50">
-                          <p class="noWorkout app-text">{{_ "Today still not formed a set of exercises."}}</p>
-                          <div class="list-block list-block-without-margin">
-                          	<!-- Сформированный набор упражнений -->
-                            <ul id="ulListScheduleEx">
-                            </ul>
-                          </div>
-                        </div>
-                      	<div class="col-50">
-                          <div class="list-block list-block-without-margin">
-                            <ul id="ulListDays">
-                              <li data-item="today">
-                                <label class="label-checkbox item-content">
-                                  <input type="checkbox" name="day-checkbox" value="today">
-                                  <div class="item-media">
-                                    <i class="icon icon-form-checkbox"></i>
-                                  </div>
-                                  <div class="item-inner">
-                                    <div class="item-title app-text">{{_ "Only today"}}</div>
-                                  </div>
-                                </label>
-                              </li>
-                              <li data-item="everyday">
-                                <label class="label-checkbox item-content">
-                                  <input type="checkbox" name="day-checkbox" value="everyday">
-                                  <div class="item-media">
-                                    <i class="icon icon-form-checkbox"></i>
-                                  </div>
-                                  <div class="item-inner">
-                                    <div class="item-title-row">
-                                      <div class="item-title app-text">{{_ "Everyday"}}</div>
-                                      <div class="item-after">
-                                        <span class="badge badge-red hidden" id="badgeCountEveryday"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </label>
-                              </li>
-                              <li data-item="week">
-                                <label class="label-checkbox item-content">
-                                  <input type="checkbox" name="day-checkbox" value="sunday">
-                                  <div class="item-media">
-                                    <i class="icon icon-form-checkbox"></i>
-                                  </div>
-                                  <div class="item-inner">
-                                    <div class="item-title-row">
-                                      <div class="item-title app-text">{{_ "Sunday"}}</div>
-                                      <div class="item-after">
-                                        <span class="badge badge-red hidden" id="badgeCountSunday"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </label>
-                              </li>
-                              <li data-item="week">
-                                <label class="label-checkbox item-content">
-                                  <input type="checkbox" name="day-checkbox" value="monday">
-                                  <div class="item-media">
-                                    <i class="icon icon-form-checkbox"></i>
-                                  </div>
-                                  <div class="item-inner">
-                                    <div class="item-title-row">
-                                      <div class="item-title app-text">{{_ "Monday"}}</div>
-                                      <div class="item-after">
-                                        <span class="badge badge-red hidden" id="badgeCountMonday"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </label>
-                              </li>
-                              <li data-item="week">
-                                <label class="label-checkbox item-content">
-                                  <input type="checkbox" name="day-checkbox" value="tuesday">
-                                  <div class="item-media">
-                                    <i class="icon icon-form-checkbox"></i>
-                                  </div>
-                                  <div class="item-inner">
-                                    <div class="item-title-row">
-                                      <div class="item-title app-text">{{_ "Tuesday"}}</div>
-                                      <div class="item-after">
-                                        <span class="badge badge-red hidden" id="badgeCountTuesday"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </label>
-                              </li>
-                              <li data-item="week">
-                                <label class="label-checkbox item-content">
-                                  <input type="checkbox" name="day-checkbox" value="wednesday">
-                                  <div class="item-media">
-                                    <i class="icon icon-form-checkbox"></i>
-                                  </div>
-                                  <div class="item-inner">
-                                    <div class="item-title-row">
-                                      <div class="item-title app-text">{{_ "Wednesday"}}</div>
-                                      <div class="item-after">
-                                        <span class="badge badge-red hidden" id="badgeCountWednesday"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </label>
-                              </li>
-                              <li data-item="week">
-                                <label class="label-checkbox item-content">
-                                  <input type="checkbox" name="day-checkbox" value="thursday">
-                                  <div class="item-media">
-                                    <i class="icon icon-form-checkbox"></i>
-                                  </div>
-                                  <div class="item-inner">
-                                    <div class="item-title-row">
-                                      <div class="item-title app-text">{{_ "Thursday"}}</div>
-                                      <div class="item-after">
-                                        <span class="badge badge-red hidden" id="badgeCountThursday"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </label>
-                              </li>
-                              <li data-item="week">
-                                <label class="label-checkbox item-content">
-                                  <input type="checkbox" name="day-checkbox" value="friday">
-                                  <div class="item-media">
-                                    <i class="icon icon-form-checkbox"></i>
-                                  </div>
-                                  <div class="item-inner">
-                                    <div class="item-title-row">
-                                      <div class="item-title app-text">{{_ "Friday"}}</div>
-                                      <div class="item-after">
-                                        <span class="badge badge-red hidden" id="badgeCountFriday"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </label>
-                              </li>
-                              <li data-item="week">
-                                <label class="label-checkbox item-content">
-                                  <input type="checkbox" name="day-checkbox" value="saturday">
-                                  <div class="item-media">
-                                    <i class="icon icon-form-checkbox"></i>
-                                  </div>
-                                  <div class="item-inner">
-                                    <div class="item-title-row">
-                                      <div class="item-title app-text">{{_ "Saturday"}}</div>
-                                      <div class="item-after">
-                                        <span class="badge badge-red hidden" id="badgeCountSaturday"></span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </label>
-                              </li>
-                            </ul>
+      </div>
+      <!-- Страница добавления названия группы упражнений -->
+      <div data-page="index-5a" id="view-5a" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-5a" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title">
+                <a href="#view-5" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
+                <a href="" class="tab-link btn-right-top app-text" onclick="addExType()">{{_ "Save"}}</a>
+              </div>
+              <div class="content-block">
+                <div class="list-block">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="text" placeholder="Type of exercises" value="" id="inputNewExType">
                           </div>
                         </div>
                       </div>
-                  </div>
-                  <!-- Tab 3 Создание нового набора упражнений -->
-                  <div id="tab3" class="tab">
-                    <!--<div class="content-block">-->
-                      <div class="row">
-                      	<div class="col-50">
-                          <div class="list-block list-block-without-margin">
-                          	<!-- Сформированный набор упражнений -->
-                            <ul id="ulListSelectedExercises">
-                              <!--<li class="swipeout">
-                                <div class="swipeout-content item-content">
-                                  <div class="item-media"><i class="icon icon-f7"></i></div>
-                                  <div class="item-inner">
-                                    <div class="item-title">Item title</div>
-                                    <div class="item-after">Label</div>
-                                  </div>
-                                </div>
-                                <div class="swipeout-actions">
-                                  <div class="swipeout-actions-inner">
-                                    <a href="" class="action1">Deleted</a>
-                                  </div>
-                                </div>
-                              </li>-->
-                            </ul>
-                          </div>
-                        </div>
-                      	<div class="col-50">
-                          <div class="list-block list-block-without-margin">
-                          	<!-- Упражнения из базы данных -->
-                            <ul id="ulListAllExWithTypes">
-                              <!--<li class="swipeout">
-                                <div class="swipeout-content item-content">
-                                  <div class="item-media"><i class="icon icon-f7"></i></div>
-                                  <div class="item-inner">
-                                    <div class="item-title">Item title</div>
-                                    <div class="item-after">Label</div>
-                                  </div>
-                                </div>
-                                <div class="swipeout-actions">
-                                  <div class="swipeout-actions-inner">
-                                    <a href="" class="action1">Added</a>
-                                  </div>
-                                </div>
-                              </li>-->
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    <!--</div>-->
-                  </div>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- Страница работы с выбранным упражнением -->
-        <div data-page="index-24" id="view-24" class="navbar-through toolbar-through view tab">
-          <div class="pages">
-            <div data-page="index-24" class="page">
-              <div class="page-content grad-body">
-                <div class="content-block-title">
-                  <div class="row my-row">
-                    <div class="col-30"><span id="spanWorkCustName"></span></div>
-                    <div class="col-40"><center><strong class="app-text">{{_ "Workout of the day"}}</strong></center></div>
-                    <div class="col-30"><span id="spanWorkDateEx"></span></div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30"><a href="#view-15" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a><!-- На view-15 tab0 --></div>
-                    <div class="col-40"><center><strong><span id="spanExWork"></span></strong></center></div>
-                    <div class="col-30"><a href="" class="tab-link btn-right-top app-text" onclick="saveExerciseWork()" id="linkSaveWorkEx">{{_ "Save"}}</a></div>
-                  </div>
-                </div>
-                <div class="content-block">
-                  <div class="row">
-                    <div class="col-33">
-                      <center><a href="#workTab1" class="tab-link active app-text" id="aWorkNote">{{_ "Note"}}</a></center>
-                    </div>
-                    <div class="col-33">
-                      <center><a href="#workTab2" class="tab-link app-text" id="aWorkProgress">{{_ "Progress"}}</a></center>
-                    </div>
-                    <div class="col-33">
-                      <center><a href="#workTab3" class="tab-link app-text" id="aWorkHistory" onclick="generateHistory()">{{_ "History"}}</a></center>
-                    </div>
-                  </div>
-                </div>
-                <!-- Tabs, tabs wrapper -->
-                <div class="tabs">
-                  <!-- workTab1, Работа с текущим упражнением клиента -->
-                  <div id="workTab1" class="tab active">
-                    <div class="list-block">
-                      <ul id="ulListCurrentWorkEx"></ul>
-                    </div>
-                  </div>
-                  <!-- workTab2, Графики по данному упражнению -->
-                  <div id="workTab2" class="tab">
-                    <div class="ct-chart ct-perfect-fourth statistics"></div>
-                  </div>
-                  <!-- workTab3, Статистика по данному упражнению -->
-                  <div id="workTab3" class="tab">
-                    <!--<div class="content-block-title">3 Slides Per View, 10px Between</div>-->
-                    <div class="row">
-                      <div class="col-20 stat-name" id="divStatName">
-                      	<!--<span class="statistics-name">Sets</span><br>
-                      	<span class="statistics-name">Repeats</span><br>
-                      	<span class="statistics-name">weight</span><br>
-                      	<span class="statistics-name">time</span>-->
+      </div>
+      <!-- Страница со списком упражнений определённой группы упражнений -->
+      <div data-page="index-7" id="view-7" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-7" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title">
+                <a href="#view-5" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
+                <a href="#view-7a" class="tab-link btn-right-top app-text" onclick="emptyDataExercise()">{{_ "Add"}}</a>
+              </div>
+              <div class="content-block-title ex-of-type" data-item=""></div>
+              <div class="content-block">
+                <div class="list-block">
+                  <ul id="ulListExercises">
+                    <!--<li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="text" placeholder="Exercise" value="Bicep curl DW">
+                          </div>
+                          <div class="item-input">
+                            <a href="#view-8" class="tab-link button button-round">Properties</a>
+                          </div>
+                          <div class="item-input hidden" id="ex1">
+                            <a href="#" class="button button-round">Delete</a>
+                          </div>
+                          <div class="item-media">
+                            <label class="label-checkbox item-content">
+                              <input type="checkbox" name="ex1" class="btn-delete-toggle">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                            </label>
+                          </div>
+                        </div>
                       </div>
-                      <div class="col-80">
-                        <div class="slider-custom">
-          				        <div class="swiper-container swiper-stat">
-          				          <div class="swiper-pagination"></div>
-          				          <div class="swiper-wrapper" id="divHistory">
-          				            <!--<div class="slider-slide"><span>1</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-          				            <div class="slider-slide"><span>2</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-          				            <div class="slider-slide"><span>3</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-          				            <div class="slider-slide"><span>4</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-          				            <div class="slider-slide"><span>5</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
-          				            <div class="slider-slide"><span>6</span><br><span>1</span><br><span>1</span><br><span>1</span></div>-->
-          				          </div>
-          				        </div>
-                          <div class="slider-button-prev"></div>
-                          <div class="slider-button-next"></div>
-          				      </div>
-        				      </div>
-        				    </div>
-                  </div>
-                </div><!-- End of Tabs, tabs wrapper -->
+                    </li>-->
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      <!--</div>-->
+      </div>
+      <!-- Страница добавления упражнения -->
+      <div data-page="index-7a" id="view-7a" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-7a" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title" id="divAddExercise">
+                <!--<a href="#view-7" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
+                <a href="" class="tab-link btn-right-top app-text" onclick="addExercise()">{{_ "Save"}}</a>-->
+              </div>
+              <div class="content-block-title ex-of-type" data-item=""></div>
+              <div class="content-block">
+                <div class="list-block">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="text" placeholder="Exercise" value="" id="inputNewExercise">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="row">
+                <!-- Each "cell" has col-[widht in percents] class -->
+                <div class="col-50">
+                  <div class="list-block">
+                    <ul>
+                      <!-- Single chekbox item -->
+                      <li>
+                        <label class="label-checkbox item-content">
+                          <!-- Checked by default -->
+                          <input type="checkbox" name="checkbox-new-ex-prop" value="repeats">
+                          <div class="item-media">
+                            <i class="icon icon-form-checkbox"></i>
+                          </div>
+                          <div class="item-inner">
+                            <div class="item-title app-text">{{_ "Repeats"}}</div>
+                          </div>
+                        </label>
+                      </li>
+                      <!-- Another chekbox item -->
+                      <!--<li>
+                        <label class="label-checkbox item-content">
+                          <input type="checkbox" name="checkbox-new-ex-prop" value="sets">
+                          <div class="item-media">
+                            <i class="icon icon-form-checkbox"></i>
+                          </div>
+                          <div class="item-inner">
+                            <div class="item-title">Sets</div>
+                          </div>
+                        </label>
+                      </li>-->
+                      <li>
+                        <label class="label-checkbox item-content">
+                          <input type="checkbox" name="checkbox-new-ex-prop" value="weight">
+                          <div class="item-media">
+                            <i class="icon icon-form-checkbox"></i>
+                          </div>
+                          <div class="item-inner">
+                            <div class="item-title app-text">{{_ "Weight"}}</div>
+                          </div>
+                        </label>
+                      </li>
+                      <li>
+                        <label class="label-checkbox item-content">
+                          <input type="checkbox" name="checkbox-new-ex-prop" value="time">
+                          <div class="item-media">
+                            <i class="icon icon-form-checkbox"></i>
+                          </div>
+                          <div class="item-inner">
+                            <div class="item-title app-text">{{_ "Time"}}</div>
+                          </div>
+                        </label>
+                      </li>
+                      <li>
+                        <label class="label-checkbox item-content">
+                          <input type="checkbox" name="checkbox-new-ex-prop" value="distance">
+                          <div class="item-media">
+                            <i class="icon icon-form-checkbox"></i>
+                          </div>
+                          <div class="item-inner">
+                            <div class="item-title app-text">{{_ "Distance"}}</div>
+                          </div>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-50">
+                  <div class="list-block">
+                    <ul>
+                      <li>
+                        <label class="label-checkbox item-content">
+                          <input type="checkbox" name="checkbox-new-ex-prop" value="speed">
+                          <div class="item-media">
+                            <i class="icon icon-form-checkbox"></i>
+                          </div>
+                          <div class="item-inner">
+                            <div class="item-title app-text">{{_ "Speed"}}</div>
+                          </div>
+                        </label>
+                      </li>
+                      <li>
+                        <label class="label-checkbox item-content">
+                          <input type="checkbox" name="checkbox-new-ex-prop" value="incline">
+                          <div class="item-media">
+                            <i class="icon icon-form-checkbox"></i>
+                          </div>
+                          <div class="item-inner">
+                            <div class="item-title app-text">{{_ "Incline"}}</div>
+                          </div>
+                        </label>
+                      </li>
+                      <li>
+                        <label class="label-checkbox item-content">
+                          <input type="checkbox" name="checkbox-new-ex-prop" value="resistance">
+                          <div class="item-media">
+                            <i class="icon icon-form-checkbox"></i>
+                          </div>
+                          <div class="item-inner">
+                            <div class="item-title app-text">{{_ "Resistance"}}</div>
+                          </div>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- End of data-page="index-7" class="page" -->
+        </div><!-- End of class="pages" -->
+      </div><!-- End of data-page="index-7a" -->
+      <!-- Страница параметров выбранного упражнения -->
+      <div data-page="index-8" id="view-8" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-8" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title">
+                <a href="#view-7" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
+                <a href="" class="tab-link btn-right-top app-text" onclick="updateExerciseProperties()">{{_ "Save"}}</a>
+              </div>
+              <div class="content-block-title" id="ex-prop" data-item=""></div>
+              <div class="content-block">
+                <div class="row">
+                    <!-- Each "cell" has col-[widht in percents] class -->
+                    <div class="col-50">
+                      <div class="list-block">
+                        <ul>
+                          <!-- Single chekbox item -->
+                          <li>
+                            <label class="label-checkbox item-content">
+                              <!-- Checked by default -->
+                              <input type="checkbox" name="checkbox-ex-prop" value="repeats">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                              <div class="item-inner">
+                                <div class="item-title app-text">{{_ "Repeats"}}</div>
+                              </div>
+                            </label>
+                          </li>
+                          <!-- Another chekbox item -->
+                          <!--<li>
+                            <label class="label-checkbox item-content">
+                              <input type="checkbox" name="checkbox-ex-prop" value="sets">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                              <div class="item-inner">
+                                <div class="item-title">Sets</div>
+                              </div>
+                            </label>
+                          </li>-->
+                          <li>
+                            <label class="label-checkbox item-content">
+                              <input type="checkbox" name="checkbox-ex-prop" value="weight">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                              <div class="item-inner">
+                                <div class="item-title app-text">{{_ "Weight"}}</div>
+                              </div>
+                            </label>
+                          </li>
+                          <li>
+                            <label class="label-checkbox item-content">
+                              <input type="checkbox" name="checkbox-ex-prop" value="time">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                              <div class="item-inner">
+                                <div class="item-title app-text">{{_ "Time"}}</div>
+                              </div>
+                            </label>
+                          </li>
+                          <li>
+                            <label class="label-checkbox item-content">
+                              <input type="checkbox" name="checkbox-ex-prop" value="distance">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                              <div class="item-inner">
+                                <div class="item-title app-text">{{_ "Distance"}}</div>
+                              </div>
+                            </label>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-50">
+                      <div class="list-block">
+                        <ul>
+                          <li>
+                            <label class="label-checkbox item-content">
+                              <input type="checkbox" name="checkbox-ex-prop" value="speed">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                              <div class="item-inner">
+                                <div class="item-title app-text">{{_ "Speed"}}</div>
+                              </div>
+                            </label>
+                          </li>
+                          <li>
+                            <label class="label-checkbox item-content">
+                              <input type="checkbox" name="checkbox-ex-prop" value="incline">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                              <div class="item-inner">
+                                <div class="item-title app-text">{{_ "Incline"}}</div>
+                              </div>
+                            </label>
+                          </li>
+                          <li>
+                            <label class="label-checkbox item-content">
+                              <input type="checkbox" name="checkbox-ex-prop" value="resistance">
+                              <div class="item-media">
+                                <i class="icon icon-form-checkbox"></i>
+                              </div>
+                              <div class="item-inner">
+                                <div class="item-title app-text">{{_ "Resistance"}}</div>
+                              </div>
+                            </label>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Страница добавления и редактирования данных клиента в базе данных -->
+      <div data-page="index-10" id="view-10" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-10" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title" id="divEditCustomer">
+                <!--<a href="#view-3" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
+                <a href="" class="tab-link btn-right-top app-text" id="linkAddCustomer" onclick="addCustomer()">{{_ "Save"}}</a>
+                <a href="" class="tab-link btn-right-top" style="display: none;" id="linkEditCustomer" onclick="editCustomer()">{{_ "Save"}}</a>-->
+              </div>
+              <div class="content-block">
+                <div class="list-block">
+                  <ul>
+                    <!-- Date -->
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="date" placeholder="The date of the start of classes" value="2014-07-28" id="inputDateStartClasses">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <!-- Text inputs -->
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-name"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="text" placeholder="Name" id="inputNewCustomer" data-item="" oninput="showEditLinkCustomer()">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-comment"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <textarea placeholder="Comments" id="newCustomerComments" oninput="showEditLinkCustomer()"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <!-- Buttons -->
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <a href="#" class="tab-link button button-round app-text" id="aCustomerPhoto">{{_ "Photo"}}</a>
+                            <div class="hidden"></div>
+                          </div>
+                          <div class="item-input">
+                            <a href="#view-15" class="tab-link button button-round app-text" onclick="upgradeViewWorkout()">{{_ "Workout of the day"}}</a>
+                            <div class="hidden"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Страница удаления клиентов из базы -->
+      <div data-page="index-13" id="view-13" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-13" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title">
+                <a href="#view-2" class="back tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
+                <a href="" class="confirm-delete-customers btn-right-top app-text" onclick="removeCustomers()">{{_ "Delete"}}</a>
+              </div>
+              <div class="list-block">
+                <ul id="forDeleteCustomers">
+                  <!--
+                  <li>
+                    <label class="label-checkbox item-content">
+                      <div class="item-inner">
+                        <div class="item-title">Customers 1</div>
+                      </div>
+                      <input type="checkbox" name="my-checkbox" value="Customers 1">
+                      <div class="item-media">
+                        <i class="icon icon-form-checkbox"></i>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-checkbox item-content">
+                      <div class="item-inner">
+                        <div class="item-title">Customers 2</div>
+                      </div>
+                      <input type="checkbox" name="my-checkbox" value="Customers 2">
+                      <div class="item-media">
+                        <i class="icon icon-form-checkbox"></i>
+                      </div>
+                    </label>
+                  </li>-->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Страница для комплектования списка занятий по клиенту -->
+      <div data-page="index-15" id="view-15" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-15" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title">
+                <div class="row">
+                  <div class="col-30"><span id="spanCustName" data-item=""></span></div>
+                  <div class="col-40"><center><strong class="app-text">{{_ "Workout of the day"}}</strong></center></div>
+                  <div class="col-30"><span id="spanDateEx"></span></div>
+                </div>
+              </div>
+              <div class="content-block">
+                <div class="row" id="divMenuWorkout">
+                  <div class="col-25">
+                    <center><a href="#view-10" class="back tab-link app-text" id="aCancelSetEx">{{_ "Cancel"}}</a></center>
+                  </div>
+                  <div class="col-25">
+                    <center><a href="#tab1" class="tab-link app-text" onclick="makeCalendExCustomer()">{{_ "Calendar"}}</a></center>
+                  </div>
+                  <div class="col-25">
+                    <center><a href="#tab2" class="tab-link app-text" onclick="makeScheduleExCustomer()">{{_ "Schedule"}}</a></center>
+                  </div>
+                  <div class="col-25">
+                    <center><a href="#tab3" class="tab-link app-text" onclick="makeSetExCustomer()">{{_ "Change"}}</a></center>
+                  </div>
+                </div>
+              </div>
+              <!-- Tabs, tabs wrapper -->
+              <div class="tabs">
+                <!-- Tab 0, Текущий набор упражнений клиента -->
+                <div id="tab0" class="tab">
+                  <p class="noWorkout app-text">{{_ "Today still not formed a set of exercises."}}</p>
+                  <div class="list-block">
+                    <ul id="ulListCurrentExercises"></ul>
+                  </div>
+                </div>
+                <!-- Tab 1, Календарь -->
+                <div id="tab1" class="tab">
+                  <div class="row">
+                    <div class="col-60">
+                      <div class="list-block list-block-without-margin">
+                        <ul id="ulListPastExercises">
+                          <!--<li>
+                            <div class="item-content">
+                              <div class="item-inner">
+                                <div class="item-input">
+                                  <input type="text" placeholder="Exercise" value="Bicep curl DW">
+                                </div>
+                              </div>
+                            </div>
+                          </li>-->
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-40">
+                      <div id="calendar"></div>
+                      <div id="calendar-inline-container"></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Tab 2 -->
+                <div id="tab2" class="tab">
+                  <div class="row">
+                    <div class="col-50">
+                      <p class="noWorkout app-text">{{_ "Today still not formed a set of exercises."}}</p>
+                      <div class="list-block list-block-without-margin">
+                        <!-- Сформированный набор упражнений -->
+                        <ul id="ulListScheduleEx">
+                        </ul>
+                      </div>
+                    </div>
+                      <div class="col-50">
+                        <div class="list-block list-block-without-margin">
+                          <ul id="ulListDays">
+                            <li data-item="today">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="day-checkbox" value="today">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title app-text">{{_ "Only today"}}</div>
+                                </div>
+                              </label>
+                            </li>
+                            <li data-item="everyday">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="day-checkbox" value="everyday">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title-row">
+                                    <div class="item-title app-text">{{_ "Everyday"}}</div>
+                                    <div class="item-after">
+                                      <span class="badge badge-red hidden" id="badgeCountEveryday"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </label>
+                            </li>
+                            <li data-item="week">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="day-checkbox" value="sunday">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title-row">
+                                    <div class="item-title app-text">{{_ "Sunday"}}</div>
+                                    <div class="item-after">
+                                      <span class="badge badge-red hidden" id="badgeCountSunday"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </label>
+                            </li>
+                            <li data-item="week">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="day-checkbox" value="monday">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title-row">
+                                    <div class="item-title app-text">{{_ "Monday"}}</div>
+                                    <div class="item-after">
+                                      <span class="badge badge-red hidden" id="badgeCountMonday"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </label>
+                            </li>
+                            <li data-item="week">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="day-checkbox" value="tuesday">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title-row">
+                                    <div class="item-title app-text">{{_ "Tuesday"}}</div>
+                                    <div class="item-after">
+                                      <span class="badge badge-red hidden" id="badgeCountTuesday"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </label>
+                            </li>
+                            <li data-item="week">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="day-checkbox" value="wednesday">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title-row">
+                                    <div class="item-title app-text">{{_ "Wednesday"}}</div>
+                                    <div class="item-after">
+                                      <span class="badge badge-red hidden" id="badgeCountWednesday"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </label>
+                            </li>
+                            <li data-item="week">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="day-checkbox" value="thursday">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title-row">
+                                    <div class="item-title app-text">{{_ "Thursday"}}</div>
+                                    <div class="item-after">
+                                      <span class="badge badge-red hidden" id="badgeCountThursday"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </label>
+                            </li>
+                            <li data-item="week">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="day-checkbox" value="friday">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title-row">
+                                    <div class="item-title app-text">{{_ "Friday"}}</div>
+                                    <div class="item-after">
+                                      <span class="badge badge-red hidden" id="badgeCountFriday"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </label>
+                            </li>
+                            <li data-item="week">
+                              <label class="label-checkbox item-content">
+                                <input type="checkbox" name="day-checkbox" value="saturday">
+                                <div class="item-media">
+                                  <i class="icon icon-form-checkbox"></i>
+                                </div>
+                                <div class="item-inner">
+                                  <div class="item-title-row">
+                                    <div class="item-title app-text">{{_ "Saturday"}}</div>
+                                    <div class="item-after">
+                                      <span class="badge badge-red hidden" id="badgeCountSaturday"></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </label>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <!-- Tab 3 Создание нового набора упражнений -->
+                <div id="tab3" class="tab">
+                  <!--<div class="content-block">-->
+                    <div class="row">
+                      <div class="col-50">
+                        <div class="list-block list-block-without-margin">
+                          <!-- Сформированный набор упражнений -->
+                          <ul id="ulListSelectedExercises">
+                            <!--<li class="swipeout">
+                              <div class="swipeout-content item-content">
+                                <div class="item-media"><i class="icon icon-f7"></i></div>
+                                <div class="item-inner">
+                                  <div class="item-title">Item title</div>
+                                  <div class="item-after">Label</div>
+                                </div>
+                              </div>
+                              <div class="swipeout-actions">
+                                <div class="swipeout-actions-inner">
+                                  <a href="" class="action1">Deleted</a>
+                                </div>
+                              </div>
+                            </li>-->
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="col-50">
+                        <div class="list-block list-block-without-margin">
+                          <!-- Упражнения из базы данных -->
+                          <ul id="ulListAllExWithTypes">
+                            <!--<li class="swipeout">
+                              <div class="swipeout-content item-content">
+                                <div class="item-media"><i class="icon icon-f7"></i></div>
+                                <div class="item-inner">
+                                  <div class="item-title">Item title</div>
+                                  <div class="item-after">Label</div>
+                                </div>
+                              </div>
+                              <div class="swipeout-actions">
+                                <div class="swipeout-actions-inner">
+                                  <a href="" class="action1">Added</a>
+                                </div>
+                              </div>
+                            </li>-->
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  <!--</div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Страница работы с выбранным упражнением -->
+      <div data-page="index-24" id="view-24" class="navbar-through toolbar-through view tab">
+        <div class="pages">
+          <div data-page="index-24" class="page">
+            <div class="page-content grad-body">
+              <div class="content-block-title">
+                <div class="row my-row">
+                  <div class="col-30"><span id="spanWorkCustName"></span></div>
+                  <div class="col-40"><center><strong class="app-text">{{_ "Workout of the day"}}</strong></center></div>
+                  <div class="col-30"><span id="spanWorkDateEx"></span></div>
+                </div>
+                <div class="row">
+                  <div class="col-30"><a href="#view-15" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a><!-- На view-15 tab0 --></div>
+                  <div class="col-40"><center><strong><span id="spanExWork"></span></strong></center></div>
+                  <div class="col-30"><a href="" class="tab-link btn-right-top app-text" onclick="saveExerciseWork()" id="linkSaveWorkEx">{{_ "Save"}}</a></div>
+                </div>
+              </div>
+              <div class="content-block">
+                <div class="row">
+                  <div class="col-33">
+                    <center><a href="#workTab1" class="tab-link active app-text" id="aWorkNote">{{_ "Note"}}</a></center>
+                  </div>
+                  <div class="col-33">
+                    <center><a href="#workTab2" class="tab-link app-text" id="aWorkProgress">{{_ "Progress"}}</a></center>
+                  </div>
+                  <div class="col-33">
+                    <center><a href="#workTab3" class="tab-link app-text" id="aWorkHistory" onclick="generateHistory()">{{_ "History"}}</a></center>
+                  </div>
+                </div>
+              </div>
+              <!-- Tabs, tabs wrapper -->
+              <div class="tabs">
+                <!-- workTab1, Работа с текущим упражнением клиента -->
+                <div id="workTab1" class="tab active">
+                  <div class="list-block">
+                    <ul id="ulListCurrentWorkEx"></ul>
+                  </div>
+                </div>
+                <!-- workTab2, Графики по данному упражнению -->
+                <div id="workTab2" class="tab">
+                  <div class="ct-chart ct-perfect-fourth statistics"></div>
+                </div>
+                <!-- workTab3, Статистика по данному упражнению -->
+                <div id="workTab3" class="tab">
+                  <!--<div class="content-block-title">3 Slides Per View, 10px Between</div>-->
+                  <div class="row">
+                    <div class="col-20 stat-name" id="divStatName">
+                      <!--<span class="statistics-name">Sets</span><br>
+                      <span class="statistics-name">Repeats</span><br>
+                      <span class="statistics-name">weight</span><br>
+                      <span class="statistics-name">time</span>-->
+                    </div>
+                    <div class="col-80">
+                      <div class="slider-custom">
+                        <div class="swiper-container swiper-stat">
+                          <div class="swiper-pagination"></div>
+                          <div class="swiper-wrapper" id="divHistory">
+                            <!--<div class="slider-slide"><span>1</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+                            <div class="slider-slide"><span>2</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+                            <div class="slider-slide"><span>3</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+                            <div class="slider-slide"><span>4</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+                            <div class="slider-slide"><span>5</span><br><span>1</span><br><span>1</span><br><span>1</span></div>
+                            <div class="slider-slide"><span>6</span><br><span>1</span><br><span>1</span><br><span>1</span></div>-->
+                          </div>
+                        </div>
+                        <div class="slider-button-prev"></div>
+                        <div class="slider-button-next"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End of Tabs, tabs wrapper -->
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- Bottom Toolbar-->
     <!-- <div class="toolbar">
       <p class="app-text">{{_ "here is the place to advertise"}}</p>
     </div> -->
     <script src="js/db.min.js"></script>
-    <!-- Path to Framework7 Library JS-->
     <script src="js/framework7.min.js"></script>
     <script src="js/my-app.js"></script>
     <script src="assets/components/chartist/dist/chartist.min.js"></script>
