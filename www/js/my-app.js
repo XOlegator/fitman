@@ -14,7 +14,7 @@ var i18n = new Jed({
     "messages" : {
       "" : {
         "domain" : "messages",
-        "lang"   : "ru_RU",
+        "lang"   : "en_US",
         "plural_forms" : "nplurals=2; plural=(n != 1);"
       },
       "some key" : [ "some value"]
@@ -28,6 +28,7 @@ Template7.registerHelper('_', function(msgid) {
 });
 Template7.registerHelper('ngettext', function(msgid, plural, count) {
   //return i18n.ngettext(msgid, plural, count);
+  console.log('Переводим строку с числом. msgid = ' + msgid + '; plural = ' + plural + '; count = ' + count);
   return i18n.translate(msgid).ifPlural(count, plural).fetch(count);
 });
 // Функция для приведения дат в нужный вид
@@ -2164,35 +2165,35 @@ function makeScheduleExCustomer() {
         // Скроем все уведомления о наличии упражнений по дням недели
         $$('[id^="badgeCount"]').hide();
         if(countExSunday) {
-          $$('#badgeCountSunday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExSunday));
+          $$('#badgeCountSunday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExSunday), countExSunday));
           $$('#badgeCountSunday').show();
         }
         if(countExMonday) {
-          $$('#badgeCountMonday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExMonday));
+          $$('#badgeCountMonday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExMonday), countExMonday));
           $$('#badgeCountMonday').show();
         }
         if(countExTuesday) {
-          $$('#badgeCountTuesday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExTuesday));
+          $$('#badgeCountTuesday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExTuesday), countExTuesday));
           $$('#badgeCountTuesday').show();
         }
         if(countExWednesday) {
-          $$('#badgeCountWednesday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExWednesday));
+          $$('#badgeCountWednesday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExWednesday), countExWednesday));
           $$('#badgeCountWednesday').show();
         }
         if(countExThursday) {
-          $$('#badgeCountThursday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExThursday));
+          $$('#badgeCountThursday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExThursday), countExThursday));
           $$('#badgeCountThursday').show();
         }
         if(countExFriday) {
-          $$('#badgeCountFriday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExFriday));
+          $$('#badgeCountFriday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExFriday), countExFriday));
           $$('#badgeCountFriday').show();
         }
         if(countExSaturday) {
-          $$('#badgeCountSaturday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExSaturday));
+          $$('#badgeCountSaturday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExSaturday), countExSaturday));
           $$('#badgeCountSaturday').show();
         }
         if(countExEveryday) {
-          $$('#badgeCountEveryday').html(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExEveryday));
+          $$('#badgeCountEveryday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExEveryday), countExEveryday));
           $$('#badgeCountEveryday').show();
         }
       }
