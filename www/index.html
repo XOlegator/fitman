@@ -38,36 +38,17 @@
       </div>
     </div> -->
     <!-- Views-->
-    <div class="views tabs toolbar-through">
-      <!-- Top Navbar-->
-      <div class="navbar tabbar tabbar-labels grad-menu">
-        <div class="toolbar-inner">
-          <div class="center">
-            <a href="#view-1" class="tab-link active">
-              <i class="icon tabbar-icon-1 active"></i>
-              <span class="tabbar-label app-text">{{_ "Help"}}</span>
-            </a>
-            <a href="#view-2" class="tab-link">
-              <i class="icon tabbar-icon-2"></i>
-              <span class="tabbar-label app-text">{{_ "Settings"}}</span>
-            </a>
-            <a href="#view-3" class="tab-link">
-              <i class="icon tabbar-icon-3"><span class="badge badge-red" id="badgeCountCustomers"></span></i>
-              <span class="tabbar-label app-text">{{_ "Customers"}}</span>
-            </a>
-            <!-- <a href="#view-4" class="tab-link">
-              <i class="icon tabbar-icon-4"></i>
-              <span class="tabbar-label app-text">{{_ "www"}}</span>
-            </a> -->
+    <div class="views tabs toolbar-fixed">
+      <!-- Начальная страница с описанием приложения -->
+      <div data-page="index-1" id="view-1" class="view view-main tab active">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="center app-text">{{_ "Personal trainer"}}</div>
           </div>
         </div>
-      </div>
-      <!-- Начальная страница с описанием приложения -->
-      <div data-page="index-1" id="view-1" class="navbar-through toolbar-through view view-main tab active">
-        <div class="pages">
+        <div class="pages navbar-fixed">
           <div data-page="index-1" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title app-text">{{_ "Personal trainer"}}</div>
+            <div class="page-content">
               <div class="content-block">
                 <p class="app-text">{{_ "User agreement"}}</p>
                 <p class="app-text">{{_ "&laquo;Personal Trainer program&raquo; is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way."}}</p>
@@ -88,11 +69,15 @@
         </div>
       </div>
       <!-- Страница с настройками приложения -->
-      <div data-page="index-2" id="view-2" class="navbar-through toolbar-through view tab">
-        <div class="pages">
+      <div data-page="index-2" id="view-2" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="center app-text">{{_ "Settings"}}</div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
           <div data-page="index-2" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title"></div>
+            <div class="page-content">
               <div class="list-block">
                 <ul>
                   <li>
@@ -222,14 +207,19 @@
         </div>
       </div>
       <!-- Страница со списком клиентов -->
-      <div data-page="index-3" id="view-3" class="navbar-through toolbar-through view tab">
-        <div class="pages">
+      <div data-page="index-3" id="view-3" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left"></div>
+            <div class="center app-text">{{_ "Customers"}}</div>
+            <div class="right">
+              <a href="#view-10" class="tab-link app-text" onclick="emptyDataCustomer()">{{_ "Add"}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
           <div data-page="index-3" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title">
-                <!--<a href="#" class="back tab-link btn-left-top">Cancel</a>-->
-                <a href="#view-10" class="tab-link btn-right-top app-text" onclick="emptyDataCustomer()">{{_ "Add"}}</a>
-              </div>
+            <div class="page-content">
               <!-- Search bar -->
               <form data-search-list=".list-block-search" data-search-in=".item-title" class="searchbar">
                 <div class="searchbar-input">
@@ -268,11 +258,15 @@
         </div>
       </div>
       <!-- Страница www с внешним функционалом -->
-      <div data-page="index-4" id="view-4" class="navbar-through toolbar-through view tab">
-        <div class="pages">
+      <div data-page="index-4" id="view-4" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="center app-text">{{_ "www"}}</div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
           <div data-page="index-4" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title"></div>
+            <div class="page-content">
               <div class="content-block">
                 <p class="app-text">{{_ "Registration on the website will allow you to participate in the improvement of the program, update your program, exchange exercise and ideas with other users on the forum."}}</p>
                 <a href="#" class="button button-round app-text">{{_ "Sign in"}}</a>
@@ -282,14 +276,21 @@
         </div>
       </div>
       <!-- Страница со списком групп упражнений, возможностью их удаления и редактирования -->
-      <div data-page="index-5" id="view-5" class="navbar-through toolbar-through view tab">
-        <div class="pages">
+      <div data-page="index-5" id="view-5" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="#view-2" class="tab-link app-text">{{_ "Cancel"}}</a>
+            </div>
+            <div class="center app-text">{{_ "Type of exercises"}}</div>
+            <div class="right">
+              <a href="#view-5a" class="tab-link app-text">{{_ "Add"}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
           <div data-page="index-5" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title">
-                <a href="#view-2" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                <a href="#view-5a" class="tab-link btn-right-top app-text">{{_ "Add"}}</a>
-              </div>
+            <div class="page-content">
               <div class="content-block">
                 <div class="list-block">
                   <ul id="ulListExerciseType">
@@ -324,14 +325,21 @@
         </div>
       </div>
       <!-- Страница добавления названия группы упражнений -->
-      <div data-page="index-5a" id="view-5a" class="navbar-through toolbar-through view tab">
-        <div class="pages">
+      <div data-page="index-5a" id="view-5a" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="#view-5" class="tab-link app-text">{{_ "Cancel"}}</a>
+            </div>
+            <div class="center app-text">{{_ "Add type of exercises"}}</div>
+            <div class="right">
+              <a href="#" class="tab-link app-text" onclick="addExType()">{{_ "Save"}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
           <div data-page="index-5a" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title">
-                <a href="#view-5" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                <a href="" class="tab-link btn-right-top app-text" onclick="addExType()">{{_ "Save"}}</a>
-              </div>
+            <div class="page-content">
               <div class="content-block">
                 <div class="list-block">
                   <ul>
@@ -352,14 +360,21 @@
         </div>
       </div>
       <!-- Страница со списком упражнений определённой группы упражнений -->
-      <div data-page="index-7" id="view-7" class="navbar-through toolbar-through view tab">
-        <div class="pages">
+      <div data-page="index-7" id="view-7" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="#view-5" class="tab-link app-text">{{_ "Cancel"}}</a>
+            </div>
+            <div class="center app-text">{{_ "List of exercises"}}</div>
+            <div class="right">
+              <a href="#view-7a" class="tab-link app-text" onclick="emptyDataExercise()">{{_ "Add"}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
           <div data-page="index-7" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title">
-                <a href="#view-5" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                <a href="#view-7a" class="tab-link btn-right-top app-text" onclick="emptyDataExercise()">{{_ "Add"}}</a>
-              </div>
+            <div class="page-content">
               <div class="content-block-title ex-of-type" data-item=""></div>
               <div class="content-block">
                 <div class="list-block">
@@ -395,14 +410,21 @@
         </div>
       </div>
       <!-- Страница добавления упражнения -->
-      <div data-page="index-7a" id="view-7a" class="navbar-through toolbar-through view tab">
-        <div class="pages">
+      <div data-page="index-7a" id="view-7a" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner" id="divAddExercise">
+            <div class="left">
+              <a href="#view-7" class="tab-link app-text">{{_ "Cancel"}}</a>
+            </div>
+            <div class="center app-text">{{_ "Add exercise"}}</div>
+            <div class="right">
+              <a href="#" class="tab-link app-text" onclick="addExercise()">{{_ "Save"}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
           <div data-page="index-7a" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title" id="divAddExercise">
-                <!--<a href="#view-7" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                <a href="" class="tab-link btn-right-top app-text" onclick="addExercise()">{{_ "Save"}}</a>-->
-              </div>
+            <div class="page-content">
               <div class="content-block-title ex-of-type" data-item=""></div>
               <div class="content-block">
                 <div class="list-block">
@@ -530,138 +552,151 @@
         </div><!-- End of class="pages" -->
       </div><!-- End of data-page="index-7a" -->
       <!-- Страница параметров выбранного упражнения -->
-      <div data-page="index-8" id="view-8" class="navbar-through toolbar-through view tab">
-        <div class="pages">
+      <div data-page="index-8" id="view-8" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner" id="divAddExercise">
+            <div class="left">
+              <a href="#view-7" class="tab-link app-text">{{_ "Cancel"}}</a>
+            </div>
+            <div class="center app-text">{{_ "Properties of exercise"}}</div>
+            <div class="right">
+              <a href="#" class="tab-link app-text" onclick="updateExerciseProperties()">{{_ "Save"}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
           <div data-page="index-8" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title">
-                <a href="#view-7" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                <a href="" class="tab-link btn-right-top app-text" onclick="updateExerciseProperties()">{{_ "Save"}}</a>
-              </div>
+            <div class="page-content">
               <div class="content-block-title" id="ex-prop" data-item=""></div>
               <div class="content-block">
                 <div class="row">
-                    <!-- Each "cell" has col-[widht in percents] class -->
-                    <div class="col-50">
-                      <div class="list-block">
-                        <ul>
-                          <!-- Single chekbox item -->
-                          <li>
-                            <label class="label-checkbox item-content">
-                              <!-- Checked by default -->
-                              <input type="checkbox" name="checkbox-ex-prop" value="repeats">
-                              <div class="item-media">
-                                <i class="icon icon-form-checkbox"></i>
-                              </div>
-                              <div class="item-inner">
-                                <div class="item-title app-text">{{_ "Repeats"}}</div>
-                              </div>
-                            </label>
-                          </li>
-                          <!-- Another chekbox item -->
-                          <!--<li>
-                            <label class="label-checkbox item-content">
-                              <input type="checkbox" name="checkbox-ex-prop" value="sets">
-                              <div class="item-media">
-                                <i class="icon icon-form-checkbox"></i>
-                              </div>
-                              <div class="item-inner">
-                                <div class="item-title">Sets</div>
-                              </div>
-                            </label>
-                          </li>-->
-                          <li>
-                            <label class="label-checkbox item-content">
-                              <input type="checkbox" name="checkbox-ex-prop" value="weight">
-                              <div class="item-media">
-                                <i class="icon icon-form-checkbox"></i>
-                              </div>
-                              <div class="item-inner">
-                                <div class="item-title app-text">{{_ "Weight"}}</div>
-                              </div>
-                            </label>
-                          </li>
-                          <li>
-                            <label class="label-checkbox item-content">
-                              <input type="checkbox" name="checkbox-ex-prop" value="time">
-                              <div class="item-media">
-                                <i class="icon icon-form-checkbox"></i>
-                              </div>
-                              <div class="item-inner">
-                                <div class="item-title app-text">{{_ "Time"}}</div>
-                              </div>
-                            </label>
-                          </li>
-                          <li>
-                            <label class="label-checkbox item-content">
-                              <input type="checkbox" name="checkbox-ex-prop" value="distance">
-                              <div class="item-media">
-                                <i class="icon icon-form-checkbox"></i>
-                              </div>
-                              <div class="item-inner">
-                                <div class="item-title app-text">{{_ "Distance"}}</div>
-                              </div>
-                            </label>
-                          </li>
-                        </ul>
-                      </div>
+                  <!-- Each "cell" has col-[widht in percents] class -->
+                  <div class="col-50">
+                    <div class="list-block">
+                      <ul>
+                        <!-- Single chekbox item -->
+                        <li>
+                          <label class="label-checkbox item-content">
+                            <!-- Checked by default -->
+                            <input type="checkbox" name="checkbox-ex-prop" value="repeats">
+                            <div class="item-media">
+                              <i class="icon icon-form-checkbox"></i>
+                            </div>
+                            <div class="item-inner">
+                              <div class="item-title app-text">{{_ "Repeats"}}</div>
+                            </div>
+                          </label>
+                        </li>
+                        <!-- Another chekbox item -->
+                        <!--<li>
+                          <label class="label-checkbox item-content">
+                            <input type="checkbox" name="checkbox-ex-prop" value="sets">
+                            <div class="item-media">
+                              <i class="icon icon-form-checkbox"></i>
+                            </div>
+                            <div class="item-inner">
+                              <div class="item-title">Sets</div>
+                            </div>
+                          </label>
+                        </li>-->
+                        <li>
+                          <label class="label-checkbox item-content">
+                            <input type="checkbox" name="checkbox-ex-prop" value="weight">
+                            <div class="item-media">
+                              <i class="icon icon-form-checkbox"></i>
+                            </div>
+                            <div class="item-inner">
+                              <div class="item-title app-text">{{_ "Weight"}}</div>
+                            </div>
+                          </label>
+                        </li>
+                        <li>
+                          <label class="label-checkbox item-content">
+                            <input type="checkbox" name="checkbox-ex-prop" value="time">
+                            <div class="item-media">
+                              <i class="icon icon-form-checkbox"></i>
+                            </div>
+                            <div class="item-inner">
+                              <div class="item-title app-text">{{_ "Time"}}</div>
+                            </div>
+                          </label>
+                        </li>
+                        <li>
+                          <label class="label-checkbox item-content">
+                            <input type="checkbox" name="checkbox-ex-prop" value="distance">
+                            <div class="item-media">
+                              <i class="icon icon-form-checkbox"></i>
+                            </div>
+                            <div class="item-inner">
+                              <div class="item-title app-text">{{_ "Distance"}}</div>
+                            </div>
+                          </label>
+                        </li>
+                      </ul>
                     </div>
-                    <div class="col-50">
-                      <div class="list-block">
-                        <ul>
-                          <li>
-                            <label class="label-checkbox item-content">
-                              <input type="checkbox" name="checkbox-ex-prop" value="speed">
-                              <div class="item-media">
-                                <i class="icon icon-form-checkbox"></i>
-                              </div>
-                              <div class="item-inner">
-                                <div class="item-title app-text">{{_ "Speed"}}</div>
-                              </div>
-                            </label>
-                          </li>
-                          <li>
-                            <label class="label-checkbox item-content">
-                              <input type="checkbox" name="checkbox-ex-prop" value="incline">
-                              <div class="item-media">
-                                <i class="icon icon-form-checkbox"></i>
-                              </div>
-                              <div class="item-inner">
-                                <div class="item-title app-text">{{_ "Incline"}}</div>
-                              </div>
-                            </label>
-                          </li>
-                          <li>
-                            <label class="label-checkbox item-content">
-                              <input type="checkbox" name="checkbox-ex-prop" value="resistance">
-                              <div class="item-media">
-                                <i class="icon icon-form-checkbox"></i>
-                              </div>
-                              <div class="item-inner">
-                                <div class="item-title app-text">{{_ "Resistance"}}</div>
-                              </div>
-                            </label>
-                          </li>
-                        </ul>
-                      </div>
+                  </div>
+                  <div class="col-50">
+                    <div class="list-block">
+                      <ul>
+                        <li>
+                          <label class="label-checkbox item-content">
+                            <input type="checkbox" name="checkbox-ex-prop" value="speed">
+                            <div class="item-media">
+                              <i class="icon icon-form-checkbox"></i>
+                            </div>
+                            <div class="item-inner">
+                              <div class="item-title app-text">{{_ "Speed"}}</div>
+                            </div>
+                          </label>
+                        </li>
+                        <li>
+                          <label class="label-checkbox item-content">
+                            <input type="checkbox" name="checkbox-ex-prop" value="incline">
+                            <div class="item-media">
+                              <i class="icon icon-form-checkbox"></i>
+                            </div>
+                            <div class="item-inner">
+                              <div class="item-title app-text">{{_ "Incline"}}</div>
+                            </div>
+                          </label>
+                        </li>
+                        <li>
+                          <label class="label-checkbox item-content">
+                            <input type="checkbox" name="checkbox-ex-prop" value="resistance">
+                            <div class="item-media">
+                              <i class="icon icon-form-checkbox"></i>
+                            </div>
+                            <div class="item-inner">
+                              <div class="item-title app-text">{{_ "Resistance"}}</div>
+                            </div>
+                          </label>
+                        </li>
+                      </ul>
                     </div>
+                  </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
       <!-- Страница добавления и редактирования данных клиента в базе данных -->
-      <div data-page="index-10" id="view-10" class="navbar-through toolbar-through view tab">
-        <div class="pages">
+      <div data-page="index-10" id="view-10" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner" id="divEditCustomer">
+            <div class="left">
+              <a href="#view-3" class="tab-link app-text">{{_ "Cancel"}}</a>
+            </div>
+            <div class="center app-text"></div>
+            <div class="right">
+              <!-- <a href="" class="tab-link app-text" id="linkAddCustomer" onclick="addCustomer()">{{_ "Save"}}</a>
+              <a href="" class="tab-link app-text" style="display: none;" id="linkEditCustomer" onclick="editCustomer()">{{_ "Save"}}</a> -->
+            </div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
           <div data-page="index-10" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title" id="divEditCustomer">
-                <!--<a href="#view-3" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                <a href="" class="tab-link btn-right-top app-text" id="linkAddCustomer" onclick="addCustomer()">{{_ "Save"}}</a>
-                <a href="" class="tab-link btn-right-top" style="display: none;" id="linkEditCustomer" onclick="editCustomer()">{{_ "Save"}}</a>-->
-              </div>
+            <div class="page-content">
               <div class="content-block">
                 <div class="list-block">
                   <ul>
@@ -720,14 +755,21 @@
         </div>
       </div>
       <!-- Страница удаления клиентов из базы -->
-      <div data-page="index-13" id="view-13" class="navbar-through toolbar-through view tab">
-        <div class="pages">
+      <div data-page="index-13" id="view-13" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="#view-2" class="tab-link app-text">{{_ "Cancel"}}</a>
+            </div>
+            <div class="center app-text">{{_ "Deleting customers"}}</div>
+            <div class="right">
+              <a href="#" class="confirm-delete-customers app-text" onclick="removeCustomers()">{{_ "Delete"}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
           <div data-page="index-13" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title">
-                <a href="#view-2" class="back tab-link btn-left-top app-text">{{_ "Cancel"}}</a>
-                <a href="" class="confirm-delete-customers btn-right-top app-text" onclick="removeCustomers()">{{_ "Delete"}}</a>
-              </div>
+            <div class="page-content">
               <div class="list-block">
                 <ul id="forDeleteCustomers">
                   <!--
@@ -760,77 +802,80 @@
         </div>
       </div>
       <!-- Страница для комплектования списка занятий по клиенту -->
-      <div data-page="index-15" id="view-15" class="navbar-through toolbar-through view tab">
-        <div class="pages">
-          <div data-page="index-15" class="page">
-            <div class="page-content grad-body">
-              <div class="content-block-title">
-                <div class="row">
-                  <div class="col-30"><span id="spanCustName" data-item=""></span></div>
-                  <div class="col-40"><center><strong class="app-text">{{_ "Workout of the day"}}</strong></center></div>
-                  <div class="col-30"><span id="spanDateEx"></span></div>
-                </div>
+      <div data-page="index-15" id="view-15" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left">
+              <span id="spanCustName" data-item=""></span>
+            </div>
+            <div class="center app-text">{{_ "Workout of the day"}}</div>
+            <div class="right">
+              <span id="spanDateEx"></span>
+            </div>
+            <!-- Sub navbar -->
+            <div class="subnavbar">
+              <!-- Sub navbar content, for example tabs buttons -->
+              <div class="buttons-row" id="divMenuWorkout">
+                <a href="#view-10" class="button tab-link app-text" id="aCancelSetEx">{{_ "Cancel"}}</a>
+                <a href="#tab1" class="button tab-link app-text" onclick="makeCalendExCustomer()">{{_ "Calendar"}}</a>
+                <a href="#tab2" class="button tab-link app-text" onclick="makeScheduleExCustomer()">{{_ "Schedule"}}</a>
+                <a href="#tab3" class="button tab-link app-text" onclick="makeSetExCustomer()">{{_ "Change"}}</a>
               </div>
-              <div class="content-block">
-                <div class="row" id="divMenuWorkout">
-                  <div class="col-25">
-                    <center><a href="#view-10" class="back tab-link app-text" id="aCancelSetEx">{{_ "Cancel"}}</a></center>
-                  </div>
-                  <div class="col-25">
-                    <center><a href="#tab1" class="tab-link app-text" onclick="makeCalendExCustomer()">{{_ "Calendar"}}</a></center>
-                  </div>
-                  <div class="col-25">
-                    <center><a href="#tab2" class="tab-link app-text" onclick="makeScheduleExCustomer()">{{_ "Schedule"}}</a></center>
-                  </div>
-                  <div class="col-25">
-                    <center><a href="#tab3" class="tab-link app-text" onclick="makeSetExCustomer()">{{_ "Change"}}</a></center>
-                  </div>
-                </div>
-              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
+          <div data-page="index-15" class="page with-subnavbar">
+            <div class="page-content">
               <!-- Tabs, tabs wrapper -->
               <div class="tabs">
                 <!-- Tab 0, Текущий набор упражнений клиента -->
                 <div id="tab0" class="tab">
-                  <p class="noWorkout app-text">{{_ "Today still not formed a set of exercises."}}</p>
-                  <div class="list-block">
-                    <ul id="ulListCurrentExercises"></ul>
+                  <div class="content-block">
+                    <p class="noWorkout app-text">{{_ "Today still not formed a set of exercises."}}</p>
+                    <div class="list-block">
+                      <ul id="ulListCurrentExercises"></ul>
+                    </div>
                   </div>
                 </div>
                 <!-- Tab 1, Календарь -->
                 <div id="tab1" class="tab">
-                  <div class="row">
-                    <div class="col-60">
-                      <div class="list-block list-block-without-margin">
-                        <ul id="ulListPastExercises">
-                          <!--<li>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-input">
-                                  <input type="text" placeholder="Exercise" value="Bicep curl DW">
+                  <div class="content-block">
+                    <div class="row">
+                      <div class="col-60">
+                        <div class="list-block list-block-without-margin">
+                          <ul id="ulListPastExercises">
+                            <!--<li>
+                              <div class="item-content">
+                                <div class="item-inner">
+                                  <div class="item-input">
+                                    <input type="text" placeholder="Exercise" value="Bicep curl DW">
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </li>-->
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="col-40">
-                      <div id="calendar"></div>
-                      <div id="calendar-inline-container"></div>
+                            </li>-->
+                          </ul>
+                        </div>
+                      </div> <!-- Конец левой колонки со списком упражнений -->
+                      <div class="col-40">
+                        <div id="calendar"></div>
+                        <div id="calendar-inline-container"></div>
+                      </div> <!-- Конец правой колонки с календарём -->
                     </div>
                   </div>
                 </div>
-                <!-- Tab 2 -->
+                <!-- Tab 2, Расписание занятий по дням недели -->
                 <div id="tab2" class="tab">
-                  <div class="row">
-                    <div class="col-50">
-                      <p class="noWorkout app-text">{{_ "Today still not formed a set of exercises."}}</p>
-                      <div class="list-block list-block-without-margin">
-                        <!-- Сформированный набор упражнений -->
-                        <ul id="ulListScheduleEx">
-                        </ul>
-                      </div>
-                    </div>
+                  <div class="content-block">
+                    <div class="row">
+                      <div class="col-50">
+                        <p class="noWorkout app-text">{{_ "Today still not formed a set of exercises."}}</p>
+                        <div class="list-block list-block-without-margin">
+                          <!-- Сформированный набор упражнений -->
+                          <ul id="ulListScheduleEx">
+                          </ul>
+                        </div>
+                      </div> <!-- Конец левой колонки со списком упражнений -->
                       <div class="col-50">
                         <div class="list-block list-block-without-margin">
                           <ul id="ulListDays">
@@ -975,12 +1020,14 @@
                             </li>
                           </ul>
                         </div>
-                      </div>
+                        <a href="#view-15a" class="button button-round tab-link app-text" onclick="makeSliderSchedules()">{{_ "View all schedules"}}</a>
+                      </div> <!-- Конец правой колонки с днями недели -->
                     </div>
+                  </div>
                 </div>
                 <!-- Tab 3 Создание нового набора упражнений -->
                 <div id="tab3" class="tab">
-                  <!--<div class="content-block">-->
+                  <div class="content-block">
                     <div class="row">
                       <div class="col-50">
                         <div class="list-block list-block-without-margin">
@@ -1025,7 +1072,42 @@
                         </div>
                       </div>
                     </div>
-                  <!--</div>-->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Страница просмотра запланированных упражнений по дням недели -->
+      <div data-page="index-15a" id="view-15a" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner" id="divAddExercise">
+            <div class="left">
+              <a href="#view-15" class="tab-link app-text">{{_ "Back"}}</a>
+            </div>
+            <div class="center app-text">{{_ "Scheduled exercises"}}</div>
+            <div class="right"></div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
+          <div data-page="index-15a" class="page">
+            <div class="page-content">
+              <!-- <div class="content-block-title">
+                <a href="#view-15" class="back tab-link btn-left-top app-text">{{_ "Back"}}</a>
+              </div> -->
+              <div class="content-block">
+                <div class="slider-custom">
+                  <div class="swiper-container-schedules">
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-wrapper">
+                      <!-- <div class="swiper-slide"><span>Slide 1</span></div>
+                      <div class="swiper-slide"><span>Slide 2</span></div>
+                      <div class="swiper-slide"><span>Slide 3</span></div> -->
+                    </div>
+                  </div>
+                  <div class="slider-button-prev"></div>
+                  <div class="slider-button-next"></div>
                 </div>
               </div>
             </div>
@@ -1033,23 +1115,43 @@
         </div>
       </div>
       <!-- Страница работы с выбранным упражнением -->
-      <div data-page="index-24" id="view-24" class="navbar-through toolbar-through view tab">
-        <div class="pages">
-          <div data-page="index-24" class="page">
-            <div class="page-content grad-body">
+      <div data-page="index-24" id="view-24" class="view tab">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left">
+              <span id="spanWorkCustName"></span>
+            </div>
+            <div class="center"><span id="spanExWork"></span></div>
+            <div class="right">
+              <span id="spanWorkDateEx"></span>
+            </div>
+            <!-- Sub navbar -->
+            <div class="subnavbar">
+              <!-- Sub navbar content, for example tabs buttons -->
+              <div class="buttons-row" id="divMenuWorkout">
+                <a href="#workTab1" class="button tab-link active app-text" id="aWorkNote">{{_ "Note"}}</a>
+                <a href="#workTab2" class="button tab-link app-text" id="aWorkProgress">{{_ "Progress"}}</a>
+                <a href="#workTab3" class="button tab-link app-text" id="aWorkHistory" onclick="generateHistory()">{{_ "History"}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pages navbar-fixed">
+          <div data-page="index-24" class="page with-subnavbar">
+            <div class="page-content">
               <div class="content-block-title">
-                <div class="row my-row">
+                <!-- <div class="row my-row">
                   <div class="col-30"><span id="spanWorkCustName"></span></div>
                   <div class="col-40"><center><strong class="app-text">{{_ "Workout of the day"}}</strong></center></div>
                   <div class="col-30"><span id="spanWorkDateEx"></span></div>
-                </div>
+                </div> -->
                 <div class="row">
                   <div class="col-30"><a href="#view-15" class="tab-link btn-left-top app-text">{{_ "Cancel"}}</a><!-- На view-15 tab0 --></div>
                   <div class="col-40"><center><strong><span id="spanExWork"></span></strong></center></div>
                   <div class="col-30"><a href="" class="tab-link btn-right-top app-text" onclick="saveExerciseWork()" id="linkSaveWorkEx">{{_ "Save"}}</a></div>
                 </div>
               </div>
-              <div class="content-block">
+              <!-- <div class="content-block">
                 <div class="row">
                   <div class="col-33">
                     <center><a href="#workTab1" class="tab-link active app-text" id="aWorkNote">{{_ "Note"}}</a></center>
@@ -1061,7 +1163,7 @@
                     <center><a href="#workTab3" class="tab-link app-text" id="aWorkHistory" onclick="generateHistory()">{{_ "History"}}</a></center>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <!-- Tabs, tabs wrapper -->
               <div class="tabs">
                 <!-- workTab1, Работа с текущим упражнением клиента -->
@@ -1108,7 +1210,28 @@
           </div>
         </div>
       </div>
-    </div>
+      <!-- Tab bar with tab links -->
+      <div class="toolbar tabbar tabbar-labels">
+        <div class="toolbar-inner">
+          <a href="#view-1" class="tab-link active">
+            <i class="icon tabbar-icon-1 active"></i>
+            <span class="tabbar-label app-text">{{_ "Help"}}</span>
+          </a>
+          <a href="#view-2" class="tab-link">
+            <i class="icon tabbar-icon-2"></i>
+            <span class="tabbar-label app-text">{{_ "Settings"}}</span>
+          </a>
+          <a href="#view-3" class="tab-link">
+            <i class="icon tabbar-icon-3"><span class="badge badge-red" id="badgeCountCustomers"></span></i>
+            <span class="tabbar-label app-text">{{_ "Customers"}}</span>
+          </a>
+          <!-- <a href="#view-4" class="tab-link">
+            <i class="icon tabbar-icon-4"></i>
+            <span class="tabbar-label app-text">{{_ "www"}}</span>
+          </a> -->
+        </div>
+      </div>
+    </div> <!-- End of .views .tabs -->
     <!-- Bottom Toolbar-->
     <!-- <div class="toolbar">
       <p class="app-text">{{_ "here is the place to advertise"}}</p>
