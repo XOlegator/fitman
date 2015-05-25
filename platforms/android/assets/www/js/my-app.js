@@ -2,25 +2,36 @@
 // Initialize your app
 var myApp = new Framework7({
   modalTitle: 'Personal trainer',
-  init: false
+  init: false,
+  dynamicNavbar: true
 });
+var path = window.location.href.replace('index.html', '')
 // Export selectors engine
 var $$ = Framework7.$;
-//var fLang = './en.json'; // Язык по-умолчанию английский
-var fLang = './ru_RU.json';
-var i18n;
+var t = 0; // Переменная для секундомера
+var fLang = 'i18n/en_US.json'; // Язык по-умолчанию английский
+// Инициализируем пустой объект i18n, чтобы зарегистрировать хелперы
+var i18n = new Jed({
+  locale_data : {
+    "messages" : {
+      "" : {
+        "domain" : "messages",
+        "lang"   : "en_US",
+        "plural_forms" : "nplurals=2; plural=(n != 1);"
+      },
+      "some key" : [ "some value"]
+    }
+  },
+  "domain" : "messages"
+});
 console.log('Первый раз инициализируем все инструменты для перевода');
-$$.getJSON(fLang, function(response) {
-  console.log('Загрузили языковой файл по-умолчанию!');
-  i18n = new Jed(response);
-  console.log('По-умолчанию i18n = ' + JSON.stringify(i18n));
-  Template7.registerHelper('_', function(msgid) {
-    //console.log('i18n.gettext(msgid) = ' + i18n.gettext(msgid));
-    return i18n.gettext(msgid);
-  });
-  Template7.registerHelper('ngettext', function(msgid, plural, count) {
-    return i18n.ngettext(msgid, plural, count);
-  });
+Template7.registerHelper('_', function(msgid) {
+  return i18n.gettext(msgid);
+});
+Template7.registerHelper('ngettext', function(msgid, plural, count) {
+  //return i18n.ngettext(msgid, plural, count);
+  console.log('Переводим строку с числом. msgid = ' + msgid + '; plural = ' + plural + '; count = ' + count);
+  return i18n.translate(msgid).ifPlural(count, plural).fetch(count);
 });
 // Функция для приведения дат в нужный вид
 Date.prototype.toDateInputValue = (function() {
@@ -59,7 +70,7 @@ var view13 = myApp.addView('#view-13'); // Удаление клиентов и�
 
 var bdSchema = '';
 
-$$.getJSON('default/bd-schema.json', function(data) {
+$$.getJSON(path + 'default/bd-schema.json', function(data) {
   bdSchema = data;
   //console.log("Схема БД: " + JSON.stringify(bdSchema));
   db.open(bdSchema).then(function(serverData) {
@@ -84,10 +95,10 @@ $$.getJSON('default/bd-schema.json', function(data) {
           	$$('body').addClass('layout-' + results[0].layoutTheme);
             if (results[0].language === 'russian') {
               console.log('Готовимся грузить русский языковой файл');
-              fLang = './ru_RU.json';
+              fLang = 'i18n/ru_RU.json';
             } else if (results[0].language === 'english') {
               console.log('Готовимся грузить английский языковой файл');
-              fLang = './en.json';
+              fLang = 'i18n/en_US.json';
             }
             console.log('Переходим в функцию перевода строк');
             translate(fLang);
@@ -107,6 +118,10 @@ $$.getJSON('default/bd-schema.json', function(data) {
           	  $$('#selectLayoutThemes').val("dark");
           	  $$('body').addClass('theme-orange');
           	  $$('body').addClass('layout-dark');
+              console.log('Готовимся грузить английский языковой файл');
+              fLang = 'i18n/en_US.json';
+              console.log('Переходим в функцию перевода строк');
+              translate(fLang);
             });
           }
         });
@@ -140,17 +155,6 @@ $$.getJSON('default/bd-schema.json', function(data) {
       // Устанавливаем дату начала занятий на текущую дату
       $$('#inputDateStartClasses').val(new Date().toDateInputValue());
     });
-    //translate(fLang);
-    /*$$.getJSON(fLang, function(response) {
-      console.log('Загрузили языковой файл!');
-      i18n = new Jed(response);
-      Template7.registerHelper('_', function(msgid) {
-        return i18n.gettext(msgid);
-      });
-      Template7.registerHelper('ngettext', function(msgid, plural, count) {
-        return i18n.ngettext(msgid, plural, count);
-      });
-    });*/
     myApp.init();
     console.log('Инициализация приложения myApp выполнена');
   });
@@ -159,26 +163,20 @@ $$.getJSON('default/bd-schema.json', function(data) {
 Функция перевода строк приложения на другой язык. В функцию передаётся файл с переводом
 */
 function translate(fLang) {
-  /*$$.getJSON(fLang, function(response) {
-    console.log('Загрузили новый языковой файл!');
-    i18n = new Jed(response);*/
-    /*Template7.registerHelper('_', function(msgid) {
-      return i18n.gettext(msgid);
-    });
-    Template7.registerHelper('ngettext', function(msgid, plural, count) {
-      return i18n.ngettext(msgid, plural, count);
-    });*/
-    //console.log('i18n = ' + JSON.stringify(i18n));
+  $$.getJSON(path + fLang, function(response) {
+    console.log('Загрузили новый языковой файл! fLang = ' + fLang);
+    i18n = new Jed(response);
+    console.log('i18n = ' + JSON.stringify(i18n));
     // Переводим все шаблоны текстов в html на нужный язык
     var template = $$('.app-text').each(function() {
-      console.log('Переводим очередную строку');
+      //console.log('Переводим очередную строку');
       var compiledTemplate = Template7.compile($$( this ).text());
       //console.log('compiledTemplate = ' + compiledTemplate);
       var htmlText = compiledTemplate();
-      //console.log('htmlText = ' + htmlText);
+      console.log('New htmlText = ' + htmlText);
       $$( this ).text(htmlText);
     });
-  //});
+  });
 }
 // Функция изменения системы единиц измерения в настройках
 $$('#selectUnits').on('change', function() {
@@ -222,13 +220,18 @@ $$('#selectLang').on('change', function() {
       var setLayoutTheme = results[0].layoutTheme;
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
       server.settings.update({
-	    'id': parseInt(results[0].id),
+	      'id': parseInt(results[0].id),
         'units': setUnits,
         'language': setLang,
         'colorTheme': setColorTheme,
         'layoutTheme': setLayoutTheme
       }).then(function(item) {
         console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
+        myApp.addNotification({
+          title: i18n.gettext('Saved'),
+          hold: messageDelay,
+          message: i18n.gettext('The changes will take effect after you restart!')
+        });
       });
     });
 });
@@ -328,7 +331,7 @@ $$('.confirm-fill-demo').on('click', function () {
     // Заполняем таблицы данными из json файлов
     console.log('Начинаем обрабатывать упражнения');
     var dataExercisesJSON = '';
-    $$.getJSON('default/exercises.json', function(data) {
+    $$.getJSON(path + 'default/exercises.json', function(data) {
       dataExercisesJSON = data;
       // Запускаем цикл по группам упражнений (exerciseType)
       for (var j in data.exerciseType) {
@@ -397,7 +400,7 @@ $$('.confirm-fill-demo').on('click', function () {
         });
     });  
     
-    $$.getJSON('default/customers.json', function(data) {
+    $$.getJSON(path + 'default/customers.json', function(data) {
       for (var i in data.customers) {
         // Добавляем клиентов в базу
         server.customers.add(data.customers[i]);
@@ -462,8 +465,13 @@ $$('.confirm-remove-db').on('click', function () {
 function emptyDataCustomer() {
   // Сформируем доступные кнопки для вкладки добавления нового клиента
   var menuEditCustomer = '';
-  menuEditCustomer =  '<a href="#view-3" class="tab-link btn-left-top app-text">' + i18n.gettext('Cancel') + '</a></a>';
-  menuEditCustomer += '<a href="" class="tab-link btn-right-top app-text" style="display: none;" id="linkEditCustomer" onclick="addCustomer()">' + i18n.gettext('Save') + '</a>';
+  menuEditCustomer = '<div class="left">';
+  menuEditCustomer += ' <a href="#view-3" class="tab-link app-text">' + i18n.gettext('Cancel') + '</a>';
+  menuEditCustomer += '</div>';
+  menuEditCustomer += '<div class="center app-text">' + i18n.gettext('Add customer') + '</div>';
+  menuEditCustomer += '<div class="right">';
+  menuEditCustomer += '  <a href="#" class="tab-link app-text" style="display: none;" id="linkEditCustomer" onclick="addCustomer()">' + i18n.gettext('Save') + '</a>';
+  menuEditCustomer += '</div>';
   document.getElementById("divEditCustomer").innerHTML = menuEditCustomer;
   $$('#inputNewCustomer').val('');
   $$('#inputNewCustomer').attr('data-item', '');
@@ -473,11 +481,6 @@ function emptyDataCustomer() {
 Функция очистки данных на странице данных упражнения. Вызывается со страницы index-7 (списоко упражнений) по кнопке Add
 */
 function emptyDataExercise() {
-  // Сформируем доступные кнопки для вкладки добавления нового клиента
-  var menuAddExercise = '';
-  menuAddExercise =  '<a href="#view-7" class="tab-link btn-left-top app-text">' + i18n.gettext('Cancel') + '</a></a>';
-  menuAddExercise += '<a href="" class="tab-link btn-right-top app-text" onclick="addExercise()">' + i18n.gettext('Save') + '</a>';
-  document.getElementById("divAddExercise").innerHTML = menuAddExercise;
   $$('#inputNewExercise').val('');
   $$('#view-7a input').prop('checked', false);
 }
@@ -682,8 +685,13 @@ $$('#aCustomerPhoto').on('click', function () {
 function fillCustomerData(customerId) {
   // Сформируем доступные кнопки для вкладки существующего клиента
   var menuEditCustomer = '';
-  menuEditCustomer =  '<a href="#view-3" class="tab-link btn-left-top app-text">' + i18n.gettext('Cancel') + '</a></a>';
-  menuEditCustomer += '<a href="" class="tab-link btn-right-top" style="display: none;" id="linkEditCustomer" onclick="editCustomer()">' + i18n.gettext('Save') + '</a>';
+  menuEditCustomer = '<div class="left">';
+  menuEditCustomer += ' <a href="#view-3" class="tab-link app-text">' + i18n.gettext('Cancel') + '</a>';
+  menuEditCustomer += '</div>';
+  menuEditCustomer += '<div class="center app-text">' + i18n.gettext('Edit customer') + '</div>';
+  menuEditCustomer += '<div class="right">';
+  menuEditCustomer += '  <a href="#" class="tab-link app-text" style="display: none;" id="linkEditCustomer" onclick="editCustomer()">' + i18n.gettext('Save') + '</a>';
+  menuEditCustomer += '</div>';
   document.getElementById("divEditCustomer").innerHTML = menuEditCustomer;
   console.log('Заполняем данные по клиенту с id = ' + customerId);
   server.customers.get(parseInt(customerId)).then(function(customer) {
@@ -1004,7 +1012,8 @@ function updateViewExProp(exerciseId) {
       for (var index in exerciseOptions) {
         rowExOpt = exerciseOptions[index];
       	console.log('rowExOpt.option = ' + rowExOpt.option);
-      	//$$('input[name="checkbox-ex-prop"][value="' + rowExOpt.option + '"]').click();
+      	// Впишем id связки Параметр-Упражнение в атрибут data-item
+      	$$('input[name="checkbox-ex-prop"][value="' + rowExOpt.option + '"]').attr('data-item', rowExOpt.id);
       	$$('input[name="checkbox-ex-prop"][value="' + rowExOpt.option + '"]').prop('checked', true);
       }
     });
@@ -1014,7 +1023,7 @@ function updateViewExProp(exerciseId) {
 */
 function updateExerciseProperties() {
   // Определяем редактируемое упражнение
-  var exerciseId = parseInt($$('div#ex-prop').data('item'));
+  var exerciseId = parseInt($$('#ex-prop').data('item'));
   console.log('Идёт обновление параметров упражнения с id = ' + exerciseId);
   // Нужно понять, что изменили. Тут возможны варианты: добавили опции, убрали опции, одновременно что-то добавили и что-то убрали, вообще ничего не поменяли
   // Для начала соберём в массив всё, что сейчас отмечено
@@ -1024,54 +1033,89 @@ function updateExerciseProperties() {
   var addedOpt = []; // Масси добавленных параметров
   $$('input[name="checkbox-ex-prop"]:checked').each(function(indexOpt, valueOpt) {
     arrNewOpt[indexOpt] = valueOpt.value;
-    console.log('Занесли в массив значение выбранной опции: ' + valueOpt.value);
+    console.log('Занесли в массив значение выделенной опции: ' + valueOpt.value);
   });
+  var removeOption = [];
   // Сначала отберём все записи с активными параметрами по данному упражнению из базы
   server.optionsExercises.query()
   	.filter('exerciseId', exerciseId)
     .execute()
     .then(function(results) {
       console.log('Список характеристик: ' + JSON.stringify(results));
-      //results.forEach(function (rowOldOpt, indexOldOpt) {
-      results.each(function (rowOldOpt, indexOldOpt) {
+      for (var indexOldOpt in results) {
+        var rowOldOpt = results[indexOldOpt];
+        console.log('Очередная строка для проверки удаления: ' + JSON.stringify(rowOldOpt));
         // Сформируем массив старых параметров (те, что уже есть в базе данных)
         arrOldOpt[indexOldOpt] = rowOldOpt.option;
         // Сразу поищем, является ли данный элемент удалённым
         if (!in_array(rowOldOpt.option, arrNewOpt)) {
+          console.log('Элемент удалили на форме: ' + rowOldOpt.option);
           deletedOpt.push(rowOldOpt.option); // Этот параметр исключили из активных параметров упражнения
-          // Проверим использовался ли этот параметр в данных
-          server.workExercise.query()
-            .filter('option', parseInt(rowOldOpt.option))
-            .execute()
-            .then(function (resWorkEx) {
-              if (resWorkEx.length) { // Какие-то данные есть в базе
-                // Выведем сообщение, что такой-то параметр нельзя удалить, т.к. он используется
-                myApp.addNotification({
-                  title: i18n.gettext('Error while deleting'),
-                  hold: messageDelay,
-                  message: i18n.gettext('Option ') + rowOldOpt.option + i18n.gettext(" already used in database. It can&#39;t be deleted!")
-                });
-                // Надо снять отметку с этой опции
-                $$('input[name="checkbox-ex-prop"][value="' + rowOldOpt.option + '"]').prop('checked', false);
-              } else { // Никаких данных нет - можно смело удалять
-        	    server.remove('optionsExercises', parseInt(rowOldOpt.id));
-        	    console.log('Удалили связку параметр-упражнение с id = ' + rowOldOpt.id);
-              }
-            });
         }
-      }); // Закончили перебирать все существующие параметры, составили список удалённых параметров
+      } // Закончили перебирать все существующие параметры, составили список удалённых параметров
+      // Определим параметры, которые помечены для удаления и используются в базе. Такие удалять из упражнеия нельзя
+      server.workExercise.query("option")
+        .filter(function(workEx) {return (in_array(workEx.option, deletedOpt) && (workEx.exercise === exerciseId))})
+        .distinct()
+        .execute()
+        .then(function (resWorkEx) {
+          console.log('Результат поиска параметров, которые нельзя удалять: ' + JSON.stringify(resWorkEx))
+          if (resWorkEx.length) { // Какие-то данные есть в базе
+            for (var indexErrDel in resWorkEx) {
+              console.log('В базе есть история по параметру ' + resWorkEx[indexErrDel].option);
+              // Выведем сообщение, что такой-то параметр нельзя удалить, т.к. он используется в базе
+              myApp.addNotification({
+                title: i18n.gettext('Error while deleting'),
+                hold: messageDelay,
+                message: i18n.gettext('Option ') + resWorkEx[indexErrDel].option + i18n.gettext(" already used in database. It can&#39;t be deleted!")
+              });
+              // Надо снять отметку с этой опции
+              $$('input[name="checkbox-ex-prop"][value="' + resWorkEx[indexErrDel].option + '"]').prop('checked', false);
+              // Надо текущий параметр исключить из массива к удалению
+              delete deletedOpt[deletedOpt.indexOf(resWorkEx[indexErrDel].option)];
+            }
+          }
+          // Теперь прореженый массив к удалению полностью готов к удалению
+          for (var indexDeletedOpt in deletedOpt) {
+            var idForDelete = parseInt($$('input[name="checkbox-ex-prop"][value="' + deletedOpt[indexDeletedOpt] + '"]').data('item'));
+            console.log('idForDelete = ' + idForDelete);
+            server.remove('optionsExercises', idForDelete).then(function(resDel) {
+              console.log('resDel = ' + resDel);
+              // Определяем название только что удалённого параметра
+              var nameDeletedParameter = $$('input[name="checkbox-ex-prop"][data-item="' + resDel + '"]').val();
+              // Очистим data-item только что удалённого параметра
+              $$('input[name="checkbox-ex-prop"][value="' + nameDeletedParameter + '"]').removeAttr('data-item');
+              console.log('nameDeletedParameter = ' + nameDeletedParameter);
+              myApp.addNotification({
+                title: i18n.gettext('Saved'),
+                hold: messageDelay,
+                message: i18n.gettext('Parameter') + ' ' + nameDeletedParameter + ' ' + i18n.gettext('was removed.')
+              });
+              console.log('Удалили связку параметр: ' + nameDeletedParameter);
+            });
+          }
+        });
       // Теперь пройдёмся по всем параметрам из нового набора, чтобы определить, какие параметры добавили
       for (var indexNewOpt in arrNewOpt) {
         if (!in_array(arrNewOpt[indexNewOpt], arrOldOpt)) {
           addedOpt.push(arrNewOpt[indexNewOpt]); // Этот параметр добавили в новом наборе параметров упражнения
-          // Добавляем в базу этот параметр
-          server.optionsExercises.add({
-  	        'option': arrNewOpt[indexNewOpt],
-  	        'exerciseId': exerciseId
-  	      }).then(function (newRowExOpt) {
-            console.log('Добавили связку опция-упражнение: ' + JSON.stringify(newRowExOpt));
-  	      });
         }
+      }
+      for (var indexAddedOpt in addedOpt) {
+        // Добавляем в базу этот параметр
+        server.optionsExercises.add({
+          'option': addedOpt[indexAddedOpt],
+          'exerciseId': exerciseId
+        }).then(function (newRowExOpt) {
+          // В форму добавим data-item только что добавленной записи
+          $$('input[name="checkbox-ex-prop"][value="' + newRowExOpt[0].option + '"]').attr('data-item', newRowExOpt[0].id);
+          myApp.addNotification({
+            title: i18n.gettext('Saved'),
+            hold: messageDelay,
+            message: i18n.gettext('Parameter') + ' ' + newRowExOpt[0].option + ' ' + i18n.gettext('was added.')
+          });
+          console.log('Добавили связку опция-упражнение: ' + JSON.stringify(newRowExOpt));
+        });
       }
       if (!deletedOpt.length && !addedOpt.length) { // Ничего не изменили. Тупо нажали Сохранить
         // Покажем сообщение, что сохранять нечего
@@ -1149,7 +1193,7 @@ $$(document).on('change', '.btn-delete-toggle', function() {
 function upgradeViewWorkout() {
   // Сформируем доступные кнопки для вкладки сформированного комплекса упражнений
   var menuWorkout = '';
-  menuWorkout =  '<div class="col-25">';
+  /*menuWorkout =  '<div class="col-25">';
   menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
@@ -1161,7 +1205,11 @@ function upgradeViewWorkout() {
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
-  menuWorkout += '</div>';
+  menuWorkout += '</div>';*/
+  menuWorkout =  '<a href="#view-10" class="button tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a>';
+  menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
+  menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
+  menuWorkout += '<a href="#tab3" class="button tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   // Очистим список ранее созданного комплекса упражнений
   document.getElementById("ulListCurrentExercises").innerHTML = '';
@@ -1197,10 +1245,7 @@ function upgradeViewWorkout() {
             listExCust += '</li>';
             // После того, как в цикле сформировали список упражнений не текущий день недели, покажем его на странице
             console.log('Сейчас будем выводить подготовленный список упражнений');
-            /*if(!$$('#noWorkout').hasClass('hidden')) {
-              $$('#noWorkout').addClass('hidden');
-            }*/
-            $$('#noWorkout').hide();
+            $$('.noWorkout').hide();
             document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
             //SORTER.sort('#ulListCurrentExercises');
           });
@@ -1242,8 +1287,6 @@ function upgradeViewWorkout() {
               console.log('Сегодня: ' + nameToday);
               // Теперь пройдёмся по всем дням недели и проверим, нет ли там текущего
               // А если на текущий день недели ничего не запланировано, то покажем текст-заглушку. Для это используем флаг isWorkout
-              //resSchedule.forEach(function(item) {
-              //resSchedule.each(function(item) {
               for (var index in resSchedule) {
                 item = resSchedule[index];
       	        if((item.day === nameToday) || (item.day === 'everyday')) {
@@ -1258,10 +1301,7 @@ function upgradeViewWorkout() {
                     listExCust += '</li>';
                     // После того, как в цикле сформировали список упражнений не текущий день недели, покажем его на странице
                     console.log('Сейчас будем выводить подготовленный список упражнений');
-                    /*if(!$$('#noWorkout').hasClass('hidden')) {
-                      $$('#noWorkout').addClass('hidden');
-                    }*/
-                    $$('#noWorkout').hide();
+                    $$('.noWorkout').hide();
                     document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
                   });
                   isWorkout = 1;
@@ -1272,10 +1312,7 @@ function upgradeViewWorkout() {
       	  });
       }
       if (!isWorkout) { // Если упражнений на сегодня нет
-        /*if($$('#noWorkout').hasClass('hidden')) {
-          $$('#noWorkout').removeClass('hidden');
-        }*/
-        $$('#noWorkout').show();
+        $$('.noWorkout').show();
       }
     });
   // По-умолчанию первым делом показываем вкладку с уже сформированным списком упражнений на сегодня
@@ -1295,7 +1332,7 @@ function in_array(value, array) {
 function makeSetExCustomer() {
   // Сформируем доступные кнопки для вкладки сформированного комплекса упражнений
   var menuWorkout = '';
-  menuWorkout =  '<div class="col-25">';
+  /*menuWorkout =  '<div class="col-25">';
   menuWorkout += '  <center><a href="" class="tab-link" onclick="makeSetExCustomer()" id="aClearAll">' + i18n.gettext('Clear all') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
@@ -1307,7 +1344,11 @@ function makeSetExCustomer() {
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="saveSetExCustomer(\'fromChange\')">' + i18n.gettext('Save') + '</a></center>';
-  menuWorkout += '</div>';
+  menuWorkout += '</div>';*/
+  menuWorkout =  '<a href="#" class="button tab-link" onclick="makeSetExCustomer()" id="aClearAll">' + i18n.gettext('Clear all') + '</a>';
+  menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
+  menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
+  menuWorkout += '<a href="#tab0" class="button tab-link" onclick="saveSetExCustomer(\'fromChange\')">' + i18n.gettext('Save') + '</a>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   // Очистим список готового набора (тот, что слева)
   $$('#ulListSelectedExercises').html('');
@@ -1444,7 +1485,7 @@ $$(document).on('opened', '.swipeout-selected', function (e) {
 function saveSetExCustomer(flagFrom) {
   // Сформируем доступные кнопки для вкладки сформированного комплекса упражнений
   var menuWorkout = '';
-  menuWorkout =  '<div class="col-25">';
+  /*menuWorkout =  '<div class="col-25">';
   menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
@@ -1456,7 +1497,11 @@ function saveSetExCustomer(flagFrom) {
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
-  menuWorkout += '</div>';
+  menuWorkout += '</div>';*/
+  menuWorkout =  '<a href="#view-10" class="button tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a>';
+  menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
+  menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
+  menuWorkout += '<a href="#tab3" class="button tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   console.log('Сохраняем набор');
   var temp = '';
@@ -1471,7 +1516,7 @@ function saveSetExCustomer(flagFrom) {
       console.log('Нашли в базе данные по занятиям на сегодня: ' + JSON.stringify(result));
       var listExCust = '';
       for (var index in result) {
-        var item = typeEx[index];
+        var item = result[index];
       	server.remove('workout', parseInt(item.id)).then(function(res3) {
           console.log('Удалили workout с id = ' + item.id);
           console.log(JSON.stringify(res3));
@@ -1519,8 +1564,66 @@ function saveSetExCustomer(flagFrom) {
       document.getElementById("ulListCurrentExercises").innerHTML = listExCust;
     });
   }
-  $$('#noWorkout').hide();
+  $$('.noWorkout').hide();
   //SORTER.sort('#ulListCurrentExercises');
+}
+/*
+Функция запуска таймера. Запускается функция секундомера и диалоговое окно, которое отображает текущее значение
+*/
+function launcherTimer() {
+  modalTimer();
+  t = 0;
+  stopped(false); // открыли возможность выполнять тело функции секундомера
+  timer();
+}
+/*
+Функция для прерывание рекурсивного вызова секундомера
+*/
+timer.stopped = false;
+function stopped(boolean) { return timer.stopped = boolean; };
+/*
+Функция секундомера
+*/
+function timer() {
+  if(timer.stopped === true) {
+    return;
+  } else {
+    document.getElementById('timer-minutes').innerHTML = parseInt(t/60);
+    document.getElementById('timer-seconds').innerHTML = t - parseInt(t/60) * 60;
+    console.log("t = " + t);
+    t++;
+    setTimeout("timer()", 1000);
+  }
+}
+/*
+Функция обработки диалогового окна с таймером
+*/
+function modalTimer() {
+  myApp.modal({
+    title:  'Timer',
+    text: '<div>' +
+            '<span id="timer-minutes">0</span>:<span id="timer-seconds">0</span>' +
+          '</div>',
+    buttons: [
+      {
+        text: i18n.gettext("Stop"),
+        onClick: function() {
+          // Записываем результат в соответствующие поля.
+          stopped(true);// остановили секундомер
+          $$('input[data-item="time-minutes"]').val(parseInt($$('#timer-minutes').html()));
+          $$('input[data-item="time-seconds"]').val(parseInt($$('#timer-seconds').html()));
+        }
+      },
+      {
+        text: i18n.gettext("Cancel"),
+        bold: true,
+        onClick: function() {
+          stopped(true); // остановили секундомер
+          // Ничего не делаем
+        }
+      },
+    ]
+  })
 }
 /*
 Функция подготовки отображения страницы работы с упражнением клиента.
@@ -1575,11 +1678,12 @@ function makeViewExWork(exerciseId) {
       	  propEx += '  <div class="item-content">';
       	  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
       	  propEx += '    <div class="item-inner">';
-      	  propEx += '      <div class="item-title label">' + rowExOpt.option + '</div>';
+      	  propEx += '      <div class="item-title label">' + i18n.gettext("time") + '</div>';
       	  propEx += '      <div class="item-input">';
       	  propEx += '        <div class="row">';
-      	  propEx += '          <div class="col-50"><input type="number" min="0" data-item="' + rowExOpt.option + '-minutes" placeholder="Minutes"></div>';
-      	  propEx += '          <div class="col-50"><input type="number" min="0" data-item="' + rowExOpt.option + '-seconds" placeholder="Seconds"></div>';
+      	  propEx += '          <div class="col-33"><input type="number" min="0" data-item="time-minutes" placeholder="Minutes"></div>';
+      	  propEx += '          <div class="col-33"><input type="number" min="0" data-item="time-seconds" placeholder="Seconds"></div>';
+      	  propEx += '          <div class="col-33"><a href="#" class="button" onclick="launcherTimer()">' + i18n.gettext("Start timer") + '</a></div>';
       	  propEx += '        </div>';
       	  propEx += '      </div>';
       	  propEx += '    </div>';
@@ -1804,7 +1908,7 @@ function makeCalDate(date) {
 function makeCalendExCustomer() {
   // Сформируем доступные кнопки для вкладки Календарь
   var menuWorkout = '';
-  menuWorkout =  '<div class="col-25">';
+  /*menuWorkout =  '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a></center>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
@@ -1815,7 +1919,11 @@ function makeCalendExCustomer() {
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="saveSetExCustomer(\'fromCalendar\')">' + i18n.gettext('Save') + '</a></center>';
-  menuWorkout += '</div>';
+  menuWorkout += '</div>';*/
+  menuWorkout =  '<a href="#tab0" class="button tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
+  menuWorkout += '<a href="#tab1" class="button tab-link active">' + i18n.gettext('Calendar') + '</a>';
+  menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
+  menuWorkout += '<a href="#tab0" class="button tab-link" onclick="saveSetExCustomer(\'fromCalendar\')">' + i18n.gettext('Save') + '</a>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   // Очистим список упражнений в левой части
   $$('#ulListPastExercises').html('');
@@ -1863,8 +1971,6 @@ function makeCalendExCustomer() {
         console.log('arrWorkEx[dateEx] = ' + arrWorkEx[dateEx]);
         var workExercises = arrWorkEx[dateEx].split('@#');
         var listExCust = '';
-        //workExercises.forEach(function(exerciseToday) {
-        //workExercises.each(function(exerciseToday) {
         for (var index in workExercises) {
           var exerciseToday = workExercises[index];
           // Т.к. мы нашли id упражнения, определим его название
@@ -1989,13 +2095,13 @@ SORTER.sort = function(which, dir) {
 Вызывается со страницы #view-15 #tab2 (при клике на вкладку Schedule)
 Текущий комплекс упражнений (если он есть) должен перекочевать сюда в левую часть, чтобы можно было выбрать дни недели
 и закрепить этот комплекс упражнений за определёнными днями недели.
-Если текущего комплекса упражнений ещё нет, то на данной вкладке должны "подсветиться" те дни недели,
-по которым расписание сформировано. Если выбрать заполненный день, то должен показаться его комплекс упражнений.
+На данной вкладке должны "подсветиться" те дни недели, по которым расписание сформировано.
+Внизу текущей вкладки кнопка для просмотра уже существующих комплексов упражнений по дням недели.
 */
 function makeScheduleExCustomer() {
   // Сформируем доступные кнопки для вкладки расписания по дням недели
   var menuWorkout = '';
-  menuWorkout =  '<div class="col-25">';
+  /*menuWorkout =  '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
@@ -2006,7 +2112,11 @@ function makeScheduleExCustomer() {
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="makeScheduleCustomer()">' + i18n.gettext('Save') + '</a></center>';
-  menuWorkout += '</div>';
+  menuWorkout += '</div>';*/
+  menuWorkout =  '<a href="#tab0" class="button tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
+  menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
+  menuWorkout += '<a href="#tab2" class="button tab-link active" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
+  menuWorkout += '<a href="#tab3" class="button tab-link" onclick="makeScheduleCustomer()">' + i18n.gettext('Save') + '</a>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   // Найдём сформированный на сегодня набор упражнений, чтобы тут же его показать
   var customerId = parseInt($$('span#spanCustName').data('item'));
@@ -2065,7 +2175,7 @@ function makeScheduleExCustomer() {
             if (arrExForCheck.sort().toString() === arrWorkEx.sort().toString()) {
               // Отмечаем совпавший день
               console.log('Отмечаем совпавший день ' + arrDays[index - 1]);
-              $$('#ulListDays li[data-item="' + arrDays[index - 1] + '"] input').prop('checked', true);
+              $$('#ulListDays li input[value="' + arrDays[index - 1] + '"]').prop('checked', true);
             }
             arrExForCheck.length = 0; // Сбрасываем массив для проверки следующего дня
             arrExForCheck.push(item.exercise); // Вносим упражнение следующего дня
@@ -2076,9 +2186,77 @@ function makeScheduleExCustomer() {
         }
       });
   } else { // На сегодня нет сформированного комплекса упражнений
-    // TODO Подсветим серым цветом те дни недели, на которые есть сохранённые комплексы упражнений
 
   }
+  // Подсветим те дни недели, на которые есть сохранённые комплексы упражнений
+  server.schedule.query()
+    .filter('customer', customerId)
+    .execute()
+    .then(function(resultCountExSch) {
+      if(resultCountExSch.length) {
+        var countExEveryday = 0;
+        var countExMonday = 0;
+        var countExTuesday = 0;
+        var countExWednesday = 0;
+        var countExThursday = 0;
+        var countExFriday = 0;
+        var countExSaturday = 0;
+        var countExSunday = 0;
+        for (var indexCountExSch in resultCountExSch) {
+          if(resultCountExSch[indexCountExSch].day === 'sunday') {
+            countExSunday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'monday') {
+            countExMonday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'tuesday') {
+            countExTuesday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'wednesday') {
+            countExWednesday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'thursday') {
+            countExThursday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'friday') {
+            countExFriday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'saturday') {
+            countExSaturday++;
+          } else if (resultCountExSch[indexCountExSch].day === 'everyday') {
+            countExEveryday++;
+          }
+        }
+        // Скроем все уведомления о наличии упражнений по дням недели
+        $$('[id^="badgeCount"]').hide();
+        if(countExSunday) {
+          $$('#badgeCountSunday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExSunday), countExSunday));
+          $$('#badgeCountSunday').show();
+        }
+        if(countExMonday) {
+          $$('#badgeCountMonday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExMonday), countExMonday));
+          $$('#badgeCountMonday').show();
+        }
+        if(countExTuesday) {
+          $$('#badgeCountTuesday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExTuesday), countExTuesday));
+          $$('#badgeCountTuesday').show();
+        }
+        if(countExWednesday) {
+          $$('#badgeCountWednesday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExWednesday), countExWednesday));
+          $$('#badgeCountWednesday').show();
+        }
+        if(countExThursday) {
+          $$('#badgeCountThursday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExThursday), countExThursday));
+          $$('#badgeCountThursday').show();
+        }
+        if(countExFriday) {
+          $$('#badgeCountFriday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExFriday), countExFriday));
+          $$('#badgeCountFriday').show();
+        }
+        if(countExSaturday) {
+          $$('#badgeCountSaturday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExSaturday), countExSaturday));
+          $$('#badgeCountSaturday').show();
+        }
+        if(countExEveryday) {
+          $$('#badgeCountEveryday').html(i18n.sprintf(i18n.ngettext("There is one scheduled exercise", "There are %d scheduled exercises", countExEveryday), countExEveryday));
+          $$('#badgeCountEveryday').show();
+        }
+      }
+    });
 }
 /*
 Функция сохранения расписания по сформированному набору упражнений клиента.
@@ -2087,7 +2265,7 @@ function makeScheduleExCustomer() {
 function makeScheduleCustomer() {
   // Сформируем доступные кнопки для вкладки текущего комплекса упражнений
   var menuWorkout = '';
-  menuWorkout =  '<div class="col-25">';
+  /*menuWorkout =  '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
@@ -2098,7 +2276,11 @@ function makeScheduleCustomer() {
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
-  menuWorkout += '</div>';
+  menuWorkout += '</div>';*/
+  menuWorkout =  '<a href="#tab0" class="button tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
+  menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
+  menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
+  menuWorkout += '<a href="#tab3" class="button tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
   console.log('Сохраняем расписание');
   var customerId = parseInt($$('span#spanCustName').data('item'));
@@ -2150,7 +2332,7 @@ function makeScheduleCustomer() {
 function viewExSetCustomer() {
   // Сформируем доступные кнопки для вкладки со сформированным набором упражнений клиента на сегодня
   var menuWorkout = '';
-  menuWorkout =  '<div class="col-25">';
+  /*menuWorkout =  '<div class="col-25">';
   menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
@@ -2161,7 +2343,11 @@ function viewExSetCustomer() {
   menuWorkout += '</div>';
   menuWorkout += '<div class="col-25">';
   menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
-  menuWorkout += '</div>';
+  menuWorkout += '</div>';*/
+  menuWorkout =  '<a href="#view-10" class="button tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a>';
+  menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
+  menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
+  menuWorkout += '<a href="#tab3" class="button tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a>';
   document.getElementById("divMenuWorkout").innerHTML = menuWorkout;
 }
 /* Функция выполняется когда изменяется значение какого-либо флага дня из расписания (на странице #view-15 #tab2 - Schedule)
@@ -2273,7 +2459,6 @@ function generateHistory() {
           });
         });
     });
-
 }
 // Функция срабатывает при нажатии кнопки Note на странице работы с упражнением index-24
 $$('#aWorkNote').on('click', function() {
@@ -2316,15 +2501,15 @@ $$('#aWorkProgress').on('click', function() {
         .execute()
         .then(function(result) {
       	  var analitCount = 0;
-		  var arrSetEx = [];
-		  var arrDateEx = [];
-		  var arrRepeats = [];
-		  var arrWeight = [];
-		  var arrTime = [];
-		  var arrDistance = [];
-		  var arrSpeed = [];
-		  var arrIncline = [];
-		  var arrResistance = [];
+          var arrSetEx = [];
+          var arrDateEx = [];
+          var arrRepeats = [];
+          var arrWeight = [];
+          var arrTime = [];
+          var arrDistance = [];
+          var arrSpeed = [];
+          var arrIncline = [];
+          var arrResistance = [];
           for (var index in result) {
             var item = result[index];
             // Добрались до данных, теперь их надо собрать в массивы
@@ -2334,20 +2519,20 @@ $$('#aWorkProgress').on('click', function() {
             }
             console.log('item.option = ' + item.option);
             if (item.option === 'repeats') {
-	          arrRepeats[analitCount] = item.value;
-	        } else if (item.option === 'weight') {
-	          arrWeight[analitCount] = item.value;
-	        } else if (item.option === 'time') {
-	          arrTime[analitCount] = item.value / 60; // Время отобразим в минутах
-	        } else if (item.option === 'distance') {
-	          arrDistance[analitCount] = item.value;
-	        } else if (item.option === 'speed') {
-	          arrSpeed[analitCount] = item.value;
-	        } else if (item.option === 'incline') {
-	          arrIncline[analitCount] = item.value;
-	        } else if (item.option === 'resistance') {
-	          arrResistance[analitCount] = item.value;
-	        }
+              arrRepeats[analitCount] = item.value;
+            } else if (item.option === 'weight') {
+              arrWeight[analitCount] = item.value;
+            } else if (item.option === 'time') {
+              arrTime[analitCount] = item.value / 60; // Время отобразим в минутах
+            } else if (item.option === 'distance') {
+              arrDistance[analitCount] = item.value;
+            } else if (item.option === 'speed') {
+              arrSpeed[analitCount] = item.value;
+            } else if (item.option === 'incline') {
+              arrIncline[analitCount] = item.value;
+            } else if (item.option === 'resistance') {
+              arrResistance[analitCount] = item.value;
+            }
             i++; // Счётчик по параметрам одного аналитического разреза
             if(i === countOptions) {
               i = 0; // Начало нового аналитического разреза
@@ -2356,21 +2541,10 @@ $$('#aWorkProgress').on('click', function() {
             console.log('Номер характеристики в текущей итерации: ' + i);
           }
           // Данные собрали в массив. Теперь готовим к показу график по данным
-          //var test = [1, 2, 3];
-		  var data = {
-		    //labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-		    labels: arrDateEx,
-		    /*series: [
-		      arrRepeats,
-		      arrWeight,
-		      arrTime,
-			  arrDistance,
-			  arrSpeed,
-			  arrIncline,
-			  arrResistance
-			]*/
-			series: [
-			  {
+          var data = {
+            labels: arrDateEx,
+            series: [
+              {
                 name: i18n.gettext('Repeats'),
                 data: arrRepeats
               },
@@ -2399,35 +2573,31 @@ $$('#aWorkProgress').on('click', function() {
                 data: arrResistance
               }
             ]
-		  };
-		  console.log('Собираем данные в массивы для показа на графике.');
-		  var options = {
-		    //seriesBarDistance: 10,
-		    lineSmooth: Chartist.Interpolation.simple({
+		      };
+		      console.log('Собираем данные в массивы для показа на графике.');
+          var options = {
+            //seriesBarDistance: 10,
+            lineSmooth: Chartist.Interpolation.simple({
               divisor: 2
             }),
             fullWidth: true,
             chartPadding: {
               right: 80
             }
-		  };
-
-		  var responsiveOptions = [
-		    ['screen and (max-width: 640px)', {
-		      seriesBarDistance: 5,
-		      axisX: {
-		        labelInterpolationFnc: function (value) {
-		          return value[0];
-		        }
-		      }
-		    }]
-		  ];
-		  console.log('Показываем график.');
-		  //new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
-		  new Chartist.Line('.ct-chart', data, options, responsiveOptions);
-
+		      };
+          var responsiveOptions = [
+            ['screen and (max-width: 640px)', {
+              seriesBarDistance: 5,
+              axisX: {
+                labelInterpolationFnc: function (value) {
+                  return value[0];
+                }
+              }
+            }]
+          ];
+		      console.log('Показываем график.');
+		      new Chartist.Line('.ct-chart', data, options, responsiveOptions);
           var chart = $$('.ct-chart');
-          //$$('.ct-point').on('click', function () {
           chart.on('click', '.ct-point', function (event) {
             var clickedLink = this;
             var point = $$(this),
@@ -2441,12 +2611,124 @@ $$('#aWorkProgress').on('click', function() {
                                    '</div>'+
                                  '</div>'+
                                '</div>';
-            /*popoverHTML.css({
-              left: (event.offsetX || event.originalEvent.layerX) - popoverHTML.width() / 2 - 10,
-              top: (event.offsetY || event.originalEvent.layerY) - popoverHTML.height() - 40
-            })*/
             myApp.popover(popoverHTML, clickedLink);
           });
         });
     });  
 });
+/*
+Функция построения слайдера по запланированным расписаниям занятий
+*/
+function makeSliderSchedules() {
+  var customerId = parseInt($$('#spanCustName').data('item'));
+  var customerName = $$('#spanCustName').html();
+  $$('#spanCustNameSchedule').html(customerName).attr('data-item', customerId);
+  var countEveryday = 0;
+  var countSunday = 0;
+  var countMonday = 0;
+  var countTuesday = 0;
+  var countWednesday = 0;
+  var countThursday = 0;
+  var countFriday = 0;
+  var countSaturday = 0;
+  var scheduleEveryday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Everyday') + '</span>';
+  var scheduleSunday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Sunday') + '</span>';
+  var scheduleMonday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Monday') + '</span>';
+  var scheduleTuesday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Tuesday') + '</span>';
+  var scheduleWednesday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Wednesday') + '</span>';
+  var scheduleThursday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Thursday') + '</span>';
+  var scheduleFriday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Friday') + '</span>';
+  var scheduleSaturday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Saturday') + '</span>';
+  server.schedule.query()
+    .filter('customer', customerId)
+    .execute()
+    .then(function(resSchedule) {
+      console.log('Нашли данные по расписанию: ' + JSON.stringify(resSchedule));
+      for(var indexSchedule in resSchedule) {
+        console.log('Обрабатываем очередную строку расписания: ' + JSON.stringify(resSchedule[indexSchedule]));
+        console.log('scheduleSunday = ' + scheduleSunday);
+        var strExercise = '<span class="exerciseNameSchedule" data-item="' + resSchedule[indexSchedule].id + '"></span>';
+        if (resSchedule[indexSchedule].day === 'everyday') {
+          countEveryday++;
+          scheduleEveryday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'sunday') {
+          countSunday++;
+            console.log('Очередная строка воскресенья: ' + strExercise);
+            scheduleSunday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'monday') {
+          countMonday++;
+            scheduleMonday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'tuesday') {
+          countTuesday++;
+            scheduleTuesday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'wednesday') {
+          countWednesday++;
+            scheduleWednesday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'thursday') {
+          countThursday++;
+            scheduleThursday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'friday') {
+          countFriday++;
+            scheduleFriday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'saturday') {
+          countSaturday++;
+            scheduleSaturday += strExercise;
+        }
+      }
+      if (countEveryday == 0) {
+        scheduleEveryday = '';
+      } else {
+        scheduleEveryday += '</div>';
+      }
+      if (countSunday == 0) {
+        scheduleSunday = '';
+      } else {
+        scheduleSunday += '</div>';
+        console.log('scheduleSunday = ' + scheduleSunday);
+      }
+      if (countMonday == 0) {
+        scheduleMonday = '';
+      } else {
+        scheduleMonday += '</div>';
+      }
+      if (countTuesday == 0) {
+        scheduleTuesday = '';
+      } else {
+        scheduleTuesday += '</div>';
+      }
+      if (countWednesday == 0) {
+        scheduleWednesday = '';
+      } else {
+        scheduleWednesday += '</div>';
+      }
+      if (countThursday == 0) {
+        scheduleThursday = '';
+      } else {
+        scheduleThursday += '</div>';
+      }
+      if (countFriday == 0) {
+        scheduleFriday = '';
+      } else {
+        scheduleFriday += '</div>';
+      }
+      if (countSaturday == 0) {
+        scheduleSaturday = '';
+      } else {
+        scheduleSaturday += '</div>';
+      }
+      document.getElementById("swiperSchedule").innerHTML = scheduleEveryday + scheduleSunday + scheduleMonday + scheduleTuesday + scheduleWednesday + scheduleThursday + scheduleFriday + scheduleSaturday;
+      var mySwiper = myApp.swiper('.swiper-container-schedules', {
+        pagination: '.swiper-pagination',
+        paginationHide: false,
+        paginationClickable: true,
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev'
+      });
+      $$('.exerciseNameSchedule').each(function(item) {
+        server.exercise.get(parseInt($$(this).data('item'))).then(function(exerciseRow) {
+          console.log('Обрабатываем строку упражнения: ' + JSON.stringify(exerciseRow));
+          $$('.exerciseNameSchedule[data-item="' + exerciseRow.id + '"]').html(exerciseRow.name);
+        });
+      });
+    });
+}

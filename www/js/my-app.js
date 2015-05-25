@@ -5,10 +5,11 @@ var myApp = new Framework7({
   init: false,
   dynamicNavbar: true
 });
+var path = window.location.href.replace('index.html', '')
 // Export selectors engine
 var $$ = Framework7.$;
 var t = 0; // Переменная для секундомера
-var fLang = '/i18n/en_US.json'; // Язык по-умолчанию английский
+var fLang = 'i18n/en_US.json'; // Язык по-умолчанию английский
 // Инициализируем пустой объект i18n, чтобы зарегистрировать хелперы
 var i18n = new Jed({
   locale_data : {
@@ -69,7 +70,7 @@ var view13 = myApp.addView('#view-13'); // Удаление клиентов и�
 
 var bdSchema = '';
 
-$$.getJSON('default/bd-schema.json', function(data) {
+$$.getJSON(path + 'default/bd-schema.json', function(data) {
   bdSchema = data;
   //console.log("Схема БД: " + JSON.stringify(bdSchema));
   db.open(bdSchema).then(function(serverData) {
@@ -94,10 +95,10 @@ $$.getJSON('default/bd-schema.json', function(data) {
           	$$('body').addClass('layout-' + results[0].layoutTheme);
             if (results[0].language === 'russian') {
               console.log('Готовимся грузить русский языковой файл');
-              fLang = '/i18n/ru_RU.json';
+              fLang = 'i18n/ru_RU.json';
             } else if (results[0].language === 'english') {
               console.log('Готовимся грузить английский языковой файл');
-              fLang = '/i18n/en_US.json';
+              fLang = 'i18n/en_US.json';
             }
             console.log('Переходим в функцию перевода строк');
             translate(fLang);
@@ -118,7 +119,7 @@ $$.getJSON('default/bd-schema.json', function(data) {
           	  $$('body').addClass('theme-orange');
           	  $$('body').addClass('layout-dark');
               console.log('Готовимся грузить английский языковой файл');
-              fLang = '/i18n/en_US.json';
+              fLang = 'i18n/en_US.json';
               console.log('Переходим в функцию перевода строк');
               translate(fLang);
             });
@@ -162,7 +163,7 @@ $$.getJSON('default/bd-schema.json', function(data) {
 Функция перевода строк приложения на другой язык. В функцию передаётся файл с переводом
 */
 function translate(fLang) {
-  $$.getJSON(fLang, function(response) {
+  $$.getJSON(path + fLang, function(response) {
     console.log('Загрузили новый языковой файл! fLang = ' + fLang);
     i18n = new Jed(response);
     console.log('i18n = ' + JSON.stringify(i18n));
@@ -330,7 +331,7 @@ $$('.confirm-fill-demo').on('click', function () {
     // Заполняем таблицы данными из json файлов
     console.log('Начинаем обрабатывать упражнения');
     var dataExercisesJSON = '';
-    $$.getJSON('default/exercises.json', function(data) {
+    $$.getJSON(path + 'default/exercises.json', function(data) {
       dataExercisesJSON = data;
       // Запускаем цикл по группам упражнений (exerciseType)
       for (var j in data.exerciseType) {
@@ -399,7 +400,7 @@ $$('.confirm-fill-demo').on('click', function () {
         });
     });  
     
-    $$.getJSON('default/customers.json', function(data) {
+    $$.getJSON(path + 'default/customers.json', function(data) {
       for (var i in data.customers) {
         // Добавляем клиентов в базу
         server.customers.add(data.customers[i]);

@@ -1,0 +1,391 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+   "": {
+      "project-id-version": "",
+      "pot-creation-date": "2015-05-25 15:38+0300",
+      "po-revision-date": "2015-05-25 15:52+0300",
+      "last-translator": "Oleg Ekhlakov <subspam@mail.ru>",
+      "language-team": "",
+      "language": "ru_RU",
+      "mime-version": "1.0",
+      "content-type": "text/plain; charset=UTF-8",
+      "content-transfer-encoding": "8bit",
+      "x-generator": "Poedit 1.7.6",
+      "x-poedit-basepath": ".",
+      "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+      "x-poedit-sourcecharset": "UTF-8",
+      "x-poedit-searchpath-0": "/home/oleg/workspace/fitman/www",
+      "x-poedit-searchpathexcluded-0": "/home/oleg/workspace/fitman/www/js/my-app.min.js"
+   },
+   "Personal trainer": [
+      "Личный тренер"
+   ],
+   "Left panel content goes here": [
+      ""
+   ],
+   "Right panel content goes here": [
+      ""
+   ],
+   "User agreement": [
+      "Пользовательское соглашение"
+   ],
+   "&laquo;Personal Trainer program&raquo; is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way.": [
+      ""
+   ],
+   "All exercises in &laquo;Personal Trainer program&raquo; can be used as provided, deleted or re-created to be added to your own favorite exercises library.": [
+      "Все упражнения в приложении &laquo;Личный тренер&raquo; могут быть использованы как есть, удалены или заменены вашими собственными."
+   ],
+   "In &laquo;Personal Trainer program&raquo; you can create a group of exercises, combinations or use individual exercise every time you follow the program.": [
+      ""
+   ],
+   "&laquo;Personal Trainer program&raquo; allows you to:": [
+      ""
+   ],
+   "control the training process": [
+      "контролировать ход тренировки"
+   ],
+   "use different techniques to develop strength": [
+      ""
+   ],
+   "add your own exercise and combine them in groups": [
+      "добавляйте ваши собственные упражнения и сортируйте их по группам"
+   ],
+   "create workouts for a few weeks in advance, so you don&#39;t have to think about your workout every time you meet your client": [
+      ""
+   ],
+   "rationally use exercises": [
+      ""
+   ],
+   "see the progress visually, by using graphics and send the result by email to your client after they finish their program or reached their goals.": [
+      ""
+   ],
+   "Settings": [
+      "Настройки"
+   ],
+   "Units": [
+      "Единицы измерения"
+   ],
+   "Imperial": [
+      ""
+   ],
+   "Metric": [
+      "Метрическая"
+   ],
+   "Language": [
+      "Язык"
+   ],
+   "English": [
+      ""
+   ],
+   "Russian": [
+      "Русский"
+   ],
+   "Exercises": [
+      "Упражнения"
+   ],
+   "Change": [
+      "Изменить"
+   ],
+   "Customers": [
+      "Клиенты"
+   ],
+   "Remove": [
+      "Удалить"
+   ],
+   "Color themes": [
+      "Цветовая тема"
+   ],
+   "Gray": [
+      "Серый"
+   ],
+   "White": [
+      "Белый"
+   ],
+   "Black": [
+      "Чёрный"
+   ],
+   "Lightblue": [
+      "Голубой"
+   ],
+   "Yellow": [
+      "Жёлтый"
+   ],
+   "Orange": [
+      "Оранжевый"
+   ],
+   "Pink": [
+      "Розовый"
+   ],
+   "Blue": [
+      "Синий"
+   ],
+   "Green": [
+      "Зелёный"
+   ],
+   "Red": [
+      "Красный"
+   ],
+   "Layout themes": [
+      "Стиль шаблона"
+   ],
+   "Dark": [
+      "Тёмный"
+   ],
+   "Fill demo data": [
+      "Заполнить демонстрационными данными"
+   ],
+   "Clean database": [
+      "Очистить базу данных"
+   ],
+   "Drop all": [
+      "Удалить всё"
+   ],
+   "Create database": [
+      "Создать базу данных"
+   ],
+   "Create DB": [
+      "Создать базу данных"
+   ],
+   "Remove database": [
+      "Удалить базу данных"
+   ],
+   "Remove DB": [
+      "Удалить базу данных"
+   ],
+   "Add": [
+      "Добавить"
+   ],
+   "Cancel": [
+      "Отмена"
+   ],
+   "Nothing found": [
+      "Ничего не найдено"
+   ],
+   "www": [
+      ""
+   ],
+   "Registration on the website will allow you to participate in the improvement of the program, update your program, exchange exercise and ideas with other users on the forum.": [
+      ""
+   ],
+   "Sign in": [
+      "Зарегистрировать"
+   ],
+   "Type of exercises": [
+      "Группа упражнений"
+   ],
+   "Add type of exercises": [
+      "Добавить группу упражнений"
+   ],
+   "Save": [
+      "Сохранить"
+   ],
+   "List of exercises": [
+      "Список упражнений"
+   ],
+   "Add exercise": [
+      "Добавить упражнение"
+   ],
+   "Repeats": [
+      "Повторы"
+   ],
+   "Weight": [
+      "Вес"
+   ],
+   "Time": [
+      "Время"
+   ],
+   "Distance": [
+      "Расстояние"
+   ],
+   "Speed": [
+      "Скорость"
+   ],
+   "Incline": [
+      ""
+   ],
+   "Resistance": [
+      ""
+   ],
+   "Properties of exercise": [
+      "Параметры упражнения"
+   ],
+   "Photo": [
+      "Фотография"
+   ],
+   "Workout of the day": [
+      "Расписание занятий"
+   ],
+   "Deleting customers": [
+      "Удаление клиентов"
+   ],
+   "Delete": [
+      "Удалить"
+   ],
+   "Calendar": [
+      "Календарь"
+   ],
+   "Schedule": [
+      "Расписание"
+   ],
+   "Today still not formed a set of exercises.": [
+      "На сегодня не сформирован комплекс упражнений"
+   ],
+   "Only today": [
+      "На сегодня"
+   ],
+   "Everyday": [
+      "Ежедневно"
+   ],
+   "Sunday": [
+      "Воскресенье"
+   ],
+   "Monday": [
+      "Понедельник"
+   ],
+   "Tuesday": [
+      "Вторник"
+   ],
+   "Wednesday": [
+      "Среда"
+   ],
+   "Thursday": [
+      "Четверг"
+   ],
+   "Friday": [
+      "Пятница"
+   ],
+   "Saturday": [
+      "Суббота"
+   ],
+   "View all schedules": [
+      "Посмотреть все расписания"
+   ],
+   "Back": [
+      "Назад"
+   ],
+   "Scheduled exercises": [
+      "Запланированные упражнения"
+   ],
+   "Note": [
+      "Запись"
+   ],
+   "Progress": [
+      "Прогресс"
+   ],
+   "History": [
+      "История"
+   ],
+   "Help": [
+      "Помощь"
+   ],
+   "here is the place to advertise": [
+      ""
+   ],
+   "Saved": [
+      "Сохранено"
+   ],
+   "The changes will take effect after you restart!": [
+      "Изменения вступят в силу после перезапуска приложения"
+   ],
+   "Are you sure? It will erase all of your data!": [
+      "Вы уверены? Это удалит все ваши данные!"
+   ],
+   "Database is clean": [
+      "База данных очищена"
+   ],
+   "Are you sure?": [
+      "Вы уверены?"
+   ],
+   "Add customer": [
+      "Добавить клиента"
+   ],
+   "Error while adding": [
+      "Ошибка при добавлении"
+   ],
+   "Nothing to add!": [
+      "Нечего добавлять!"
+   ],
+   "Nothing to save": [
+      "Нечего сохранять"
+   ],
+   "New data already exist in database.": [
+      "Новые данные уже есть в базе данных"
+   ],
+   "Updated": [
+      "Обновлено"
+   ],
+   "Edit customer": [
+      "Редактировать клиента"
+   ],
+   "Successful rename": [
+      "Успешно переименовано"
+   ],
+   "Group of exercises was renamed.": [
+      "Группа упражнений переименована."
+   ],
+   "Exercise was renamed.": [
+      "Упражнение переименовано."
+   ],
+   "Can&#39;t be added": [
+      "Невозможно добавить"
+   ],
+   "The name already exist": [
+      "Такое название уже существует"
+   ],
+   "Error while deleting": [
+      "Ошибка при удалении"
+   ],
+   "Option ": [
+      "Параметр"
+   ],
+   " already used in database. It can&#39;t be deleted!": [
+      " уже используется в базе данных. Невозможно удалить!"
+   ],
+   "Parameter": [
+      "Параметр"
+   ],
+   "was removed.": [
+      "удалено."
+   ],
+   "was added.": [
+      "добавлено."
+   ],
+   "New set of options are equal to existent.": [
+      "Новый набор параметров совпадает с уже заведённым"
+   ],
+   "Can&#39;t be deleted": [
+      "Невозможно удалить"
+   ],
+   "This item can not be delete while there are exercises in it.": [
+      "Позицию нельзя удалить, пока в ней есть упражнения"
+   ],
+   "Clear all": [
+      "Очистить всё"
+   ],
+   "Stop": [
+      "Стоп"
+   ],
+   "time": [
+      "время"
+   ],
+   "Start timer": [
+      "Запустить таймер"
+   ],
+   "Current set already exist in DB": [
+      "Такой набор уже есть в базе данных"
+   ],
+   "What do you want to do with current values?": [
+      "Что вы хотите сделать с текущими значениями?"
+   ],
+   "Rewrite": [
+      "Перезаписать"
+   ],
+   "There is one scheduled exercise": [
+      "There are %d scheduled exercises",
+      "Есть %d запланированное упражнение",
+      "Есть %d запланированных упражнения",
+      "Есть %d запланированных упражнений"
+   ]
+}}}
