@@ -78,6 +78,9 @@ div.page-content>div.my-toolbar-inner {
   margin: 15px;
   font-size:21px;
 }
+.swiper-slide span.my-title {
+  color: black;
+}
 .swiper-pagination-bullet {
   width: 10px;
   height: 10px;

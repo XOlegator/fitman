@@ -1082,12 +1082,12 @@
       <!-- Страница просмотра запланированных упражнений по дням недели -->
       <div data-page="index-15a" id="view-15a" class="view tab">
         <div class="navbar">
-          <div class="navbar-inner" id="divAddExercise">
+          <div class="navbar-inner">
             <div class="left">
               <a href="#view-15" class="tab-link app-text">{{_ "Back"}}</a>
             </div>
             <div class="center app-text">{{_ "Scheduled exercises"}}</div>
-            <div class="right"></div>
+            <div class="right"><span id="spanCustNameSchedule" data-item=""></span></div>
           </div>
         </div>
         <div class="pages navbar-fixed">
@@ -1100,7 +1100,7 @@
                 <div class="slider-custom">
                   <div class="swiper-container-schedules">
                     <div class="swiper-pagination"></div>
-                    <div class="swiper-wrapper">
+                    <div class="swiper-wrapper" id="swiperSchedule">
                       <!-- <div class="swiper-slide"><span>Slide 1</span></div>
                       <div class="swiper-slide"><span>Slide 2</span></div>
                       <div class="swiper-slide"><span>Slide 3</span></div> -->

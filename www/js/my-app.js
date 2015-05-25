@@ -2619,12 +2619,115 @@ $$('#aWorkProgress').on('click', function() {
 Функция построения слайдера по запланированным расписаниям занятий
 */
 function makeSliderSchedules() {
-
-  var mySwiper = myApp.swiper('.swiper-container-schedules', {
-    pagination: '.swiper-pagination',
-    paginationHide: false,
-    paginationClickable: true,
-    nextButton: '.swiper-button-next',
-    prevButton: '.swiper-button-prev'
-  });
+  var customerId = parseInt($$('#spanCustName').data('item'));
+  var customerName = $$('#spanCustName').html();
+  $$('#spanCustNameSchedule').html(customerName).attr('data-item', customerId);
+  var countEveryday = 0;
+  var countSunday = 0;
+  var countMonday = 0;
+  var countTuesday = 0;
+  var countWednesday = 0;
+  var countThursday = 0;
+  var countFriday = 0;
+  var countSaturday = 0;
+  var scheduleEveryday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Everyday') + '</span>';
+  var scheduleSunday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Sunday') + '</span>';
+  var scheduleMonday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Monday') + '</span>';
+  var scheduleTuesday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Tuesday') + '</span>';
+  var scheduleWednesday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Wednesday') + '</span>';
+  var scheduleThursday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Thursday') + '</span>';
+  var scheduleFriday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Friday') + '</span>';
+  var scheduleSaturday = '<div class="swiper-slide"><span class="my-title">' + i18n.gettext('Saturday') + '</span>';
+  server.schedule.query()
+    .filter('customer', customerId)
+    .execute()
+    .then(function(resSchedule) {
+      console.log('Нашли данные по расписанию: ' + JSON.stringify(resSchedule));
+      for(var indexSchedule in resSchedule) {
+        console.log('Обрабатываем очередную строку расписания: ' + JSON.stringify(resSchedule[indexSchedule]));
+        console.log('scheduleSunday = ' + scheduleSunday);
+        var strExercise = '<span class="exerciseNameSchedule" data-item="' + resSchedule[indexSchedule].id + '"></span>';
+        if (resSchedule[indexSchedule].day === 'everyday') {
+          countEveryday++;
+          scheduleEveryday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'sunday') {
+          countSunday++;
+            console.log('Очередная строка воскресенья: ' + strExercise);
+            scheduleSunday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'monday') {
+          countMonday++;
+            scheduleMonday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'tuesday') {
+          countTuesday++;
+            scheduleTuesday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'wednesday') {
+          countWednesday++;
+            scheduleWednesday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'thursday') {
+          countThursday++;
+            scheduleThursday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'friday') {
+          countFriday++;
+            scheduleFriday += strExercise;
+        } else if (resSchedule[indexSchedule].day === 'saturday') {
+          countSaturday++;
+            scheduleSaturday += strExercise;
+        }
+      }
+      if (countEveryday == 0) {
+        scheduleEveryday = '';
+      } else {
+        scheduleEveryday += '</div>';
+      }
+      if (countSunday == 0) {
+        scheduleSunday = '';
+      } else {
+        scheduleSunday += '</div>';
+        console.log('scheduleSunday = ' + scheduleSunday);
+      }
+      if (countMonday == 0) {
+        scheduleMonday = '';
+      } else {
+        scheduleMonday += '</div>';
+      }
+      if (countTuesday == 0) {
+        scheduleTuesday = '';
+      } else {
+        scheduleTuesday += '</div>';
+      }
+      if (countWednesday == 0) {
+        scheduleWednesday = '';
+      } else {
+        scheduleWednesday += '</div>';
+      }
+      if (countThursday == 0) {
+        scheduleThursday = '';
+      } else {
+        scheduleThursday += '</div>';
+      }
+      if (countFriday == 0) {
+        scheduleFriday = '';
+      } else {
+        scheduleFriday += '</div>';
+      }
+      if (countSaturday == 0) {
+        scheduleSaturday = '';
+      } else {
+        scheduleSaturday += '</div>';
+      }
+      document.getElementById("swiperSchedule").innerHTML = scheduleEveryday + scheduleSunday + scheduleMonday + scheduleTuesday + scheduleWednesday + scheduleThursday + scheduleFriday + scheduleSaturday;
+      var mySwiper = myApp.swiper('.swiper-container-schedules', {
+        pagination: '.swiper-pagination',
+        paginationHide: false,
+        paginationClickable: true,
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev'
+      });
+      $$('.exerciseNameSchedule').each(function(item) {
+        server.exercise.get(parseInt($$(this).data('item'))).then(function(exerciseRow) {
+          console.log('Обрабатываем строку упражнения: ' + JSON.stringify(exerciseRow));
+          $$('.exerciseNameSchedule[data-item="' + exerciseRow.id + '"]').html(exerciseRow.name);
+        });
+      });
+    });
 }
