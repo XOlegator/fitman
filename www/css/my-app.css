@@ -123,3 +123,6 @@ div.page-content>div.my-toolbar-inner {
 .selected-day {
   background-color: #FF9500 !important;
 }
+#photoCustomer {
+  width:100%;
+}

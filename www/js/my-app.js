@@ -476,6 +476,12 @@ function emptyDataCustomer() {
   $$('#inputNewCustomer').val('');
   $$('#inputNewCustomer').attr('data-item', '');
   $$('#newCustomerComments').val('');
+  console.log('Скрываем показ фотки');
+  $$('#photoCustomer').attr('src', '');
+  $$('#aCustomerPhoto').attr('data-item', 'add');
+  $$('#aCustomerPhoto').html(i18n.gettext('Add photo'));
+  $$('#photoCustomer').hide(); // Фотографии пока нет, так что скроем её
+  $$('#pMesNoPhoto').show(); // Показываем текст-заглушку об отсутствии фотографии
 }
 /*
 Функция очистки данных на странице данных упражнения. Вызывается со страницы index-7 (списоко упражнений) по кнопке Add
@@ -531,7 +537,8 @@ function addCustomer() {
   temp = $$('input#inputDateStartClasses').val();
   var dateStartClasses = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   var timeVal = new Date().toISOString();
-  var photo = 'somepic' + timeVal + '.jpg'; // TODO фото надо куда-то сохранять, а тут указывать путь к файлу
+  // var photo = 'somepic' + timeVal + '.jpg'; // TODO фото надо куда-то сохранять, а тут указывать путь к файлу
+  var photo = ''; // Фотография указывается отдельно, так что тут оставлям пусто
   temp = '';
   temp = $$('textarea#newCustomerComments').val();
   var newCustomerComments = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
@@ -562,6 +569,7 @@ function addCustomer() {
 }
 /*
 Функция сохранения изменений в данных клиента. Вызывается по кнопке Save из формы редактирования данных клиента
+Пересохраняется имя клиента и комментарий. Фотография не трогается.
 */
 function editCustomer() {
   var customerId = parseInt($$('#inputNewCustomer').data('item'));
@@ -676,9 +684,20 @@ var myPhotoBrowserDark = myApp.photoBrowser({
     'caption': ''
   }]
 });
-$$('#aCustomerPhoto').on('click', function () {
-  myPhotoBrowserDark.open();
-});
+/*
+Функция работы с фотографией клиента. Либо формирует показ уже имеющейся фотографии, либо добавляет новую фотографию
+*/
+function editPhoto() {
+  console.log('Зашли в обработку фотки. Действие = ' + $$('#aCustomerPhoto').data('item'));
+  // Получаем необходимое действие
+  if ($$('#aCustomerPhoto').data('item') === 'change') {
+    // Нужно изменить фотографию
+    console.log('Надо искать на устройстве другую фотку и заменить старую');
+  } else if ($$('#aCustomerPhoto').data('item') === 'add') {
+    // Нужно добавить фотографию
+    console.log('Надо искать на устройстве новую фотку');
+  }
+}
 /*
 Функция заполнения данными страницы клиента (#index-3). В функцию передаётся id клиента. Вызывается из списка клиентов при выборе клиента
 */
@@ -698,12 +717,25 @@ function fillCustomerData(customerId) {
     $$('input#inputNewCustomer').val(customer.name);
     $$('#inputNewCustomer').attr('data-item', customerId);
     $$('textarea#newCustomerComments').val(customer.comments);
-    myPhotoBrowserDark = myApp.photoBrowser({
-      photos: [{
-        'url': './photo/' + customer.photo,
-        'caption': customer.name
-      }]
-    });
+    if (customer.photo.length) {
+      $$('#photoCustomer').attr('src', 'photo/' + customer.photo);
+      $$('#photoCustomer').show();
+      $$('#pMesNoPhoto').hide();
+      $$('#aCustomerPhoto').html(i18n.gettext('Change photo'));
+      $$('#aCustomerPhoto').attr('data-item', 'change'); // Помечаем, что ссылка будет указывать на редиктирование фотографии
+      // Сформируем показ фотографии на весь экран. Вызывается кликом по фотографии
+      myPhotoBrowserDark = myApp.photoBrowser({
+        photos: [{
+          'url': './photo/' + customer.photo,
+          'caption': customer.name
+        }]
+      });
+    } else { // Если в базе не нашлось фотографии
+      $$('#photoCustomer').hide();
+      $$('#pMesNoPhoto').show();
+      $$('#aCustomerPhoto').html(i18n.gettext('Add photo'));
+      $$('#aCustomerPhoto').attr('data-item', 'add'); // Помечаем, что ссылка будет указывать на добавление фотографии
+    }
   });
 }
 /*
