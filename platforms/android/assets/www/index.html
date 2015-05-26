@@ -698,60 +698,70 @@
           <div data-page="index-10" class="page">
             <div class="page-content">
               <div class="content-block">
-                <div class="list-block">
-                  <ul>
-                    <!-- Date -->
-                    <li>
-                      <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-calendar"></i></div>
-                        <div class="item-inner">
-                          <div class="item-input">
-                            <input type="date" placeholder="The date of the start of classes" value="2014-07-28" id="inputDateStartClasses">
+                <div class="row">
+                  <div class="col-50">
+                    <img id="photoCustomer" src="" style="display: none;" onclick="myPhotoBrowserDark.open()">
+                    <p id="pMesNoPhoto" style="display: block;">{{_ "There is no photo yet"}}</p>
+                    <div id="photos"></div>
+                    <img id="largeImage">
+                  </div>
+                  <div class="col-50">
+                    <div class="list-block">
+                      <ul>
+                        <!-- Date -->
+                        <li>
+                          <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-calendar"></i></div>
+                            <div class="item-inner">
+                              <div class="item-input">
+                                <input type="date" placeholder="The date of the start of classes" value="2014-07-28" id="inputDateStartClasses">
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </li>
-                    <!-- Text inputs -->
-                    <li>
-                      <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-name"></i></div>
-                        <div class="item-inner">
-                          <div class="item-input">
-                            <input type="text" placeholder="Name" id="inputNewCustomer" data-item="" oninput="showEditLinkCustomer()">
+                        </li>
+                        <!-- Text inputs -->
+                        <li>
+                          <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-name"></i></div>
+                            <div class="item-inner">
+                              <div class="item-input">
+                                <input type="text" placeholder="Name" id="inputNewCustomer" data-item="" oninput="showEditLinkCustomer()">
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-comment"></i></div>
-                        <div class="item-inner">
-                          <div class="item-input">
-                            <textarea placeholder="Comments" id="newCustomerComments" oninput="showEditLinkCustomer()"></textarea>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-comment"></i></div>
+                            <div class="item-inner">
+                              <div class="item-input">
+                                <textarea placeholder="Comments" id="newCustomerComments" oninput="showEditLinkCustomer()"></textarea>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </li>
-                    <!-- Buttons -->
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-input">
-                            <a href="#" class="tab-link button button-round app-text" id="aCustomerPhoto">{{_ "Photo"}}</a>
-                            <div class="hidden"></div>
+                        </li>
+                        <!-- Buttons -->
+                        <li>
+                          <div class="item-content">
+                            <div class="item-inner">
+                              <div class="item-input">
+                                <a href="#" class="tab-link button button-round app-text" id="aCustomerPhoto" data-item="add" onclick="editPhoto()" style="display: none;">{{_ "Add photo"}}</a>
+                                <div class="hidden"></div>
+                              </div>
+                              <div class="item-input">
+                                <a href="#view-15" class="tab-link button button-round app-text" onclick="upgradeViewWorkout()">{{_ "Workout of the day"}}</a>
+                                <div class="hidden"></div>
+                              </div>
+                            </div>
                           </div>
-                          <div class="item-input">
-                            <a href="#view-15" class="tab-link button button-round app-text" onclick="upgradeViewWorkout()">{{_ "Workout of the day"}}</a>
-                            <div class="hidden"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
+                        </li>
+                      </ul>
+                    </div> <!-- End of .list-block -->
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
+              </div> <!-- End of .content-block -->
+            </div> <!-- End of .page-content -->
+          </div> <!-- End of .page -->
         </div>
       </div>
       <!-- Страница удаления клиентов из базы -->
@@ -1238,6 +1248,7 @@
     </div> -->
     <script src="js/db.min.js"></script>
     <script src="js/framework7.min.js"></script>
+    <script src="cordova.js"></script>
     <script src="js/my-app.js"></script>
     <script src="assets/components/chartist/dist/chartist.min.js"></script>
   </body>

@@ -1,0 +1,313 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+   "": {
+      "domain": "messages",
+      "lang": "ru_RU",
+      "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+   },
+   "Personal trainer": [
+      "Личный тренер"
+   ],
+   "Left panel content goes here": [
+      ""
+   ],
+   "Right panel content goes here": [
+      ""
+   ],
+   "Help": [
+      "Помощь"
+   ],
+   "Settings": [
+      "Настройки"
+   ],
+   "Customers": [
+      ""
+   ],
+   "www": [
+      ""
+   ],
+   "User agreement": [
+      "Пользовательское соглашение"
+   ],
+   "&laquo;Personal Trainer program&raquo; is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way.": [
+      ""
+   ],
+   "All exercises in &laquo;Personal Trainer program&raquo; can be used as provided, deleted or re-created to be added to your own favorite exercises library.": [
+      "Все упражнения в приложении &laquo;Личный тренер&raquo; могут быть использованы как есть, удалены или заменены вашими собственными."
+   ],
+   "In &laquo;Personal Trainer program&raquo; you can create a group of exercises, combinations or use individual exercise every time you follow the program.": [
+      ""
+   ],
+   "&laquo;Personal Trainer program&raquo; allows you to:": [
+      ""
+   ],
+   "control the training process": [
+      ""
+   ],
+   "use different techniques to develop strength": [
+      ""
+   ],
+   "add your own exercise and combine them in groups": [
+      "добавляйте ваши собственные упражнения и сортируйте их по группам"
+   ],
+   "create workouts for a few weeks in advance, so you don&#39;t have to think about your workout every time you meet your client": [
+      ""
+   ],
+   "rationally use exercises": [
+      ""
+   ],
+   "see the progress visually, by using graphics and send the result by email to your client after they finish their program or reached their goals.": [
+      ""
+   ],
+   "Units": [
+      "Единицы измерения"
+   ],
+   "Imperial": [
+      ""
+   ],
+   "Metric": [
+      "Метрическая"
+   ],
+   "Language": [
+      "Язык"
+   ],
+   "English": [
+      ""
+   ],
+   "Russian": [
+      "Русский"
+   ],
+   "Exercises": [
+      "Упражнения"
+   ],
+   "Change": [
+      ""
+   ],
+   "Remove": [
+      "Удалить"
+   ],
+   "Color themes": [
+      ""
+   ],
+   "Gray": [
+      "Серый"
+   ],
+   "White": [
+      "Белый"
+   ],
+   "Black": [
+      ""
+   ],
+   "Lightblue": [
+      "Голубой"
+   ],
+   "Yellow": [
+      "Жёлтый"
+   ],
+   "Orange": [
+      "Оранжевый"
+   ],
+   "Pink": [
+      "Розовый"
+   ],
+   "Blue": [
+      ""
+   ],
+   "Green": [
+      "Зелёный"
+   ],
+   "Red": [
+      "Красный"
+   ],
+   "Layout themes": [
+      ""
+   ],
+   "Dark": [
+      ""
+   ],
+   "Fill demo data": [
+      "Заполнить демонстрационными данными"
+   ],
+   "Clean database": [
+      ""
+   ],
+   "Drop all": [
+      ""
+   ],
+   "Remove database": [
+      "Удалить базу данных"
+   ],
+   "Remove DB": [
+      "Удалить базу данных"
+   ],
+   "Add": [
+      "Добавить"
+   ],
+   "Cancel": [
+      ""
+   ],
+   "Nothing found": [
+      "Ничего не найдено"
+   ],
+   "Registration on the website will allow you to participate in the improvement of the program, update your program, exchange exercise and ideas with other users on the forum.": [
+      ""
+   ],
+   "Sign in": [
+      "Зарегистрировать"
+   ],
+   "Save": [
+      "Сохранить"
+   ],
+   "Repeats": [
+      "Повторы"
+   ],
+   "Weight": [
+      "Вес"
+   ],
+   "Time": [
+      "Время"
+   ],
+   "Distance": [
+      ""
+   ],
+   "Speed": [
+      "Скорость"
+   ],
+   "Incline": [
+      ""
+   ],
+   "Resistance": [
+      ""
+   ],
+   "Photo": [
+      "Фотография"
+   ],
+   "Workout of the day": [
+      "Расписание занятий"
+   ],
+   "Delete": [
+      ""
+   ],
+   "Calendar": [
+      ""
+   ],
+   "Schedule": [
+      "Расписание"
+   ],
+   "Today still not formed a set of exercises.": [
+      "На сегодня не сформирован комплекс упражнений"
+   ],
+   "Only today": [
+      "На сегодня"
+   ],
+   "Everyday": [
+      "Ежедневно"
+   ],
+   "Sunday": [
+      "Воскресенье"
+   ],
+   "Monday": [
+      "Понедельник"
+   ],
+   "Tuesday": [
+      "Вторник"
+   ],
+   "Wednesday": [
+      ""
+   ],
+   "Thursday": [
+      "Четверг"
+   ],
+   "Friday": [
+      "Пятница"
+   ],
+   "Saturday": [
+      "Суббота"
+   ],
+   "Note": [
+      ""
+   ],
+   "Progress": [
+      ""
+   ],
+   "History": [
+      ""
+   ],
+   "here is the place to advertise": [
+      ""
+   ],
+   "Saved": [
+      "Сохранено"
+   ],
+   "The changes will take effect after you restart!": [
+      ""
+   ],
+   "Are you sure? It will erase all of your data!": [
+      ""
+   ],
+   "Database is clean": [
+      ""
+   ],
+   "Are you sure?": [
+      ""
+   ],
+   "Error while adding": [
+      ""
+   ],
+   "Nothing to add!": [
+      "Нечего добавлять!"
+   ],
+   "Nothing to save": [
+      "Нечего сохранять"
+   ],
+   "New data already exist in database.": [
+      ""
+   ],
+   "Updated": [
+      "Обновлено"
+   ],
+   "Successful rename": [
+      "Успешно переименовано"
+   ],
+   "Exercise was renamed.": [
+      "Упражнение переименовано."
+   ],
+   "Can&#39;t be added": [
+      ""
+   ],
+   "The name already exist": [
+      "Такое название уже существует"
+   ],
+   "Error while deleting": [
+      ""
+   ],
+   "Option ": [
+      ""
+   ],
+   " already used in database. It can&#39;t be deleted!": [
+      " уже используется в базе данных. Невозможно удалить!"
+   ],
+   "New set of options are equal to existent.": [
+      ""
+   ],
+   "Can&#39;t be deleted": [
+      ""
+   ],
+   "This item can not be delete while there are exercises in it.": [
+      ""
+   ],
+   "Clear all": [
+      ""
+   ],
+   "Current set already exist in DB": [
+      ""
+   ],
+   "What do you want to do with current values?": [
+      ""
+   ],
+   "Rewrite": [
+      "Перезаписать"
+   ]
+}}}

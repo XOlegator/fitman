@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.phonegap.fitman" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
+    <feature name="Camera">
+        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+    </feature>
     <name>Fitman</name>
     <description>
         Personal trainer
@@ -70,4 +73,7 @@
     <gap:splash gap:platform="ios" height="768" src="res/screen/ios/screen-ipad-landscape.png" width="1024" />
     <gap:splash gap:platform="winphone" src="res/screen/windows-phone/screen-portrait.jpg" />
     <access origin="*" />
+    <gap:config-file parent="/manifest" platform="android">
+        <uses-permission name="android.permission.CAMERA" />
+    </gap:config-file>
 </widget>

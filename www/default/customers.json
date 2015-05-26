@@ -3,12 +3,12 @@
     "id": 0,
     "name": "Agent Smith",
     "comments": "Test comment 1",
-    "photo": "agent-smitt.jpg"
+    "photo": "./photo/agent-smitt.jpg"
   },
   {
     "id": 1,
     "name": "James Bond",
     "comments": "Test comment 2",
-    "photo": "007.jpg"
+    "photo": "./photo/007.jpg"
   }
 ]}

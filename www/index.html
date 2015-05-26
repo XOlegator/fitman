@@ -702,6 +702,8 @@
                   <div class="col-50">
                     <img id="photoCustomer" src="" style="display: none;" onclick="myPhotoBrowserDark.open()">
                     <p id="pMesNoPhoto" style="display: block;">{{_ "There is no photo yet"}}</p>
+                    <div id="photos"></div>
+                    <img id="largeImage">
                   </div>
                   <div class="col-50">
                     <div class="list-block">
@@ -743,7 +745,7 @@
                           <div class="item-content">
                             <div class="item-inner">
                               <div class="item-input">
-                                <a href="#" class="tab-link button button-round app-text" id="aCustomerPhoto" data-item="add" onclick="editPhoto()">{{_ "Add photo"}}</a>
+                                <a href="#" class="tab-link button button-round app-text" id="aCustomerPhoto" data-item="add" onclick="editPhoto()" style="display: none;">{{_ "Add photo"}}</a>
                                 <div class="hidden"></div>
                               </div>
                               <div class="item-input">
@@ -1246,6 +1248,7 @@
     </div> -->
     <script src="js/db.min.js"></script>
     <script src="js/framework7.min.js"></script>
+    <script src="cordova.js"></script>
     <script src="js/my-app.js"></script>
     <script src="assets/components/chartist/dist/chartist.min.js"></script>
   </body>

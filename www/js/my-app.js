@@ -1,4 +1,75 @@
 //console.log('Sart at my-app');
+
+var pictureSource;   // picture source
+var destinationType; // sets the format of returned value
+
+// Wait for PhoneGap to connect with the device
+document.addEventListener("deviceready", onDeviceReady, false);
+
+// PhoneGap is ready to be used!
+function onDeviceReady() {
+  console.log('function onDeviceReady()');
+  pictureSource = navigator.camera.PictureSourceType;
+  destinationType = navigator.camera.DestinationType;
+}
+
+// Called when a photo is successfully retrieved
+function onPhotoDataSuccess(imageData) {
+  console.log('function onPhotoDataSuccess(imageData)');
+  var largeImage = document.getElementById('largeImage');
+  largeImage.style.display = 'block';
+  largeImage.src = "data:image/jpeg;base64," + imageData;
+}
+
+function onPhotoURISuccess(imageURI) {
+  console.log('function onPhotoURISuccess(imageURI)');
+  var largeImage = document.getElementById('largeImage');
+  largeImage.style.display = 'block';
+  largeImage.src = imageURI;
+  console.log('imageURI = ' + imageURI);
+}
+
+// A button will call this function
+function capturePhoto() {
+  console.log('function capturePhoto()');
+  //add new div
+
+  var newPhoto = document.createElement("div");
+  newPhoto.id = "div";
+  newPhoto.className ="photo";
+  newPhoto.innerHTML = "<img id='largeImage' src='' />";
+  document.getElementById("photos").appendChild(newPhoto);
+
+  // Take picture using device camera and retrieve image as base64-encoded string
+  navigator.camera.getPicture(onPhotoDataSuccess, onPhotoURISuccess, onFail, { limit:1, quality: 50 });
+}
+
+// A button will call this function
+/*function getPhoto() {
+  console.log('function getPhoto(source)');
+  //add new div
+
+  // Retrieve image file location from specified source
+  navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+    destinationType: destinationType.FILE_URI
+  });
+}*/
+function getPhoto(source) {
+  console.log('function getPhoto(source)');
+  //add new div
+
+  // Retrieve image file location from specified source
+  navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+    destinationType: destinationType.FILE_URI,
+    sourceType: source
+  });
+}
+
+// Called if something bad happens.
+function onFail(message) {
+  alert('Failed because: ' + message);
+}
+
 // Initialize your app
 var myApp = new Framework7({
   modalTitle: 'Personal trainer',
@@ -173,7 +244,7 @@ function translate(fLang) {
       var compiledTemplate = Template7.compile($$( this ).text());
       //console.log('compiledTemplate = ' + compiledTemplate);
       var htmlText = compiledTemplate();
-      console.log('New htmlText = ' + htmlText);
+      //console.log('New htmlText = ' + htmlText);
       $$( this ).text(htmlText);
     });
   });
@@ -480,6 +551,7 @@ function emptyDataCustomer() {
   $$('#photoCustomer').attr('src', '');
   $$('#aCustomerPhoto').attr('data-item', 'add');
   $$('#aCustomerPhoto').html(i18n.gettext('Add photo'));
+  $$('#aCustomerPhoto').hide(); // Убираем кнопку редактирования фотографии
   $$('#photoCustomer').hide(); // Фотографии пока нет, так что скроем её
   $$('#pMesNoPhoto').show(); // Показываем текст-заглушку об отсутствии фотографии
 }
@@ -538,14 +610,16 @@ function addCustomer() {
   var dateStartClasses = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   var timeVal = new Date().toISOString();
   // var photo = 'somepic' + timeVal + '.jpg'; // TODO фото надо куда-то сохранять, а тут указывать путь к файлу
-  var photo = ''; // Фотография указывается отдельно, так что тут оставлям пусто
+  var photo = 0; // Управление фотографией устроено отдельно. В эту переменную заносим флаг отсутствия фотографии
   temp = '';
   temp = $$('textarea#newCustomerComments').val();
   var newCustomerComments = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   //console.log('Добавляем клиента ' + newCustomer + ' фотография ' + photo + ' комментарий: ' + newCustomerComments);
   if(newCustomer != '') {
   	//console.log('Добавляем клиента ' + newCustomer + ' фотография ' + photo + ' комментарий: ' + newCustomerComments);
-    server.customers.add({'name': newCustomer, 'photo': photo, 'comments': newCustomerComments});
+    server.customers.add({'name': newCustomer, 'photo': photo, 'comments': newCustomerComments}).then(function(resRow){
+      $$('#inputNewCustomer').attr('data-item', resRow.id);
+    });
     // Обновляем список клиентов на соответсвующей странице
     server.customers.query('name')
       .all()            
@@ -556,6 +630,8 @@ function addCustomer() {
           title: i18n.gettext('Saved'),
           hold: messageDelay
         });
+        // Клиента в базе сохранили, теперь можно показать ссылку на добавление фотографии
+        $$('#aCustomerPhoto').show();
         // Запросом получили массив объектов customers
         updateListCustomers(results);
       });
@@ -578,6 +654,8 @@ function editCustomer() {
   temp = '';
   temp = $$('#newCustomerComments').val();
   var newCommentsCustomer = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
+  // Клиент уже есть в базе данных, значит показываем ссылку на добавление фотографии
+  $$('#aCustomerPhoto').show();
   console.log('Сейчас будем обновлять данные по клиенту с id = ' + customerId);
   server.customers.get(customerId).then(function (customer) {
     if ((newNameCustomer === customer.name) && (newCommentsCustomer === customer.comments)) {
@@ -689,14 +767,55 @@ var myPhotoBrowserDark = myApp.photoBrowser({
 */
 function editPhoto() {
   console.log('Зашли в обработку фотки. Действие = ' + $$('#aCustomerPhoto').data('item'));
+  if ($$('#inputNewCustomer').data('item') != '') { // Если редактируется существующий в базе клиент
+    var customerId = parseInt($$('#inputNewCustomer').data('item'));
+    console.log('Код клиента = ' + customerId);
+    // Для начала запустим поиск во внутренней галерее изображений.
+    // Если там фотографии нужной нет, то оттуда можно включить камеру и получить фотку
+    //getPhoto(Camera.PictureSourceType.PHOTOLIBRARY);
+    navigator.camera.getPicture(
+      function onPhotoURISuccess(imageURI) {
+        console.log('Получили путь фотки: ' + imageURI);
+        // Получили ссылку на фотографию - можно обновлять данные по клиенту
+        server.customers.get(customerId).then(function (customerRow) {
+          server.customers.update({
+            'id': customerId,
+            'name': customerRow.name,
+            'comments': customerRow.comments,
+            'photo': imageURI
+          }).then(function (newDataCustomer) {
+            console.log('Обновили данные по клиенту: ' + JSON.stringify(newDataCustomer));
+            $$('#photoCustomer').attr('src', imageURI);
+            $$('#photoCustomer').show();
+            $$('#pMesNoPhoto').hide();
+          });
+        });
+      },
+      function onFail(message) {
+        myApp.addNotification({
+          title: i18n.gettext('Error'),
+          message: message,
+          hold: messageDelay
+        });
+      },
+      {
+        limit:1,
+        quality: 50,
+        destinationType: destinationType.FILE_URI,
+        sourceType: Camera.PictureSourceType.PHOTOLIBRARY
+      }
+    );
+  } else { // Фотку добавили к ещё не сохранённому клиенту
+    // Такое недопустимо!
+  }
   // Получаем необходимое действие
-  if ($$('#aCustomerPhoto').data('item') === 'change') {
+  /*if ($$('#aCustomerPhoto').data('item') === 'change') {
     // Нужно изменить фотографию
     console.log('Надо искать на устройстве другую фотку и заменить старую');
   } else if ($$('#aCustomerPhoto').data('item') === 'add') {
     // Нужно добавить фотографию
     console.log('Надо искать на устройстве новую фотку');
-  }
+  }*/
 }
 /*
 Функция заполнения данными страницы клиента (#index-3). В функцию передаётся id клиента. Вызывается из списка клиентов при выборе клиента
@@ -712,25 +831,28 @@ function fillCustomerData(customerId) {
   menuEditCustomer += '  <a href="#" class="tab-link app-text" style="display: none;" id="linkEditCustomer" onclick="editCustomer()">' + i18n.gettext('Save') + '</a>';
   menuEditCustomer += '</div>';
   document.getElementById("divEditCustomer").innerHTML = menuEditCustomer;
+  $$('#aCustomerPhoto').show(); // Показываем кнопку редактирования фотки
   console.log('Заполняем данные по клиенту с id = ' + customerId);
   server.customers.get(parseInt(customerId)).then(function(customer) {
     $$('input#inputNewCustomer').val(customer.name);
     $$('#inputNewCustomer').attr('data-item', customerId);
     $$('textarea#newCustomerComments').val(customer.comments);
-    if (customer.photo.length) {
-      $$('#photoCustomer').attr('src', 'photo/' + customer.photo);
+    if (customer.photo) { // Если фотография есть, то покажем её
+      $$('#photoCustomer').attr('src', customer.photo);
       $$('#photoCustomer').show();
       $$('#pMesNoPhoto').hide();
       $$('#aCustomerPhoto').html(i18n.gettext('Change photo'));
       $$('#aCustomerPhoto').attr('data-item', 'change'); // Помечаем, что ссылка будет указывать на редиктирование фотографии
+      // Получим путь к фотографии
+
       // Сформируем показ фотографии на весь экран. Вызывается кликом по фотографии
       myPhotoBrowserDark = myApp.photoBrowser({
         photos: [{
-          'url': './photo/' + customer.photo,
+          'url': customer.photo,
           'caption': customer.name
         }]
       });
-    } else { // Если в базе не нашлось фотографии
+    } else { // Если в базе не нашлось фотографии, то предложим сделать её
       $$('#photoCustomer').hide();
       $$('#pMesNoPhoto').show();
       $$('#aCustomerPhoto').html(i18n.gettext('Add photo'));
