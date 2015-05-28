@@ -4,8 +4,8 @@
       "messages": {
    "": {
       "project-id-version": "",
-      "pot-creation-date": "2015-05-28 15:25+0300",
-      "po-revision-date": "2015-05-28 15:25+0300",
+      "pot-creation-date": "2015-05-28 15:37+0300",
+      "po-revision-date": "2015-05-28 15:38+0300",
       "last-translator": "Oleg Ekhlakov <subspam@mail.ru>",
       "language-team": "",
       "language": "ru_RU",
@@ -427,12 +427,18 @@
       "Км/ч"
    ],
    "Lb": [
-      "Фунт"
+      "Фунт",
+      "Фунта",
+      "Фунтов"
    ],
    "Ml": [
+      "Миль",
+      "Мили",
       "Миль"
    ],
    "Ml/h": [
+      "Миля/ч",
+      "Мили/ч",
       "Миль/ч"
    ]
 }}}

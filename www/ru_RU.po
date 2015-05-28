@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2015-05-28 15:25+0300\n"
-"PO-Revision-Date: 2015-05-28 15:25+0300\n"
+"POT-Creation-Date: 2015-05-28 15:37+0300\n"
+"PO-Revision-Date: 2015-05-28 15:38+0300\n"
 "Last-Translator: Oleg Ekhlakov <subspam@mail.ru>\n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -149,10 +149,10 @@ msgstr "Упражнения"
 
 #: /home/oleg/workspace/fitman/www/index.html:114
 #: /home/oleg/workspace/fitman/www/index.html:832
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1280
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1572
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2418
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2485
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1282
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1574
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2420
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2487
 msgid "Change"
 msgstr "Изменить"
 
@@ -267,16 +267,16 @@ msgstr "Добавить"
 #: /home/oleg/workspace/fitman/www/index.html:772
 #: /home/oleg/workspace/fitman/www/index.html:829
 #: /home/oleg/workspace/fitman/www/index.html:1159
-#: /home/oleg/workspace/fitman/www/js/my-app.js:468
-#: /home/oleg/workspace/fitman/www/js/my-app.js:745
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1277
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1569
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1686
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1928
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2058
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2251
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2415
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2482
+#: /home/oleg/workspace/fitman/www/js/my-app.js:470
+#: /home/oleg/workspace/fitman/www/js/my-app.js:747
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1279
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1571
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1688
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1930
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2060
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2253
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2417
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2484
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -317,11 +317,11 @@ msgstr "Добавить группу упражнений"
 #: /home/oleg/workspace/fitman/www/index.html:692
 #: /home/oleg/workspace/fitman/www/index.html:693
 #: /home/oleg/workspace/fitman/www/index.html:1161
-#: /home/oleg/workspace/fitman/www/js/my-app.js:472
-#: /home/oleg/workspace/fitman/www/js/my-app.js:749
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1419
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2061
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2254
+#: /home/oleg/workspace/fitman/www/js/my-app.js:474
+#: /home/oleg/workspace/fitman/www/js/my-app.js:751
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1421
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2063
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2256
 msgid "Save"
 msgstr "Сохранить"
 
@@ -335,57 +335,57 @@ msgstr "Добавить упражнение"
 
 #: /home/oleg/workspace/fitman/www/index.html:458
 #: /home/oleg/workspace/fitman/www/index.html:586
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1765
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2541
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2734
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1767
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2543
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2736
 msgid "Repeats"
 msgstr "Повторы"
 
 #: /home/oleg/workspace/fitman/www/index.html:481
 #: /home/oleg/workspace/fitman/www/index.html:609
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1797
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2543
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2738
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1799
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2545
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2740
 msgid "Weight"
 msgstr "Вес"
 
 #: /home/oleg/workspace/fitman/www/index.html:492
 #: /home/oleg/workspace/fitman/www/index.html:620
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1749
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2545
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2742
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1751
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2547
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2744
 msgid "Time"
 msgstr "Время"
 
 #: /home/oleg/workspace/fitman/www/index.html:503
 #: /home/oleg/workspace/fitman/www/index.html:631
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1809
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2547
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2746
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1811
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2549
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2748
 msgid "Distance"
 msgstr "Расстояние"
 
 #: /home/oleg/workspace/fitman/www/index.html:520
 #: /home/oleg/workspace/fitman/www/index.html:648
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1821
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2549
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2750
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1823
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2551
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2752
 msgid "Speed"
 msgstr "Скорость"
 
 #: /home/oleg/workspace/fitman/www/index.html:531
 #: /home/oleg/workspace/fitman/www/index.html:659
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1781
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2551
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2754
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1783
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2553
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2756
 msgid "Incline"
 msgstr "Наклон"
 
 #: /home/oleg/workspace/fitman/www/index.html:542
 #: /home/oleg/workspace/fitman/www/index.html:670
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1833
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2553
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2758
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1835
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2555
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2760
 msgid "Resistance"
 msgstr "Нагрузка"
 
@@ -398,7 +398,7 @@ msgid "There is no photo yet"
 msgstr "Пока нет фотографии"
 
 #: /home/oleg/workspace/fitman/www/index.html:748
-#: /home/oleg/workspace/fitman/www/js/my-app.js:773
+#: /home/oleg/workspace/fitman/www/js/my-app.js:775
 msgid "Add photo"
 msgstr "Добавить фотографию"
 
@@ -417,24 +417,24 @@ msgid "Delete"
 msgstr "Удалить"
 
 #: /home/oleg/workspace/fitman/www/index.html:830
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1278
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1417
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1570
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2059
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2252
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2416
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2483
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1280
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1419
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1572
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2061
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2254
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2418
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2485
 msgid "Calendar"
 msgstr "Календарь"
 
 #: /home/oleg/workspace/fitman/www/index.html:831
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1279
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1418
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1571
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2060
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2253
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2417
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2484
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1281
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1420
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1573
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2062
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2255
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2419
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2486
 msgid "Schedule"
 msgstr "Расписание"
 
@@ -448,42 +448,42 @@ msgid "Only today"
 msgstr "На сегодня"
 
 #: /home/oleg/workspace/fitman/www/index.html:911
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2820
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2822
 msgid "Everyday"
 msgstr "Ежедневно"
 
 #: /home/oleg/workspace/fitman/www/index.html:927
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2821
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2823
 msgid "Sunday"
 msgstr "Воскресенье"
 
 #: /home/oleg/workspace/fitman/www/index.html:943
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2822
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2824
 msgid "Monday"
 msgstr "Понедельник"
 
 #: /home/oleg/workspace/fitman/www/index.html:959
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2823
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2825
 msgid "Tuesday"
 msgstr "Вторник"
 
 #: /home/oleg/workspace/fitman/www/index.html:975
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2824
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2826
 msgid "Wednesday"
 msgstr "Среда"
 
 #: /home/oleg/workspace/fitman/www/index.html:991
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2825
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2827
 msgid "Thursday"
 msgstr "Четверг"
 
 #: /home/oleg/workspace/fitman/www/index.html:1007
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2826
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2828
 msgid "Friday"
 msgstr "Пятница"
 
 #: /home/oleg/workspace/fitman/www/index.html:1023
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2827
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2829
 msgid "Saturday"
 msgstr "Суббота"
 
@@ -523,181 +523,181 @@ msgstr "Помощь"
 msgid "here is the place to advertise"
 msgstr "тут место для рекламы"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:230
-#: /home/oleg/workspace/fitman/www/js/my-app.js:557
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1158
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1181
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1989
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2011
+#: /home/oleg/workspace/fitman/www/js/my-app.js:232
+#: /home/oleg/workspace/fitman/www/js/my-app.js:559
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1160
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1183
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1991
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2013
 msgid "Saved"
 msgstr "Сохранено"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:232
+#: /home/oleg/workspace/fitman/www/js/my-app.js:234
 msgid "The changes will take effect after you restart!"
 msgstr "Изменения вступят в силу после перезапуска приложения"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:423
+#: /home/oleg/workspace/fitman/www/js/my-app.js:425
 msgid "Are you sure? It will erase all of your data!"
 msgstr "Вы уверены? Это удалит все ваши данные!"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:437
+#: /home/oleg/workspace/fitman/www/js/my-app.js:439
 msgid "Database is clean"
 msgstr "База данных очищена"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:445
-#: /home/oleg/workspace/fitman/www/js/my-app.js:453
-#: /home/oleg/workspace/fitman/www/js/my-app.js:617
+#: /home/oleg/workspace/fitman/www/js/my-app.js:447
+#: /home/oleg/workspace/fitman/www/js/my-app.js:455
+#: /home/oleg/workspace/fitman/www/js/my-app.js:619
 msgid "Are you sure?"
 msgstr "Вы уверены?"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:470
+#: /home/oleg/workspace/fitman/www/js/my-app.js:472
 msgid "Add customer"
 msgstr "Добавить клиента"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:567
+#: /home/oleg/workspace/fitman/www/js/my-app.js:569
 msgid "Error while adding"
 msgstr "Ошибка при добавлении"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:569
+#: /home/oleg/workspace/fitman/www/js/my-app.js:571
 msgid "Nothing to add!"
 msgstr "Нечего добавлять!"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:590
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1191
+#: /home/oleg/workspace/fitman/www/js/my-app.js:592
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1193
 msgid "Nothing to save"
 msgstr "Нечего сохранять"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:592
+#: /home/oleg/workspace/fitman/www/js/my-app.js:594
 msgid "New data already exist in database."
 msgstr "Новые данные уже есть в базе данных"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:603
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1919
+#: /home/oleg/workspace/fitman/www/js/my-app.js:605
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1921
 msgid "Updated"
 msgstr "Обновлено"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:722
+#: /home/oleg/workspace/fitman/www/js/my-app.js:724
 msgid "Error"
 msgstr "Ошибка"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:747
+#: /home/oleg/workspace/fitman/www/js/my-app.js:749
 msgid "Edit customer"
 msgstr "Редактировать клиента"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:762
+#: /home/oleg/workspace/fitman/www/js/my-app.js:764
 msgid "Change photo"
 msgstr "Изменить фотографию"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:848
-#: /home/oleg/workspace/fitman/www/js/my-app.js:932
+#: /home/oleg/workspace/fitman/www/js/my-app.js:850
+#: /home/oleg/workspace/fitman/www/js/my-app.js:934
 msgid "Successful rename"
 msgstr "Успешно переименовано"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:850
+#: /home/oleg/workspace/fitman/www/js/my-app.js:852
 msgid "Group of exercises was renamed."
 msgstr "Группа упражнений переименована."
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:934
+#: /home/oleg/workspace/fitman/www/js/my-app.js:936
 msgid "Exercise was renamed."
 msgstr "Упражнение переименовано."
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:956
+#: /home/oleg/workspace/fitman/www/js/my-app.js:958
 msgid "Can't be added"
 msgstr "Невозможно добавить"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:958
+#: /home/oleg/workspace/fitman/www/js/my-app.js:960
 msgid "The name already exist"
 msgstr "Такое название уже существует"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1136
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1138
 msgid "Error while deleting"
 msgstr "Ошибка при удалении"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1138
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1140
 msgid "Option "
 msgstr "Параметр"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1138
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1140
 msgid " already used in database. It can&#39;t be deleted!"
 msgstr " уже используется в базе данных. Невозможно удалить!"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1160
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1183
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1162
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1185
 msgid "Parameter"
 msgstr "Параметр"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1160
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1162
 msgid "was removed."
 msgstr "удалено."
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1183
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1185
 msgid "was added."
 msgstr "добавлено."
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1193
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1195
 msgid "New set of options are equal to existent."
 msgstr "Новый набор параметров совпадает с уже заведённым"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1230
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1232
 msgid "Can't be deleted"
 msgstr "Невозможно удалить"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1232
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1234
 msgid "This item can not be delete while there are exercises in it."
 msgstr "Позицию нельзя удалить, пока в ней есть упражнения"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1416
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1418
 msgid "Clear all"
 msgstr "Очистить всё"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1677
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1679
 msgid "Stop"
 msgstr "Стоп"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1720
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2535
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1722
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2537
 msgid "Sets"
 msgstr "Подходы"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1752
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1754
 msgid "Minutes"
 msgstr "Минуты"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1753
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1755
 msgid "Seconds"
 msgstr "Секунды"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1754
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1756
 msgid "Start timer"
 msgstr "Запустить таймер"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1799
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1811
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1823
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1835
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1801
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1813
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1825
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1837
 msgid "Value"
 msgstr "Значение параметра:"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1869
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1871
 msgid "Current set already exist in DB"
 msgstr "Такой набор уже есть в базе данных"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1870
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1872
 msgid "What do you want to do with current values?"
 msgstr "Что вы хотите сделать с текущими значениями?"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:1872
+#: /home/oleg/workspace/fitman/www/js/my-app.js:1874
 msgid "Rewrite"
 msgstr "Перезаписать"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2362
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2366
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2370
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2374
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2378
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2382
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2386
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2390
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2364
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2368
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2372
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2376
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2380
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2384
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2388
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2392
 #, javascript-format
 msgid "There is one scheduled exercise"
 msgid_plural "There are %d scheduled exercises"
@@ -705,31 +705,40 @@ msgstr[0] "Есть %d запланированное упражнение"
 msgstr[1] "Есть %d запланированных упражнения"
 msgstr[2] "Есть %d запланированных упражнений"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2591
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2603
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2593
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2605
 msgid "Kg"
 msgstr "Кг"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2597
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2599
 msgid "Km"
 msgstr "Км"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2599
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2601
 msgid "Km/h"
 msgstr "Км/ч"
 
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2609
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2621
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2611
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2623
 msgid "Lb"
-msgstr "Фунт"
-
-#: /home/oleg/workspace/fitman/www/js/my-app.js:2615
-msgid "Ml"
-msgstr "Миль"
+msgid_plural "Lb"
+msgstr[0] "Фунт"
+msgstr[1] "Фунта"
+msgstr[2] "Фунтов"
 
 #: /home/oleg/workspace/fitman/www/js/my-app.js:2617
+msgid "Ml"
+msgid_plural "Ml"
+msgstr[0] "Миль"
+msgstr[1] "Мили"
+msgstr[2] "Миль"
+
+#: /home/oleg/workspace/fitman/www/js/my-app.js:2619
 msgid "Ml/h"
-msgstr "Миль/ч"
+msgid_plural "Ml/h"
+msgstr[0] "Миля/ч"
+msgstr[1] "Мили/ч"
+msgstr[2] "Миль/ч"
 
 #~ msgid "&laquo;Personal Trainer program&raquo; allows you to:"
 #~ msgstr "Приложение &laquo;Личный тренер&raquo; позволит вам:"

@@ -112,6 +112,7 @@ $$.getJSON(path + 'default/bd-schema.json', function(data) {
             }).then(function(item) {
               console.log('Записали настройки по-умолчанию в базу: ' + JSON.stringify(item));
           	  $$('#selectUnits').val("metric");
+          	  curUnits = "metric"; // Установим систему измерения
               $$('#selectLang').val("english");
           	  $$('#selectColorThemes').val("orange");
           	  $$('#selectLayoutThemes').val("dark");
@@ -192,15 +193,17 @@ $$('#selectUnits').on('change', function() {
       var setLayoutTheme = results[0].layoutTheme;
       console.log('Новая система измерений: ' + setUnits);
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
-	  server.settings.update({
-	    'id': parseInt(results[0].id),
-        'units': setUnits, // Ставим новое значение
-        'language': setLang,
-        'colorTheme': setColorTheme,
-        'layoutTheme': setLayoutTheme
-	  }).then(function(item) {
-        console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
-      });
+      server.settings.update({
+        'id': parseInt(results[0].id),
+          'units': setUnits, // Ставим новое значение
+          'language': setLang,
+          'colorTheme': setColorTheme,
+          'layoutTheme': setLayoutTheme
+      }).then(function(item) {
+          console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
+          curUnits = setUnits; // Установим систему измерения
+          console.log('Текущая система измерения изменилась!!! curUnits = ' + curUnits);
+        });
     });
 });
 // Функция изменения языка приложения в настройках
@@ -2512,9 +2515,10 @@ $$('#ulListDays li').click(function() {
   }
 });
 /*
-Функция генерирует данные для страницы статистики по выбранному упражнению, клиенту и дате
+Функция генерирует данные для страницы истории по выбранному упражнению, клиенту и дате
 */
 function generateHistory() {
+  console.log('Формируем блоки данных для показа');
   // Надо добавить кнопку Save
   $$('#linkSaveWorkEx').show();
   var customerId = parseInt($$('span#spanCustName').data('item'));
@@ -2570,6 +2574,7 @@ function generateHistory() {
             countBlock = 5;
           }
           console.log('Определили количество показываемых блоков информации: ' + countBlock);
+          console.log('Текущая система измерения curUnits = ' + curUnits);
           var block = '';
           var i = 0; // Счётчик параметров. Будем отсчитывать параметры и формировать блоки информации
           for (var index in workEx) {
@@ -2606,19 +2611,19 @@ function generateHistory() {
            	  if (item.option === 'repeats') {
            	    block += '<br><span>' + item.value + '</span>';
            	  } else if (item.option === 'weight') {
-           	    block += '<br><span>' + item.value + ' ' + i18n.gettext('Lb') + '</span>';
+           	    block += '<br><span>' + item.value + ' ' + i18n.ngettext("Lb", "Lb", item.value) + '</span>';
            	  } else if (item.option === 'time') {
            	    var min = parseInt(item.value / 60);
            	    var sec = item.value - parseInt(item.value / 60) * 60;
                 block += '<br><span>' + min + ':' + sec + '</span>';
               } else if (item.option === 'distance') {
-                block += '<br><span>' + item.value + ' ' + i18n.gettext('Ml') + '</span>';
+                block += '<br><span>' + item.value + ' ' + i18n.ngettext("Ml", "Ml", item.value) + '</span>';
               } else if (item.option === 'speed') {
-                block += '<br><span>' + item.value + ' ' + i18n.gettext('Ml/h') + '</span>';
+                block += '<br><span>' + item.value + ' ' + i18n.ngettext("Ml/h", "Ml/h", item.value) + '</span>';
               } else if (item.option === 'incline') {
                 block += '<br><span>' + item.value + '</span>';
               } else if (item.option === 'resistance') {
-                block += '<br><span>' + item.value + ' ' + i18n.gettext('Lb') + '</span>';
+                block += '<br><span>' + item.value + ' ' + i18n.ngettext("Lb", "Lb", item.value) + '</span>';
               }
            	}
            	i++;
