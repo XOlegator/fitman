@@ -1645,25 +1645,27 @@ function launcherTimer() {
   modalTimer();
   t = 0;
   stopped(false); // открыли возможность выполнять тело функции секундомера
-  timer();
+  myTimer();
 }
 /*
 Функция для прерывание рекурсивного вызова секундомера
 */
-timer.stopped = false;
-function stopped(boolean) { return timer.stopped = boolean; };
+myTimer.stopped = false;
+function stopped(myBoolean) {
+  return myTimer.stopped = myBoolean;
+}
 /*
 Функция секундомера
 */
-function timer() {
-  if(timer.stopped === true) {
+function myTimer() {
+  if(myTimer.stopped === true) {
     return;
   } else {
     document.getElementById('timer-minutes').innerHTML = parseInt(t/60);
     document.getElementById('timer-seconds').innerHTML = t - parseInt(t/60) * 60;
     console.log("t = " + t);
     t++;
-    setTimeout("timer()", 1000);
+    setTimeout("myTimer()", 1000);
   }
 }
 /*
@@ -1671,7 +1673,7 @@ function timer() {
 */
 function modalTimer() {
   myApp.modal({
-    title:  'Timer',
+    title:  i18n.gettext("Timer"),
     text: '<div>' +
             '<span id="timer-minutes">0</span>:<span id="timer-seconds">0</span>' +
           '</div>',
@@ -1692,7 +1694,7 @@ function modalTimer() {
           stopped(true); // остановили секундомер
           // Ничего не делаем
         }
-      },
+      }
     ]
   })
 }
