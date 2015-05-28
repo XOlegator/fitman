@@ -95,6 +95,7 @@ div.page-content>div.my-toolbar-inner {
   border-color: #007aff;
 }
 .statistics-name {
+  height: 30px;
   margin: 15px;
   display: block;
 }

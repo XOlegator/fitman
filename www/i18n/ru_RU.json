@@ -4,8 +4,8 @@
       "messages": {
    "": {
       "project-id-version": "",
-      "pot-creation-date": "2015-05-25 15:38+0300",
-      "po-revision-date": "2015-05-25 15:52+0300",
+      "pot-creation-date": "2015-05-28 15:25+0300",
+      "po-revision-date": "2015-05-28 15:25+0300",
       "last-translator": "Oleg Ekhlakov <subspam@mail.ru>",
       "language-team": "",
       "language": "ru_RU",
@@ -23,43 +23,52 @@
       "Личный тренер"
    ],
    "Left panel content goes here": [
-      ""
+      "Левая панель для контента"
    ],
    "Right panel content goes here": [
-      ""
+      "Правая панель для контента"
    ],
    "User agreement": [
       "Пользовательское соглашение"
    ],
-   "&laquo;Personal Trainer program&raquo; is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way.": [
-      ""
+   "Personal Trainer program": [
+      "Личный тренер"
    ],
-   "All exercises in &laquo;Personal Trainer program&raquo; can be used as provided, deleted or re-created to be added to your own favorite exercises library.": [
-      "Все упражнения в приложении &laquo;Личный тренер&raquo; могут быть использованы как есть, удалены или заменены вашими собственными."
+   "is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way.": [
+      "предназначено для фитнес-профессионалов для создания индивидуальной программы обучения для каждого клиента. Это уникальный подход к тренировочному процессу, используя сочетание различных техник, чтобы развить силу  быстрым, безопасным и эффективным способом."
    ],
-   "In &laquo;Personal Trainer program&raquo; you can create a group of exercises, combinations or use individual exercise every time you follow the program.": [
-      ""
+   "All exercises in": [
+      "Все упражнения в"
    ],
-   "&laquo;Personal Trainer program&raquo; allows you to:": [
-      ""
+   "can be used as provided, deleted or re-created to be added to your own favorite exercises library.": [
+      "могут быть использованы как есть, удалены или заменены вашими собственными."
+   ],
+   "In": [
+      "В"
+   ],
+   "you can create a group of exercises, combinations or use individual exercise every time you follow the program.": [
+      "вы можете создавать группы упражнений, комбинации или отдельные упражнения для каждого занятия."
+   ],
+   "allows you to:": [
+      "позволяет вам:"
    ],
    "control the training process": [
       "контролировать ход тренировки"
    ],
    "use different techniques to develop strength": [
-      ""
+      "использовать различные техники, чтобы развить силу"
    ],
    "add your own exercise and combine them in groups": [
-      "добавляйте ваши собственные упражнения и сортируйте их по группам"
+      "добавлять ваши собственные упражнения и сортировать их по группам"
    ],
-   "create workouts for a few weeks in advance, so you don&#39;t have to think about your workout every time you meet your client": [
-      ""
+   "create workouts for a few weeks in advance, so you don't have to think about your workout every time you meet your client": [
+      "создавать планы тренировок на несколько недель вперёд, так что вам не придётся думать о тренировке каждый раз, когда вы встречаете своего клиента"
    ],
    "rationally use exercises": [
-      ""
+      "рационально использовать упражнения"
    ],
    "see the progress visually, by using graphics and send the result by email to your client after they finish their program or reached their goals.": [
-      ""
+      "увидеть наглядно прогресс с помощью графика и отправлять результат по электронной почте вашему клиенту после того как они заканчивают свою программу или достигли своих целей."
    ],
    "Settings": [
       "Настройки"
@@ -68,7 +77,7 @@
       "Единицы измерения"
    ],
    "Imperial": [
-      ""
+      "Английская"
    ],
    "Metric": [
       "Метрическая"
@@ -77,7 +86,7 @@
       "Язык"
    ],
    "English": [
-      ""
+      "English"
    ],
    "Russian": [
       "Русский"
@@ -136,6 +145,9 @@
    "Fill demo data": [
       "Заполнить демонстрационными данными"
    ],
+   "Fill demo": [
+      "Заполнить демонстрационными данными"
+   ],
    "Clean database": [
       "Очистить базу данных"
    ],
@@ -164,10 +176,10 @@
       "Ничего не найдено"
    ],
    "www": [
-      ""
+      "www"
    ],
    "Registration on the website will allow you to participate in the improvement of the program, update your program, exchange exercise and ideas with other users on the forum.": [
-      ""
+      "Регистрация на сайте позволит вам участвовать в совершенствовании программы, обновлять программу, обмениваться упражнениями и  идеями с другими пользователями на форуме."
    ],
    "Sign in": [
       "Зарегистрировать"
@@ -203,16 +215,19 @@
       "Скорость"
    ],
    "Incline": [
-      ""
+      "Наклон"
    ],
    "Resistance": [
-      ""
+      "Нагрузка"
    ],
    "Properties of exercise": [
       "Параметры упражнения"
    ],
-   "Photo": [
-      "Фотография"
+   "There is no photo yet": [
+      "Пока нет фотографии"
+   ],
+   "Add photo": [
+      "Добавить фотографию"
    ],
    "Workout of the day": [
       "Расписание занятий"
@@ -281,7 +296,7 @@
       "Помощь"
    ],
    "here is the place to advertise": [
-      ""
+      "тут место для рекламы"
    ],
    "Saved": [
       "Сохранено"
@@ -316,8 +331,14 @@
    "Updated": [
       "Обновлено"
    ],
+   "Error": [
+      "Ошибка"
+   ],
    "Edit customer": [
       "Редактировать клиента"
+   ],
+   "Change photo": [
+      "Изменить фотографию"
    ],
    "Successful rename": [
       "Успешно переименовано"
@@ -328,7 +349,7 @@
    "Exercise was renamed.": [
       "Упражнение переименовано."
    ],
-   "Can&#39;t be added": [
+   "Can't be added": [
       "Невозможно добавить"
    ],
    "The name already exist": [
@@ -355,7 +376,7 @@
    "New set of options are equal to existent.": [
       "Новый набор параметров совпадает с уже заведённым"
    ],
-   "Can&#39;t be deleted": [
+   "Can't be deleted": [
       "Невозможно удалить"
    ],
    "This item can not be delete while there are exercises in it.": [
@@ -367,11 +388,20 @@
    "Stop": [
       "Стоп"
    ],
-   "time": [
-      "время"
+   "Sets": [
+      "Подходы"
+   ],
+   "Minutes": [
+      "Минуты"
+   ],
+   "Seconds": [
+      "Секунды"
    ],
    "Start timer": [
       "Запустить таймер"
+   ],
+   "Value": [
+      "Значение параметра:"
    ],
    "Current set already exist in DB": [
       "Такой набор уже есть в базе данных"
@@ -386,5 +416,23 @@
       "Есть %d запланированное упражнение",
       "Есть %d запланированных упражнения",
       "Есть %d запланированных упражнений"
+   ],
+   "Kg": [
+      "Кг"
+   ],
+   "Km": [
+      "Км"
+   ],
+   "Km/h": [
+      "Км/ч"
+   ],
+   "Lb": [
+      "Фунт"
+   ],
+   "Ml": [
+      "Миль"
+   ],
+   "Ml/h": [
+      "Миль/ч"
    ]
 }}}

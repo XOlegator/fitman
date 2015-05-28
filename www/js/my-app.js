@@ -65,7 +65,7 @@ var view8 = myApp.addView('#view-8'); // Страница настроек уп�
 var view10 = myApp.addView('#view-10'); // Добавление клиента
 var view13 = myApp.addView('#view-13'); // Удаление клиентов из базы
 */
-
+var curUnits = 'metric'; // По-умолчанию глобальную переменную системы измерения устанавливаем Метрическую
 var bdSchema = '';
 
 $$.getJSON(path + 'default/bd-schema.json', function(data) {
@@ -89,6 +89,7 @@ $$.getJSON(path + 'default/bd-schema.json', function(data) {
           	$$('#selectLang').val(results[0].language);
           	$$('#selectColorThemes').val(results[0].colorTheme);
           	$$('#selectLayoutThemes').val(results[0].layoutTheme);
+          	curUnits = results[0].units; // Установим систему измерения
           	$$('body').addClass('theme-' + results[0].colorTheme);
           	$$('body').addClass('layout-' + results[0].layoutTheme);
             if (results[0].language === 'russian') {
@@ -952,7 +953,7 @@ function addExercise() {
       .then(function (resultExist) {
         if(resultExist.length) { // В базе есть запись с таким упражнением.
           myApp.addNotification({
-            title: i18n.gettext("Can&#39;t be added"),
+            title: i18n.gettext("Can't be added"),
             hold: messageDelay,
             message: i18n.gettext('The name already exist')
           });
@@ -1226,7 +1227,7 @@ function deleteExType(idExType) {
       if(countExercises) {
     	// В базе есть упражнения из этой группы. Удалять нельзя
     	myApp.addNotification({
-		  title: i18n.gettext("Can&#39;t be deleted"),
+		  title: i18n.gettext("Can't be deleted"),
           hold: messageDelay,
 		  message: i18n.gettext('This item can not be delete while there are exercises in it.')
 		});
@@ -1716,7 +1717,7 @@ function makeViewExWork(exerciseId) {
   propEx += '  <div class="item-content">';
   propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
   propEx += '    <div class="item-inner">';
-  propEx += '      <div class="item-title label">sets</div>';
+  propEx += '      <div class="item-title label">' + i18n.gettext("Sets") + '</div>';
   propEx += '      <div class="item-input">';
   propEx += '        <select data-item="sets">';
   for (i=1; i<11; i++) {
@@ -1740,36 +1741,103 @@ function makeViewExWork(exerciseId) {
         var rowExOpt = results[index];
       	console.log('rowExOpt.option = ' + rowExOpt.option);
       	// Параметр "Время" нужно оформить в виде двух окон ввода для минут и секунд 
-      	if (rowExOpt.option == 'time') {
+      	if (rowExOpt.option === 'time') {
       	  propEx += '<li>';
       	  propEx += '  <div class="item-content">';
       	  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
       	  propEx += '    <div class="item-inner">';
-      	  propEx += '      <div class="item-title label">' + i18n.gettext("time") + '</div>';
+      	  propEx += '      <div class="item-title label">' + i18n.gettext("Time") + '</div>';
       	  propEx += '      <div class="item-input">';
       	  propEx += '        <div class="row">';
-      	  propEx += '          <div class="col-33"><input type="number" min="0" data-item="time-minutes" placeholder="Minutes"></div>';
-      	  propEx += '          <div class="col-33"><input type="number" min="0" data-item="time-seconds" placeholder="Seconds"></div>';
+      	  propEx += '          <div class="col-33"><input type="number" min="0" data-item="time-minutes" placeholder="' + i18n.gettext("Minutes") + '"></div>';
+      	  propEx += '          <div class="col-33"><input type="number" min="0" data-item="time-seconds" placeholder="' + i18n.gettext("Seconds") + '"></div>';
       	  propEx += '          <div class="col-33"><a href="#" class="button" onclick="launcherTimer()">' + i18n.gettext("Start timer") + '</a></div>';
       	  propEx += '        </div>';
       	  propEx += '      </div>';
       	  propEx += '    </div>';
       	  propEx += '  </div>';
       	  propEx += '</li>';
-      	}
-      	else {
+      	} else if (rowExOpt.option === 'repeats') {
+      	  propEx += '<li>';
+          propEx += '  <div class="item-content">';
+          propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
+          propEx += '    <div class="item-inner">';
+          propEx += '      <div class="item-title label">' + i18n.gettext("Repeats") + '</div>';
+          propEx += '      <div class="item-input">';
+          propEx += '        <select data-item="sets">';
+          for (i = 0; i <= 9; i++) {
+            propEx += '          <option>' + i + '</option>';
+          }
+          propEx += '        </select>';
+          propEx += '      </div>';
+          propEx += '    </div>';
+          propEx += '  </div>';
+          propEx += '</li>';
+      	} else if (rowExOpt.option === 'incline') {
+          propEx += '<li>';
+          propEx += '  <div class="item-content">';
+          propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
+          propEx += '    <div class="item-inner">';
+          propEx += '      <div class="item-title label">' + i18n.gettext("Incline") + '</div>';
+          propEx += '      <div class="item-input">';
+          propEx += '        <select data-item="sets">';
+          for (i = 0; i <= 9; i++) {
+            propEx += '          <option>' + i + '</option>';
+          }
+          propEx += '        </select>';
+          propEx += '      </div>';
+          propEx += '    </div>';
+          propEx += '  </div>';
+          propEx += '</li>';
+        }	else if (rowExOpt.option === 'weight') {
       	  propEx += '<li>';
       	  propEx += '  <div class="item-content">';
       	  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
       	  propEx += '    <div class="item-inner">';
-      	  propEx += '      <div class="item-title label">' + rowExOpt.option + '</div>';
+      	  propEx += '      <div class="item-title label">' + i18n.gettext('Weight') + '</div>';
       	  propEx += '      <div class="item-input">';
-      	  propEx += '        <input type="number" min="0" data-item="' + rowExOpt.option + '" placeholder="Value of ' + rowExOpt.option + '">';
+      	  propEx += '        <input type="number" min="0" max="400" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
       	  propEx += '      </div>';
       	  propEx += '    </div>';
       	  propEx += '  </div>';
       	  propEx += '</li>';
-      	}
+      	}	else if (rowExOpt.option === 'distance') {
+          propEx += '<li>';
+          propEx += '  <div class="item-content">';
+          propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
+          propEx += '    <div class="item-inner">';
+          propEx += '      <div class="item-title label">' + i18n.gettext('Distance') + '</div>';
+          propEx += '      <div class="item-input">';
+          propEx += '        <input type="number" min="0" max="100" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
+          propEx += '      </div>';
+          propEx += '    </div>';
+          propEx += '  </div>';
+          propEx += '</li>';
+        }	else if (rowExOpt.option === 'speed') {
+          propEx += '<li>';
+          propEx += '  <div class="item-content">';
+          propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
+          propEx += '    <div class="item-inner">';
+          propEx += '      <div class="item-title label">' + i18n.gettext('Speed') + '</div>';
+          propEx += '      <div class="item-input">';
+          propEx += '        <input type="number" min="0" max="80" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
+          propEx += '      </div>';
+          propEx += '    </div>';
+          propEx += '  </div>';
+          propEx += '</li>';
+        }	else if (rowExOpt.option === 'resistance') {
+          propEx += '<li>';
+          propEx += '  <div class="item-content">';
+          propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
+          propEx += '    <div class="item-inner">';
+          propEx += '      <div class="item-title label">' + i18n.gettext('Resistance') + '</div>';
+          propEx += '      <div class="item-input">';
+          propEx += '        <input type="number" min="0" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
+          propEx += '      </div>';
+          propEx += '    </div>';
+          propEx += '  </div>';
+          propEx += '</li>';
+        }
       }
       document.getElementById("ulListCurrentWorkEx").innerHTML = propEx;
     });
@@ -2464,12 +2532,26 @@ function generateHistory() {
       // Найдём все характеристики упражнения и сформируем из них заголовки строк статистики
       // Первым параметром всегда идёт Подход
       var statName = '';
-      statName += '<span class="statistics-name">sets</span><br>';
+      statName += '<span class="statistics-name">' + i18n.gettext('Sets') + '</span><br>';
       var numberOption = 0;
       // После подхода идут все остальные характеристики
       for (var index in resOptions) {
         var rowExOpt = resOptions[index];
-        statName += '<span class="statistics-name">' + rowExOpt.option + '</span><br>';
+        if (rowExOpt.option === 'repeats') {
+          statName += '<span class="statistics-name">' + i18n.gettext('Repeats') + '</span><br>';
+        } else if (rowExOpt.option === 'weight') {
+          statName += '<span class="statistics-name">' + i18n.gettext('Weight') + '</span><br>';
+        } else if (rowExOpt.option === 'time') {
+          statName += '<span class="statistics-name">' + i18n.gettext('Time') + '</span><br>';
+        } else if (rowExOpt.option === 'distance') {
+          statName += '<span class="statistics-name">' + i18n.gettext('Distance') + '</span><br>';
+        } else if (rowExOpt.option === 'speed') {
+          statName += '<span class="statistics-name">' + i18n.gettext('Speed') + '</span><br>';
+        } else if (rowExOpt.option === 'incline') {
+          statName += '<span class="statistics-name">' + i18n.gettext('Incline') + '</span><br>';
+        } else if (rowExOpt.option === 'resistance') {
+          statName += '<span class="statistics-name">' + i18n.gettext('Resistance') + '</span><br>';
+        }
         numberOption++;
         document.getElementById("divStatName").innerHTML = statName;
       }
@@ -2501,7 +2583,44 @@ function generateHistory() {
            	  // Первым параметром всегда идёт Подход
            	  block += '<span>' + item.set + '</span>';
            	}
-           	block += '<br><span>' + item.value + '</span>';
+           	// В зависимости от систему счисления покажем нужные единицы измерения
+           	if (curUnits === 'metric') {
+           	  if (item.option === 'repeats') {
+           	    block += '<br><span>' + item.value + '</span>';
+           	  } else if (item.option === 'weight') {
+           	    block += '<br><span>' + item.value + ' ' + i18n.gettext('Kg') + '</span>';
+           	  } else if (item.option === 'time') {
+           	    var min = parseInt(item.value / 60);
+           	    var sec = item.value - parseInt(item.value / 60) * 60;
+                block += '<br><span>' + min + ':' + sec + '</span>';
+              } else if (item.option === 'distance') {
+                block += '<br><span>' + item.value + ' ' + i18n.gettext('Km') + '</span>';
+              } else if (item.option === 'speed') {
+                block += '<br><span>' + item.value + ' ' + i18n.gettext('Km/h') + '</span>';
+              } else if (item.option === 'incline') {
+                block += '<br><span>' + item.value + '</span>';
+              } else if (item.option === 'resistance') {
+                block += '<br><span>' + item.value + ' ' + i18n.gettext('Kg') + '</span>';
+              }
+           	} else if (curUnits === 'imperial') {
+           	  if (item.option === 'repeats') {
+           	    block += '<br><span>' + item.value + '</span>';
+           	  } else if (item.option === 'weight') {
+           	    block += '<br><span>' + item.value + ' ' + i18n.gettext('Lb') + '</span>';
+           	  } else if (item.option === 'time') {
+           	    var min = parseInt(item.value / 60);
+           	    var sec = item.value - parseInt(item.value / 60) * 60;
+                block += '<br><span>' + min + ':' + sec + '</span>';
+              } else if (item.option === 'distance') {
+                block += '<br><span>' + item.value + ' ' + i18n.gettext('Ml') + '</span>';
+              } else if (item.option === 'speed') {
+                block += '<br><span>' + item.value + ' ' + i18n.gettext('Ml/h') + '</span>';
+              } else if (item.option === 'incline') {
+                block += '<br><span>' + item.value + '</span>';
+              } else if (item.option === 'resistance') {
+                block += '<br><span>' + item.value + ' ' + i18n.gettext('Lb') + '</span>';
+              }
+           	}
            	i++;
            	if(i === numberOption) {
            	  console.log('Закрываем блок и обнуляем счётчик.');
