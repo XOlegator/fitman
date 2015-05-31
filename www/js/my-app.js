@@ -1754,8 +1754,8 @@ function makeViewExWork(exerciseId) {
       	  propEx += '      <div class="item-title label">' + i18n.gettext("Time") + '</div>';
       	  propEx += '      <div class="item-input">';
       	  propEx += '        <div class="row">';
-      	  propEx += '          <div class="col-33"><input type="number" min="0" data-item="time-minutes" placeholder="' + i18n.gettext("Minutes") + '"></div>';
-      	  propEx += '          <div class="col-33"><input type="number" min="0" data-item="time-seconds" placeholder="' + i18n.gettext("Seconds") + '"></div>';
+      	  propEx += '          <div class="col-33"><input class="myInput" type="number" min="0" data-item="time-minutes" placeholder="' + i18n.gettext("Minutes") + '"></div>';
+      	  propEx += '          <div class="col-33"><input class="myInput" type="number" min="0" data-item="time-seconds" placeholder="' + i18n.gettext("Seconds") + '"></div>';
       	  propEx += '          <div class="col-33"><a href="#" class="button" onclick="launcherTimer()">' + i18n.gettext("Start timer") + '</a></div>';
       	  propEx += '        </div>';
       	  propEx += '      </div>';
@@ -1769,7 +1769,7 @@ function makeViewExWork(exerciseId) {
           propEx += '    <div class="item-inner">';
           propEx += '      <div class="item-title label">' + i18n.gettext("Repeats") + '</div>';
           propEx += '      <div class="item-input">';
-          propEx += '        <select data-item="sets">';
+          propEx += '        <select class="myInput" data-item="repeats">';
           for (i = 0; i <= 9; i++) {
             propEx += '          <option>' + i + '</option>';
           }
@@ -1785,7 +1785,7 @@ function makeViewExWork(exerciseId) {
           propEx += '    <div class="item-inner">';
           propEx += '      <div class="item-title label">' + i18n.gettext("Incline") + '</div>';
           propEx += '      <div class="item-input">';
-          propEx += '        <select data-item="sets">';
+          propEx += '        <select class="myInput" data-item="incline">';
           for (i = 0; i <= 9; i++) {
             propEx += '          <option>' + i + '</option>';
           }
@@ -1801,7 +1801,7 @@ function makeViewExWork(exerciseId) {
       	  propEx += '    <div class="item-inner">';
       	  propEx += '      <div class="item-title label">' + i18n.gettext('Weight') + '</div>';
       	  propEx += '      <div class="item-input">';
-      	  propEx += '        <input type="number" min="0" max="400" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
+      	  propEx += '        <input class="myInput" type="number" min="0" max="400" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
       	  propEx += '      </div>';
       	  propEx += '    </div>';
       	  propEx += '  </div>';
@@ -1813,7 +1813,7 @@ function makeViewExWork(exerciseId) {
           propEx += '    <div class="item-inner">';
           propEx += '      <div class="item-title label">' + i18n.gettext('Distance') + '</div>';
           propEx += '      <div class="item-input">';
-          propEx += '        <input type="number" min="0" max="100" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
+          propEx += '        <input class="myInput" type="number" min="0" max="100" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
           propEx += '      </div>';
           propEx += '    </div>';
           propEx += '  </div>';
@@ -1825,7 +1825,7 @@ function makeViewExWork(exerciseId) {
           propEx += '    <div class="item-inner">';
           propEx += '      <div class="item-title label">' + i18n.gettext('Speed') + '</div>';
           propEx += '      <div class="item-input">';
-          propEx += '        <input type="number" min="0" max="80" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
+          propEx += '        <input class="myInput" type="number" min="0" max="80" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
           propEx += '      </div>';
           propEx += '    </div>';
           propEx += '  </div>';
@@ -1837,7 +1837,7 @@ function makeViewExWork(exerciseId) {
           propEx += '    <div class="item-inner">';
           propEx += '      <div class="item-title label">' + i18n.gettext('Resistance') + '</div>';
           propEx += '      <div class="item-input">';
-          propEx += '        <input type="number" min="0" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
+          propEx += '        <input class="myInput" type="number" min="0" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
           propEx += '      </div>';
           propEx += '    </div>';
           propEx += '  </div>';
@@ -1885,7 +1885,7 @@ function saveExerciseWork() {
                 // Мы нашли данные по аналитическому разрезу!
                 console.log('В базе нашлось: item.option = ' + item.option + '; item.value = ' + item.value);
                 // Найдём текущий параметр в нашей форме
-                if(item.option == 'time') {
+                if (item.option === 'time') {
                   var tempMinValue = $$('#ulListCurrentWorkEx input[data-item = "time-minutes"]').val();
                   if (tempMinValue == '') { // Не заполнили минуты
                     var intMinValue = 0;
@@ -1899,7 +1899,11 @@ function saveExerciseWork() {
                     var intSecValue = parseInt(tempSecValue);
                   }
                   newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
-                } else { // Параметр - не время, т.е. можно сразу заносить в базу новое суммарное значение
+                } else if (item.option === 'repeats') {
+                  var tempValue = parseInt($$('select[data-item="repeats"]').val()); // Узнаём номер повтора
+                } else if (item.option === 'incline') {
+                  var tempValue = parseInt($$('select[data-item="incline"]').val()); // Узнаём номер наклона
+                } else { // Параметр - не время и не выпадающий список, т.е. можно сразу заносить в базу новое суммарное значение
                   var tempValue = $$('#ulListCurrentWorkEx input[data-item = "' + item.option + '"]').val();
                   if (tempValue == '') { // Если поле ввода оставили пустым
                     var newValOpt = 0;
@@ -1943,11 +1947,12 @@ function saveExerciseWork() {
         var time = 0; // Время будем записывать в секундах
         var isTime = 0;
         var flagSavedData = 0; // Флаг, что данные (первоя строка) сохранены
-        $$('#ulListCurrentWorkEx li input').each(function(index, item) {
-          console.log('item.value ' + item.value + '; item.attributes[data-item].value ' + item.attributes["data-item"].value);
+        //$$('#ulListCurrentWorkEx li .myInput').each(function(index, item) {
+        $$('.myInput').each(function(index, item) {
+          console.log('item.value = ' + item.value + '; item.attributes[data-item].value = ' + item.attributes["data-item"].value);
           option = item.attributes['data-item'].value;
           // Значение параметра заполнено
-          if(option === 'time-minutes') {
+          if (option === 'time-minutes') {
             isTime = 1;
             // Запоминаем минуты, переведённые в секунды
             var tempMinValue = $$(this).val();
@@ -1958,7 +1963,7 @@ function saveExerciseWork() {
             }
             time = time + (intMinValue * 60);
           }
-          else if(option === 'time-seconds') {
+          else if (option === 'time-seconds') {
             isTime = 1;
             // Запоминем секунды
             var tempSecValue = $$(this).val();
