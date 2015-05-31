@@ -308,10 +308,10 @@ $$('#selectLayoutThemes').on('change', function() {
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
 	  server.settings.update({
 	    'id': parseInt(results[0].id),
-        'units': setUnits,
-        'language': setLang,
-        'colorTheme': setColorTheme,
-        'layoutTheme': setLayoutTheme
+      'units': setUnits,
+      'language': setLang,
+      'colorTheme': setColorTheme,
+      'layoutTheme': setLayoutTheme
 	  }).then(function(item) {
         console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
       });
@@ -319,7 +319,7 @@ $$('#selectLayoutThemes').on('change', function() {
 });
 // Модальное окно для подтверждения загрузки демо-данных
 $$('.confirm-fill-demo').on('click', function () {
-  myApp.confirm('Are you sure? It will erase all of your data!', function () {
+  myApp.confirm(i18n.gettext('Are you sure? It will erase all of your data!'), function () {
     // Очистим всё
     console.log(JSON.stringify(server));
     //server.clear('settings');
@@ -349,18 +349,12 @@ $$('.confirm-fill-demo').on('click', function () {
           'name': newExTypeName
         }).then(function(exType) {
           //console.log('Добавили в БД новую группу упражнений: ' + JSON.stringify(exType));
-          //var exerciseTypeId = exType[0].id;
           //console.log('Начинаем обработку группы упражнений с id = ' + exerciseTypeId);
           // Внутри группы упражнений проходим циклом все упражнения из этой группы
           //console.log('arrExercises = ' + JSON.stringify(arrExercises));
-          //var arrExercises = data.exerciseType[j].exercises; // Занесём все упражнения (как объекты) данной группы в отдельный массив
           for (var i in data.exerciseType[parseInt(exType[0].id)].exercises) {
             //console.log('i = ' + i);
             //console.log('Начинаем обрабатывать следующее упражнение: data.exerciseType[j].exercises[i].name = ' + data.exerciseType[j].exercises[i].name);
-            // Занесём характеристики текущего упражнения в массив
-            //var options = arrExercises[i].options[0];
-            //var options = data.exerciseType[j].exercises[i].options[0];
-            //console.log('options = ' + options);
             var newExerciseName = data.exerciseType[parseInt(exType[0].id)].exercises[i].name;
             var newExerciseId = parseInt(data.exerciseType[parseInt(exType[0].id)].exercises[i].id);
             //console.log('newExerciseName = ' + newExerciseName);
@@ -417,7 +411,7 @@ $$('.confirm-fill-demo').on('click', function () {
         });
     });
     
-    myApp.alert('Enjoy your new demo data');
+    myApp.alert(i18n.gettext('Enjoy your new demo data'));
   });
 });
 

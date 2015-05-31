@@ -171,25 +171,43 @@ var idbModules = {  // jshint ignore:line
         };
 
         IDBObjectStore.prototype.add = function(value, key) {
-            var args = Array.prototype.slice.call(arguments);
-            if (key instanceof Array) {
-                args[1] = encodeCompoundKey(key);
-            }
-            else if (typeof value === 'object' && isCompoundKey(this.keyPath)) {
-                setInlineCompoundKey(value, this.keyPath);
-            }
-            return add.apply(this, args);
+            return this.__insertData(add, arguments);
         };
 
         IDBObjectStore.prototype.put = function(value, key) {
-            var args = Array.prototype.slice.call(arguments);
+            return this.__insertData(put, arguments);
+        };
+
+        IDBObjectStore.prototype.__insertData = function(method, args) {
+            args = Array.prototype.slice.call(args);
+            var value = args[0];
+            var key = args[1];
+
+            // out-of-line key
             if (key instanceof Array) {
                 args[1] = encodeCompoundKey(key);
             }
-            else if (typeof value === 'object' && isCompoundKey(this.keyPath)) {
-                setInlineCompoundKey(value, this.keyPath);
+
+            if (typeof value === 'object') {
+                // inline key
+                if (isCompoundKey(this.keyPath)) {
+                    setInlineCompoundKey(value, this.keyPath);
+                }
+
+                // inline indexes
+                for (var i = 0; i < this.indexNames.length; i++) {
+                    var index = this.index(this.indexNames[i]);
+                    if (isCompoundKey(index.keyPath)) {
+                        try {
+                            setInlineCompoundKey(value, index.keyPath);
+                        }
+                        catch (e) {
+                            // The value doesn't have a valid key for this index.
+                        }
+                    }
+                }
             }
-            return put.apply(this, args);
+            return method.apply(this, args);
         };
 
         IDBIndex.prototype.get = function(key) {
@@ -301,8 +319,8 @@ var idbModules = {  // jshint ignore:line
         });
 
         Object.defineProperty(IDBCursor.prototype, 'primaryKey', {
-            enumerable: requestResult.enumerable,
-            configurable: requestResult.configurable,
+            enumerable: cursorPrimaryKey.enumerable,
+            configurable: cursorPrimaryKey.configurable,
             get: function() {
                 var result = cursorPrimaryKey.get.call(this);
                 return removeInlineCompoundKey(result);
@@ -310,8 +328,8 @@ var idbModules = {  // jshint ignore:line
         });
 
         Object.defineProperty(IDBCursor.prototype, 'key', {
-            enumerable: requestResult.enumerable,
-            configurable: requestResult.configurable,
+            enumerable: cursorKey.enumerable,
+            configurable: cursorKey.configurable,
             get: function() {
                 var result = cursorKey.get.call(this);
                 return removeInlineCompoundKey(result);
@@ -319,13 +337,20 @@ var idbModules = {  // jshint ignore:line
         });
 
         Object.defineProperty(IDBCursorWithValue.prototype, 'value', {
-            enumerable: requestResult.enumerable,
-            configurable: requestResult.configurable,
+            enumerable: cursorValue.enumerable,
+            configurable: cursorValue.configurable,
             get: function() {
                 var result = cursorValue.get.call(this);
                 return removeInlineCompoundKey(result);
             }
         });
+
+        try {
+            if (!IDBTransaction.VERSION_CHANGE) {
+                IDBTransaction.VERSION_CHANGE = 'versionchange';
+            }
+        }
+        catch (e) {}
     }
 
     var compoundKeysPropertyName = '__$$compoundKey';
@@ -345,12 +370,12 @@ var idbModules = {  // jshint ignore:line
         }
 
         // Encode the array as a single property
-        // ["name$$first", "name$$last"] => "__$$compoundKeys.name$$first$_$name$$last"
+        // ["name$$first", "name$$last"] => "__$$compoundKey.name$$first$_$name$$last"
         return compoundKeysPropertyName + '.' + keyPath.join(keySeparator);
     }
 
     function decodeCompoundKeyPath(keyPath) {
-        // Remove the "__$$compoundKeys." prefix
+        // Remove the "__$$compoundKey." prefix
         keyPath = keyPath.substr(compoundKeysPropertyName.length + 1);
 
         // Split the properties into an array
@@ -392,17 +417,29 @@ var idbModules = {  // jshint ignore:line
         idbModules.Key.validate(key);
         key = idbModules.Key.encode(key);
 
-        // Prepend the "__$$compoundKeys." prefix
-        return compoundKeysPropertyName + '.' + key;
+        // Prepend the "__$$compoundKey." prefix
+        key = compoundKeysPropertyName + '.' + key;
+
+        validateKeyLength(key);
+        return key;
     }
 
     function decodeCompoundKey(key) {
-        // Remove the "__$$compoundKeys." prefix
+        validateKeyLength(key);
+
+        // Remove the "__$$compoundKey." prefix
         key = key.substr(compoundKeysPropertyName.length + 1);
 
         // Decode the key
         key = idbModules.Key.decode(key);
         return key;
+    }
+
+    function validateKeyLength(key) {
+        // BUG: Internet Explorer truncates string keys at 889 characters
+        if (key.length > 889) {
+            throw idbModules.util.createDOMException("DataError", "The encoded key is " + key.length + " characters long, but IE only allows 889 characters. Consider replacing numeric keys with strings to reduce the encoded length.");
+        }
     }
 
     idbModules.polyfill = polyfill;
@@ -758,12 +795,24 @@ var idbModules = {  // jshint ignore:line
 }(idbModules));
 
 (function(idbModules) {
-    'use strict';
+    "use strict";
 
     /**
      * Encodes the keys based on their types. This is required to maintain collations
      */
     var collations = ["undefined", "number", "date", "string", "array"];
+
+    /**
+     * The sign values for numbers, ordered from least to greatest.
+     *  - "negativeInfinity": Sorts below all other values.
+     *  - "bigNegative": Negative values less than or equal to negative one.
+     *  - "smallNegative": Negative values between negative one and zero, noninclusive.
+     *  - "smallPositive": Positive values between zero and one, including zero but not one.
+     *  - "largePositive": Positive values greater than or equal to one.
+     *  - "positiveInfinity": Sorts above all other values.
+     */
+    var signValues = ["negativeInfinity", "bigNegative", "smallNegative", "smallPositive", "bigPositive", "positiveInfinity"];
+
     var types = {
         // Undefined is not a valid key type.  It's only used when there is no key.
         undefined: {
@@ -775,7 +824,7 @@ var idbModules = {  // jshint ignore:line
             }
         },
 
-        // Dates are encoded as ISO 8601 strings, in UTC time zone
+        // Dates are encoded as ISO 8601 strings, in UTC time zone.
         date: {
             encode: function(key) {
                 return collations.indexOf("date") + "-" + key.toJSON();
@@ -785,44 +834,105 @@ var idbModules = {  // jshint ignore:line
             }
         },
 
-        // Numbers are encoded as base-36 strings between 200 and 400 characters
-        // 1 character = sign (always)
-        // 1 character = decimal point (optional)
-        // 199 characters on each side of decimal point (Number.MAX_VALUE is 199 digits in base-36)
+        // Numbers are represented in a lexically sortable base-32 sign-exponent-mantissa
+        // notation.
+        //
+        // sign: takes a value between zero and five, inclusive. Represents infinite cases
+        //     and the signs of both the exponent and the fractional part of the number.
+        // exponent: paded to two base-32 digits, represented by the 32's compliment in the
+        //     "smallPositive" and "bigNegative" cases to ensure proper lexical sorting.
+        // mantissa: also called the fractional part. Normed 11-digit base-32 representation.
+        //     Represented by the 32's compliment in the "smallNegative" and "bigNegative"
+        //     cases to ensure proper lexical sorting.
         number: {
+            // The encode step checks for six numeric cases and generates 14-digit encoded
+            // sign-exponent-mantissa strings.
             encode: function(key) {
-                var sign, whole, fraction;
-                sign = key < 0 ? '0' : 'z';                                     // 0 = negative, z = positive
-                whole = new Array(200).join(sign);                              // Infinity
-                fraction = '';
+                var key32 = Math.abs(key).toString(32);
+                // Get the index of the decimal.
+                var decimalIndex = key32.indexOf(".");
+                // Remove the decimal.
+                key32 = (decimalIndex !== -1) ? key32.replace(".", "") : key32;
+                // Get the index of the first significant digit.
+                var significantDigitIndex = key32.search(/[^0]/);
+                // Truncate leading zeros.
+                key32 = key32.slice(significantDigitIndex);
+                var sign, exponent = zeros(2), mantissa = zeros(11);
 
+                // Finite cases:
                 if (isFinite(key)) {
-                    var encoded = Math.abs(key).toString(36);                   // base-36 encode
-                    encoded = encoded.split('.');                               // split whole from fraction
-                    whole = flipBase36(sign, encoded[0]);                       // if negative, flip each whole digit
-                    var padding = new Array(200 - whole.length);                // pad the whole to 199 digits
-                    padding = padding.join(sign === '0' ? 'z' : '0');           // pad with z for negative, 0 for positive
-                    whole = padding + whole;                                    // pad-left
-                    if (encoded.length > 1) {
-                        fraction = '.' + flipBase36(sign, encoded[1] || '');    // if negative, flip each fractional digit
+                    // Negative cases:
+                    if (key < 0) {
+                        // Negative exponent case:
+                        if (key > -1) {
+                            sign = signValues.indexOf("smallNegative");
+                            exponent = padBase32Exponent(significantDigitIndex);
+                            mantissa = flipBase32(padBase32Mantissa(key32));
+                        }
+                        // Non-negative exponent case:
+                        else {
+                            sign = signValues.indexOf("bigNegative");
+                            exponent = flipBase32(padBase32Exponent(
+                                (decimalIndex !== -1) ? decimalIndex : key32.length
+                            ));
+                            mantissa = flipBase32(padBase32Mantissa(key32));
+                        }
+                    }
+                    // Non-negative cases:
+                    else {
+                        // Negative exponent case:
+                        if (key < 1) {
+                            sign = signValues.indexOf("smallPositive");
+                            exponent = flipBase32(padBase32Exponent(significantDigitIndex));
+                            mantissa = padBase32Mantissa(key32);
+                        }
+                        // Non-negative exponent case:
+                        else {
+                            sign = signValues.indexOf("bigPositive");
+                            exponent = padBase32Exponent(
+                                (decimalIndex !== -1) ? decimalIndex : key32.length
+                            );
+                            mantissa = padBase32Mantissa(key32);
+                        }
                     }
                 }
-
-                return collations.indexOf("number") + "-" + sign + whole + fraction;
-            },
-            decode: function(key) {
-                var sign = key.substr(2, 1);                                    // 0 = negative, z = positive
-                var whole = flipBase36(sign, key.substr(3, 199));               // flip each whole digit if negative
-                var fraction = flipBase36(sign, key.substr(203));               // flip each fractional digit if negative
-                sign = sign === '0' ? -1 : 1;                                   // sign multiplier
-                whole = parseInt(whole, 36);                                    // base-36 decode
-                if (fraction) {
-                    var digits = fraction.length;
-                    fraction = parseInt(fraction, 36);                          // base-36 decode
-                    return sign * (whole + (fraction / Math.pow(36, digits)));  // add the fraction to the whole
-                }
+                // Infinite cases:
                 else {
-                    return sign * whole;
+                    sign = signValues.indexOf(
+                        key > 0 ? "positiveInfinity" : "negativeInfinity"
+                    );
+                }
+
+                return collations.indexOf("number") + "-" + sign + exponent + mantissa;
+            },
+            // The decode step must interpret the sign, reflip values encoded as the 32's complements,
+            // apply signs to the exponent and mantissa, do the base-32 power operation, and return
+            // the original JavaScript number values.
+            decode: function(key) {
+                var sign = +key.substr(2, 1);
+                var exponent = key.substr(3, 2);
+                var mantissa = key.substr(5, 11);
+
+                switch (signValues[sign]) {
+                    case "negativeInfinity":
+                        return -Infinity;
+                    case "positiveInfinity":
+                        return Infinity;
+                    case "bigPositive":
+                        return pow32(mantissa, exponent);
+                    case "smallPositive":
+                        exponent = negate(flipBase32(exponent));
+                        return pow32(mantissa, exponent);
+                    case "smallNegative":
+                        exponent = negate(exponent);
+                        mantissa = flipBase32(mantissa);
+                        return -pow32(mantissa, exponent);
+                    case "bigNegative":
+                        exponent = flipBase32(exponent);
+                        mantissa = flipBase32(mantissa);
+                        return -pow32(mantissa, exponent);
+                    default:
+                        throw new Error("Invalid number.");
                 }
             }
         },
@@ -880,19 +990,99 @@ var idbModules = {  // jshint ignore:line
     };
 
     /**
-     * Flips each digit of a base-36 encoded number, if negative
-     * @param {string} sign - 0 = negative, z = positive
+     * Return a padded base-32 exponent value.
+     * @param {number}
+     * @return {string}
+     */
+    function padBase32Exponent(n) {
+        n = n.toString(32);
+        return (n.length === 1) ? "0" + n : n;
+    }
+
+    /**
+     * Return a padded base-32 mantissa.
+     * @param {string}
+     * @return {string}
+     */
+    function padBase32Mantissa(s) {
+        return (s + zeros(11)).slice(0, 11);
+    }
+
+    /**
+     * Flips each digit of a base-32 encoded string.
      * @param {string} encoded
      */
-    function flipBase36(sign, encoded) {
-        if (sign === '0') {
-            var flipped = '';
-            for (var i = 0; i < encoded.length; i++) {
-                flipped += (35 - parseInt(encoded[i], 36)).toString(36);
-            }
-            return flipped;
+    function flipBase32(encoded) {
+        var flipped = "";
+        for (var i = 0; i < encoded.length; i++) {
+            flipped += (31 - parseInt(encoded[i], 32)).toString(32);
         }
-        return encoded;
+        return flipped;
+    }
+
+    /**
+     * Base-32 power function.
+     * RESEARCH: This function does not precisely decode floats because it performs
+     * floating point arithmetic to recover values. But can the original values be
+     * recovered exactly?
+     * Someone may have already figured out a good way to store JavaScript floats as
+     * binary strings and convert back. Barring a better method, however, one route
+     * may be to generate decimal strings that `parseFloat` decodes predictably.
+     * @param {string}
+     * @param {string}
+     * @return {number}
+     */
+    function pow32(mantissa, exponent) {
+        var whole, fraction, expansion;
+        exponent = parseInt(exponent, 32);
+        if (exponent < 0) {
+            return roundToPrecision(
+                parseInt(mantissa, 32) * Math.pow(32, exponent - 10)
+            );
+        }
+        else {
+            if (exponent < 11) {
+                whole = mantissa.slice(0, exponent);
+                whole = parseInt(whole, 32);
+                fraction = mantissa.slice(exponent);
+                fraction = parseInt(fraction, 32) * Math.pow(32, exponent - 11);
+                return roundToPrecision(whole + fraction);
+            }
+            else {
+                expansion = mantissa + zeros(exponent - 11);
+                return parseInt(expansion, 32);
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    function roundToPrecision(num, precision) {
+        precision = precision || 16;
+        return parseFloat(num.toPrecision(precision));
+    }
+
+    /**
+     * Returns a string of n zeros.
+     * @param {number}
+     * @return {string}
+     */
+    function zeros(n) {
+        var result = "";
+        while (n--) {
+            result = result + "0";
+        }
+        return result;
+    }
+
+    /**
+     * Negates numeric strings.
+     * @param {string}
+     * @return {string}
+     */
+    function negate(s) {
+        return "-" + s;
     }
 
     /**
@@ -977,6 +1167,65 @@ var idbModules = {  // jshint ignore:line
         }
     }
 
+    function isKeyInRange(key, range) {
+        var lowerMatch = range.lower === undefined;
+        var upperMatch = range.upper === undefined;
+        var encodedKey = idbModules.Key.encode(key, true);
+
+        if (range.lower !== undefined) {
+            if (range.lowerOpen && encodedKey > range.__lower) {
+                lowerMatch = true;
+            }
+            if (!range.lowerOpen && encodedKey >= range.__lower) {
+                lowerMatch = true;
+            }
+        }
+        if (range.upper !== undefined) {
+            if (range.upperOpen && encodedKey < range.__upper) {
+                upperMatch = true;
+            }
+            if (!range.upperOpen && encodedKey <= range.__upper) {
+                upperMatch = true;
+            }
+        }
+
+        return lowerMatch && upperMatch;
+    }
+
+    function findMultiEntryMatches(keyEntry, range) {
+        var matches = [];
+
+        if (keyEntry instanceof Array) {
+            for (var i = 0; i < keyEntry.length; i++) {
+                var key = keyEntry[i];
+
+                if (key instanceof Array) {
+                    if (range.lower === range.upper) {
+                        continue;
+                    }
+                    if (key.length === 1) {
+                        key = key[0];
+                    } else {
+                        var nested = findMultiEntryMatches(key, range);
+                        if (nested.length > 0) {
+                            matches.push(key);
+                        }
+                        continue;
+                    }
+                }
+
+                if (isKeyInRange(key, range)) {
+                    matches.push(key);
+                }
+            }
+        } else {
+            if (isKeyInRange(keyEntry, range)) {
+                matches.push(keyEntry);
+            }
+        }
+        return matches;
+    }
+
     idbModules.Key = {
         encode: function(key, inArray) {
             if (key === undefined) {
@@ -993,7 +1242,8 @@ var idbModules = {  // jshint ignore:line
         validate: validate,
         getValue: getValue,
         setValue: setValue,
-        isMultiEntryMatch: isMultiEntryMatch
+        isMultiEntryMatch: isMultiEntryMatch,
+        findMultiEntryMatches: findMultiEntryMatches
     };
 }(idbModules));
 
@@ -1294,6 +1544,7 @@ var idbModules = {  // jshint ignore:line
         this.__offset = -1; // Setting this to -1 as continue will set it to 0 anyway
         this.__lastKeyContinued = undefined; // Used when continuing with a key
         this.__multiEntryIndex = source instanceof idbModules.IDBIndex ? source.multiEntry : false;
+        this.__unique = this.direction.indexOf("unique") !== -1;
 
         if (range !== undefined) {
             // Encode the key range and cache the encoded values, so we don't have to re-encode them over and over
@@ -1304,7 +1555,16 @@ var idbModules = {  // jshint ignore:line
         this["continue"]();
     }
 
-    IDBCursor.prototype.__find = function (key, tx, success, error, recordsToLoad) {
+    IDBCursor.prototype.__find = function (/* key, tx, success, error, recordsToLoad */) {
+        var args = Array.prototype.slice.call(arguments);
+        if (this.__multiEntryIndex) {
+            this.__findMultiEntry.apply(this, args);
+        } else {
+            this.__findBasic.apply(this, args);
+        }
+    };
+
+    IDBCursor.prototype.__findBasic = function (key, tx, success, error, recordsToLoad) {
         recordsToLoad = recordsToLoad || 1;
 
         var me = this;
@@ -1364,6 +1624,114 @@ var idbModules = {  // jshint ignore:line
         });
     };
 
+    IDBCursor.prototype.__findMultiEntry = function (key, tx, success, error) {
+        var me = this;
+
+        if (me.__prefetchedData && me.__prefetchedData.length === me.__prefetchedIndex) {
+            idbModules.DEBUG && console.log("Reached end of multiEntry cursor");
+            success(undefined, undefined, undefined);
+            return;
+        }
+
+        var quotedKeyColumnName = idbModules.util.quote(me.__keyColumnName);
+        var sql = ["SELECT * FROM", idbModules.util.quote(me.__store.name)];
+        var sqlValues = [];
+        sql.push("WHERE", quotedKeyColumnName, "NOT NULL");
+        if (me.__range && (me.__range.lower !== undefined && me.__range.upper !== undefined)) {
+            if (me.__range.upper.indexOf(me.__range.lower) === 0) {
+                sql.push("AND", quotedKeyColumnName, "LIKE ?");
+                sqlValues.push("%" + me.__range.__lower.slice(0, -1) + "%");
+            }
+        }
+        if (typeof key !== "undefined") {
+            me.__lastKeyContinued = key;
+            me.__offset = 0;
+        }
+        if (me.__lastKeyContinued !== undefined) {
+            sql.push("AND", quotedKeyColumnName, ">= ?");
+            idbModules.Key.validate(me.__lastKeyContinued);
+            sqlValues.push(idbModules.Key.encode(me.__lastKeyContinued));
+        }
+
+        // Determine the ORDER BY direction based on the cursor.
+        var direction = me.direction === 'prev' || me.direction === 'prevunique' ? 'DESC' : 'ASC';
+
+        sql.push("ORDER BY key", direction);
+        sql = sql.join(" ");
+        idbModules.DEBUG && console.log(sql, sqlValues);
+
+        me.__prefetchedData = null;
+        me.__prefetchedIndex = 0;
+        tx.executeSql(sql, sqlValues, function (tx, data) {
+            me.__multiEntryOffset = data.rows.length;
+
+            if (data.rows.length > 0) {
+                var rows = [];
+
+                for (var i = 0; i < data.rows.length; i++) {
+                    var rowItem = data.rows.item(i);
+                    var rowKey = idbModules.Key.decode(rowItem[me.__keyColumnName], true);
+                    var matches = idbModules.Key.findMultiEntryMatches(rowKey, me.__range);
+
+                    for (var j = 0; j < matches.length; j++) {
+                        var matchingKey = matches[j];
+                        var clone = {
+                            matchingKey: idbModules.Key.encode(matchingKey, true),
+                            key: rowItem.key
+                        };
+                        clone[me.__keyColumnName] = rowItem[me.__keyColumnName];
+                        clone[me.__valueColumnName] = rowItem[me.__valueColumnName];
+                        rows.push(clone);
+                    }
+                }
+
+                var reverse = me.direction.indexOf("prev") === 0;
+                rows.sort(function (a, b) {
+                    if (a.matchingKey.replace('[','z') < b.matchingKey.replace('[','z')) {
+                        return reverse ? 1 : -1;
+                    }
+                    if (a.matchingKey.replace('[','z') > b.matchingKey.replace('[','z')) {
+                        return reverse ? -1 : 1;
+                    }
+                    if (a.key < b.key) {
+                        return me.direction === "prev" ? 1 : -1;
+                    }
+                    if (a.key > b.key) {
+                        return me.direction === "prev" ? -1 : 1;
+                    }
+                    return 0;
+                });
+
+                me.__prefetchedData = {
+                    data: rows,
+                    length: rows.length,
+                    item: function (index) {
+                        return this.data[index];
+                    }
+                };
+                me.__prefetchedIndex = 0;
+
+                if (rows.length > 1) {
+                    idbModules.DEBUG && console.log("Preloaded " + me.__prefetchedData.length + " records for multiEntry cursor");
+                    me.__decode(rows[0], success);
+                } else if (rows.length === 1) {
+                    idbModules.DEBUG && console.log("Reached end of multiEntry cursor");
+                    me.__decode(rows[0], success);
+                } else {
+                    idbModules.DEBUG && console.log("Reached end of multiEntry cursor");
+                    success(undefined, undefined, undefined);
+                }
+            }
+            else {
+                idbModules.DEBUG && console.log("Reached end of multiEntry cursor");
+                success(undefined, undefined, undefined);
+            }
+        }, function (tx, err) {
+            idbModules.DEBUG && console.log("Could not execute Cursor.continue", sql, sqlValues);
+            error(err);
+        });
+    };
+
     /**
      * Creates an "onsuccess" callback
      * @private
@@ -1374,12 +1742,23 @@ var idbModules = {  // jshint ignore:line
             me.key = key === undefined ? null : key;
             me.value = value === undefined ? null : value;
             me.primaryKey = primaryKey === undefined ? null : primaryKey;
-            success(key === undefined ? null : me, me.__req);
+            var result = key === undefined ? null : me;
+            success(result, me.__req);
         };
     };
 
     IDBCursor.prototype.__decode = function (rowItem, callback) {
-        var key = idbModules.Key.decode(rowItem[this.__keyColumnName], this.__multiEntryIndex);
+        if (this.__multiEntryIndex && this.__unique) {
+            if (!this.__matchedKeys) {
+                this.__matchedKeys = {};
+            }
+            if (this.__matchedKeys[rowItem.matchingKey]) {
+                callback(undefined, undefined, undefined);
+                return;
+            }
+            this.__matchedKeys[rowItem.matchingKey] = true;
+        }
+        var key = idbModules.Key.decode(this.__multiEntryIndex ? rowItem.matchingKey : rowItem[this.__keyColumnName], this.__multiEntryIndex);
         var val = this.__valueDecoder.decode(rowItem[this.__valueColumnName]);
         var primaryKey = idbModules.Key.decode(rowItem.key);
         callback(key, val, primaryKey);

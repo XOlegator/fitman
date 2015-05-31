@@ -1,15 +1,18 @@
 {
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
    "": {
       "project-id-version": "",
-      "pot-creation-date": "2015-05-19 14:17+0300",
-      "po-revision-date": "2015-05-19 14:17+0300",
+      "pot-creation-date": "2015-05-31 14:08+0300",
+      "po-revision-date": "2015-05-31 14:08+0300",
       "last-translator": "Oleg Ekhlakov <subspam@mail.ru>",
       "language-team": "",
       "language": "en_US",
       "mime-version": "1.0",
       "content-type": "text/plain; charset=UTF-8",
       "content-transfer-encoding": "8bit",
-      "x-generator": "Poedit 1.7.5",
+      "x-generator": "Poedit 1.7.6",
       "x-poedit-basepath": ".",
       "plural-forms": "nplurals=2; plural=(n != 1);",
       "x-poedit-sourcecharset": "UTF-8",
@@ -25,31 +28,28 @@
    "Right panel content goes here": [
       ""
    ],
-   "Help": [
-      ""
-   ],
-   "Settings": [
-      ""
-   ],
-   "Customers": [
-      ""
-   ],
-   "www": [
-      ""
-   ],
    "User agreement": [
       ""
    ],
-   "&laquo;Personal Trainer program&raquo; is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way.": [
+   "Personal Trainer program": [
       ""
    ],
-   "All exercises in &laquo;Personal Trainer program&raquo; can be used as provided, deleted or re-created to be added to your own favorite exercises library.": [
+   "is designed for fitness professionals to create an individualized training programs for each client. It is a unique approach to the training process by using the combination of different techniques to develop strength in a fast, safe and efficient way.": [
       ""
    ],
-   "In &laquo;Personal Trainer program&raquo; you can create a group of exercises, combinations or use individual exercise every time you follow the program.": [
+   "All exercises in": [
       ""
    ],
-   "&laquo;Personal Trainer program&raquo; allows you to:": [
+   "can be used as provided, deleted or re-created to be added to your own favorite exercises library.": [
+      ""
+   ],
+   "In": [
+      ""
+   ],
+   "you can create a group of exercises, combinations or use individual exercise every time you follow the program.": [
+      ""
+   ],
+   "allows you to:": [
       ""
    ],
    "control the training process": [
@@ -61,13 +61,16 @@
    "add your own exercise and combine them in groups": [
       ""
    ],
-   "create workouts for a few weeks in advance, so you don&#39;t have to think about your workout every time you meet your client": [
+   "create workouts for a few weeks in advance, so you don't have to think about your workout every time you meet your client": [
       ""
    ],
    "rationally use exercises": [
       ""
    ],
    "see the progress visually, by using graphics and send the result by email to your client after they finish their program or reached their goals.": [
+      ""
+   ],
+   "Settings": [
       ""
    ],
    "Units": [
@@ -92,6 +95,9 @@
       ""
    ],
    "Change": [
+      ""
+   ],
+   "Customers": [
       ""
    ],
    "Remove": [
@@ -169,13 +175,28 @@
    "Nothing found": [
       ""
    ],
+   "www": [
+      ""
+   ],
    "Registration on the website will allow you to participate in the improvement of the program, update your program, exchange exercise and ideas with other users on the forum.": [
       ""
    ],
    "Sign in": [
       ""
    ],
+   "Type of exercises": [
+      ""
+   ],
+   "Add type of exercises": [
+      ""
+   ],
    "Save": [
+      ""
+   ],
+   "List of exercises": [
+      ""
+   ],
+   "Add exercise": [
       ""
    ],
    "Repeats": [
@@ -199,10 +220,19 @@
    "Resistance": [
       ""
    ],
-   "Photo": [
+   "Properties of exercise": [
+      ""
+   ],
+   "There is no photo yet": [
+      ""
+   ],
+   "Add photo": [
       ""
    ],
    "Workout of the day": [
+      ""
+   ],
+   "Deleting customers": [
       ""
    ],
    "Delete": [
@@ -212,6 +242,9 @@
       ""
    ],
    "Schedule": [
+      ""
+   ],
+   "Today still not formed a set of exercises. Click Change button to form a set.": [
       ""
    ],
    "Today still not formed a set of exercises.": [
@@ -244,6 +277,15 @@
    "Saturday": [
       ""
    ],
+   "View all schedules": [
+      ""
+   ],
+   "Back": [
+      ""
+   ],
+   "Scheduled exercises": [
+      ""
+   ],
    "Note": [
       ""
    ],
@@ -251,6 +293,9 @@
       ""
    ],
    "History": [
+      ""
+   ],
+   "Help": [
       ""
    ],
    "here is the place to advertise": [
@@ -265,10 +310,16 @@
    "Are you sure? It will erase all of your data!": [
       ""
    ],
+   "Enjoy your new demo data": [
+      ""
+   ],
    "Database is clean": [
       ""
    ],
    "Are you sure?": [
+      ""
+   ],
+   "Add customer": [
       ""
    ],
    "Error while adding": [
@@ -286,6 +337,15 @@
    "Updated": [
       ""
    ],
+   "Error": [
+      ""
+   ],
+   "Edit customer": [
+      ""
+   ],
+   "Change photo": [
+      ""
+   ],
    "Successful rename": [
       ""
    ],
@@ -295,7 +355,7 @@
    "Exercise was renamed.": [
       ""
    ],
-   "Can&#39;t be added": [
+   "Can't be added": [
       ""
    ],
    "The name already exist": [
@@ -310,10 +370,19 @@
    " already used in database. It can&#39;t be deleted!": [
       ""
    ],
+   "Parameter": [
+      ""
+   ],
+   "was removed.": [
+      ""
+   ],
+   "was added.": [
+      ""
+   ],
    "New set of options are equal to existent.": [
       ""
    ],
-   "Can&#39;t be deleted": [
+   "Can't be deleted": [
       ""
    ],
    "This item can not be delete while there are exercises in it.": [
@@ -322,13 +391,25 @@
    "Clear all": [
       ""
    ],
+   "Timer": [
+      ""
+   ],
    "Stop": [
       ""
    ],
-   "time": [
+   "Sets": [
+      ""
+   ],
+   "Minutes": [
+      ""
+   ],
+   "Seconds": [
       ""
    ],
    "Start timer": [
+      ""
+   ],
+   "Value": [
       ""
    ],
    "Current set already exist in DB": [
@@ -344,5 +425,29 @@
       "There are %d scheduled exercises",
       "",
       ""
+   ],
+   "Kg": [
+      ""
+   ],
+   "Km": [
+      ""
+   ],
+   "Km/h": [
+      ""
+   ],
+   "Lb": [
+      "Lb",
+      "",
+      ""
+   ],
+   "Ml": [
+      "Ml",
+      "",
+      ""
+   ],
+   "Ml/h": [
+      "Ml/h",
+      "",
+      ""
    ]
-}
+}}}

@@ -4,8 +4,8 @@
       "messages": {
    "": {
       "project-id-version": "",
-      "pot-creation-date": "2015-05-28 16:17+0300",
-      "po-revision-date": "2015-05-28 16:17+0300",
+      "pot-creation-date": "2015-05-31 13:58+0300",
+      "po-revision-date": "2015-05-31 14:00+0300",
       "last-translator": "Oleg Ekhlakov <subspam@mail.ru>",
       "language-team": "",
       "language": "ru_RU",
@@ -244,6 +244,9 @@
    "Schedule": [
       "Расписание"
    ],
+   "Today still not formed a set of exercises. Click Change button to form a set.": [
+      "На сегодня не сформирован комплекс упражнений. Нажмите кнопку Изменить, чтобы сформировать комплекс."
+   ],
    "Today still not formed a set of exercises.": [
       "На сегодня не сформирован комплекс упражнений"
    ],
@@ -306,6 +309,9 @@
    ],
    "Are you sure? It will erase all of your data!": [
       "Вы уверены? Это удалит все ваши данные!"
+   ],
+   "Enjoy your new demo data": [
+      "Наслаждайтесь вашими новыми демо-данными"
    ],
    "Database is clean": [
       "База данных очищена"
