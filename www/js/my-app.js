@@ -306,13 +306,13 @@ $$('#selectLayoutThemes').on('change', function() {
       $$('body').addClass('layout-' + setLayoutTheme);
       console.log('Новый стиль оформления: ' + setLayoutTheme);
       // Т.к. запись с настройками может быть только одна, то смело обновляем найденную запись
-	  server.settings.update({
-	    'id': parseInt(results[0].id),
-      'units': setUnits,
-      'language': setLang,
-      'colorTheme': setColorTheme,
-      'layoutTheme': setLayoutTheme
-	  }).then(function(item) {
+      server.settings.update({
+        'id': parseInt(results[0].id),
+        'units': setUnits,
+        'language': setLang,
+        'colorTheme': setColorTheme,
+        'layoutTheme': setLayoutTheme
+      }).then(function(item) {
         console.log('Записали новые настройки в базу: ' + JSON.stringify(item));
       });
     });
@@ -532,7 +532,6 @@ function addCustomer() {
   temp = $$('input#inputDateStartClasses').val();
   var dateStartClasses = temp.replace(/<script[^>]*>[\S\s]*?<\/script[^>]*>/ig, "");
   var timeVal = new Date().toISOString();
-  // var photo = 'somepic' + timeVal + '.jpg'; // TODO фото надо куда-то сохранять, а тут указывать путь к файлу
   var photo = ''; // Управление фотографией устроено отдельно. В эту переменную заносим пустое значение
   temp = '';
   temp = $$('#newCustomerComments').val();
@@ -616,7 +615,7 @@ function removeCustomers() {
     // Начинаем цикл по всем отмеченным для удаления клиентам
     $$('input[name="inputCustomerForDelete"]:checked').each(function() {
       console.log('Проверяем пользователя с id = ' + this.value);
-	  server.customers.get(parseInt(this.value)).then(function(resCustomer) {
+	    server.customers.get(parseInt(this.value)).then(function(resCustomer) {
         console.log('Нашли удаляемого клиента в базе: ' + JSON.stringify(resCustomer));
         // Без лишних вопросов сразу удаляем клиента из справочника
         server.remove('customers', resCustomer.id).then(function(res3) {
@@ -969,7 +968,7 @@ function addExercise() {
         	      'option': this.value,
         	      'exerciseId': parseInt(rowNewExercise[0].id)
         	    }).then(function(rowOptEx) {
-                  console.log('Добавили новую связку параметр-упражнение: ' + JSON.stringify(rowOptEx));
+                console.log('Добавили новую связку параметр-упражнение: ' + JSON.stringify(rowOptEx));
         	    });
             });
             // Обновляем список упражнений на соответствующей странице
@@ -1090,104 +1089,95 @@ function updateExerciseProperties() {
   // Определяем редактируемое упражнение
   var exerciseId = parseInt($$('#ex-prop').data('item'));
   console.log('Идёт обновление параметров упражнения с id = ' + exerciseId);
-  // Нужно понять, что изменили. Тут возможны варианты: добавили опции, убрали опции, одновременно что-то добавили и что-то убрали, вообще ничего не поменяли
-  // Для начала соберём в массив всё, что сейчас отмечено
-  var arrNewOpt = [];
-  var arrOldOpt = [];
-  var deletedOpt = []; // Массив удалённых параметров
-  var addedOpt = []; // Масси добавленных параметров
-  $$('input[name="checkbox-ex-prop"]:checked').each(function(indexOpt, valueOpt) {
-    arrNewOpt[indexOpt] = valueOpt.value;
-    console.log('Занесли в массив значение выделенной опции: ' + valueOpt.value);
-  });
-  var removeOption = [];
-  // Сначала отберём все записи с активными параметрами по данному упражнению из базы
-  server.optionsExercises.query()
-  	.filter('exerciseId', exerciseId)
+  // Определим не является ли данное упражнение недоступным для изменения набора параметров.
+  // Если по упражнению есть записи в истории, то изменять набор его параметров нельзя!
+  server.workExercise.query()
+    .filter('exercise', exerciseId)
     .execute()
-    .then(function(results) {
-      console.log('Список характеристик: ' + JSON.stringify(results));
-      for (var indexOldOpt in results) {
-        var rowOldOpt = results[indexOldOpt];
-        console.log('Очередная строка для проверки удаления: ' + JSON.stringify(rowOldOpt));
-        // Сформируем массив старых параметров (те, что уже есть в базе данных)
-        arrOldOpt[indexOldOpt] = rowOldOpt.option;
-        // Сразу поищем, является ли данный элемент удалённым
-        if (!in_array(rowOldOpt.option, arrNewOpt)) {
-          console.log('Элемент удалили на форме: ' + rowOldOpt.option);
-          deletedOpt.push(rowOldOpt.option); // Этот параметр исключили из активных параметров упражнения
-        }
-      } // Закончили перебирать все существующие параметры, составили список удалённых параметров
-      // Определим параметры, которые помечены для удаления и используются в базе. Такие удалять из упражнеия нельзя
-      server.workExercise.query("option")
-        .filter(function(workEx) {return (in_array(workEx.option, deletedOpt) && (workEx.exercise === exerciseId))})
-        .distinct()
-        .execute()
-        .then(function (resWorkEx) {
-          console.log('Результат поиска параметров, которые нельзя удалять: ' + JSON.stringify(resWorkEx))
-          if (resWorkEx.length) { // Какие-то данные есть в базе
-            for (var indexErrDel in resWorkEx) {
-              console.log('В базе есть история по параметру ' + resWorkEx[indexErrDel].option);
-              // Выведем сообщение, что такой-то параметр нельзя удалить, т.к. он используется в базе
-              myApp.addNotification({
-                title: i18n.gettext('Error while deleting'),
-                hold: messageDelay,
-                message: i18n.gettext('Option ') + resWorkEx[indexErrDel].option + i18n.gettext(" already used in database. It can&#39;t be deleted!")
+    .then(function (historyExercise) {
+      if(!historyExercise.length) { // Если истории по упражненю нет, то можно его изменять
+        // Нужно понять, что изменили. Тут возможны варианты: добавили опции, убрали опции, одновременно что-то добавили и что-то убрали, вообще ничего не поменяли
+        // Для начала соберём в массив всё, что сейчас отмечено
+        var arrNewOpt = [];
+        var arrOldOpt = [];
+        var deletedOpt = []; // Массив удалённых параметров
+        var addedOpt = []; // Масси добавленных параметров
+        $$('input[name="checkbox-ex-prop"]:checked').each(function(indexOpt, valueOpt) {
+          arrNewOpt[indexOpt] = valueOpt.value;
+          console.log('Занесли в массив значение выделенной опции: ' + valueOpt.value);
+        });
+        var removeOption = [];
+        // Сначала отберём все записи с активными параметрами по данному упражнению из базы
+        server.optionsExercises.query()
+          .filter('exerciseId', exerciseId)
+          .execute()
+          .then(function(results) {
+            console.log('Список характеристик: ' + JSON.stringify(results));
+            for (var indexOldOpt in results) {
+              var rowOldOpt = results[indexOldOpt];
+              console.log('Очередная строка для проверки удаления: ' + JSON.stringify(rowOldOpt));
+              // Сформируем массив старых параметров (те, что уже есть в базе данных)
+              arrOldOpt[indexOldOpt] = rowOldOpt.option;
+              // Сразу поищем, является ли данный элемент удалённым
+              if (!in_array(rowOldOpt.option, arrNewOpt)) {
+                console.log('Элемент удалили на форме: ' + rowOldOpt.option);
+                deletedOpt.push(rowOldOpt.option); // Этот параметр исключили из активных параметров упражнения
+              }
+            } // Закончили перебирать все существующие параметры, составили список удалённых параметров
+            for (var indexDeletedOpt in deletedOpt) {
+              var idForDelete = parseInt($$('input[name="checkbox-ex-prop"][value="' + deletedOpt[indexDeletedOpt] + '"]').data('item'));
+              console.log('idForDelete = ' + idForDelete);
+              server.remove('optionsExercises', idForDelete).then(function(resDel) {
+                console.log('resDel = ' + resDel);
+                // Определяем название только что удалённого параметра
+                var nameDeletedParameter = $$('input[name="checkbox-ex-prop"][data-item="' + resDel + '"]').val();
+                // Очистим data-item только что удалённого параметра
+                $$('input[name="checkbox-ex-prop"][value="' + nameDeletedParameter + '"]').removeAttr('data-item');
+                console.log('nameDeletedParameter = ' + nameDeletedParameter);
+                myApp.addNotification({
+                  title: i18n.gettext('Saved'),
+                  hold: messageDelay,
+                  message: i18n.gettext('Parameter') + ' ' + i18n.gettext(nameDeletedParameter.charAt(0).toUpperCase() + nameDeletedParameter.substr(1)) + ' ' + i18n.gettext('was removed.')
+                });
+                console.log('Удалили связку параметр: ' + nameDeletedParameter);
               });
-              // Надо снять отметку с этой опции
-              $$('input[name="checkbox-ex-prop"][value="' + resWorkEx[indexErrDel].option + '"]').prop('checked', false);
-              // Надо текущий параметр исключить из массива к удалению
-              delete deletedOpt[deletedOpt.indexOf(resWorkEx[indexErrDel].option)];
             }
-          }
-          // Теперь прореженый массив к удалению полностью готов к удалению
-          for (var indexDeletedOpt in deletedOpt) {
-            var idForDelete = parseInt($$('input[name="checkbox-ex-prop"][value="' + deletedOpt[indexDeletedOpt] + '"]').data('item'));
-            console.log('idForDelete = ' + idForDelete);
-            server.remove('optionsExercises', idForDelete).then(function(resDel) {
-              console.log('resDel = ' + resDel);
-              // Определяем название только что удалённого параметра
-              var nameDeletedParameter = $$('input[name="checkbox-ex-prop"][data-item="' + resDel + '"]').val();
-              // Очистим data-item только что удалённого параметра
-              $$('input[name="checkbox-ex-prop"][value="' + nameDeletedParameter + '"]').removeAttr('data-item');
-              console.log('nameDeletedParameter = ' + nameDeletedParameter);
-              myApp.addNotification({
-                title: i18n.gettext('Saved'),
-                hold: messageDelay,
-                message: i18n.gettext('Parameter') + ' ' + nameDeletedParameter + ' ' + i18n.gettext('was removed.')
+            // Теперь пройдёмся по всем параметрам из нового набора, чтобы определить, какие параметры добавили
+            for (var indexNewOpt in arrNewOpt) {
+              if (!in_array(arrNewOpt[indexNewOpt], arrOldOpt)) {
+                addedOpt.push(arrNewOpt[indexNewOpt]); // Этот параметр добавили в новом наборе параметров упражнения
+              }
+            }
+            for (var indexAddedOpt in addedOpt) {
+              // Добавляем в базу этот параметр
+              server.optionsExercises.add({
+                'option': addedOpt[indexAddedOpt],
+                'exerciseId': exerciseId
+              }).then(function (newRowExOpt) {
+                // В форму добавим data-item только что добавленной записи
+                $$('input[name="checkbox-ex-prop"][value="' + newRowExOpt[0].option + '"]').attr('data-item', newRowExOpt[0].id);
+                myApp.addNotification({
+                  title: i18n.gettext('Saved'),
+                  hold: messageDelay,
+                  message: i18n.gettext('Parameter') + ' ' + i18n.gettext(newRowExOpt[0].option.charAt(0).toUpperCase() + newRowExOpt[0].option.substr(1)) + ' ' + i18n.gettext('was added.')
+                });
+                console.log('Добавили связку опция-упражнение: ' + JSON.stringify(newRowExOpt));
               });
-              console.log('Удалили связку параметр: ' + nameDeletedParameter);
-            });
-          }
-        });
-      // Теперь пройдёмся по всем параметрам из нового набора, чтобы определить, какие параметры добавили
-      for (var indexNewOpt in arrNewOpt) {
-        if (!in_array(arrNewOpt[indexNewOpt], arrOldOpt)) {
-          addedOpt.push(arrNewOpt[indexNewOpt]); // Этот параметр добавили в новом наборе параметров упражнения
-        }
-      }
-      for (var indexAddedOpt in addedOpt) {
-        // Добавляем в базу этот параметр
-        server.optionsExercises.add({
-          'option': addedOpt[indexAddedOpt],
-          'exerciseId': exerciseId
-        }).then(function (newRowExOpt) {
-          // В форму добавим data-item только что добавленной записи
-          $$('input[name="checkbox-ex-prop"][value="' + newRowExOpt[0].option + '"]').attr('data-item', newRowExOpt[0].id);
-          myApp.addNotification({
-            title: i18n.gettext('Saved'),
-            hold: messageDelay,
-            message: i18n.gettext('Parameter') + ' ' + newRowExOpt[0].option + ' ' + i18n.gettext('was added.')
+            }
+            if (!deletedOpt.length && !addedOpt.length) { // Ничего не изменили. Тупо нажали Сохранить
+              // Покажем сообщение, что сохранять нечего
+              myApp.addNotification({
+                title: i18n.gettext('Nothing to save'),
+                hold: messageDelay,
+                message: i18n.gettext('New set of options are equal to existent.')
+              });
+            }
           });
-          console.log('Добавили связку опция-упражнение: ' + JSON.stringify(newRowExOpt));
-        });
-      }
-      if (!deletedOpt.length && !addedOpt.length) { // Ничего не изменили. Тупо нажали Сохранить
-        // Покажем сообщение, что сохранять нечего
+      } else { // История по упражнению есть, - изменять его параметры нельзя
         myApp.addNotification({
-          title: i18n.gettext('Nothing to save'),
+          title: i18n.gettext('Error'),
           hold: messageDelay,
-          message: i18n.gettext('New set of options are equal to existent.')
+          message: i18n.gettext("Parameters of exercise can't be change, as there is a history of this exercise.")
         });
       }
     });
@@ -1222,24 +1212,24 @@ function deleteExType(idExType) {
     .execute()
     .then(function(countExercises) {
       if(countExercises) {
-    	// В базе есть упражнения из этой группы. Удалять нельзя
-    	myApp.addNotification({
-		  title: i18n.gettext("Can't be deleted"),
+        // В базе есть упражнения из этой группы. Удалять нельзя
+        myApp.addNotification({
+          title: i18n.gettext("Can't be deleted"),
           hold: messageDelay,
-		  message: i18n.gettext('This item can not be delete while there are exercises in it.')
-		});
+          message: i18n.gettext('This item can not be delete while there are exercises in it.')
+        });
       } else {
-    	// В базе нет упражнений из этой группы, поэтому смело удаляем эту группу упражнений
-    	server.remove('exerciseType', parseInt(idExType)).then(function(res1) {
-    	  server.exerciseType.query('name')
-			.all()
-			.distinct()
-			.execute()
-			.then(function(results) {
-			  //console.log('exerciseType results = ' + JSON.stringify(results));
-			  updateListExerciseType(results);
-			});
-    	});
+        // В базе нет упражнений из этой группы, поэтому смело удаляем эту группу упражнений
+        server.remove('exerciseType', parseInt(idExType)).then(function(res1) {
+          server.exerciseType.query('name')
+            .all()
+            .distinct()
+            .execute()
+            .then(function(results) {
+              //console.log('exerciseType results = ' + JSON.stringify(results));
+              updateListExerciseType(results);
+            });
+        });
       }
     });
 }
@@ -1301,7 +1291,7 @@ function upgradeViewWorkout() {
       	  server.exercise.get(item.exercise).then(function (rowExercise) {
       	    console.log('Вот, что нашли по текущему упражнению: ' + JSON.stringify(rowExercise));
       	    var exName = rowExercise.name; // Получили название упражнения, т.к. в workout хранится только код
-        	listExCust += '<li>';
+        	  listExCust += '<li>';
             listExCust += '  <a href="#view-24" class="tab-link item-link item-content" onclick="makeViewExWork(' + rowExercise.id + ')">';
             listExCust += '    <div class="item-inner">';
             listExCust += '      <span data-item="' + rowExercise.id + '">' + exName + '</span>';
@@ -1397,19 +1387,6 @@ function in_array(value, array) {
 function makeSetExCustomer() {
   // Сформируем доступные кнопки для вкладки сформированного комплекса упражнений
   var menuWorkout = '';
-  /*menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="" class="tab-link" onclick="makeSetExCustomer()" id="aClearAll">' + i18n.gettext('Clear all') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a></center>';
-  //menuWorkout += '  <center><a href="#" class="tab-link">' + i18n.gettext('Schedule') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="saveSetExCustomer(\'fromChange\')">' + i18n.gettext('Save') + '</a></center>';
-  menuWorkout += '</div>';*/
   menuWorkout =  '<a href="#" class="button tab-link" onclick="makeSetExCustomer()" id="aClearAll">' + i18n.gettext('Clear all') + '</a>';
   menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
   menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
@@ -1550,19 +1527,6 @@ $$(document).on('opened', '.swipeout-selected', function (e) {
 function saveSetExCustomer(flagFrom) {
   // Сформируем доступные кнопки для вкладки сформированного комплекса упражнений
   var menuWorkout = '';
-  /*menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a></center>';
-  //menuWorkout += '  <center><a href="#" class="tab-link">' + i18n.gettext('Schedule') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
-  menuWorkout += '</div>';*/
   menuWorkout =  '<a href="#view-10" class="button tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
   menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
@@ -1756,23 +1720,19 @@ function makeViewExWork(exerciseId) {
       	  propEx += '    </div>';
       	  propEx += '  </div>';
       	  propEx += '</li>';
-      	} else if (rowExOpt.option === 'repeats') {
+      	} else if (rowExOpt.option === 'repeats') { // Оформляем в виде числового поля
       	  propEx += '<li>';
           propEx += '  <div class="item-content">';
           propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
           propEx += '    <div class="item-inner">';
           propEx += '      <div class="item-title label">' + i18n.gettext("Repeats") + '</div>';
           propEx += '      <div class="item-input">';
-          propEx += '        <select class="myInput" data-item="repeats">';
-          for (i = 0; i <= 9; i++) {
-            propEx += '          <option>' + i + '</option>';
-          }
-          propEx += '        </select>';
+          propEx += '        <input class="myInput" type="number" min="0" data-item="' + rowExOpt.option + '" placeholder="' + i18n.gettext('Value') + '">';
           propEx += '      </div>';
           propEx += '    </div>';
           propEx += '  </div>';
           propEx += '</li>';
-      	} else if (rowExOpt.option === 'incline') {
+      	} else if (rowExOpt.option === 'incline') { // Оформляем в виде выпадающего списка
           propEx += '<li>';
           propEx += '  <div class="item-content">';
           propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
@@ -1788,7 +1748,7 @@ function makeViewExWork(exerciseId) {
           propEx += '    </div>';
           propEx += '  </div>';
           propEx += '</li>';
-        }	else if (rowExOpt.option === 'weight') {
+        }	else if (rowExOpt.option === 'weight') { // Оформляем в виде числового поля
       	  propEx += '<li>';
       	  propEx += '  <div class="item-content">';
       	  propEx += '    <div class="item-media"><i class="icon icon-form-settings"></i></div>';
@@ -1893,8 +1853,6 @@ function saveExerciseWork() {
                     var intSecValue = parseInt(tempSecValue);
                   }
                   newValOpt = intSecValue + (intMinValue * 60); // Всё переводим в секунды
-                } else if (item.option === 'repeats') {
-                  var tempValue = parseInt($$('select[data-item="repeats"]').val()); // Узнаём номер повтора
                 } else if (item.option === 'incline') {
                   var tempValue = parseInt($$('select[data-item="incline"]').val()); // Узнаём номер наклона
                 } else { // Параметр - не время и не выпадающий список, т.е. можно сразу заносить в базу новое суммарное значение
@@ -2047,18 +2005,6 @@ function makeCalDate(date) {
 function makeCalendExCustomer() {
   // Сформируем доступные кнопки для вкладки Календарь
   var menuWorkout = '';
-  /*menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link active">' + i18n.gettext('Calendar') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="saveSetExCustomer(\'fromCalendar\')">' + i18n.gettext('Save') + '</a></center>';
-  menuWorkout += '</div>';*/
   menuWorkout =  '<a href="#tab0" class="button tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '<a href="#tab1" class="button tab-link active">' + i18n.gettext('Calendar') + '</a>';
   menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
@@ -2114,7 +2060,7 @@ function makeCalendExCustomer() {
           var exerciseToday = workExercises[index];
           // Т.к. мы нашли id упражнения, определим его название
           server.exercise.get(parseInt(exerciseToday)).then(function (rowExercise) {
-    	    console.log('rowExercise.name = ' + rowExercise.name);
+    	      console.log('rowExercise.name = ' + rowExercise.name);
             listExCust += '<li>';
             listExCust += '  <div class="item-link item-content">';
             listExCust += '    <div class="item-inner">';
@@ -2125,7 +2071,6 @@ function makeCalendExCustomer() {
             document.getElementById("ulListPastExercises").innerHTML = listExCust;
             //SORTER.sort('#ulListPastExercises');
           });
-        //});
         }
       };
       //console.log('Цикл закончился, форматируем даты');
@@ -2240,18 +2185,6 @@ SORTER.sort = function(which, dir) {
 function makeScheduleExCustomer() {
   // Сформируем доступные кнопки для вкладки расписания по дням недели
   var menuWorkout = '';
-  /*menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab2" class="tab-link active">' + i18n.gettext('Schedule') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="tab-link" onclick="makeScheduleCustomer()">' + i18n.gettext('Save') + '</a></center>';
-  menuWorkout += '</div>';*/
   menuWorkout =  '<a href="#tab0" class="button tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
   menuWorkout += '<a href="#tab2" class="button tab-link active" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
@@ -2404,18 +2337,6 @@ function makeScheduleExCustomer() {
 function makeScheduleCustomer() {
   // Сформируем доступные кнопки для вкладки текущего комплекса упражнений
   var menuWorkout = '';
-  /*menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab0" class="back tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#" class="tab-link">' + i18n.gettext('Schedule') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
-  menuWorkout += '</div>';*/
   menuWorkout =  '<a href="#tab0" class="button tab-link" onclick="viewExSetCustomer()">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
   menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
@@ -2471,18 +2392,6 @@ function makeScheduleCustomer() {
 function viewExSetCustomer() {
   // Сформируем доступные кнопки для вкладки со сформированным набором упражнений клиента на сегодня
   var menuWorkout = '';
-  /*menuWorkout =  '<div class="col-25">';
-  menuWorkout += '  <center><a href="#view-10" class="back tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab1" class="tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab2" class="tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a></center>';
-  menuWorkout += '</div>';
-  menuWorkout += '<div class="col-25">';
-  menuWorkout += '  <center><a href="#tab3" class="tab-link" onclick="makeSetExCustomer()">' + i18n.gettext('Change') + '</a></center>';
-  menuWorkout += '</div>';*/
   menuWorkout =  '<a href="#view-10" class="button tab-link" id="aCancelSetEx">' + i18n.gettext('Cancel') + '</a>';
   menuWorkout += '<a href="#tab1" class="button tab-link" onclick="makeCalendExCustomer()">' + i18n.gettext('Calendar') + '</a>';
   menuWorkout += '<a href="#tab2" class="button tab-link" onclick="makeScheduleExCustomer()">' + i18n.gettext('Schedule') + '</a>';
@@ -2681,7 +2590,7 @@ $$('#aWorkProgress').on('click', function() {
     .then(function(results) {
       for (var index in results) {
         var rowExercise = results[index];
-    	arrOptEx[index] = rowExercise.option;
+    	  arrOptEx[index] = rowExercise.option;
       }
       // Определим количество характеристик
       var countOptions = arrOptEx.length;

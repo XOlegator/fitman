@@ -4,8 +4,8 @@
       "messages": {
    "": {
       "project-id-version": "",
-      "pot-creation-date": "2015-05-31 13:58+0300",
-      "po-revision-date": "2015-05-31 14:00+0300",
+      "pot-creation-date": "2015-06-14 13:31+0300",
+      "po-revision-date": "2015-06-14 13:32+0300",
       "last-translator": "Oleg Ekhlakov <subspam@mail.ru>",
       "language-team": "",
       "language": "ru_RU",
@@ -361,26 +361,20 @@
    "The name already exist": [
       "Такое название уже существует"
    ],
-   "Error while deleting": [
-      "Ошибка при удалении"
-   ],
-   "Option ": [
-      "Параметр"
-   ],
-   " already used in database. It can&#39;t be deleted!": [
-      " уже используется в базе данных. Невозможно удалить!"
-   ],
    "Parameter": [
       "Параметр"
    ],
    "was removed.": [
-      "удалено."
+      "удалён."
    ],
    "was added.": [
-      "добавлено."
+      "добавлен."
    ],
    "New set of options are equal to existent.": [
       "Новый набор параметров совпадает с уже заведённым"
+   ],
+   "Parameters of exercise can't be change, as there is a history of this exercise.": [
+      "Параметры упражнения нельзя изменять, так как по этому упражнению есть записи в истории."
    ],
    "Can't be deleted": [
       "Невозможно удалить"

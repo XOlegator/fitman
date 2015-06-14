@@ -4,8 +4,8 @@
       "messages": {
    "": {
       "project-id-version": "",
-      "pot-creation-date": "2015-05-31 14:08+0300",
-      "po-revision-date": "2015-05-31 14:08+0300",
+      "pot-creation-date": "2015-06-14 13:34+0300",
+      "po-revision-date": "2015-06-14 13:34+0300",
       "last-translator": "Oleg Ekhlakov <subspam@mail.ru>",
       "language-team": "",
       "language": "en_US",
@@ -361,15 +361,6 @@
    "The name already exist": [
       ""
    ],
-   "Error while deleting": [
-      ""
-   ],
-   "Option ": [
-      ""
-   ],
-   " already used in database. It can&#39;t be deleted!": [
-      ""
-   ],
    "Parameter": [
       ""
    ],
@@ -380,6 +371,9 @@
       ""
    ],
    "New set of options are equal to existent.": [
+      ""
+   ],
+   "Parameters of exercise can't be change, as there is a history of this exercise.": [
       ""
    ],
    "Can't be deleted": [
