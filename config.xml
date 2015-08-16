@@ -8,7 +8,7 @@
         Ekhlakov Oleg
     </author>
     <preference name="permissions" value="none" />
-    <preference name="phonegap-version" value="5.0.0" />
+    <preference name="phonegap-version" value="cli-5.1.1" />
     <preference name="orientation" value="default" />
     <preference name="target-device" value="universal" />
     <preference name="fullscreen" value="true" />
@@ -21,12 +21,10 @@
     <preference name="show-splash-screen-spinner" value="true" />
     <preference name="auto-hide-splash-screen" value="true" />
     <preference name="disable-cursor" value="false" />
-    <preference name="android-minSdkVersion" value="7" />
+    <preference name="android-minSdkVersion" value="10" />
     <preference name="android-installLocation" value="auto" />
-    
-    <preference name="InAppBrowserStorageEnabled" value="true"/>
-    <preference name="LogLevel" value="VERBOSE"/>
-
+    <preference name="InAppBrowserStorageEnabled" value="true" />
+    <preference name="LogLevel" value="VERBOSE" />
     <gap:plugin name="org.apache.cordova.battery-status" />
     <gap:plugin name="org.apache.cordova.camera" />
     <gap:plugin name="org.apache.cordova.media-capture" />
@@ -71,11 +69,8 @@
     <gap:splash gap:platform="ios" height="768" src="res/screen/ios/screen-ipad-landscape.png" width="1024" />
     <gap:splash gap:platform="winphone" src="res/screen/windows-phone/screen-portrait.jpg" />
     <access origin="*" />
-    <gap:config-file platform="android" parent="/manifest">
+    <gap:config-file parent="/manifest" platform="android">
         <uses-permission name="android.permission.CAMERA" />
     </gap:config-file>
-    <feature name="Camera">
-        <param name="ios-package" value="CDVCamera" />
-        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
-    </feature>
+    <plugin name="cordova-plugin-camera" spec="^1.1.0" />
 </widget>
