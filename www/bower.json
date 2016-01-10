@@ -1,0 +1,33 @@
+{
+  "name": "fitman",
+  "homepage": "https://github.com/XOlegator/fitman",
+  "authors": [
+    "Oleg <subspam@mail.ru>"
+  ],
+  "description": "Programm for fitness trainers",
+  "main": "index.html",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "fitness",
+    "notepad"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Framework7": "framework7#~1.4.0",
+    "chartist": "~0.9.5",
+    "IndexedDBShim": "~2.2.1",
+    "es6-promise-polyfill": "~1.1.1",
+    "db.js": "~0.10.2"
+  }
+}

@@ -6,19 +6,19 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title class="app-text">{{_ "Personal trainer"}}</title>
-    <script src="js/es6-promise.min.js"></script>
-    <script src="js/indexeddbshim.min.js"></script>
+    <script src="public/components/es6-promise-polyfill/promise.min.js"></script>
+    <script src="public/components/IndexedDBShim/dist/indexeddbshim.min.js"></script>
     <script type="text/javascript">
         var server;
         if (!window.Promise) window.Promise = ES6Promise.Promise;
     </script>
     <script src="js/jed.min.js"></script>
     <!-- Path to Framework7 Library CSS-->
-    <link rel="stylesheet" href="css/framework7.min.css">
-    <link rel="stylesheet" href="css/framework7.themes.css">
+    <link rel="stylesheet" href="public/components/Framework7/dist/css/framework7.material.min.css">
+    <link rel="stylesheet" href="public/components/Framework7/dist/css/framework7.material.colors.min.css">
     <!-- Path to your custom app styles-->
     <link rel="stylesheet" href="css/my-app.css">
-    <link rel="stylesheet" href="assets/components/chartist/dist/chartist.min.css">
+    <link rel="stylesheet" href="public/components/chartist/dist/chartist.min.css">
   </head>
   <body>
     <!-- Status bar overlay for fullscreen mode-->
@@ -1246,10 +1246,10 @@
     <!-- <div class="toolbar">
       <p class="app-text">{{_ "here is the place to advertise"}}</p>
     </div> -->
-    <script src="js/db.min.js"></script>
-    <script src="js/framework7.min.js"></script>
+    <script src="public/components/db.js/src/db.js"></script>
+    <script src="public/components/Framework7/dist/js/framework7.min.js"></script>
     <script src="cordova.js"></script>
     <script src="js/my-app.min.js"></script>
-    <script src="assets/components/chartist/dist/chartist.min.js"></script>
+    <script src="public/components/chartist/dist/chartist.min.js"></script>
   </body>
 </html>
