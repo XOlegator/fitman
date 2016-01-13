@@ -1,4 +1,9 @@
 # fitman
+Try live demo at http://fitman.eu.pn/
+## [English]
+Fitman is a program for fitness trainers. You can schedule workouts and exercises. The program allows you to note the parameters of each performed exercise, to gather statistics and create graphs of progress.
+This is cross-platform application that can be build for iOS, Android, and other systems from a set of Phonegap.
+## [Russian]
 Программа предназначена для учёта данных о выполнении комплекса упражнений по курсу тренировок. Пользователи программы - фитнес-тренеры.
 Программа умеет составлять индивидуальный набор упражнений для каждого тренируемого. Набор упражнений можно создавать с нуля перед новой тренировкой, либо применить уже отработанный на предыдущих тренировках набор, либо назначить периодические наборы упражнений по дням недели.
 Алгоритм работы с программой:
